@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: qrguard-api
+    name: qrguard-osswt-20260824-api
     runtime: docker
     plan: free
     region: singapore
@@ -10,7 +10,7 @@ services:
     autoDeployTrigger: off
     envVars:
       - key: QRGUARD_CORS_ORIGINS
-        value: https://qrguard-app.onrender.com
+        value: https://qrguard-osswt-20260824-web.onrender.com
       - key: OMP_NUM_THREADS
         value: "1"
       - key: OPENBLAS_NUM_THREADS
@@ -19,7 +19,7 @@ services:
         value: "1"
 
   - type: web
-    name: qrguard-app
+    name: qrguard-osswt-20260824-web
     runtime: static
     buildCommand: echo "Publishing the verified local Flutter build"
     staticPublishPath: ./deploy/render/web/public
