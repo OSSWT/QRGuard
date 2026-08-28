@@ -188,6 +188,7 @@ def health() -> HealthResponse:
                 f"safe<{load_engine().safe_max} blocked>={load_engine().blocked_min}"
             ),
         ),
+        ("qr_decoder", lambda: f"opencv {__import__('cv2').__version__}"),
         ("domain_list", lambda: f"{list_size()} domains"),
         # Optional by design (option E): "not configured" is not a fault, so this
         # never flips overall status to degraded.

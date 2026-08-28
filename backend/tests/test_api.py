@@ -112,6 +112,7 @@ class TestHealth:
             "structural",
             "semantic",
             "fusion",
+            "qr_decoder",
             "domain_list",
             "deep_check",
         }
