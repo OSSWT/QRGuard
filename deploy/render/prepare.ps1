@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$BackendUrl = "https://qrguard-osswt-20260824-api.onrender.com",
-    [string]$WebUrl = "https://qrguard-osswt-20260824-web.onrender.com"
+    [string]$BackendUrl = "https://qrguard-api-osswt.onrender.com",
+    [string]$WebUrl = "https://qrguard-app-osswt.onrender.com"
 )
 
 $ErrorActionPreference = "Stop"
