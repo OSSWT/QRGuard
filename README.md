@@ -20,6 +20,10 @@ evidence, and reproducibility material prepared for the project. It is an academ
 prototype and must not be treated as a guarantee that a QR code or destination is
 safe.
 
+- **Live application:** https://qrguard-app-osswt.onrender.com
+- **Backend API:** https://qrguard-api-osswt.onrender.com
+- **Android download:** https://qrguard-app-osswt.onrender.com/download.html
+
 ## Current architecture
 
 ```text
@@ -51,13 +55,16 @@ automatic QRGuard-Mix-v2 model.
 | Semantic | `semantic-2026.02`, hashed character 3–5 gram calibrated linear model | Gates passed and deployed |
 | Risk Decision Layer | `decision-2026.02`, QRGuard-Mix-v2 Fusion | Gates passed and deployed |
 
-Camera and Gallery use the same continuous Structural score and Fusion contract, but
-different calibrated image artifacts for their different acquisition domains. Live
-capture waits for a stable decode, ranks recent QR crops by acquisition quality, and
-submits only the clearest rectified crop. No source-specific threshold, consensus or
-score suppression is applied. RUN 5 remains the Gallery artifact; the camera-robust
-`structural-2026.02` artifact serves Live Camera because RUN 5 measured an 80.84%
-false-positive rate on the QR-DN camera-derived clean holdout.
+Camera and Gallery use different calibrated image artifacts for their acquisition
+domains. Gallery keeps the continuous `1 - P(clean)` Structural score. Live Camera
+retains that raw score for auditability, corrects only global exposure, and uses the
+strongest competing manipulation class when the model's winning class is `clean`.
+This prevents two losing three-class probabilities from manufacturing a blocked
+binary result. A sub-0.95 camera manipulation confidence cannot be the sole reason a
+widely recognised low-risk URL becomes Blocked; the disagreement remains Warning.
+High-confidence camera attacks, risky URLs, and Gallery attacks keep the normal
+Fusion result. RUN 5 remains the Gallery artifact; `structural-2026.02` serves Live
+Camera because RUN 5 measured an 80.84% false-positive rate on the QR-DN holdout.
 
 ## Measured results
 
@@ -93,13 +100,18 @@ are under `ml_training/*/performance/`.
 ## Live-camera policy
 
 - Require a stable on-device decode before analysis.
-- Rank recent observations and submit one clearest rectified QR crop.
-- Apply the camera-domain Structural artifact and the same continuous score/Fusion
-  contract as Gallery.
+- Rank up to five recent observations on the visible Analysing screen and submit one
+  clearest rectified QR crop.
+- Correct global camera exposure without thresholding, blurring, or removing local
+  colour/shape evidence; preserve the raw model score in every response.
+- Treat a low-risk known URL plus medium-confidence camera manipulation evidence as
+  cross-modal Warning, while high-confidence attacks remain eligible for Blocked.
 - If no usable crop exists, report Structural as unavailable and mark the response
   partial; never replace missing image evidence with a zero score.
 - An open or WEP Wi-Fi payload always has a Warning floor. It is not labelled fraud
   merely because the network is open.
+- Recognise the narrow `Q01:*:` hi-hive attendance envelope as an opaque token,
+  report Warning, and open only the official app for the user to scan again.
 
 ## Canonical project layout
 
@@ -182,7 +194,7 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.0.0+8006`.
+The checked Android version is `1.1.0+8007`.
 
 ## Verification
 
@@ -194,8 +206,8 @@ flutter test
 flutter build apk --release
 ```
 
-Current verified result: 267 backend tests passed, Flutter analysis reported no
-issues, and 65 Flutter tests passed. The release workflow is documented separately
+Current verified result: 275 backend tests passed, Flutter analysis reported no
+issues, and 67 Flutter tests passed. The release workflow is documented separately
 from these source-level checks.
 
 ## Known evidence boundary

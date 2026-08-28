@@ -141,10 +141,13 @@ class ScanResponse {
 
   /// What the user should be shown as the destination. Always the expanded /
   /// normalized form — never a shortened link.
-  String get displayTarget =>
-      normalizedUrl ?? payload ?? '(could not read this QR code)';
+  String get displayTarget => payloadType == 'attendance'
+      ? 'hi-hive attendance QR'
+      : normalizedUrl ?? payload ?? '(could not read this QR code)';
 
   bool get isUrl => payloadType == 'url';
+  bool get isHiHiveAttendance =>
+      payloadType == 'attendance' && (payload ?? '').startsWith('Q01:*:');
   bool get couldNotDecode => payloadSource == 'undecodable';
 }
 

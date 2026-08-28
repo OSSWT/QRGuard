@@ -57,6 +57,32 @@ class StructuralSignals:
     effective: Optional[float]
     raw_score: Optional[float]
     predicted_type: Optional[str]
+    manipulation_confidence: Optional[float]
+
+
+_CAMERA_BLOCK_CONFIDENCE = 0.95
+
+
+def _normalize_camera_capture(image):
+    """Correct global exposure while preserving local colour/shape evidence.
+
+    Phone and projector captures often turn a black/white QR into a narrow grey
+    range. The camera model learned that acquisition artefact too strongly. A
+    percentile stretch restores the global paper/ink range but does not blur,
+    threshold, erase a logo, or remove local adversarial colour variation.
+    """
+    import numpy as np
+    from PIL import Image
+
+    rgb = np.asarray(image.convert("RGB"), dtype=np.float32)
+    luminance = 0.299 * rgb[:, :, 0] + 0.587 * rgb[:, :, 1] + 0.114 * rgb[:, :, 2]
+    black, white = np.percentile(luminance, (5, 95))
+    if white - black < 30:
+        return image.convert("RGB")
+
+    gain = float(np.clip(239.0 / (white - black), 0.70, 2.20))
+    normalized = np.clip(rgb * gain + (8.0 - black * gain), 0, 255).astype(np.uint8)
+    return Image.fromarray(normalized, mode="RGB")
 
 
 def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
@@ -70,12 +96,41 @@ def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
     crops; only the first is authoritative.
     """
     if not images:
-        return StructuralSignals(None, None, None)
+        return StructuralSignals(None, None, None, None)
 
     analyzer = load_camera_structural() if source == "camera" else load_structural()
-    result = analyzer.predict(images[0])
+    image = _normalize_camera_capture(images[0]) if source == "camera" else images[0]
+    result = analyzer.predict(image)
     score = float(result.p_structural)
-    return StructuralSignals(score, score, result.predicted_type)
+    manipulation_confidence = max(
+        float(result.probs.get("adversarial", 0.0)),
+        float(result.probs.get("tampered", 0.0)),
+    )
+
+    # The camera artifact is a three-class model. For an argmax ``clean`` result,
+    # summing both losing manipulation classes inflated ordinary Google/YouTube/
+    # UTAR captures across the decision boundaries. Use the strongest competing
+    # manipulation class as the deployed camera evidence and keep the original
+    # 1-P(clean) value in p_structural_raw for auditability. A model prediction of
+    # adversarial/tampered remains unsuppressed.
+    effective = (
+        manipulation_confidence
+        if source == "camera" and result.predicted_type == "clean"
+        else score
+    )
+    return StructuralSignals(
+        effective, score, result.predicted_type, manipulation_confidence
+    )
+
+
+def _is_low_risk_known_url(sem: SemanticSignals) -> bool:
+    return bool(
+        sem.info.is_url
+        and sem.p_url is not None
+        and sem.p_url <= 0.15
+        and sem.domain_unknown == 0.0
+        and not sem.flags
+    )
 
 
 def analyse_payload(payload: str) -> SemanticSignals:
@@ -277,6 +332,25 @@ def run_scan(
     risk_score = fusion.risk_score
     verdict = fusion.verdict
 
+    # Camera evidence below the model's high-confidence attack band must not be
+    # the sole reason a widely recognised, low-risk URL becomes Blocked. This is
+    # cross-modal disagreement, so retain a Warning and let the user inspect the
+    # decoded destination. High-confidence camera attacks and every risky URL keep
+    # the normal fusion verdict; gallery uses its separately validated model.
+    if (
+        source == "camera"
+        and verdict == "blocked"
+        and _is_low_risk_known_url(sem)
+        and (structural.manipulation_confidence or 0.0) < _CAMERA_BLOCK_CONFIDENCE
+    ):
+        verdict = "warning"
+        risk_score = engine.safe_max
+        disagreement_reason = (
+            "Camera image evidence is uncertain; verify the decoded destination"
+        )
+        if disagreement_reason not in reasons:
+            reasons.append(disagreement_reason)
+
     # A CRC-valid Malaysian DuitNow payload is handed to the payment app, where
     # the user must confirm recipient and amount. Camera acquisition artefacts on
     # dense/branded payment codes must not manufacture a hard Blocked result and
@@ -292,6 +366,19 @@ def run_scan(
         )
         if payment_reason not in reasons:
             reasons.append(payment_reason)
+
+    # hi-hive attendance QR values are opaque app tokens, not web destinations.
+    # QRGuard can recognise the envelope but cannot authenticate or redeem it.
+    # Never claim Safe, and never let projector/logo artefacts prevent the user
+    # from handing control to the official hi-hive app for a fresh scan.
+    if sem.info.payload_type == "attendance":
+        verdict = "warning"
+        risk_score = engine.safe_max
+        attendance_reason = (
+            "Recognised hi-hive attendance format; verify it in the official app"
+        )
+        if attendance_reason not in reasons:
+            reasons.append(attendance_reason)
 
     return ScanResponse(
         verdict=verdict,

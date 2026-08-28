@@ -256,7 +256,7 @@ class TestScan:
         assert "structural_consensus" not in body["branch_scores"]
         assert body["verdict"] == "blocked"
 
-    def test_camera_uses_the_continuous_structural_score(
+    def test_camera_clean_class_uses_strongest_competing_score(
         self, client, qr_png, monkeypatch
     ):
         class BoundaryAnalyzer:
@@ -282,18 +282,9 @@ class TestScan:
             ],
         ).json()
 
-        expected = load_engine().predict(
-            BranchInputs(
-                p_structural=0.527,
-                p_url=body["branch_scores"]["p_url"],
-                llm_score=None,
-                rule_flags=body["rule_flags"],
-                domain_unknown=body["branch_scores"]["domain_unknown"],
-            )
-        )
-        assert body["branch_scores"]["p_structural"] == pytest.approx(0.527)
-        assert body["risk_score"] == expected.risk_score
-        assert body["verdict"] == expected.verdict
+        assert body["branch_scores"]["p_structural_raw"] == pytest.approx(0.527)
+        assert body["branch_scores"]["p_structural"] == pytest.approx(0.40)
+        assert body["verdict"] == "safe"
         assert body["partial_analysis"] is False
 
     def test_missing_camera_crop_is_unavailable_not_inconclusive(self, client):
@@ -380,7 +371,81 @@ class TestScan:
         assert results["gallery"]["branch_scores"]["p_structural"] == 0.05
         assert results["camera"]["branch_scores"]["p_structural"] == 0.93
         assert results["gallery"]["verdict"] == "safe"
-        assert results["camera"]["verdict"] == "blocked"
+        assert results["camera"]["verdict"] == "warning"
+        assert results["camera"]["risk_score"] == load_engine().safe_max
+        assert any(
+            "Camera image evidence is uncertain" in reason
+            for reason in results["camera"]["reasons"]
+        )
+
+    def test_camera_exposure_is_normalized_before_inference(
+        self, client, qr_png, monkeypatch
+    ):
+        from PIL import ImageStat
+
+        observed = {}
+
+        class ExposureAnalyzer:
+            def predict(self, image):
+                observed["extrema"] = ImageStat.Stat(image.convert("L")).extrema[0]
+                return StructuralResult(
+                    p_structural=0.08,
+                    predicted_type="clean",
+                    probs={"clean": 0.92, "adversarial": 0.05, "tampered": 0.03},
+                )
+
+        from PIL import Image, ImageEnhance
+
+        dim = ImageEnhance.Brightness(Image.open(io.BytesIO(qr_png))).enhance(0.5)
+        encoded = io.BytesIO()
+        dim.save(encoded, "PNG")
+        monkeypatch.setattr(
+            "app.pipeline.load_camera_structural", lambda: ExposureAnalyzer()
+        )
+
+        body = client.post(
+            "/scan",
+            data={
+                "payload": "https://www.google.com/maps",
+                "image_source": "camera",
+            },
+            files={"image": ("dim.png", encoded.getvalue(), "image/png")},
+        ).json()
+
+        assert observed["extrema"][0] <= 10
+        assert observed["extrema"][1] >= 240
+        assert body["verdict"] == "safe"
+
+    def test_hihive_camera_token_is_warning_not_blocked(
+        self, client, qr_png, monkeypatch
+    ):
+        class ProjectorLogoAnalyzer:
+            def predict(self, _image):
+                return StructuralResult(
+                    p_structural=0.98,
+                    predicted_type="tampered",
+                    probs={"clean": 0.02, "adversarial": 0.01, "tampered": 0.97},
+                )
+
+        monkeypatch.setattr(
+            "app.pipeline.load_camera_structural", lambda: ProjectorLogoAnalyzer()
+        )
+        token = (
+            "Q01:*:PACkNWVoPGvQQJ0Htc32cjZdTi+na5wHs0CB9rCOeg34g41pKQdYzMgrwZOV"
+            "qjZeYyQ4SLPlONzsyH+m6fku+yLQK1V/jFB4cQJp85G0JgI="
+        )
+
+        body = client.post(
+            "/scan",
+            data={"payload": token, "image_source": "camera"},
+            files={"image": ("hihive.png", qr_png, "image/png")},
+        ).json()
+
+        assert body["payload_type"] == "attendance"
+        assert body["verdict"] == "warning"
+        assert body["risk_score"] == load_engine().safe_max
+        assert body["partial_analysis"] is False
+        assert any("official app" in reason for reason in body["reasons"])
 
     def test_camera_model_accepts_real_camera_clean_google(
         self, client, camera_clean_png
@@ -397,6 +462,35 @@ class TestScan:
         assert body["branch_scores"]["structural_type"] == "clean"
         assert body["branch_scores"]["p_structural"] < 0.5
         assert body["verdict"] == "safe"
+
+    @pytest.mark.parametrize(
+        ("filename", "payload"),
+        [
+            ("01_safe_google.png", "https://www.google.com/maps"),
+            (
+                "02_safe_youtube.png",
+                "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            ),
+            ("03_safe_utar.png", "https://www.utar.edu.my/"),
+            ("10_tampered_blur.png", "https://www.google.com/maps"),
+        ],
+    )
+    def test_camera_reference_safe_cases(self, client, filename, payload):
+        image = (ROOT / "data" / "test_qrs" / filename).read_bytes()
+        body = client.post(
+            "/scan",
+            data={"payload": payload, "image_source": "camera"},
+            files={"image": (filename, image, "image/png")},
+        ).json()
+
+        assert body["registered_domain"] in {
+            "google.com",
+            "youtube.com",
+            "utar.edu.my",
+        }
+        assert body["branch_scores"]["structural_type"] == "clean"
+        assert body["verdict"] == "safe"
+        assert body["partial_analysis"] is False
 
     def test_camera_model_keeps_verified_duitnow_complete(
         self, client, camera_clean_png
@@ -553,7 +647,7 @@ class TestScan:
         ).json()
 
         assert body["branch_scores"]["p_structural_raw"] == pytest.approx(0.12)
-        assert body["branch_scores"]["p_structural"] == pytest.approx(0.12)
+        assert body["branch_scores"]["p_structural"] == pytest.approx(0.08)
         assert body["verdict"] == "safe"
 
     def test_legacy_multi_upload_does_not_average_scores(
@@ -589,7 +683,8 @@ class TestScan:
             ],
         ).json()
 
-        assert body["branch_scores"]["p_structural"] == pytest.approx(0.05)
+        assert body["branch_scores"]["p_structural_raw"] == pytest.approx(0.05)
+        assert body["branch_scores"]["p_structural"] == pytest.approx(0.0375)
         assert body["verdict"] == "safe"
 
     def test_corrupt_legacy_frames_do_not_replace_the_first_valid_crop(

@@ -229,6 +229,30 @@ void main() {
     expect(find.text('Open TNG eWallet'), findsOneWidget);
   });
 
+  testWidgets('hi-hive attendance QR offers official-app hand-off', (
+    tester,
+  ) async {
+    const token =
+        'Q01:*:PACkNWVoPGvQQJ0Htc32cjZdTi+na5wHs0CB9rCOeg34g41pKQdYzMgrwZOV'
+        'qjZeYyQ4SLPlONzsyH+m6fku+yLQK1V/jFB4cQJp85G0JgI=';
+    await pumpResult(
+      tester,
+      _scan(
+        verdict: Verdict.warning,
+        risk: 45,
+        payloadType: 'attendance',
+        payload: token,
+        reasons: const [
+          'Recognised hi-hive attendance format; verify it in the official app',
+        ],
+      ),
+    );
+
+    expect(find.text('hi-hive attendance QR'), findsOneWidget);
+    expect(find.text('Open hi-hive to scan again'), findsOneWidget);
+    expect(find.textContaining('PACkNWVo'), findsNothing);
+  });
+
   testWidgets('Wi-Fi QR is a complete non-URL result, not Partial', (
     tester,
   ) async {

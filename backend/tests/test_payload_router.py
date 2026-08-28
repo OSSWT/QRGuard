@@ -39,6 +39,18 @@ class TestPayloadTypeDetection:
     def test_payment(self):
         assert route_payload("upi://pay?pa=x@bank").payload_type == "payment"
 
+    def test_hihive_attendance_token(self):
+        token = (
+            "Q01:*:PACkNWVoPGvQQJ0Htc32cjZdTi+na5wHs0CB9rCOeg34g41pKQdYzMgrwZOV"
+            "qjZeYyQ4SLPlONzsyH+m6fku+yLQK1V/jFB4cQJp85G0JgI="
+        )
+        info = route_payload(token)
+        assert info.payload_type == "attendance"
+        assert not info.is_url
+
+    def test_hihive_like_plain_text_is_not_overmatched(self):
+        assert route_payload("Q01:*:short classroom note").payload_type == "text"
+
     def test_crc_valid_duitnow_emv_payload(self):
         payload = (
             "00020201021126410014A000000615000101065016640209123456789"

@@ -10,23 +10,25 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            "com.osswt.qrguard/external_payment_apps",
+            "com.osswt.qrguard/external_apps",
         ).setMethodCallHandler { call, result ->
             when (call.method) {
                 "openTngEWallet" -> {
-                    val launchIntent = packageManager
-                        .getLaunchIntentForPackage("my.com.tngdigital.ewallet")
-                    if (launchIntent == null) {
-                        result.success(false)
-                    } else {
-                        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(launchIntent)
-                        result.success(true)
-                    }
+                    result.success(openInstalledApp("my.com.tngdigital.ewallet"))
                 }
+
+                "openHiHive" -> result.success(openInstalledApp("com.slc.hihive.community"))
 
                 else -> result.notImplemented()
             }
         }
+    }
+
+    private fun openInstalledApp(packageName: String): Boolean {
+        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+            ?: return false
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(launchIntent)
+        return true
     }
 }

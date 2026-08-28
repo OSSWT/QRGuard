@@ -13,7 +13,6 @@ import '../app_controller.dart';
 import '../services/api_client.dart';
 import '../services/history_service.dart';
 import '../services/live_qr_stability.dart';
-import '../services/qr_capture_selector.dart';
 import '../theme.dart';
 import '../widgets/pulse_lens.dart';
 import 'analysing_screen.dart';
@@ -35,9 +34,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     detectionTimeoutMs: 120,
     formats: const [BarcodeFormat.qrCode],
     returnImage: true,
-    // Digital auto-zoom resamples the image evidence used by the structural
-    // model. Keep the native frame and ask the user to move closer instead.
-    autoZoom: false,
+    // Projected/classroom QR codes can occupy only a small part of the frame.
+    // ML Kit auto-zoom improves decoding; QRGuard still rectifies the detected
+    // code before any image evidence reaches the backend.
+    autoZoom: true,
   );
   final _history = HistoryService();
   final _picker = ImagePicker();
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   static const _autoPromptDelay = Duration(milliseconds: 100);
   static const _candidateLifetime = Duration(milliseconds: 1800);
-  static const _maximumLiveCandidates = 8;
+  static const _maximumLiveCandidates = 5;
 
   @override
   void initState() {
@@ -77,8 +77,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final url = await widget.appController.settings.backendUrl();
     if (!mounted) return;
     final previous = _api;
-    setState(() => _api = ApiClient(baseUrl: url));
+    final next = ApiClient(baseUrl: url);
+    setState(() => _api = next);
     previous?.dispose();
+    // Render may suspend a free service while idle. Wake it while the user is
+    // aiming the camera so the first real scan does not pay the cold-start wait.
+    unawaited(next.health().then<void>((_) {}, onError: (_) {}));
   }
 
   Future<void> _loadHistory() async {
@@ -238,8 +242,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     setState(() => _confirming = true);
     await _safeStop();
     if (!mounted) return;
-    final evidence = await _selectLiveEvidence(candidate.payload);
-    if (!mounted) return;
 
     final proceed = await showDialog<bool>(
       context: context,
@@ -271,6 +273,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     setState(() => _confirming = false);
     if (proceed == true) {
       _dismissedPayload = null;
+      final evidence = _evidenceForPayload(candidate.payload);
       await _openAnalysis(
         evidence.isEmpty ? candidate : evidence.first,
         evidence: evidence,
@@ -309,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _scheduledPromptPayload = null;
     setState(() => _confirming = true);
     await _safeStop();
-    final evidence = await _selectLiveEvidence(candidate.payload);
+    final evidence = _evidenceForPayload(candidate.payload);
     if (!mounted) return;
     await _openAnalysis(
       evidence.isEmpty ? candidate : evidence.first,
@@ -317,37 +320,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  Future<List<_Candidate>> _selectLiveEvidence(String payload) async {
+  List<_Candidate> _evidenceForPayload(String payload) {
     final candidates = [
       for (final candidate in _liveCandidates)
         if (candidate.payload == payload && candidate.hasUsableImage) candidate,
     ];
     if (candidates.isEmpty) return const [];
-    if (candidates.length == 1) return [candidates.single];
-
-    try {
-      final ranked = await compute(rankQrCaptures, [
-        for (final candidate in candidates)
-          QrCaptureSample(
-            frame: candidate.frame!,
-            corners: candidate.corners,
-            frameSize: candidate.frameSize,
-          ),
-      ]);
-      final selected = [
-        for (final index in ranked)
-          if (index >= 0 && index < candidates.length) candidates[index],
-      ];
-      if (selected.isNotEmpty) {
-        return [selected.first];
-      }
-    } catch (_) {
-      // Fall back to the inexpensive geometry-based candidate if an isolate is
-      // unavailable on a particular device.
-    }
-    final preferred = _candidate?.payload == payload ? _candidate : null;
-    if (preferred != null && preferred.hasUsableImage) return [preferred];
-    return [candidates.last];
+    // Full-resolution crop/clarity work is intentionally deferred until the
+    // Analysing screen is visible. Sorting by cheap geometry first gives that
+    // worker the strongest candidates without freezing this ready state.
+    candidates.sort((left, right) => right.quality.compareTo(left.quality));
+    return candidates;
   }
 
   Future<void> _pickGalleryImage() async {
@@ -572,286 +555,340 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.qrColors;
     final detected = _candidate != null;
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-              sliver: SliverList.list(
-                children: [
-                  Row(
-                    children: [
-                      const PulseLensMark(size: 46),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'QRGuard',
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 0.2,
-                              ),
+        child: LayoutBuilder(
+          builder: (context, viewport) {
+            final wide = viewport.maxWidth >= 900;
+            return CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    wide ? 32 : 20,
+                    12,
+                    wide ? 32 : 20,
+                    32,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1180),
+                        child: Column(
+                          children: [
+                            _buildHeader(context),
+                            const SizedBox(height: 20),
+                            if (wide)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: _buildScannerPanel(
+                                      context,
+                                      detected,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 32),
+                                  Expanded(
+                                    flex: 5,
+                                    child: _buildRecentPanel(context),
+                                  ),
+                                ],
+                              )
+                            else ...[
+                              _buildScannerPanel(context, detected),
+                              const SizedBox(height: 28),
+                              _buildRecentPanel(context),
+                            ],
+                          ],
                         ),
                       ),
-                      IconButton.filledTonal(
-                        tooltip: 'Settings',
-                        onPressed: _openSettings,
-                        icon: const Icon(Icons.settings_outlined),
-                      ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 20),
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) => Row(
+    children: [
+      const PulseLensMark(size: 46),
+      const SizedBox(width: 12),
+      Expanded(
+        child: Text(
+          'QRGuard',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w900,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ),
+      IconButton.filledTonal(
+        tooltip: 'Settings',
+        onPressed: _openSettings,
+        icon: const Icon(Icons.settings_outlined),
+      ),
+    ],
+  );
+
+  Widget _buildScannerPanel(BuildContext context, bool detected) {
+    final colors = context.qrColors;
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 580),
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF11100F),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: colors.border, width: 1.5),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(22),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ColoredBox(
                         color: const Color(0xFF11100F),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: colors.border, width: 1.5),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final previewSize = constraints.biggest;
+                            final scanSide = previewSize.shortestSide * 0.82;
+                            return MobileScanner(
+                              controller: _scanner,
+                              onDetect: _onDetect,
+                              fit: BoxFit.cover,
+                              tapToFocus: true,
+                              scanWindow: Rect.fromCenter(
+                                center: previewSize.center(Offset.zero),
+                                width: scanSide,
+                                height: scanSide,
+                              ),
+                              scanWindowUpdateThreshold: 12,
+                            );
+                          },
+                        ),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(22),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            ColoredBox(
-                              color: const Color(0xFF11100F),
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  final previewSize = constraints.biggest;
-                                  final scanSide =
-                                      previewSize.shortestSide * 0.82;
-                                  return MobileScanner(
-                                    controller: _scanner,
-                                    onDetect: _onDetect,
-                                    fit: BoxFit.cover,
-                                    tapToFocus: true,
-                                    scanWindow: Rect.fromCenter(
-                                      center: previewSize.center(Offset.zero),
-                                      width: scanSide,
-                                      height: scanSide,
+                      LiveCameraFrame(detected: detected),
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 14,
+                        child: Center(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFF11100F,
+                              ).withValues(alpha: 0.78),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 11,
+                                vertical: 7,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.videocam_outlined,
+                                    color: Color(0xFFFFD0A8),
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    'Live camera',
+                                    style: TextStyle(
+                                      color: Color(0xFFF8EEE7),
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 11,
                                     ),
-                                    scanWindowUpdateThreshold: 12,
-                                  );
-                                },
+                                  ),
+                                ],
                               ),
                             ),
-                            LiveCameraFrame(detected: detected),
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              top: 14,
-                              child: Center(
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFF11100F,
-                                    ).withValues(alpha: 0.78),
-                                    borderRadius: BorderRadius.circular(999),
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 11,
-                                      vertical: 7,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.videocam_outlined,
-                                          color: Color(0xFFFFD0A8),
-                                          size: 16,
-                                        ),
-                                        SizedBox(width: 6),
-                                        Text(
-                                          'Live camera',
-                                          style: TextStyle(
-                                            color: Color(0xFFF8EEE7),
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 16,
+                        right: 16,
+                        bottom: 14,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: const Color(
+                              0xFF11100F,
+                            ).withValues(alpha: 0.82),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 9,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  detected
+                                      ? _candidateReady
+                                            ? Icons.center_focus_strong_rounded
+                                            : Icons.hourglass_top_rounded
+                                      : Icons.center_focus_weak_rounded,
+                                  color: _candidateReady
+                                      ? colors.signalLight
+                                      : colors.brand,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    detected
+                                        ? _candidateReady
+                                              ? 'QR detected · opening confirmation'
+                                              : 'QR detected · hold steady'
+                                        : 'Align one QR inside the frame',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: _candidateReady
+                                          ? colors.signalLight
+                                          : const Color(0xFFF8EEE7),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                            Positioned(
-                              left: 16,
-                              right: 16,
-                              bottom: 14,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: const Color(
-                                    0xFF11100F,
-                                  ).withValues(alpha: 0.82),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 9,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        detected
-                                            ? _candidateReady
-                                                  ? Icons
-                                                        .center_focus_strong_rounded
-                                                  : Icons.hourglass_top_rounded
-                                            : Icons.center_focus_weak_rounded,
-                                        color: _candidateReady
-                                            ? colors.signalLight
-                                            : colors.brand,
-                                        size: 18,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Flexible(
-                                        child: Text(
-                                          detected
-                                              ? _candidateReady
-                                                    ? 'QR detected · stable frame ready'
-                                                    : 'QR detected · hold steady'
-                                              : 'Align one QR inside the frame',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: _candidateReady
-                                                ? colors.signalLight
-                                                : const Color(0xFFF8EEE7),
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (_message != null) ...[
-                    const SizedBox(height: 12),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: colors.warningSurface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: colors.warning),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.info_outline_rounded,
-                              color: colors.warning,
-                            ),
-                            const SizedBox(width: 9),
-                            Expanded(child: Text(_message!)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FilledButton.icon(
-                          style: _scannerActionStyle(context),
-                          onPressed: _api == null || _navigating || _confirming
-                              ? null
-                              : _scanCandidate,
-                          icon: const Icon(Icons.qr_code_scanner_rounded),
-                          label: const Text('Scan'),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: FilledButton.icon(
-                          style: _scannerActionStyle(context),
-                          onPressed: _navigating || _confirming
-                              ? null
-                              : _pickGalleryImage,
-                          icon: const Icon(Icons.photo_library_outlined),
-                          label: const Text('Gallery'),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Auto-detect is on · Scan is the backup action',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: colors.secondaryText, fontSize: 11),
-                  ),
-                  const SizedBox(height: 28),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Recent Scans',
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                      if (_recent.isNotEmpty)
-                        TextButton(
-                          onPressed: _openHistory,
-                          child: const Text('View all'),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  if (_recent.isEmpty)
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(18),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.history_rounded,
-                              color: colors.secondaryText,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                widget.appController.saveHistory
-                                    ? 'Scanned domains will appear here. Full URLs '
-                                          'and QR images are never stored.'
-                                    : 'Recent Scans is disabled in Privacy & History.',
-                                style: TextStyle(
-                                  color: colors.secondaryText,
-                                  height: 1.4,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  else
-                    ..._recent.map(
-                      (record) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: ScanHistoryTile(record: record, compact: true),
-                      ),
-                    ),
-                ],
+                ),
               ),
+            ),
+            if (_message != null) ...[
+              const SizedBox(height: 12),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colors.warningSurface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: colors.warning),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline_rounded, color: colors.warning),
+                      const SizedBox(width: 9),
+                      Expanded(child: Text(_message!)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.icon(
+                    style: _scannerActionStyle(context),
+                    onPressed: _api == null || _navigating || _confirming
+                        ? null
+                        : _scanCandidate,
+                    icon: const Icon(Icons.qr_code_scanner_rounded),
+                    label: const Text('Scan'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: FilledButton.icon(
+                    style: _scannerActionStyle(context),
+                    onPressed: _navigating || _confirming
+                        ? null
+                        : _pickGalleryImage,
+                    icon: const Icon(Icons.photo_library_outlined),
+                    label: const Text('Gallery'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Auto-detect is on · Scan is the backup action',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: colors.secondaryText, fontSize: 11),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRecentPanel(BuildContext context) {
+    final colors = context.qrColors;
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Recent Scans',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ),
+            if (_recent.isNotEmpty)
+              TextButton(
+                onPressed: _openHistory,
+                child: const Text('View all'),
+              ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        if (_recent.isEmpty)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Row(
+                children: [
+                  Icon(Icons.history_rounded, color: colors.secondaryText),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      widget.appController.saveHistory
+                          ? 'Scanned domains will appear here. Full URLs and QR '
+                                'images are never stored.'
+                          : 'Recent Scans is disabled in Privacy & History.',
+                      style: TextStyle(
+                        color: colors.secondaryText,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          ..._recent.map(
+            (record) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: ScanHistoryTile(record: record, compact: true),
+            ),
+          ),
+      ],
     );
   }
 }

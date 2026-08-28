@@ -53,7 +53,9 @@ Copy-Item -LiteralPath (Join-Path $repoRoot "deploy\web\privacy.html") `
     -Destination (Join-Path $publicRoot "privacy.html") -Force
 
 $downloads = New-Item -ItemType Directory -Path (Join-Path $publicRoot "downloads") -Force
-$apkName = "qrguard-1.0.0+8006.apk"
+$versionInfo = Get-Content -LiteralPath (Join-Path $appRoot "build\web\version.json") `
+    -Raw -Encoding UTF8 | ConvertFrom-Json
+$apkName = "qrguard-$($versionInfo.version)+$($versionInfo.build_number).apk"
 $apkTarget = Join-Path $downloads.FullName $apkName
 Copy-Item -LiteralPath (Join-Path $appRoot "build\app\outputs\flutter-apk\app-release.apk") `
     -Destination $apkTarget -Force

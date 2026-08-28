@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../services/api_client.dart';
 import '../services/history_service.dart';
+import '../services/qr_capture_selector.dart';
 import '../services/qr_cropper.dart';
 import '../theme.dart';
 import '../widgets/pulse_lens.dart';
@@ -64,7 +65,7 @@ class AnalysingScreen extends StatefulWidget {
     this.imageSource = 'unknown',
     this.evidence = const [],
     this.cropTimeout = const Duration(seconds: 8),
-    this.analysisTimeout = const Duration(seconds: 15),
+    this.analysisTimeout = const Duration(seconds: 30),
   });
 
   final ApiClient api;
@@ -99,6 +100,40 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
     'Analysing QR content',
     'Computing risk',
   ];
+
+  Future<Uint8List?> _prepareBestCrop(List<QrFrameEvidence> evidence) async {
+    if (evidence.isEmpty) return null;
+    var selected = evidence.first;
+    if (evidence.length > 1) {
+      try {
+        final ranked = await compute(rankQrCaptures, [
+          for (final sample in evidence)
+            QrCaptureSample(
+              frame: sample.frame,
+              corners: sample.corners,
+              frameSize: sample.frameSize,
+            ),
+        ]);
+        if (ranked.isNotEmpty &&
+            ranked.first >= 0 &&
+            ranked.first < evidence.length) {
+          selected = evidence[ranked.first];
+        }
+      } catch (_) {
+        // The candidates already arrive geometry-ranked; the first is a safe
+        // fallback on platforms where background isolate work is unavailable.
+      }
+    }
+    return compute(
+      cropInBackground,
+      CropRequest(
+        frame: selected.frame,
+        corners: selected.corners,
+        frameSize: selected.frameSize,
+        normalizeCameraColor: widget.imageSource == 'camera',
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -135,20 +170,12 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
                 frameSize: widget.frameSize,
               ),
             ];
-      // Live observations arrive best-quality first. Analyse exactly one crop,
-      // matching the gallery contract and avoiding hidden frame consensus.
-      final sample = evidence.firstOrNull;
-      final imageBytes = sample == null
+      // Select and rectify on the visible Analysing screen. Previously this
+      // work happened while Home still said "stable frame ready", which looked
+      // like a frozen scan on physical phones.
+      final imageBytes = evidence.isEmpty
           ? null
-          : await compute(
-              cropInBackground,
-              CropRequest(
-                frame: sample.frame,
-                corners: sample.corners,
-                frameSize: sample.frameSize,
-                normalizeCameraColor: widget.imageSource == 'camera',
-              ),
-            ).timeout(
+          : await _prepareBestCrop(evidence).timeout(
               widget.cropTimeout,
               onTimeout: () => throw const _CropPreparationTimeout(),
             );
@@ -234,9 +261,8 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
   }
 
   String get _serverTimeoutMessage =>
-      'The analysis server did not respond in time. Check that the backend is '
-      'running and that ${widget.api.baseUrl} matches the address shown by '
-      'scripts\\run_server.py.';
+      'The analysis service did not respond in time. It may be waking after an '
+      'idle period. Wait a moment, then try again.';
 
   @override
   Widget build(BuildContext context) => PopScope(
@@ -330,8 +356,8 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
                           const Expanded(
                             child: Text(
                               'This is taking longer than usual. QRGuard will '
-                              'stop automatically if the service does not '
-                              'respond, then you can retry.',
+                              'keep checking while the analysis service wakes. '
+                              'You can cancel and retry at any time.',
                               style: TextStyle(height: 1.4),
                             ),
                           ),

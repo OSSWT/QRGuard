@@ -24,7 +24,16 @@ import tldextract
 from semantic.duitnow_qr import MALAYSIA_AID, parse_duitnow
 
 PayloadType = Literal[
-    "url", "wifi", "vcard", "email", "phone", "sms", "geo", "payment", "text"
+    "url",
+    "wifi",
+    "vcard",
+    "email",
+    "phone",
+    "sms",
+    "geo",
+    "payment",
+    "attendance",
+    "text",
 ]
 
 # Payloads longer than this are truncated before analysis. QR codes rarely
@@ -45,6 +54,13 @@ _DOMAIN_LIKE = re.compile(
     r"([:/?#].*)?$",
     re.IGNORECASE,
 )
+
+# UTAR's official hi-hive attendance codes carry an opaque signed-looking token
+# rather than a URL. Recognising the narrow envelope lets the client hand the user
+# to the official app without pretending QRGuard can validate or redeem the token.
+# The body is deliberately strict so ordinary text beginning with ``Q01`` is never
+# relabelled as attendance data.
+_HIHIVE_ATTENDANCE = re.compile(r"^Q01:\*:[A-Za-z0-9+/_-]{32,}={0,2}$")
 
 # Prefix table checked in order. javascript:/data: are intentionally routed
 # as "url" (see module docstring).
@@ -103,6 +119,9 @@ def route_payload(payload: str) -> PayloadInfo:
         return PayloadInfo(payload_type="text", raw=raw, truncated=truncated)
 
     lowered = raw.lower()
+
+    if _HIHIVE_ATTENDANCE.fullmatch(raw):
+        return PayloadInfo(payload_type="attendance", raw=raw, truncated=truncated)
 
     # Merchant-presented DuitNow uses the EMV TLV format rather than a
     # ``duitnow://`` prefix. Recognise it only after CRC, country, currency and

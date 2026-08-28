@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/scan_response.dart';
 import '../services/api_client.dart';
 import '../services/duitnow_qr.dart';
-import '../services/payment_app_launcher.dart';
+import '../services/official_app_launcher.dart';
 import '../theme.dart';
 import '../widgets/reason_card.dart';
 
@@ -28,10 +28,16 @@ class _ResultScreenState extends State<ResultScreen> {
   String? _deepError;
 
   DuitNowQr? get _duitNow => DuitNowQr.tryParse(_scan.payload);
-  bool get _canProceed => _scan.isUrl || _duitNow != null;
-  String get _proceedLabel =>
-      _duitNow == null ? 'Proceed to URL' : 'Open TNG eWallet';
-  String get _destinationDescription => _duitNow == null
+  bool get _isHiHive => _scan.isHiHiveAttendance;
+  bool get _canProceed => _scan.isUrl || _duitNow != null || _isHiHive;
+  String get _proceedLabel => _isHiHive
+      ? 'Open hi-hive'
+      : _duitNow == null
+      ? 'Proceed to URL'
+      : 'Open TNG eWallet';
+  String get _destinationDescription => _isHiHive
+      ? 'Official hi-hive app (scan the original attendance QR again)'
+      : _duitNow == null
       ? _scan.displayTarget
       : 'DuitNow recipient: ${_duitNow!.recipientName}';
 
@@ -282,7 +288,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 : () => Navigator.of(context).pop(),
             icon: Icon(
               _canProceed
-                  ? (_duitNow == null
+                  ? (_isHiHive
+                        ? Icons.school_outlined
+                        : _duitNow == null
                         ? Icons.open_in_new_rounded
                         : Icons.account_balance_wallet_outlined)
                   : Icons.qr_code_scanner,
@@ -339,7 +347,11 @@ class _ResultScreenState extends State<ResultScreen> {
         TextButton(
           onPressed: _confirmWarningProceed,
           child: Text(
-            _duitNow == null ? 'Proceed anyway' : 'Open payment app anyway',
+            _isHiHive
+                ? 'Open hi-hive to scan again'
+                : _duitNow == null
+                ? 'Proceed anyway'
+                : 'Open payment app anyway',
             style: TextStyle(color: style.color),
           ),
         ),
@@ -425,13 +437,20 @@ class _ResultScreenState extends State<ResultScreen> {
           color: context.qrColors.warning,
         ),
         title: Text(
-          _duitNow == null
+          _isHiHive
+              ? 'Open the official hi-hive app?'
+              : _duitNow == null
               ? 'Proceed to this destination?'
               : 'Open this payment in TNG?',
         ),
         content: Text(
-          'QRGuard found signals that require caution. You are responsible for '
-          'the consequences if you continue.\n\n$_destinationDescription',
+          _isHiHive
+              ? 'QRGuard recognises the attendance format but cannot verify or '
+                    'submit the token. Open hi-hive, then scan the original QR '
+                    'again inside the official app.'
+              : 'QRGuard found signals that require caution. You are responsible '
+                    'for the consequences if you continue.\n\n'
+                    '$_destinationDescription',
         ),
         actions: [
           FilledButton(
@@ -510,6 +529,10 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Future<void> _openDestination() async {
+    if (_isHiHive) {
+      await _openHiHive();
+      return;
+    }
     if (_duitNow != null) {
       await _openTngEWallet();
       return;
@@ -518,7 +541,7 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Future<void> _openTngEWallet() async {
-    final opened = await PaymentAppLauncher.openTngEWallet();
+    final opened = await OfficialAppLauncher.openTngEWallet();
     if (!mounted || opened) return;
 
     final openStore = await showDialog<bool>(
@@ -546,6 +569,46 @@ class _ResultScreenState extends State<ResultScreen> {
     if (openStore != true) return;
     final storeUri = Uri.https('play.google.com', '/store/apps/details', {
       'id': 'my.com.tngdigital.ewallet',
+    });
+    final launched = await launchUrl(
+      storeUri,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open Google Play.')),
+      );
+    }
+  }
+
+  Future<void> _openHiHive() async {
+    final opened = await OfficialAppLauncher.openHiHive();
+    if (!mounted || opened) return;
+
+    final openStore = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.school_outlined),
+        title: const Text('hi-hive is not installed'),
+        content: const Text(
+          'Install the official hi-hive Community app, then use its scanner on '
+          'the original attendance QR. QRGuard does not pass or submit the token.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Open Google Play'),
+          ),
+        ],
+      ),
+    );
+    if (openStore != true) return;
+    final storeUri = Uri.https('play.google.com', '/store/apps/details', {
+      'id': 'com.slc.hihive.community',
     });
     final launched = await launchUrl(
       storeUri,

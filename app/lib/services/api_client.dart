@@ -30,7 +30,7 @@ class ApiClient {
   }) : _client = client ?? http.Client(),
        _ownsClient = client == null;
 
-  static const _defaultTimeout = Duration(seconds: 12);
+  static const _defaultTimeout = Duration(seconds: 25);
 
   /// The deep check calls an LLM, so it needs a longer budget than a normal scan.
   static const _deepCheckTimeout = Duration(seconds: 30);

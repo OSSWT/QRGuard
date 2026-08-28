@@ -37,7 +37,8 @@ void main() {
     await tester.pump();
 
     expect(find.textContaining('did not respond in time'), findsOneWidget);
-    expect(find.textContaining('http://10.0.2.2:8001'), findsOneWidget);
+    expect(find.textContaining('waking after an idle period'), findsOneWidget);
+    expect(find.textContaining('http://10.0.2.2:8001'), findsNothing);
     expect(find.text('Try Again'), findsOneWidget);
     expect(find.text('Back to Scanner'), findsOneWidget);
     api.dispose();

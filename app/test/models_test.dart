@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qrguard/models/scan_response.dart';
 import 'package:qrguard/services/settings_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const _phishingScan = '''
 {
@@ -246,6 +247,22 @@ void main() {
     test('empty input falls back to the default', () {
       expect(
         SettingsService.normalise('   '),
+        SettingsService.defaultBackendUrl,
+      );
+    });
+  });
+
+  group('SettingsService backend migration', () {
+    test('old Render production API moves to the current release default', () async {
+      SharedPreferences.setMockInitialValues({
+        'backend_url': 'https://qrguard-osswt-20260824-api.onrender.com',
+      });
+
+      final url = await SettingsService().backendUrl();
+
+      expect(url, SettingsService.defaultBackendUrl);
+      expect(
+        (await SharedPreferences.getInstance()).getString('backend_url'),
         SettingsService.defaultBackendUrl,
       );
     });
