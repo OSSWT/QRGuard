@@ -79,6 +79,41 @@ void main() {
     api.dispose();
   });
 
+  testWidgets('browser-selected gallery bytes bypass client-side crop', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final api = _RecordingApi();
+    final selectedImage = img.Image(width: 16, height: 16);
+    img.fill(selectedImage, color: img.ColorRgb8(240, 240, 240));
+    final selected = Uint8List.fromList(img.encodePng(selectedImage));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildTheme(Brightness.dark),
+        home: AnalysingScreen(
+          api: api,
+          history: HistoryService(),
+          saveHistory: false,
+          payload: null,
+          imageSource: 'gallery',
+          selectedImageBytes: selected,
+        ),
+      ),
+    );
+
+    await tester.pump();
+    await tester.pump();
+
+    expect(api.calls, 1);
+    expect(api.payload, isNull);
+    expect(api.imageBytes, orderedEquals(selected));
+    expect(api.imageSource, 'gallery');
+    api.dispose();
+  });
+
   testWidgets('screen timeout replaces the spinner with recovery UI', (
     tester,
   ) async {
@@ -129,5 +164,31 @@ class _TimesOutApi extends ApiClient {
   }) {
     calls++;
     return Future<ScanResponse>.error(TimeoutException('test timeout'));
+  }
+}
+
+class _RecordingApi extends ApiClient {
+  _RecordingApi()
+    : super(
+        baseUrl: 'https://local.invalid',
+        client: MockClient((_) async => http.Response('{}', 200)),
+      );
+
+  int calls = 0;
+  String? payload;
+  Uint8List? imageBytes;
+  String? imageSource;
+
+  @override
+  Future<ScanResponse> scan({
+    String? payload,
+    Uint8List? imageBytes,
+    String imageSource = 'unknown',
+  }) {
+    calls++;
+    this.payload = payload;
+    this.imageBytes = imageBytes;
+    this.imageSource = imageSource;
+    return Future<ScanResponse>.error(const ApiException('captured'));
   }
 }

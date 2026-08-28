@@ -93,6 +93,7 @@ class AnalysingScreen extends StatefulWidget {
     this.frameSize = Size.zero,
     this.imageSource = 'unknown',
     this.evidence = const [],
+    this.selectedImageBytes,
     this.cropTimeout = const Duration(seconds: 8),
     this.analysisTimeout = const Duration(seconds: 30),
   });
@@ -100,12 +101,17 @@ class AnalysingScreen extends StatefulWidget {
   final ApiClient api;
   final HistoryService history;
   final bool saveHistory;
-  final String payload;
+  final String? payload;
   final Uint8List? frame;
   final List<Offset> corners;
   final Size frameSize;
   final String imageSource;
   final List<QrFrameEvidence> evidence;
+
+  /// A browser-selected Gallery file. Web cannot call mobile_scanner's
+  /// analyzeImage API, so the backend decodes and rectifies this image before
+  /// Structural inference. Native camera/gallery flows continue to crop here.
+  final Uint8List? selectedImageBytes;
   final Duration cropTimeout;
   final Duration analysisTimeout;
 
@@ -186,12 +192,14 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
       // Select and rectify on the visible Analysing screen. Previously this
       // work happened while Home still said "stable frame ready", which looked
       // like a frozen scan on physical phones.
-      final imageBytes = evidence.isEmpty
-          ? null
-          : await _prepareBestCrop(evidence).timeout(
-              widget.cropTimeout,
-              onTimeout: () => throw const _CropPreparationTimeout(),
-            );
+      final imageBytes =
+          widget.selectedImageBytes ??
+          (evidence.isEmpty
+              ? null
+              : await _prepareBestCrop(evidence).timeout(
+                  widget.cropTimeout,
+                  onTimeout: () => throw const _CropPreparationTimeout(),
+                ));
       if (imageBytes == null &&
           (widget.imageSource == 'camera' || widget.imageSource == 'gallery')) {
         throw const _ImageEvidenceUnavailable();

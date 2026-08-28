@@ -5,6 +5,21 @@ void main() {
   group('LiveQrStabilityGate', () {
     final start = DateTime(2026, 8, 10, 12);
 
+    test('responsive policy accepts one ML Kit-validated QR sighting', () {
+      final gate = LiveQrStabilityGate(
+        stableFor: Duration.zero,
+        minimumSightings: 1,
+        maximumGap: const Duration(milliseconds: 700),
+      );
+
+      final first = gate.observe('decoded', start);
+
+      expect(first.startedNewSequence, isTrue);
+      expect(first.sightings, 1);
+      expect(first.ready, isTrue);
+      expect(gate.isReady('decoded', start), isTrue);
+    });
+
     test('requires repeated sightings for the complete stable period', () {
       final gate = LiveQrStabilityGate();
 

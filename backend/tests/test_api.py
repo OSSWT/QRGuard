@@ -87,6 +87,22 @@ def _pixel_distinct_pngs(source: bytes, count: int) -> list[bytes]:
     return variants
 
 
+def _conditioned_fixture(
+    filename: str, *, brightness: float = 1.0, blur: float = 0.0
+) -> bytes:
+    """Apply deterministic camera-like acquisition conditions to a fixture."""
+    from PIL import Image, ImageEnhance, ImageFilter
+
+    image = Image.open(ROOT / "data/test_qrs" / filename).convert("RGB")
+    if brightness != 1.0:
+        image = ImageEnhance.Brightness(image).enhance(brightness)
+    if blur > 0:
+        image = image.filter(ImageFilter.GaussianBlur(blur))
+    output = io.BytesIO()
+    image.save(output, "PNG")
+    return output.getvalue()
+
+
 class TestHealth:
     def test_health_reports_all_components(self, client):
         r = client.get("/health")
@@ -237,6 +253,7 @@ class TestScan:
         monkeypatch.setattr(
             "app.pipeline.load_camera_structural", lambda: BoundaryAnalyzer()
         )
+        monkeypatch.setattr("app.pipeline.load_structural", lambda: BoundaryAnalyzer())
         body = client.post(
             "/scan",
             data={
@@ -330,7 +347,47 @@ class TestScan:
         )
         assert body["branch_scores"]["image_source"] == "gallery"
 
-    def test_camera_and_gallery_use_domain_models_without_suppressing_scores(
+    def test_web_gallery_file_is_decoded_and_cropped_server_side(self, client, qr_png):
+        from PIL import Image
+
+        qr = Image.open(io.BytesIO(qr_png)).convert("RGB").resize((260, 260))
+        selected = Image.new("RGB", (1000, 700), (225, 220, 210))
+        selected.paste(qr, (610, 260))
+        encoded = io.BytesIO()
+        selected.save(encoded, "PNG")
+
+        body = client.post(
+            "/scan",
+            data={"image_source": "gallery"},
+            files={"image": ("selected.png", encoded.getvalue(), "image/png")},
+        ).json()
+
+        assert body["payload_source"] == "decoded"
+        assert body["payload"] == "https://www.google.com/maps"
+        assert body["registered_domain"] == "google.com"
+        assert body["branch_scores"]["structural_type"] == "clean"
+        assert body["verdict"] == "safe"
+        assert body["partial_analysis"] is False
+
+    def test_web_gallery_file_without_qr_returns_actionable_error(self, client):
+        from PIL import Image
+
+        selected = Image.new("RGB", (800, 600), (230, 230, 230))
+        encoded = io.BytesIO()
+        selected.save(encoded, "PNG")
+
+        response = client.post(
+            "/scan",
+            data={"image_source": "gallery"},
+            files={"image": ("blank.png", encoded.getvalue(), "image/png")},
+        )
+
+        assert response.status_code == 422
+        assert response.json()["detail"] == (
+            "No readable QR code was found in that image"
+        )
+
+    def test_camera_disagreement_uses_stable_clean_second_opinion(
         self, client, qr_png, monkeypatch
     ):
         class GalleryAnalyzer:
@@ -365,14 +422,11 @@ class TestScan:
             ).json()
 
         assert results["gallery"]["branch_scores"]["p_structural"] == 0.05
-        assert results["camera"]["branch_scores"]["p_structural"] == 0.93
+        assert results["camera"]["branch_scores"]["p_structural_raw"] == 0.93
+        assert results["camera"]["branch_scores"]["p_structural"] == 0.03
+        assert results["camera"]["branch_scores"]["structural_type"] == "clean"
         assert results["gallery"]["verdict"] == "safe"
-        assert results["camera"]["verdict"] == "warning"
-        assert results["camera"]["risk_score"] == load_engine().safe_max
-        assert any(
-            "Camera image evidence is uncertain" in reason
-            for reason in results["camera"]["reasons"]
-        )
+        assert results["camera"]["verdict"] == "safe"
 
     def test_camera_exposure_is_normalized_before_inference(
         self, client, qr_png, monkeypatch
@@ -488,6 +542,59 @@ class TestScan:
         assert body["verdict"] == "safe"
         assert body["partial_analysis"] is False
 
+    @pytest.mark.parametrize(
+        ("filename", "payload", "brightness", "blur"),
+        [
+            ("01_safe_google.png", "https://www.google.com/maps", 1.35, 0.0),
+            ("01_safe_google.png", "https://www.google.com/maps", 1.65, 0.0),
+            ("01_safe_google.png", "https://www.google.com/maps", 1.00, 0.8),
+            ("02_safe_youtube.png", "https://www.youtube.com/", 0.45, 0.0),
+            ("02_safe_youtube.png", "https://www.youtube.com/", 1.65, 0.0),
+            ("03_safe_utar.png", "https://www.utar.edu.my/", 0.65, 0.0),
+            ("03_safe_utar.png", "https://www.utar.edu.my/", 1.65, 0.0),
+        ],
+    )
+    def test_camera_environment_does_not_turn_clean_qr_into_warning(
+        self, client, filename, payload, brightness, blur
+    ):
+        image = _conditioned_fixture(filename, brightness=brightness, blur=blur)
+        body = client.post(
+            "/scan",
+            data={"payload": payload, "image_source": "camera"},
+            files={"image": (filename, image, "image/png")},
+        ).json()
+
+        assert body["branch_scores"]["structural_type"] == "clean"
+        assert body["verdict"] == "safe"
+        assert body["partial_analysis"] is False
+
+    @pytest.mark.parametrize(
+        ("filename", "payload"),
+        [
+            ("07_tampered_sticker.png", "https://www.google.com/maps"),
+            ("08_tampered_occlusion.png", "https://www.youtube.com/"),
+            ("09_tampered_finder.png", "https://www.google.com/"),
+            ("20_adversarial.png", "https://www.google.com/maps"),
+        ],
+    )
+    @pytest.mark.parametrize("brightness", [1.0, 1.35])
+    def test_camera_model_agreement_keeps_real_attacks_blocked(
+        self, client, filename, payload, brightness
+    ):
+        image = _conditioned_fixture(filename, brightness=brightness)
+        body = client.post(
+            "/scan",
+            data={"payload": payload, "image_source": "camera"},
+            files={"image": (filename, image, "image/png")},
+        ).json()
+
+        assert body["branch_scores"]["structural_type"] in {
+            "adversarial",
+            "tampered",
+        }
+        assert body["branch_scores"]["p_structural"] > 0.5
+        assert body["verdict"] == "blocked"
+
     def test_camera_model_keeps_verified_duitnow_complete(
         self, client, camera_clean_png
     ):
@@ -520,6 +627,9 @@ class TestScan:
 
         monkeypatch.setattr(
             "app.pipeline.load_camera_structural", lambda: NoisyPaymentAnalyzer()
+        )
+        monkeypatch.setattr(
+            "app.pipeline.load_structural", lambda: NoisyPaymentAnalyzer()
         )
         payload = (
             "00020201021126410014A000000615000101065016640209123456789"
@@ -574,9 +684,8 @@ class TestScan:
         ).json()
 
         assert body["branch_scores"]["structural_type"] == "tampered"
-        assert body["branch_scores"]["p_structural"] == pytest.approx(
-            body["branch_scores"]["p_structural_raw"]
-        )
+        assert body["branch_scores"]["p_structural"] > 0.9
+        assert body["branch_scores"]["p_structural_raw"] > 0.9
         assert body["verdict"] == "blocked"
 
     def test_legacy_repeated_uploads_use_the_first_crop(self, client, tampered_png):
@@ -593,9 +702,8 @@ class TestScan:
         ).json()
 
         assert "structural_consensus" not in body["branch_scores"]
-        assert body["branch_scores"]["p_structural"] == pytest.approx(
-            body["branch_scores"]["p_structural_raw"]
-        )
+        assert body["branch_scores"]["p_structural"] > 0.9
+        assert body["branch_scores"]["p_structural_raw"] > 0.9
         assert body["verdict"] == "blocked"
 
     def test_repeated_stable_camera_tampering_can_block(self, client, tampered_png):
@@ -611,9 +719,8 @@ class TestScan:
             ],
         ).json()
 
-        assert body["branch_scores"]["p_structural"] == pytest.approx(
-            body["branch_scores"]["p_structural_raw"]
-        )
+        assert body["branch_scores"]["p_structural"] > 0.9
+        assert body["branch_scores"]["p_structural_raw"] > 0.9
         assert body["verdict"] == "blocked"
 
     def test_repeated_stable_clean_camera_frames_are_accepted(
@@ -697,6 +804,7 @@ class TestScan:
         monkeypatch.setattr(
             "app.pipeline.load_camera_structural", lambda: HighAnalyzer()
         )
+        monkeypatch.setattr("app.pipeline.load_structural", lambda: HighAnalyzer())
         files = [("images", ("valid.png", qr_png, "image/png"))]
         files.extend(
             ("images", (f"bad-{index}.png", b"not an image", "image/png"))
@@ -769,6 +877,7 @@ class TestScan:
         monkeypatch.setattr(
             "app.pipeline.load_camera_structural", lambda: BoundaryAnalyzer()
         )
+        monkeypatch.setattr("app.pipeline.load_structural", lambda: BoundaryAnalyzer())
         body = client.post(
             "/scan",
             data={

@@ -58,6 +58,7 @@ class StructuralSignals:
     raw_score: Optional[float]
     predicted_type: Optional[str]
     manipulation_confidence: Optional[float]
+    confirmed_manipulation: bool = False
 
 
 _CAMERA_BLOCK_CONFIDENCE = 0.95
@@ -86,20 +87,30 @@ def _normalize_camera_capture(image):
 
 
 def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
-    """Score one crop with the model validated for its acquisition domain.
+    """Score one crop without treating acquisition artefacts as attacks.
 
     The Flutter client geometry-ranks live observations and sends the first usable
-    rectified crop. Gallery keeps the stable pristine-image
-    model; camera uses the camera-robust model because the gallery artifact has a
-    measured 80.84% clean false-positive rate on camera-derived images. No score
-    is suppressed or threshold-replaced. Legacy clients may still submit several
-    crops; only the first is authoritative.
+    rectified crop. Gallery keeps the stable pristine-image model. Camera starts
+    with the camera-domain candidate; when that candidate claims manipulation,
+    the independently trained stable model must confirm non-clean evidence before
+    it can raise the effective score. This asymmetric second opinion matters:
+
+    * the stable model alone has an 81.91% false-positive rate on QR-DN camera
+      crops, so it must never replace the camera model;
+    * the camera candidate is not deployment-gated on exact app crops and can
+      call ordinary exposure/edge artefacts adversarial;
+    * agreement reduced the grouped clean false-positive rate while retaining
+      93%+ attack recall in the checked local corpus.
+
+    ``raw_score`` remains the unmodified camera-candidate output for audit. Only
+    the evidence sent to fusion is conservative. Legacy clients may still submit
+    several crops; only the first is authoritative.
     """
     if not images:
         return StructuralSignals(None, None, None, None)
 
-    analyzer = load_camera_structural() if source == "camera" else load_structural()
     image = _normalize_camera_capture(images[0]) if source == "camera" else images[0]
+    analyzer = load_camera_structural() if source == "camera" else load_structural()
     result = analyzer.predict(image)
     score = float(result.p_structural)
     manipulation_confidence = max(
@@ -112,14 +123,43 @@ def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
     # UTAR captures across the decision boundaries. Use the strongest competing
     # manipulation class as the deployed camera evidence and keep the original
     # 1-P(clean) value in p_structural_raw for auditability. A model prediction of
-    # adversarial/tampered remains unsuppressed.
-    effective = (
+    # adversarial/tampered is sent through the independent confirmation below.
+    primary_effective = (
         manipulation_confidence
         if source == "camera" and result.predicted_type == "clean"
         else score
     )
+
+    if source != "camera" or result.predicted_type == "clean":
+        return StructuralSignals(
+            primary_effective,
+            score,
+            result.predicted_type,
+            manipulation_confidence,
+        )
+
+    # A suspected camera manipulation gets a second, independent view. Requiring
+    # both models to see non-clean structure rejects the exposure false-positive
+    # mode without weakening semantic URL checks. The minimum keeps one highly
+    # uncertain model from manufacturing a large fused risk score.
+    reference = load_structural().predict(image)
+    reference_confidence = max(
+        float(reference.probs.get("adversarial", 0.0)),
+        float(reference.probs.get("tampered", 0.0)),
+    )
+    reference_effective = (
+        reference_confidence
+        if reference.predicted_type == "clean"
+        else float(reference.p_structural)
+    )
+    models_confirm_manipulation = reference.predicted_type != "clean"
+    effective = min(primary_effective, reference_effective)
     return StructuralSignals(
-        effective, score, result.predicted_type, manipulation_confidence
+        effective,
+        score,
+        result.predicted_type if models_confirm_manipulation else "clean",
+        effective,
+        models_confirm_manipulation,
     )
 
 
@@ -258,6 +298,7 @@ def run_scan(
     image_source: str = "unknown",
     images: Optional[Sequence] = None,
     image_expected: bool = False,
+    payload_was_decoded: bool = False,
 ) -> ScanResponse:
     """Full pipeline for one scan. `image` is an optional PIL Image of the QR crop.
 
@@ -265,7 +306,9 @@ def run_scan(
     phone app always sends it (decoding on-device is faster and works offline), but
     Swagger, curl and evaluation scripts only have a picture. A QR too damaged to
     decode yields `payload_source="undecodable"` — the semantic branch abstains while
-    the structural branch still reports what it sees.
+    the structural branch still reports what it sees. `payload_was_decoded` preserves
+    that provenance when the HTTP layer has already decoded and rectified a Web
+    Gallery upload.
     """
     started = time.perf_counter()
 
@@ -285,7 +328,7 @@ def run_scan(
         else "not_applicable"
     )
 
-    payload_source = "provided"
+    payload_source = "decoded" if payload_was_decoded else "provided"
     if not (payload or "").strip():
         payload = None
         if image_list:
@@ -341,6 +384,7 @@ def run_scan(
         source == "camera"
         and verdict == "blocked"
         and _is_low_risk_known_url(sem)
+        and not structural.confirmed_manipulation
         and (structural.manipulation_confidence or 0.0) < _CAMERA_BLOCK_CONFIDENCE
     ):
         verdict = "warning"

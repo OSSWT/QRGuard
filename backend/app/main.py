@@ -287,6 +287,30 @@ async def scan(
             detail=f"{image_source} image could not be decoded",
         )
 
+    # Web browsers can choose a file but mobile_scanner cannot analyse that file
+    # on Web. In that one payload-less Gallery path, decode and rectify server-side
+    # before Structural sees the image. This prevents a whole screenshot/room from
+    # being mistaken for a tampered QR and preserves the one-code contract used by
+    # the native Gallery picker.
+    gallery_payload_decoded = False
+    if image_source == "gallery" and not (payload or "").strip() and pil_images:
+        from structural.qr_decoder import decode_and_crop_qrs
+
+        detections = decode_and_crop_qrs(pil_images[0])
+        if not detections:
+            raise HTTPException(
+                status_code=422,
+                detail="No readable QR code was found in that image",
+            )
+        if len(detections) > 1:
+            raise HTTPException(
+                status_code=422,
+                detail="That image contains multiple QR codes; choose an image with one",
+            )
+        payload, gallery_crop = detections[0]
+        pil_images = [gallery_crop]
+        gallery_payload_decoded = True
+
     # Camera and gallery share one Structural contract. New clients upload only
     # one geometry-selected crop; for legacy multi-frame clients, preserve order
     # and analyse the first usable crop rather than applying hidden consensus.
@@ -296,6 +320,7 @@ async def scan(
         image_source=image_source,
         images=analysed_images,
         image_expected=bool(uploads),
+        payload_was_decoded=gallery_payload_decoded,
     )
     _dump_if_requested(analysed_images, payload, image_source, result)
     branch = result.branch_scores

@@ -32,7 +32,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _scanner = MobileScannerController(
     detectionSpeed: DetectionSpeed.normal,
-    detectionTimeoutMs: 120,
+    // Analyse often enough to feel immediate without running overlapping ML Kit
+    // work on older phones. A successful QR decode already includes checksum/
+    // error-correction validation, so Home does not need three more sightings.
+    detectionTimeoutMs: 100,
+    cameraResolution: const Size(1280, 720),
+    // Emulator webcams are commonly exposed as an external lens. `normal`
+    // filters them out and makes mobile_scanner report "No cameras available".
+    // `any` still starts the back camera on phones while keeping webcam-backed
+    // development devices usable.
+    lensType: CameraLensType.any,
     formats: const [BarcodeFormat.qrCode],
     returnImage: true,
     // Projected/classroom QR codes can occupy only a small part of the frame.
@@ -43,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _history = HistoryService();
   final _picker = ImagePicker();
   final _stability = LiveQrStabilityGate(
-    stableFor: const Duration(milliseconds: 600),
-    minimumSightings: 3,
-    maximumGap: const Duration(milliseconds: 900),
+    stableFor: Duration.zero,
+    minimumSightings: 1,
+    maximumGap: const Duration(milliseconds: 700),
   );
 
   ApiClient? _api;
@@ -62,11 +71,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String? _message;
   List<ScanRecord> _recent = const [];
 
-  static const _autoPromptDelay = Duration(milliseconds: 100);
+  static const _autoPromptDelay = Duration(milliseconds: 40);
   static const _candidateLifetime = Duration(milliseconds: 1800);
-  // Three stable observations are enough for fallback without retaining and
-  // repeatedly decoding five full camera frames on memory-constrained phones.
-  static const _maximumLiveCandidates = 3;
+  // One ML Kit-validated frame is authoritative. Retaining more full JPEGs adds
+  // memory/latency without making a decoded payload more trustworthy.
+  static const _maximumLiveCandidates = 1;
 
   @override
   void initState() {
@@ -191,8 +200,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         Offset(centre.dx / frameSize.width, centre.dy / frameSize.height),
       );
     } catch (_) {
-      // Some camera implementations do not expose a focus point. The stable
-      // stable-observation gate still prevents the first detectable frame being used.
+      // Some camera implementations do not expose a focus point. The QR was
+      // already decoded and validated, so lack of manual focus is non-fatal.
     }
   }
 
@@ -375,10 +384,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _pickGalleryImage() async {
-    if (kIsWeb) {
-      _showMessage('Gallery QR analysis is not supported in the Web fallback.');
-      return;
-    }
     await _safeStop();
     final image = await _picker.pickImage(source: ImageSource.gallery);
     if (image == null) {
@@ -386,6 +391,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return;
     }
     try {
+      if (kIsWeb) {
+        final bytes = await image.readAsBytes();
+        if (bytes.isEmpty) {
+          _showMessage('That file is empty. Choose another QR image.');
+          await _safeStart();
+          return;
+        }
+        await _openAnalysis(
+          _Candidate(
+            payload: '',
+            frame: bytes,
+            corners: const [],
+            frameSize: Size.zero,
+            imageSource: 'gallery',
+          ),
+          selectedImageBytes: bytes,
+        );
+        return;
+      }
       final capture = await _scanner.analyzeImage(image.path);
       final byPayload = <String, Barcode>{};
       for (final barcode in capture?.barcodes ?? const <Barcode>[]) {
@@ -430,6 +454,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Future<void> _openAnalysis(
     _Candidate candidate, {
     List<_Candidate> evidence = const [],
+    Uint8List? selectedImageBytes,
   }) async {
     final api = _api;
     if (api == null || _navigating) return;
@@ -454,6 +479,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           corners: candidate.corners,
           frameSize: candidate.frameSize,
           imageSource: candidate.imageSource,
+          selectedImageBytes: selectedImageBytes,
           evidence: [
             for (final sample in evidence)
               QrFrameEvidence(
@@ -700,23 +726,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     children: [
                       ColoredBox(
                         color: const Color(0xFF11100F),
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            final previewSize = constraints.biggest;
-                            final scanSide = previewSize.shortestSide * 0.82;
-                            return MobileScanner(
-                              controller: _scanner,
-                              onDetect: _onDetect,
-                              fit: BoxFit.cover,
-                              tapToFocus: true,
-                              scanWindow: Rect.fromCenter(
-                                center: previewSize.center(Offset.zero),
-                                width: scanSide,
-                                height: scanSide,
-                              ),
-                              scanWindowUpdateThreshold: 12,
-                            );
-                          },
+                        child: MobileScanner(
+                          controller: _scanner,
+                          onDetect: _onDetect,
+                          fit: BoxFit.cover,
+                          tapToFocus: true,
                         ),
                       ),
                       LiveCameraFrame(detected: detected),
@@ -858,8 +872,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     onPressed: _navigating || _confirming
                         ? null
                         : _pickGalleryImage,
-                    icon: const Icon(Icons.photo_library_outlined),
-                    label: const Text('Gallery'),
+                    icon: Icon(
+                      kIsWeb
+                          ? Icons.upload_file_outlined
+                          : Icons.photo_library_outlined,
+                    ),
+                    label: Text(kIsWeb ? 'Choose file' : 'Gallery'),
                   ),
                 ),
               ],
