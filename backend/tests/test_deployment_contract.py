@@ -39,9 +39,9 @@ def test_render_blueprint_is_free_and_secretless():
     assert "region: singapore" in blueprint
     assert "QRGUARD_GEMINI_API_KEY" not in blueprint
     assert "GEMINI_API_KEY" not in blueprint
-    assert "name: qrguard-osswt-20260824-api" in blueprint
-    assert "qrguard-osswt-20260824-api.onrender.com" in prepare_script
-    assert "qrguard-osswt-20260824-web.onrender.com" in blueprint
+    assert "name: qrguard-api" in blueprint
+    assert "qrguard-api.onrender.com" in prepare_script
+    assert "qrguard-app.onrender.com" in blueprint
 
 
 def test_android_release_uses_api_36_https_and_real_signing():
