@@ -287,37 +287,33 @@ class TestScan:
         assert body["verdict"] == "safe"
         assert body["partial_analysis"] is False
 
-    def test_missing_camera_crop_is_unavailable_not_inconclusive(self, client):
-        body = client.post(
+    @pytest.mark.parametrize("source", ["camera", "gallery"])
+    def test_image_scan_source_requires_image_evidence(self, client, source):
+        response = client.post(
+            "/scan",
+            data={
+                "payload": "https://www.utar.edu.my/",
+                "image_source": source,
+            },
+        )
+
+        assert response.status_code == 422
+        assert "valid QR image evidence" in response.json()["detail"]
+
+    def test_camera_rejects_an_unreadable_image_instead_of_returning_partial(
+        self, client
+    ):
+        response = client.post(
             "/scan",
             data={
                 "payload": "https://www.utar.edu.my/",
                 "image_source": "camera",
             },
-        ).json()
+            files={"image": ("bad.jpg", b"not an image", "image/jpeg")},
+        )
 
-        assert body["registered_domain"] == "utar.edu.my"
-        assert body["rule_flags"] == []
-        assert body["branch_scores"]["domain_unknown"] == 0.0
-        assert body["branch_scores"]["structural_status"] == "unavailable"
-        assert body["branch_scores"]["p_structural"] is None
-        assert body["verdict"] == "safe"
-        assert body["risk_score"] < load_engine().safe_max
-        assert body["partial_analysis"] is True
-
-    def test_unknown_domain_still_fails_closed_without_camera_evidence(self, client):
-        body = client.post(
-            "/scan",
-            data={
-                "payload": "https://fyp-clean-example-2026.com/",
-                "image_source": "camera",
-            },
-        ).json()
-
-        assert body["rule_flags"] == []
-        assert body["branch_scores"]["domain_unknown"] == 1.0
-        assert body["branch_scores"]["structural_status"] == "unavailable"
-        assert body["partial_analysis"] is True
+        assert response.status_code == 422
+        assert response.json()["detail"] == "camera image could not be decoded"
 
     def test_gallery_keeps_continuous_structural_score(self, client, qr_png):
         body = client.post(

@@ -100,14 +100,16 @@ are under `ml_training/*/performance/`.
 ## Live-camera policy
 
 - Require a stable on-device decode before analysis.
-- Rank up to five recent observations on the visible Analysing screen and submit one
-  clearest rectified QR crop.
+- Retain at most three geometry-ranked observations and rectify the first usable
+  crop in one background pass; fall back only when an earlier frame is invalid.
+- Snapshot the active browser video before stopping a Web scan because
+  `mobile_scanner` Web detections do not include encoded image bytes.
 - Correct global camera exposure without thresholding, blurring, or removing local
   colour/shape evidence; preserve the raw model score in every response.
 - Treat a low-risk known URL plus medium-confidence camera manipulation evidence as
   cross-modal Warning, while high-confidence attacks remain eligible for Blocked.
-- If no usable crop exists, report Structural as unavailable and mark the response
-  partial; never replace missing image evidence with a zero score.
+- A declared Camera/Gallery scan must contain a decodable crop. If acquisition
+  fails, ask the user to rescan instead of silently degrading to URL-only Partial.
 - An open or WEP Wi-Fi payload always has a Warning floor. It is not labelled fraud
   merely because the network is open.
 - Recognise the narrow `Q01:*:` hi-hive attendance envelope as an opaque token,
@@ -194,7 +196,7 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.1.0+8007`.
+The checked Android version is `1.1.1+8008`.
 
 ## Verification
 
@@ -206,7 +208,7 @@ flutter test
 flutter build apk --release
 ```
 
-Current verified result: 275 backend tests passed, Flutter analysis reported no
+Current verified result: 276 backend tests passed, Flutter analysis reported no
 issues, and 67 Flutter tests passed. The release workflow is documented separately
 from these source-level checks.
 

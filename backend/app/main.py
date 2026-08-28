@@ -233,9 +233,15 @@ async def scan(
 ) -> ScanResponse:
     """Full scan: image goes to the structural branch, payload to the semantic branch."""
     uploads = ([image] if image is not None else []) + list(images or [])
+    image_required = image_source in {"camera", "gallery"}
     if not (payload or "").strip() and not uploads:
         raise HTTPException(
             status_code=422, detail="provide a payload, an image, or both"
+        )
+    if image_required and not uploads:
+        raise HTTPException(
+            status_code=422,
+            detail=f"{image_source} scans require valid QR image evidence",
         )
     if len(uploads) > MAX_SCAN_IMAGES:
         raise HTTPException(
@@ -269,13 +275,20 @@ async def scan(
             seen_image_hashes.add(image_hash)
             pil_images.append(pil_image)
         except Exception:
-            # A corrupt upload must not fail the whole scan: the structural branch
-            # abstains and the response is marked partial_analysis.
+            # Unknown/legacy callers may still use semantic evidence when an
+            # optional upload is corrupt. Explicit camera/gallery callers are
+            # rejected below so they cannot receive a misleading Partial result.
             log.warning("unreadable image upload; structural branch abstains")
             continue
 
+    if image_required and not pil_images:
+        raise HTTPException(
+            status_code=422,
+            detail=f"{image_source} image could not be decoded",
+        )
+
     # Camera and gallery share one Structural contract. New clients upload only
-    # the clearest selected crop; for legacy multi-frame clients, preserve order
+    # one geometry-selected crop; for legacy multi-frame clients, preserve order
     # and analyse the first usable crop rather than applying hidden consensus.
     analysed_images = pil_images[:1]
     result = run_scan(

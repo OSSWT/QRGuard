@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import '../services/api_client.dart';
 import '../services/history_service.dart';
-import '../services/qr_capture_selector.dart';
 import '../services/qr_cropper.dart';
 import '../theme.dart';
 import '../widgets/pulse_lens.dart';
@@ -17,14 +16,19 @@ import 'result_screen.dart';
 class CropRequest {
   const CropRequest({
     required this.frame,
-    required this.corners,
-    required this.frameSize,
+    required this.cornerCoordinates,
+    required this.frameWidth,
+    required this.frameHeight,
     required this.normalizeCameraColor,
   });
 
   final Uint8List frame;
-  final List<Offset> corners;
-  final Size frameSize;
+
+  /// Flat x/y values keep the message passed to `compute` free of dart:ui
+  /// objects, which are not reliably transferable on every Android runtime.
+  final List<double> cornerCoordinates;
+  final double frameWidth;
+  final double frameHeight;
   final bool normalizeCameraColor;
 }
 
@@ -45,12 +49,37 @@ class _CropPreparationTimeout implements Exception {
   const _CropPreparationTimeout();
 }
 
-Uint8List? cropInBackground(CropRequest request) => cropToCode(
-  frame: request.frame,
-  corners: request.corners,
-  frameSize: request.frameSize,
-  normalizeCameraColor: request.normalizeCameraColor,
-);
+class _ImageEvidenceUnavailable implements Exception {
+  const _ImageEvidenceUnavailable();
+}
+
+/// Rectifies the first usable geometry-ranked frame and stops immediately.
+///
+/// The previous implementation decoded/cropped up to five full frames to rank
+/// their sharpness and then decoded the winner again. On physical phones that
+/// could exceed the eight-second preparation budget. Home already ranks frames
+/// by QR coverage and geometry, so one pass with fallback is both faster and
+/// more robust across ordinary, projected, angled and low-light QR codes.
+Uint8List? prepareFirstUsableCropInBackground(List<CropRequest> requests) {
+  for (final request in requests) {
+    if (request.cornerCoordinates.length != 8) continue;
+    final corners = <Offset>[
+      for (var index = 0; index < 8; index += 2)
+        Offset(
+          request.cornerCoordinates[index],
+          request.cornerCoordinates[index + 1],
+        ),
+    ];
+    final crop = cropToCode(
+      frame: request.frame,
+      corners: corners,
+      frameSize: Size(request.frameWidth, request.frameHeight),
+      normalizeCameraColor: request.normalizeCameraColor,
+    );
+    if (crop != null && crop.isNotEmpty) return crop;
+  }
+  return null;
+}
 
 class AnalysingScreen extends StatefulWidget {
   const AnalysingScreen({
@@ -103,36 +132,18 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
 
   Future<Uint8List?> _prepareBestCrop(List<QrFrameEvidence> evidence) async {
     if (evidence.isEmpty) return null;
-    var selected = evidence.first;
-    if (evidence.length > 1) {
-      try {
-        final ranked = await compute(rankQrCaptures, [
-          for (final sample in evidence)
-            QrCaptureSample(
-              frame: sample.frame,
-              corners: sample.corners,
-              frameSize: sample.frameSize,
-            ),
-        ]);
-        if (ranked.isNotEmpty &&
-            ranked.first >= 0 &&
-            ranked.first < evidence.length) {
-          selected = evidence[ranked.first];
-        }
-      } catch (_) {
-        // The candidates already arrive geometry-ranked; the first is a safe
-        // fallback on platforms where background isolate work is unavailable.
-      }
-    }
-    return compute(
-      cropInBackground,
-      CropRequest(
-        frame: selected.frame,
-        corners: selected.corners,
-        frameSize: selected.frameSize,
-        normalizeCameraColor: widget.imageSource == 'camera',
-      ),
-    );
+    return compute(prepareFirstUsableCropInBackground, [
+      for (final sample in evidence.take(3))
+        CropRequest(
+          frame: sample.frame,
+          cornerCoordinates: [
+            for (final corner in sample.corners) ...[corner.dx, corner.dy],
+          ],
+          frameWidth: sample.frameSize.width,
+          frameHeight: sample.frameSize.height,
+          normalizeCameraColor: widget.imageSource == 'camera',
+        ),
+    ]);
   }
 
   @override
@@ -157,6 +168,8 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
       _stage = 0;
       _error = null;
       _takingLonger = false;
+      _crop = null;
+      _imageUnavailable = false;
     });
     try {
       final evidence = widget.evidence.isNotEmpty
@@ -179,6 +192,10 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
               widget.cropTimeout,
               onTimeout: () => throw const _CropPreparationTimeout(),
             );
+      if (imageBytes == null &&
+          (widget.imageSource == 'camera' || widget.imageSource == 'gallery')) {
+        throw const _ImageEvidenceUnavailable();
+      }
       if (!mounted) return;
       setState(() {
         _crop = imageBytes;
@@ -239,6 +256,14 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
           _error =
               'QR image preparation took too long. Return to the scanner and '
               'hold the code steady before trying again.';
+        });
+      }
+    } on _ImageEvidenceUnavailable {
+      if (mounted && runId == _runId) {
+        setState(() {
+          _error =
+              'QRGuard could not prepare a valid camera image. Return to the '
+              'scanner, keep the whole code in view and try again.';
         });
       }
     } on TimeoutException {

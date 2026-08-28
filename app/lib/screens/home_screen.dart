@@ -12,6 +12,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../app_controller.dart';
 import '../services/api_client.dart';
 import '../services/history_service.dart';
+import '../services/live_camera_frame.dart';
 import '../services/live_qr_stability.dart';
 import '../theme.dart';
 import '../widgets/pulse_lens.dart';
@@ -63,7 +64,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   static const _autoPromptDelay = Duration(milliseconds: 100);
   static const _candidateLifetime = Duration(milliseconds: 1800);
-  static const _maximumLiveCandidates = 5;
+  // Three stable observations are enough for fallback without retaining and
+  // repeatedly decoding five full camera frames on memory-constrained phones.
+  static const _maximumLiveCandidates = 3;
 
   @override
   void initState() {
@@ -240,6 +243,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _autoPromptTimer?.cancel();
     _scheduledPromptPayload = null;
     setState(() => _confirming = true);
+    final preparedCandidate = await _withLiveCameraFrame(candidate);
+    if (!mounted) return;
+    if (preparedCandidate == null) {
+      setState(() {
+        _confirming = false;
+        _message =
+            'QR detected, but a camera image was not ready. Keep the code in '
+            'view and try again.';
+      });
+      return;
+    }
     await _safeStop();
     if (!mounted) return;
 
@@ -273,9 +287,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     setState(() => _confirming = false);
     if (proceed == true) {
       _dismissedPayload = null;
-      final evidence = _evidenceForPayload(candidate.payload);
+      final evidence = _evidenceForPayload(preparedCandidate.payload);
       await _openAnalysis(
-        evidence.isEmpty ? candidate : evidence.first,
+        evidence.isEmpty ? preparedCandidate : evidence.first,
         evidence: evidence,
       );
       return;
@@ -311,13 +325,40 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _autoPromptTimer?.cancel();
     _scheduledPromptPayload = null;
     setState(() => _confirming = true);
+    final preparedCandidate = await _withLiveCameraFrame(candidate);
+    if (!mounted) return;
+    if (preparedCandidate == null) {
+      setState(() {
+        _confirming = false;
+        _message =
+            'QR detected, but a camera image was not ready. Keep the code in '
+            'view and try again.';
+      });
+      return;
+    }
     await _safeStop();
-    final evidence = _evidenceForPayload(candidate.payload);
+    final evidence = _evidenceForPayload(preparedCandidate.payload);
     if (!mounted) return;
     await _openAnalysis(
-      evidence.isEmpty ? candidate : evidence.first,
+      evidence.isEmpty ? preparedCandidate : evidence.first,
       evidence: evidence,
     );
+  }
+
+  /// Web barcode events contain corners and payload but never encoded image
+  /// bytes. Snapshot the still-running video before the scanner is stopped.
+  /// Native captures already contain JPEG bytes and return immediately.
+  Future<_Candidate?> _withLiveCameraFrame(_Candidate candidate) async {
+    if (candidate.hasUsableImage) return candidate;
+    if (!kIsWeb ||
+        candidate.corners.length != 4 ||
+        candidate.frameSize.width <= 0 ||
+        candidate.frameSize.height <= 0) {
+      return null;
+    }
+    final frame = await captureLiveCameraFrame();
+    if (frame == null || frame.isEmpty) return null;
+    return candidate.withFrame(frame);
   }
 
   List<_Candidate> _evidenceForPayload(String payload) {
@@ -907,6 +948,14 @@ class _Candidate {
   final List<Offset> corners;
   final Size frameSize;
   final String imageSource;
+
+  _Candidate withFrame(Uint8List value) => _Candidate(
+    payload: payload,
+    frame: value,
+    corners: corners,
+    frameSize: frameSize,
+    imageSource: imageSource,
+  );
 
   bool get hasUsableImage =>
       frame != null &&

@@ -88,8 +88,8 @@ def _normalize_camera_capture(image):
 def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
     """Score one crop with the model validated for its acquisition domain.
 
-    The Flutter client ranks live observations for acquisition quality and sends
-    the clearest rectified crop first. Gallery keeps the stable pristine-image
+    The Flutter client geometry-ranks live observations and sends the first usable
+    rectified crop. Gallery keeps the stable pristine-image
     model; camera uses the camera-robust model because the gallery artifact has a
     measured 80.84% clean false-positive rate on camera-derived images. No score
     is suppressed or threshold-replaced. Legacy clients may still submit several

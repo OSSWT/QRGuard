@@ -3,6 +3,7 @@
 /// let the branch abstain.
 library;
 
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' show Offset, Size;
@@ -42,6 +43,79 @@ List<Offset> _corners({int left = 300, int top = 200, int side = 80}) => [
 
 void main() {
   group('cropToCode', () {
+    test(
+      'handles varied real QR payloads, positions and camera resolutions',
+      () {
+        final cases = [
+          (
+            file: '01_safe_google.png',
+            width: 640,
+            height: 480,
+            left: 24,
+            top: 40,
+            side: 120,
+          ),
+          (
+            file: '02_safe_youtube.png',
+            width: 1280,
+            height: 720,
+            left: 910,
+            top: 260,
+            side: 220,
+          ),
+          (
+            file: '03_safe_utar.png',
+            width: 1920,
+            height: 1080,
+            left: 760,
+            top: 340,
+            side: 320,
+          ),
+          (
+            file: '16_wifi_open.png',
+            width: 800,
+            height: 800,
+            left: 140,
+            top: 110,
+            side: 500,
+          ),
+        ];
+
+        for (final sample in cases) {
+          final fixture = File(
+            '${Directory.current.parent.path}/data/test_qrs/${sample.file}',
+          );
+          final qr = img.decodeImage(fixture.readAsBytesSync())!;
+          final frame = img.Image(width: sample.width, height: sample.height);
+          img.fill(frame, color: img.ColorRgb8(218, 212, 200));
+          img.compositeImage(
+            frame,
+            qr,
+            dstX: sample.left,
+            dstY: sample.top,
+            dstW: sample.side,
+            dstH: sample.side,
+          );
+
+          final result = cropToCode(
+            frame: Uint8List.fromList(img.encodeJpg(frame, quality: 82)),
+            corners: _corners(
+              left: sample.left,
+              top: sample.top,
+              side: sample.side,
+            ),
+            frameSize: Size(sample.width.toDouble(), sample.height.toDouble()),
+            normalizeCameraColor: true,
+          );
+
+          expect(result, isNotNull, reason: sample.file);
+          final crop = img.decodeImage(result!)!;
+          expect(crop.width, crop.height, reason: sample.file);
+          expect(crop.width, greaterThanOrEqualTo(24), reason: sample.file);
+        }
+      },
+    );
+
     test('cuts the code out of a much larger frame', () {
       final result = cropToCode(
         frame: _frame(),

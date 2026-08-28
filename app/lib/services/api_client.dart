@@ -62,6 +62,13 @@ class ApiClient {
     if ((payload == null || payload.trim().isEmpty) && imageBytes == null) {
       throw const ApiException('Nothing to scan.');
     }
+    if ((imageSource == 'camera' || imageSource == 'gallery') &&
+        (imageBytes == null || imageBytes.isEmpty)) {
+      throw const ApiException(
+        'A valid QR image is required for a camera or gallery scan. Return to '
+        'the scanner and try again.',
+      );
+    }
 
     final request = http.MultipartRequest('POST', _uri('/scan'));
     request.fields['image_source'] = imageSource;

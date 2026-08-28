@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.0+8007
+version: 1.1.1+8008
 
 environment:
   sdk: ^3.12.2
@@ -42,6 +42,9 @@ dependencies:
   crypto: ^3.0.7
   shared_preferences: ^2.5.5
   image_picker: ^1.2.1
+  # Web live scans need a snapshot of mobile_scanner's video element because
+  # BarcodeCapture.image is only populated on Android/iOS/macOS.
+  web: ^1.1.1
   # Crops the camera frame down to the detected code before the structural
   # branch sees it - see services/qr_cropper.dart for why that is essential.
   image: ^4.5.0
