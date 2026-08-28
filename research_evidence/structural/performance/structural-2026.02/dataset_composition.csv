@@ -1,0 +1,7 @@
+label,adversarial,clean,clean,clean,tampered
+source,procedural_qrguard,QR-DN1.0,procedural_qrguard,qr_codes_in_surfaces,procedural_qrguard
+split,,,,,
+external_holdout_test,0,2250,0,0,0
+test,180,0,180,0,180
+train,900,3600,900,67,900
+validation,180,900,180,0,180

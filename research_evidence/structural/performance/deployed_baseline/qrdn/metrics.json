@@ -1,0 +1,55 @@
+{
+  "display_name": "Structural Training",
+  "evaluation": "QR-DN1.0 external clean holdout",
+  "artifact": "structural_fp32.onnx",
+  "artifact_path": "C:\\Users\\OSSW\\Desktop\\Y4S2\\FYP2\\QRGuard\\training\\artifacts\\structural",
+  "independent_qr_identities": 25,
+  "overall": {
+    "n": 2250,
+    "false_positive_rate_at_0_5": 0.8084444444444444,
+    "nonclean_class_rate": 0.7408888888888889,
+    "mean_p_structural": 0.7112231851948632,
+    "median_p_structural": 0.7529020607471466,
+    "p95_p_structural": 0.9803109496831893,
+    "maximum_p_structural": 0.9995324015617371
+  },
+  "per_extraction_method": {
+    "one": {
+      "n": 750,
+      "false_positive_rate_at_0_5": 0.7933333333333333,
+      "nonclean_class_rate": 0.7346666666666667,
+      "mean_p_structural": 0.707381328980128,
+      "median_p_structural": 0.7559043169021606,
+      "p95_p_structural": 0.9852011293172837,
+      "maximum_p_structural": 0.9993323683738708
+    },
+    "quad": {
+      "n": 750,
+      "false_positive_rate_at_0_5": 0.7586666666666667,
+      "nonclean_class_rate": 0.6453333333333333,
+      "mean_p_structural": 0.6600274853706359,
+      "median_p_structural": 0.6457527279853821,
+      "p95_p_structural": 0.976811820268631,
+      "maximum_p_structural": 0.9995324015617371
+    },
+    "voted": {
+      "n": 750,
+      "false_positive_rate_at_0_5": 0.8733333333333333,
+      "nonclean_class_rate": 0.8426666666666667,
+      "mean_p_structural": 0.7662607412338257,
+      "median_p_structural": 0.8250846862792969,
+      "p95_p_structural": 0.9753484606742858,
+      "maximum_p_structural": 0.994342565536499
+    }
+  },
+  "latency": {
+    "median_ms": 30.66480000052252,
+    "p95_ms": 40.29461999980413,
+    "wall_seconds": 71.81835929999943
+  },
+  "gate": {
+    "target": "external clean FPR <= 0.05",
+    "passed": false
+  },
+  "scope_note": "QR-DN is genuine screen/camera acquisition data but uses watermark extraction rather than QRGuard's mobile_scanner crop pipeline. It is external evidence, not a substitute for exact app-crop deployment gates."
+}

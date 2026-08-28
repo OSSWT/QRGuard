@@ -1,0 +1,464 @@
+{
+  "display_name": "Semantic Training",
+  "version": "semantic-2026.01",
+  "architecture": "hashed character 3-5 gram averaged SGD logistic classifier",
+  "cleaning": {
+    "input_rows": 1037076,
+    "invalid_rows": 7,
+    "conflict_keys": 3942,
+    "conflict_rows": 7913,
+    "duplicate_rows": 11463,
+    "output_rows": 1017693,
+    "acceptance_exact_rows_removed": 4,
+    "output_rows_after_acceptance_reservation": 1017689
+  },
+  "split_rows": {
+    "train": 240050,
+    "validation": 60000,
+    "test": 80000
+  },
+  "overall": {
+    "n": 80000,
+    "accuracy": 0.912275,
+    "precision": 0.9180652030624145,
+    "recall": 0.90535,
+    "f1": 0.9116632681318128,
+    "roc_auc": 0.9684600975,
+    "pr_auc": 0.9720256818900483,
+    "brier": 0.06597415445913266,
+    "ece": 0.008652359476284538
+  },
+  "classification_report": {
+    "benign": {
+      "precision": 0.9066429945258174,
+      "recall": 0.9192,
+      "f1-score": 0.9128783176502718,
+      "support": 40000.0
+    },
+    "dangerous": {
+      "precision": 0.9180652030624145,
+      "recall": 0.90535,
+      "f1-score": 0.9116632681318128,
+      "support": 40000.0
+    },
+    "accuracy": 0.912275,
+    "macro avg": {
+      "precision": 0.9123540987941159,
+      "recall": 0.912275,
+      "f1-score": 0.9122707928910423,
+      "support": 80000.0
+    },
+    "weighted avg": {
+      "precision": 0.912354098794116,
+      "recall": 0.912275,
+      "f1-score": 0.9122707928910422,
+      "support": 80000.0
+    }
+  },
+  "per_source": {
+    "malicious_phish": {
+      "n": 50409,
+      "accuracy": 0.9074966771806622,
+      "precision": 0.921169047791718,
+      "recall": 0.9107661420428065,
+      "f1": 0.9159380577238557,
+      "roc_auc": 0.9670599389794376,
+      "pr_auc": 0.9733663427327228,
+      "brier": 0.06890600306785463,
+      "ece": 0.00834641365070921
+    },
+    "phiusiil": {
+      "n": 20397,
+      "accuracy": 0.9361670833946169,
+      "precision": 0.9995376791493297,
+      "recall": 0.8928718922937143,
+      "f1": 0.9431986737631969,
+      "roc_auc": 0.9857421107309841,
+      "pr_auc": 0.9929776486173185,
+      "brier": 0.04717721277418606,
+      "ece": 0.010391363284851905
+    },
+    "tranco": {
+      "n": 9194,
+      "accuracy": 0.8854687839895584,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "roc_auc": null,
+      "pr_auc": null,
+      "brier": 0.09160061334871153,
+      "ece": 0.07555179557966189
+    }
+  },
+  "calibration": {
+    "scale": 0.8435456812563816,
+    "intercept": -0.16387202096339223,
+    "validation_ece_before": 0.013092126495870847,
+    "validation_ece_after": 0.006137337003619592
+  },
+  "behavioural_acceptance": {
+    "n": 45,
+    "benign_false_positive_rate": 0.04,
+    "phishing_recall": 1.0,
+    "slices": {
+      "brand_lookalike_phish": {
+        "n": 10,
+        "accuracy": 1.0,
+        "false_positive_rate": null,
+        "recall": 1.0,
+        "maximum_benign_score": null,
+        "minimum_phishing_score": 0.9848631633059873
+      },
+      "official_brand_benign": {
+        "n": 15,
+        "accuracy": 1.0,
+        "false_positive_rate": 0.0,
+        "recall": null,
+        "maximum_benign_score": 0.04656038036748472,
+        "minimum_phishing_score": null
+      },
+      "technical_phish": {
+        "n": 10,
+        "accuracy": 1.0,
+        "false_positive_rate": null,
+        "recall": 1.0,
+        "maximum_benign_score": null,
+        "minimum_phishing_score": 0.9341970012393355
+      },
+      "unseen_benign": {
+        "n": 10,
+        "accuracy": 0.9,
+        "false_positive_rate": 0.1,
+        "recall": null,
+        "maximum_benign_score": 0.9910955862648599,
+        "minimum_phishing_score": null
+      }
+    },
+    "passed": true,
+    "failures": [],
+    "cases": [
+      {
+        "url": "https://www.google.com/maps",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.007432612785738957,
+        "correct": true
+      },
+      {
+        "url": "https://www.google.com/accounts",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.0046988566092275195,
+        "correct": true
+      },
+      {
+        "url": "https://www.google.com/search?q=secure+login",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.00014286511252102648,
+        "correct": true
+      },
+      {
+        "url": "https://www.paypal.com/",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 5.826835418029868e-05,
+        "correct": true
+      },
+      {
+        "url": "https://www.paypal.com/signin",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 3.0900315422758044e-06,
+        "correct": true
+      },
+      {
+        "url": "https://www.paypal.com/myaccount/security",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 1.5248087504141567e-05,
+        "correct": true
+      },
+      {
+        "url": "https://www.maybank2u.com.my/",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.0007968556075117495,
+        "correct": true
+      },
+      {
+        "url": "https://www.maybank2u.com.my/home/m2u/common/login.do",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.001305351647236222,
+        "correct": true
+      },
+      {
+        "url": "https://www.maybank2u.com.my/help/reset-password",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 1.3165209507987887e-05,
+        "correct": true
+      },
+      {
+        "url": "https://www.microsoft.com/",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.012857217790454473,
+        "correct": true
+      },
+      {
+        "url": "https://www.microsoft.com/en-my/security",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.008975460618948107,
+        "correct": true
+      },
+      {
+        "url": "https://www.microsoft.com/account/signin",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.0009201597291380573,
+        "correct": true
+      },
+      {
+        "url": "https://www.apple.com/my/",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.03227454015306882,
+        "correct": true
+      },
+      {
+        "url": "https://www.apple.com/support/apple-id",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.04656038036748472,
+        "correct": true
+      },
+      {
+        "url": "https://www.apple.com/shop/account/home",
+        "label": 0,
+        "slice": "official_brand_benign",
+        "p_url": 0.03141516707352129,
+        "correct": true
+      },
+      {
+        "url": "https://www.cloudflare.com/learning/security/what-is-phishing/",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.005616770122601578,
+        "correct": true
+      },
+      {
+        "url": "https://www.amazon.com/gp/help/customer/account-security",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.011967825911992441,
+        "correct": true
+      },
+      {
+        "url": "https://www.netflix.com/login",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.0009909696383106114,
+        "correct": true
+      },
+      {
+        "url": "https://www.dropbox.com/account/security",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.00028388269523008526,
+        "correct": true
+      },
+      {
+        "url": "https://www.adobe.com/my_en/account.html",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.007816433327415174,
+        "correct": true
+      },
+      {
+        "url": "https://stripe.com/docs/security",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.05440185061941364,
+        "correct": true
+      },
+      {
+        "url": "https://www.python.org/accounts/login/",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.0074961653754641346,
+        "correct": true
+      },
+      {
+        "url": "https://docs.github.com/en/authentication",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.9910955862648599,
+        "correct": false
+      },
+      {
+        "url": "https://www.mozilla.org/en-US/privacy/",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.025429555478140145,
+        "correct": true
+      },
+      {
+        "url": "https://www.booking.com/signin.html",
+        "label": 0,
+        "slice": "unseen_benign",
+        "p_url": 0.0018780382523624786,
+        "correct": true
+      },
+      {
+        "url": "http://paypal-secure-verify.test/login/update.php",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9995092365372328,
+        "correct": true
+      },
+      {
+        "url": "http://maybank2u-verify.test/login",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9848631633059873,
+        "correct": true
+      },
+      {
+        "url": "http://microsoft-support-alert.test/warning",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9999984282188763,
+        "correct": true
+      },
+      {
+        "url": "http://appleid-billing-check.test/confirm",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9999887583897561,
+        "correct": true
+      },
+      {
+        "url": "http://shopee-wallet-reward.test/claim",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.999913876767507,
+        "correct": true
+      },
+      {
+        "url": "http://cimb-account-unlock.test/session",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9997632334750833,
+        "correct": true
+      },
+      {
+        "url": "http://google-drive-share.test/auth",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9999458347422444,
+        "correct": true
+      },
+      {
+        "url": "http://netflix-payment-update.test/login",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9997693630991487,
+        "correct": true
+      },
+      {
+        "url": "http://amazon-order-refund.test/verify",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.999967100689421,
+        "correct": true
+      },
+      {
+        "url": "http://dropbox-document-share.test/signin",
+        "label": 1,
+        "slice": "brand_lookalike_phish",
+        "p_url": 0.9997021386730138,
+        "correct": true
+      },
+      {
+        "url": "http://203.0.113.7/account/confirm",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9992155216021481,
+        "correct": true
+      },
+      {
+        "url": "http://198.51.100.22:8080/bank/login",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9341970012393355,
+        "correct": true
+      },
+      {
+        "url": "http://paypal.com@account-check.test/signin",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.99981325417505,
+        "correct": true
+      },
+      {
+        "url": "http://google.com@secure-share.test/auth",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.999998065202327,
+        "correct": true
+      },
+      {
+        "url": "http://xn--pypal-4ve.test/login",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9980015106655539,
+        "correct": true
+      },
+      {
+        "url": "http://login.bank.security.verify.session.test/update",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9992056669206215,
+        "correct": true
+      },
+      {
+        "url": "http://192.0.2.44/reset?account=maybank",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9885240177024077,
+        "correct": true
+      },
+      {
+        "url": "http://user:pass@billing-check.test/paypal",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9999775925370971,
+        "correct": true
+      },
+      {
+        "url": "http://secure-account.test/%70%61%79%70%61%6c/login",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9979897686564161,
+        "correct": true
+      },
+      {
+        "url": "http://verify.test//https://www.apple.com/account",
+        "label": 1,
+        "slice": "technical_phish",
+        "p_url": 0.9776957173804458,
+        "correct": true
+      }
+    ]
+  },
+  "export_parity_max_abs_error": 0.0,
+  "latency": {
+    "median_ms": 0.9284500010835472,
+    "p95_ms": 1.146955002332106
+  },
+  "gates_passed": true,
+  "gate_failures": []
+}

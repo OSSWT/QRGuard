@@ -1,0 +1,444 @@
+{
+  "feature_names": [
+    "p_structural",
+    "structural_present",
+    "p_url",
+    "semantic_present",
+    "llm_score",
+    "llm_invoked",
+    "domain_unknown",
+    "rule_js_or_data_uri",
+    "rule_ip_literal_host",
+    "rule_punycode_host",
+    "rule_non_https",
+    "rule_shortened_url",
+    "rule_suspicious_tld",
+    "rule_excessive_subdomains",
+    "rule_userinfo_in_url",
+    "rule_long_url",
+    "rule_brand_in_subdomain",
+    "rule_open_wifi_network"
+  ],
+  "coef": [
+    6.83298126013594,
+    -0.3135270672250001,
+    6.161409984771526,
+    -0.793980217126804,
+    0.0,
+    0.0,
+    0.8406084168978233,
+    6.549227341532169,
+    0.4106854503996005,
+    0.0,
+    0.0,
+    5.472964079105049,
+    0.21358843727149,
+    0.8411681241115878,
+    0.0,
+    0.0,
+    0.0,
+    2.87494875575982
+  ],
+  "intercept": -3.202381621558405,
+  "safe_max": 45,
+  "blocked_min": 55,
+  "metadata": {
+    "version": "decision-2026.02",
+    "trained_on": "QRGuard-Mix-v2",
+    "model_fingerprint": {
+      "structural": {
+        "temperature": 1.7350759506225586,
+        "onnx_bytes": {
+          "structural_fp32.onnx": 16035559,
+          "structural_int8.onnx": 4360735
+        },
+        "joblib_sha256": {},
+        "metadata_sha256": "2d110810bb859abb"
+      },
+      "semantic": {
+        "temperature": null,
+        "onnx_bytes": {},
+        "joblib_sha256": {
+          "semantic_model.joblib": "a15a5a409df73946"
+        },
+        "metadata_sha256": "e1d90be3658b31eb"
+      },
+      "dataset": {
+        "manifest_sha256": "6c30bba32aba6cd1",
+        "image_count": 1800,
+        "image_bytes": 37825776
+      }
+    },
+    "n_train": 1260,
+    "n_test": 540,
+    "roc_auc_test": 0.9898919753086419,
+    "blocked_precision": 0.994269340974212,
+    "safe_fnr": 0.013888888888888888,
+    "per_cell": {
+      "camera_clean_consensus_benign_url": {
+        "mean_score": 4.1333,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 1.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 0.0
+      },
+      "camera_clean_consensus_executable_uri": {
+        "mean_score": 95.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_clean_consensus_phishing_url": {
+        "mean_score": 74.3333,
+        "n": 15,
+        "exact_tier_accuracy": 0.7333,
+        "acceptance_rate": 0.8667,
+        "safe_rate": 0.1333,
+        "warning_rate": 0.1333,
+        "blocked_rate": 0.7333
+      },
+      "camera_clean_consensus_plain_text": {
+        "mean_score": 3.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 1.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 0.0
+      },
+      "camera_clean_consensus_wifi_open": {
+        "mean_score": 45.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 1.0,
+        "blocked_rate": 0.0
+      },
+      "camera_clean_consensus_wifi_secure": {
+        "mean_score": 3.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 1.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 0.0
+      },
+      "camera_tampered_consensus_benign_url": {
+        "mean_score": 95.9333,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_tampered_consensus_executable_uri": {
+        "mean_score": 100.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_tampered_consensus_phishing_url": {
+        "mean_score": 99.5333,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_tampered_consensus_plain_text": {
+        "mean_score": 95.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_tampered_consensus_wifi_open": {
+        "mean_score": 100.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_tampered_consensus_wifi_secure": {
+        "mean_score": 95.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_uncertain_abstain_benign_url": {
+        "mean_score": 36.7333,
+        "n": 15,
+        "exact_tier_accuracy": 0.2667,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.2667,
+        "warning_rate": 0.6667,
+        "blocked_rate": 0.0667
+      },
+      "camera_uncertain_abstain_executable_uri": {
+        "mean_score": 97.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "camera_uncertain_abstain_phishing_url": {
+        "mean_score": 75.6,
+        "n": 15,
+        "exact_tier_accuracy": 0.6667,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.3333,
+        "blocked_rate": 0.6667
+      },
+      "camera_uncertain_abstain_plain_text": {
+        "mean_score": 45.0,
+        "n": 15,
+        "exact_tier_accuracy": 0.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 1.0,
+        "blocked_rate": 0.0
+      },
+      "camera_uncertain_abstain_wifi_open": {
+        "mean_score": 45.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 1.0,
+        "blocked_rate": 0.0
+      },
+      "camera_uncertain_abstain_wifi_secure": {
+        "mean_score": 45.0,
+        "n": 15,
+        "exact_tier_accuracy": 0.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 1.0,
+        "blocked_rate": 0.0
+      },
+      "gallery_adversarial_benign_url": {
+        "mean_score": 95.5333,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_adversarial_executable_uri": {
+        "mean_score": 100.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_adversarial_phishing_url": {
+        "mean_score": 99.4667,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_adversarial_plain_text": {
+        "mean_score": 95.8,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_adversarial_wifi_open": {
+        "mean_score": 100.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_adversarial_wifi_secure": {
+        "mean_score": 95.6,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_clean_benign_url": {
+        "mean_score": 4.1333,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 1.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 0.0
+      },
+      "gallery_clean_executable_uri": {
+        "mean_score": 96.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_clean_phishing_url": {
+        "mean_score": 81.4,
+        "n": 15,
+        "exact_tier_accuracy": 0.8,
+        "acceptance_rate": 0.8667,
+        "safe_rate": 0.1333,
+        "warning_rate": 0.0667,
+        "blocked_rate": 0.8
+      },
+      "gallery_clean_plain_text": {
+        "mean_score": 3.3333,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 1.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 0.0
+      },
+      "gallery_clean_wifi_open": {
+        "mean_score": 48.5333,
+        "n": 15,
+        "exact_tier_accuracy": 0.9333,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.0,
+        "warning_rate": 0.9333,
+        "blocked_rate": 0.0667
+      },
+      "gallery_clean_wifi_secure": {
+        "mean_score": 3.4667,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 1.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 0.0
+      },
+      "gallery_tampered_benign_url": {
+        "mean_score": 97.4,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_tampered_executable_uri": {
+        "mean_score": 100.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_tampered_phishing_url": {
+        "mean_score": 99.9333,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_tampered_plain_text": {
+        "mean_score": 89.8667,
+        "n": 15,
+        "exact_tier_accuracy": 0.9333,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.0667,
+        "warning_rate": 0.0,
+        "blocked_rate": 0.9333
+      },
+      "gallery_tampered_wifi_open": {
+        "mean_score": 100.0,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      },
+      "gallery_tampered_wifi_secure": {
+        "mean_score": 96.0667,
+        "n": 15,
+        "exact_tier_accuracy": 1.0,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.0,
+        "warning_rate": 0.0,
+        "blocked_rate": 1.0
+      }
+    },
+    "per_cell_gate_policy": {
+      "dangerous_url": "not-Safe >= 0.80 and Blocked recall >= 0.65",
+      "open_wifi_clean_or_abstain": "exact Warning >= 0.90",
+      "manipulated_or_executable": "exact Blocked >= 0.85",
+      "other_benign": "not-Blocked >= 0.90; exact tier also reported"
+    },
+    "deployment_gates_passed": true,
+    "deployment_gate_failures": [],
+    "ablation": {
+      "structural_only": {
+        "roc_auc": 0.8713117283950615,
+        "accuracy": 0.8296296296296296
+      },
+      "semantic_only": {
+        "roc_auc": 0.7426003086419751,
+        "accuracy": 0.6574074074074074
+      },
+      "fused": {
+        "roc_auc": 0.9968518518518519,
+        "accuracy": 0.975925925925926
+      }
+    },
+    "class_weight": "balanced",
+    "monotonic_risk_constraint": true,
+    "zero_unidentifiable": [
+      "llm_score",
+      "llm_invoked",
+      "rule_punycode_host",
+      "rule_userinfo_in_url"
+    ],
+    "zero_clamped_by_constraint": [
+      "rule_non_https",
+      "rule_long_url",
+      "rule_brand_in_subdomain"
+    ],
+    "llm_features_trained": false,
+    "note": "llm_score/llm_invoked absent from QRGuard-Mix; their weights are untrained. Retrain after adding an LLM-labelled subset.",
+    "leakage_risk": [
+      "none"
+    ]
+  }
+}

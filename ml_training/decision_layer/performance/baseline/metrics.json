@@ -1,0 +1,48 @@
+{
+  "status": "rejected_for_new_deployment",
+  "metrics": {
+    "trained_on": "QRGuard-Mix",
+    "n_train": 630,
+    "n_test": 270,
+    "roc_auc_test": 0.9401481481481482,
+    "blocked_precision": 0.9792746113989638,
+    "safe_fnr": 0.035555555555555556,
+    "ablation": {
+      "structural_only": {
+        "roc_auc": 0.8909629629629628,
+        "accuracy": 0.8333333333333334
+      },
+      "semantic_only": {
+        "roc_auc": 0.7255308641975309,
+        "accuracy": 0.7
+      },
+      "fused": {
+        "roc_auc": 0.9401481481481482,
+        "accuracy": 0.8518518518518519
+      }
+    },
+    "class_weight": "balanced",
+    "monotonic_risk_constraint": true,
+    "zero_unidentifiable": [
+      "structural_present",
+      "semantic_present",
+      "llm_score",
+      "llm_invoked",
+      "rule_js_or_data_uri",
+      "rule_userinfo_in_url",
+      "rule_open_wifi_network"
+    ],
+    "zero_clamped_by_constraint": [
+      "rule_punycode_host",
+      "rule_non_https",
+      "rule_brand_in_subdomain"
+    ],
+    "llm_features_trained": false,
+    "note": "llm_score/llm_invoked absent from QRGuard-Mix; their weights are untrained. Retrain after adding an LLM-labelled subset.",
+    "leakage_risk": "none"
+  },
+  "gate_failures": [
+    "Safe-tier FNR 0.0356 > 0.0200",
+    "trained on legacy QRGuard-Mix without the v2 payload/camera cells"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "display_name": "Structural Training",
+  "experiment_version": "structural-2026.02",
+  "seed": 42,
+  "classes": ["clean", "adversarial", "tampered"],
+  "image_size": 224,
+  "split_unit": ["source_dataset", "capture_session", "physical_qr", "payload_hash"],
+  "split_ratios": {"train": 0.7, "validation": 0.15, "test": 0.15},
+  "minimum_sessions_per_class": 100,
+  "minimum_independent_test_groups_per_class": 20,
+  "minimum_runtime_capture_draw_fraction": 0.4,
+  "deployment_gates": {
+    "real_clean_false_positive_rate_max": 0.05,
+    "real_tampered_recall_min": 0.85,
+    "real_adversarial_recall_min": 0.8,
+    "binary_ece_max": 0.05,
+    "export_accuracy_drop_max": 0.02,
+    "server_latency_p95_ms_max": 500
+  }
+}

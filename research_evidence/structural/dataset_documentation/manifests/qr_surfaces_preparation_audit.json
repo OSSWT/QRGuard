@@ -1,0 +1,140 @@
+{
+  "source": "https://data.mendeley.com/datasets/m6mfwc52vk/1",
+  "licence": "CC-BY-4.0",
+  "input_photos": 92,
+  "accepted_crops": 67,
+  "rejected_crops": 25,
+  "rejection_reasons": {
+    "untrustworthy_geometry": 4,
+    "qr_detector_failed": 21
+  },
+  "unique_qr_bitmaps": 1,
+  "leakage_control": "All photographs share one QR bitmap SHA and remain auxiliary_train_only; none may be used as an independent test observation.",
+  "app_crop_parity": "15% quiet-zone expansion, perspective rectification, linear interpolation, and bright-pixel camera colour correction are mirrored; OpenCV detection replaces mobile_scanner corner detection, so is_exact_app_crop remains false.",
+  "rejected": [
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191225_202821.jpg",
+      "reason": "untrustworthy_geometry",
+      "edges": [
+        1343.1448974609375,
+        0.0,
+        927.2516479492188,
+        913.9967651367188
+      ]
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191225_202829.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_201433.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_201435.jpg",
+      "reason": "untrustworthy_geometry",
+      "edges": [
+        1070.12646484375,
+        696.1143798828125,
+        745.435546875,
+        0.0
+      ]
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_201442.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_201446.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_201449.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_201502.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_212324.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_213420.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/flat/images/IMG_20191229_213503.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20191229_201422.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20191229_204134.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20191229_204335.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20191229_204402.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200523_192735.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200524_105859.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200524_105906.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200524_105917.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200524_180823.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200524_180845.jpg",
+      "reason": "untrustworthy_geometry",
+      "edges": [
+        1838.9638671875,
+        1059.674560546875,
+        2242.5654296875,
+        0.0
+      ]
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200615_192442.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200615_192513.jpg",
+      "reason": "qr_detector_failed"
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200615_192527.jpg",
+      "reason": "untrustworthy_geometry",
+      "edges": [
+        1081.033203125,
+        327.58135986328125,
+        1382.888916015625,
+        907.3538208007812
+      ]
+    },
+    {
+      "source_path": "<repository-root>/ml_training/datasets/structural/raw/qr_surfaces/random/images/IMG_20200615_192652.jpg",
+      "reason": "qr_detector_failed"
+    }
+  ]
+}

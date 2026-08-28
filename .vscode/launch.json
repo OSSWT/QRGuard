@@ -1,0 +1,98 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "App: run on device",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/app/lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "App: Web server (no phone)",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/app/lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "flutterMode": "debug",
+      "deviceId": "web-server",
+      "toolArgs": [
+        "--web-hostname",
+        "127.0.0.1",
+        "--web-port",
+        "53000"
+      ]
+    },
+    {
+      "// ": "Live-camera Android Emulator. Boot Small_Phone with camera-back=webcam0 before launching. The app's default backend URL is 10.0.2.2:8001.",
+      "name": "App: run on Android Emulator (live webcam)",
+      "type": "dart",
+      "request": "launch",
+      "preLaunchTask": "QRGuard: Ensure Small_Phone emulator",
+      "program": "${workspaceFolder}/app/lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "flutterMode": "debug",
+      "deviceId": "emulator-5554"
+    },
+    {
+      "name": "App: profile mode (measure latency)",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/app/lib/main.dart",
+      "cwd": "${workspaceFolder}/app",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Backend: API (localhost)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "program": "${workspaceFolder}/scripts/run_server.py",
+      "cwd": "${workspaceFolder}",
+      "args": ["--no-reload"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Backend: API (--lan, for the phone)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "program": "${workspaceFolder}/scripts/run_server.py",
+      "cwd": "${workspaceFolder}",
+      "args": ["--lan", "--no-reload"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ],
+  "compounds": [
+    {
+      "// ": "Start the backend and the app together - the usual dev setup",
+      "name": "Full stack: backend (--lan) + app",
+      "configurations": [
+        "Backend: API (--lan, for the phone)",
+        "App: run on device"
+      ],
+      "stopAll": true
+    },
+    {
+      "// ": "Full pipeline through the real laptop webcam. Small_Phone must already be running with webcam0 as its back camera.",
+      "name": "Full stack: backend + Android Emulator (live webcam)",
+      "configurations": [
+        "Backend: API (localhost)",
+        "App: run on Android Emulator (live webcam)"
+      ],
+      "stopAll": true
+    },
+    {
+      "// ": "No-phone development, UI + Semantic only: mobile_scanner on Web cannot return image bytes, so the Structural branch abstains",
+      "name": "Full stack: backend + Web server (no phone)",
+      "configurations": [
+        "Backend: API (localhost)",
+        "App: Web server (no phone)"
+      ],
+      "stopAll": true
+    }
+  ]
+}

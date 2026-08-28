@@ -1,0 +1,8 @@
+metric,value
+synthetic_accuracy,0.8907407407407407
+synthetic_macro_f1,0.8892255247853335
+adversarial_recall,0.9611111111111111
+tampered_recall,0.9222222222222223
+qrdn_clean_fpr,0.0
+ece,0.012630444433954049
+onnx_latency_p95_ms,44.634604996826965

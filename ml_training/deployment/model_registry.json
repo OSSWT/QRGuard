@@ -1,0 +1,116 @@
+{
+  "schema_version": 2,
+  "status": "camera_robust_structural_runtime_correction_exact_app_gate_pending",
+  "deployed": {
+    "structural": {
+      "display_name": "Structural Training deployed baseline",
+      "version": "structural-run5",
+      "scope": "RUN 5 for Gallery; structural-2026.02 for Live Camera",
+      "artifact": {
+        "path": "training/artifacts/structural/structural_fp32.onnx",
+        "bytes": 16035559,
+        "sha256": "031ff0c355674bf77e08311b5c245a5d58dfb5de15a5c95c2511ca29539e997a",
+        "temperature": 1.7350759506225586
+      },
+      "camera_artifact": {
+        "path": "ml_training/structural/runs/structural-2026.02/artifacts/structural_fp32.onnx",
+        "bytes": 44702737,
+        "sha256": "4184d4bee26b5cd2b3608392f80599f17f91e97a4a337b873a3f81121b01bce1",
+        "temperature": 0.7535029466424891,
+        "qrdn_camera_clean_fpr": 0.0,
+        "runtime_scope": "live_camera"
+      },
+      "branch_gates_passed": false,
+      "runtime_mitigation": [
+        "one clearest rectified crop per scan",
+        "domain-matched calibrated Structural artifact",
+        "continuous score enters Fusion without consensus or source threshold"
+      ],
+      "gate_failures": [
+        "RUN 5 camera-derived clean FPR 0.8084 makes it invalid for Live Camera",
+        "structural-2026.02 exact QRGuard app-camera acceptance sessions are still missing"
+      ]
+    },
+    "semantic": {
+      "display_name": "Semantic Training",
+      "version": "semantic-2026.02",
+      "artifact": {
+        "path": "training/artifacts/semantic/semantic_model.joblib",
+        "bytes": 6060168,
+        "sha256": "a15a5a409df739465c2b94371c059cbd728c1b1e1c879f69e0400a858ed230ce"
+      },
+      "performance": {
+        "test_rows": 80000,
+        "accuracy": 0.8982875,
+        "f1": 0.8969491267841087,
+        "roc_auc": 0.9566482468749999,
+        "ece": 0.020249664690277128,
+        "latency_p95_ms": 1.0320899953512706,
+        "behavioural_benign_fpr": 0.04,
+        "behavioural_phishing_recall": 1.0
+      },
+      "gates_passed": true,
+      "gate_failures": []
+    },
+    "decision_layer": {
+      "display_name": "Risk Decision Layer",
+      "version": "decision-2026.02",
+      "artifact": {
+        "path": "backend/fusion/fusion_weights.json",
+        "bytes": 12592,
+        "sha256": "06d3e4d15060541e2310af73796159ded82528f02bd443483202de3617279631"
+      },
+      "thresholds": {
+        "safe_max": 45,
+        "blocked_min": 55
+      },
+      "performance": {
+        "test_rows": 540,
+        "roc_auc": 0.9898919753086419,
+        "blocked_precision": 0.994269340974212,
+        "safe_tier_fnr": 0.013888888888888888,
+        "exact_tier_accuracy": 0.8981481481481481,
+        "policy_acceptance_rate": 0.987037037037037
+      },
+      "gates_passed": true,
+      "gate_failures": []
+    }
+  },
+  "candidates": {
+    "structural": {
+      "display_name": "Structural Training",
+      "version": "structural-2026.02",
+      "path": "ml_training/structural/runs/structural-2026.02",
+      "artifact_sha256": "4184d4bee26b5cd2b3608392f80599f17f91e97a4a337b873a3f81121b01bce1",
+      "research_gates_passed": true,
+      "runtime_scope": "live_camera_provisional",
+      "deployment_gates_passed": false,
+      "deployment_gate_failures": [
+        "zero exact QRGuard app-camera sessions for clean",
+        "zero exact QRGuard app-camera sessions for physical adversarial",
+        "zero exact QRGuard app-camera sessions for tampered"
+      ]
+    }
+  },
+  "rollback": {
+    "structural_run5": "ml_training/deployment/rollback/structural-run5",
+    "semantic_v1": "ml_training/semantic/runs/semantic-2026.01",
+    "legacy_semantic": "training/artifacts/method1"
+  },
+  "verification": {
+    "backend_tests": "247 passed",
+    "flutter_analyze": "no issues",
+    "flutter_tests": "58 passed",
+    "flutter_release_apk": "built and installed as 1.0.0+8003 on emulator-5554",
+    "emulator_backend_connection": "connected to http://10.0.2.2:8001",
+    "smoke_matrix": {
+      "gallery_utar": "Safe, risk 2",
+      "gallery_open_wifi": "Warning/Partial analysis, risk 45",
+      "camera_utar_direct_pipeline": "Safe, risk 2",
+      "camera_open_wifi_direct_pipeline": "Warning, risk 45",
+      "camera_phishing_direct_pipeline": "Blocked, risk 94"
+    }
+  },
+  "remaining_promotion_requirement": "Collect at least 100 group-disjoint exact app-camera sessions per Structural class, including 20 test sessions per class.",
+  "recorded_at": "2026-08-21T10:08:24+08:00"
+}

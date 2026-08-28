@@ -1,0 +1,17 @@
+{
+  "display_name": "Semantic Training",
+  "experiment_version": "semantic-2026.02",
+  "seed": 42,
+  "labels": {"benign": 0, "dangerous": 1},
+  "split_unit": "registrable_domain",
+  "split_ratios": {"train": 0.7, "validation": 0.15, "test": 0.15},
+  "deployment_gates": {
+    "behavioural_benign_false_positive_rate_max": 0.05,
+    "behavioural_phishing_recall_min": 0.9,
+    "official_brand_probability_max": 0.35,
+    "per_source_roc_auc_min": 0.9,
+    "ece_max": 0.03,
+    "export_accuracy_drop_max": 0.02,
+    "server_latency_p95_ms_max": 150
+  }
+}

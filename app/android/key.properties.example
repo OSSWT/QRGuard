@@ -1,0 +1,5 @@
+# Copy to key.properties only on the release build machine. Never commit secrets.
+storePassword=replace-with-upload-keystore-password
+keyPassword=replace-with-upload-key-password
+keyAlias=qrguard-upload
+storeFile=C:/secure/location/qrguard-upload.jks

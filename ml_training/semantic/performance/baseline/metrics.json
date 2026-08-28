@@ -1,0 +1,169 @@
+{
+  "run": "run3_augmented",
+  "test_metrics": {
+    "overall": {
+      "n": 141900,
+      "accuracy": 0.977554615926709,
+      "precision": 0.9680176128024242,
+      "recall": 0.9570743124634289,
+      "f1": 0.9625148587098521,
+      "roc_auc": 0.9944241371065532
+    },
+    "per_source": {
+      "malicious_phish": {
+        "n": 86055,
+        "accuracy": 0.9721922026610889,
+        "precision": 0.9596911661486012,
+        "recall": 0.9603010033444817,
+        "f1": 0.9599959878968221,
+        "roc_auc": 0.9959868877024267
+      },
+      "phiusiil": {
+        "n": 33374,
+        "accuracy": 0.9805237610115659,
+        "precision": 0.9997537148017405,
+        "recall": 0.9495516569200779,
+        "f1": 0.9740062385027594,
+        "roc_auc": 0.987527068139417
+      },
+      "tranco": {
+        "n": 22471,
+        "accuracy": 0.9936807440701348,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "roc_auc": null
+      }
+    }
+  },
+  "calibration": {
+    "temperature": 2.2032649517059326,
+    "ece_before": 0.020171426311187835,
+    "ece_after": 0.005179209363888991
+  },
+  "sanity": {
+    "sanity_accuracy": 0.65,
+    "results": [
+      {
+        "url": "https://www.google.com/maps",
+        "label": 0,
+        "p_url": 0.01689893566071987
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=x",
+        "label": 0,
+        "p_url": 0.9896334409713745
+      },
+      {
+        "url": "https://github.com/pytorch/pytorch",
+        "label": 0,
+        "p_url": 0.9475706815719604
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/QR_code",
+        "label": 0,
+        "p_url": 0.9081546068191528
+      },
+      {
+        "url": "https://www.maybank2u.com.my/",
+        "label": 0,
+        "p_url": 0.9847480654716492
+      },
+      {
+        "url": "https://www.imda.gov.sg/",
+        "label": 0,
+        "p_url": 0.9292446374893188
+      },
+      {
+        "url": "https://www.utar.edu.my/",
+        "label": 0,
+        "p_url": 0.06807486712932587
+      },
+      {
+        "url": "https://outlook.office.com/mail/",
+        "label": 0,
+        "p_url": 0.936097264289856
+      },
+      {
+        "url": "https://www.paypal.com/signin",
+        "label": 0,
+        "p_url": 0.9832721948623657
+      },
+      {
+        "url": "https://shopee.com.my/",
+        "label": 0,
+        "p_url": 0.013076703064143658
+      },
+      {
+        "url": "http://paypal-secure-verify.top/login/update.php",
+        "label": 1,
+        "p_url": 0.9918290972709656
+      },
+      {
+        "url": "http://maybank2u-verify.xyz/login",
+        "label": 1,
+        "p_url": 0.9924033880233765
+      },
+      {
+        "url": "http://203.0.113.7/account/confirm",
+        "label": 1,
+        "p_url": 0.9922865629196167
+      },
+      {
+        "url": "http://apple.id-login.secure-check.tk/",
+        "label": 1,
+        "p_url": 0.9924814701080322
+      },
+      {
+        "url": "http://update-account.cimb-my.com.security-alert.ga/",
+        "label": 1,
+        "p_url": 0.9925204515457153
+      },
+      {
+        "url": "http://free-gift-card.win/claim?id=123",
+        "label": 1,
+        "p_url": 0.9922757744789124
+      },
+      {
+        "url": "http://bankofamerica.com.login-verify.ru/",
+        "label": 1,
+        "p_url": 0.9924707412719727
+      },
+      {
+        "url": "http://192.168.0.1.phishing-site.xyz/reset",
+        "label": 1,
+        "p_url": 0.9926407933235168
+      },
+      {
+        "url": "http://microsoft-support-alert.ml/warning",
+        "label": 1,
+        "p_url": 0.9925280809402466
+      },
+      {
+        "url": "http://verify-shopee-wallet.cf/pay",
+        "label": 1,
+        "p_url": 0.9923985600471497
+      }
+    ]
+  },
+  "quantization": {
+    "f1_torch": 0.9562982005141388,
+    "f1_onnx_int8": 0.9536878216123499,
+    "drop_pp": 0.26103789017889456,
+    "deployed": "model_quant.onnx"
+  },
+  "latency_ms_median_p95": {
+    "pytorch_cpu": [
+      112.43107100017369,
+      146.2213365997286
+    ],
+    "onnx_fp32": [
+      59.66196149984171,
+      78.52313240055082
+    ],
+    "onnx_int8": [
+      32.184985499952745,
+      45.40099784967423
+    ]
+  }
+}

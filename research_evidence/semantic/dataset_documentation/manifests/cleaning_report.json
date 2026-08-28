@@ -1,0 +1,10 @@
+{
+  "input_rows": 1037076,
+  "invalid_rows": 7,
+  "conflict_keys": 3942,
+  "conflict_rows": 7913,
+  "duplicate_rows": 11463,
+  "output_rows": 1017693,
+  "acceptance_exact_rows_removed": 4,
+  "output_rows_after_acceptance_reservation": 1017689
+}

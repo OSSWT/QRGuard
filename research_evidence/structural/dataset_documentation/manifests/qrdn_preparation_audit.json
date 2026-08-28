@@ -1,0 +1,22 @@
+{
+  "source": "https://data.mendeley.com/datasets/t2bdr663ms/2",
+  "doi": "10.17632/t2bdr663ms.2",
+  "licence": "CC-BY-4.0",
+  "manifest_rows": 6750,
+  "rows_by_split": {
+    "train": 4500,
+    "test": 2250
+  },
+  "rows_by_method": {
+    "one": 2250,
+    "quad": 2250,
+    "voted": 2250
+  },
+  "qr_identities_by_split": {
+    "train": 50,
+    "test": 25
+  },
+  "invalid_images": [],
+  "leakage_control": "Official train uses 50 QR identities (30 captures each); official test uses 25 disjoint QR identities. The same identity/capture across extraction methods always remains in the same split.",
+  "label_scope": "All rows are clean Structural examples with genuine acquisition/extraction noise; noise, lighting and reconstruction artefacts are capture conditions, not adversarial or physical-tampering labels."
+}

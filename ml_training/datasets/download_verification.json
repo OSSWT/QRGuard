@@ -1,0 +1,22 @@
+{
+  "qr_surfaces": {
+    "path": "ml_training/datasets/structural/downloads/qr_surfaces/qr_codes_in_surfaces.zip",
+    "expected_bytes": 384232282,
+    "expected_sha256": "706352654a744217b6853c77362f4a32cc318d941b715423948ba2108aae7523",
+    "doi": "10.17632/m6mfwc52vk.1",
+    "exists": true,
+    "actual_bytes": 384232282,
+    "actual_sha256": "706352654a744217b6853c77362f4a32cc318d941b715423948ba2108aae7523",
+    "passed": true
+  },
+  "qrdn": {
+    "path": "ml_training/datasets/structural/downloads/qrdn/QR-DN1.0.zip",
+    "expected_bytes": 1025545184,
+    "expected_sha256": "1f175a62239646bd7d6b179245cb0970c03b179c2baf1a5e8e59ba0b156cdf61",
+    "doi": "10.17632/t2bdr663ms.2",
+    "exists": true,
+    "actual_bytes": 1025545184,
+    "actual_sha256": "1f175a62239646bd7d6b179245cb0970c03b179c2baf1a5e8e59ba0b156cdf61",
+    "passed": true
+  }
+}

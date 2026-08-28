@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>QRGuard Privacy Policy</title>
+  <style>
+    :root { font-family: Inter, system-ui, sans-serif; color: #e9edf5; background: #080b12; }
+    body { margin: 0; }
+    main { max-width: 760px; margin: auto; padding: 48px 24px 80px; line-height: 1.65; }
+    h1, h2 { line-height: 1.2; color: #fff; }
+    h1 { font-size: clamp(2rem, 6vw, 3.4rem); }
+    h2 { margin-top: 2rem; }
+    a { color: #75e6c5; }
+    .meta { color: #a8b0c0; }
+    .notice { border-left: 4px solid #75e6c5; padding: 12px 18px; background: #111827; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>QRGuard Privacy Policy</h1>
+  <p class="meta">Effective 24 August 2026</p>
+  <p class="notice">QRGuard is a research-based QR safety aid. It cannot guarantee
+    that a QR code, destination, payment request, or network is safe.</p>
+
+  <h2>Data processed during a scan</h2>
+  <p>When you request analysis, QRGuard sends the decoded QR payload and, when
+    available, a cropped QR image to the QRGuard analysis server. They are used to
+    calculate structural, semantic, and combined risk results.</p>
+  <p>The production server does not persist uploaded images or raw payloads by
+    default. It processes them in memory. Operational logs deliberately omit the
+    raw payload and destination domain.</p>
+
+  <h2>Data stored on your device</h2>
+  <p>If history is enabled, QRGuard stores up to 200 local summaries. A summary may
+    contain a SHA-256 payload hash, registered domain, risk signals, verdict, score,
+    and scan time. It does not contain the raw QR image, full URL, URL path or query,
+    or raw payload. You can disable or clear history.</p>
+
+  <h2>Optional deep analysis</h2>
+  <p>Deep analysis runs only when requested. If a third-party language-model provider
+    is enabled, relevant link evidence may be sent to it for a second opinion. The
+    initial internal deployment keeps this provider disabled.</p>
+
+  <h2>Permissions and security</h2>
+  <p>QRGuard requests camera permission for scanning and network access for analysis.
+    Gallery selection is initiated through the operating-system picker. Production
+    traffic uses HTTPS. QRGuard does not sell scan data and contains no advertising
+    or analytics SDK.</p>
+
+  <h2>Retention and deletion</h2>
+  <p>Server-side scan inputs are not retained under the default production
+    configuration. Local history remains until it exceeds 200 records, you clear it,
+    or the app is removed. Infrastructure security logs follow the hosting provider's
+    configured retention.</p>
+
+  <h2>Contact and changes</h2>
+  <p>QRGuard is developed by OSSWT. Contact
+    <a href="mailto:szeshou03@gmail.com">szeshou03@gmail.com</a>. Material changes
+    will be reflected by updating this page and its effective date.</p>
+</main>
+</body>
+</html>

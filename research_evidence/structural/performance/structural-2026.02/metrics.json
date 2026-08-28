@@ -1,0 +1,160 @@
+{
+  "display_name": "Structural Training",
+  "version": "structural-2026.02",
+  "architecture": "ImageNet-pretrained ResNet-18; 3-class fine-tuning",
+  "trained_at": "2026-08-20T21:49:16.831240+00:00",
+  "split_rows": {
+    "train": 6367,
+    "validation": 1440,
+    "synthetic_grouped_test": 540,
+    "qrdn_external_holdout_test": 2250
+  },
+  "temperature": 0.7535029466424891,
+  "synthetic_grouped_test": {
+    "n": 540,
+    "accuracy": 0.8907407407407407,
+    "macro_f1": 0.8892255247853335,
+    "ece": 0.012630444433954049,
+    "per_class": {
+      "clean": {
+        "precision": 0.8765432098765432,
+        "recall": 0.7888888888888889,
+        "f1": 0.8304093567251462,
+        "support": 180
+      },
+      "adversarial": {
+        "precision": 0.8871794871794871,
+        "recall": 0.9611111111111111,
+        "f1": 0.9226666666666666,
+        "support": 180
+      },
+      "tampered": {
+        "precision": 0.907103825136612,
+        "recall": 0.9222222222222223,
+        "f1": 0.9146005509641874,
+        "support": 180
+      }
+    }
+  },
+  "classification_report": {
+    "clean": {
+      "precision": 0.8765432098765432,
+      "recall": 0.7888888888888889,
+      "f1-score": 0.8304093567251462,
+      "support": 180.0
+    },
+    "adversarial": {
+      "precision": 0.8871794871794871,
+      "recall": 0.9611111111111111,
+      "f1-score": 0.9226666666666666,
+      "support": 180.0
+    },
+    "tampered": {
+      "precision": 0.907103825136612,
+      "recall": 0.9222222222222223,
+      "f1-score": 0.9146005509641874,
+      "support": 180.0
+    },
+    "accuracy": 0.8907407407407407,
+    "macro avg": {
+      "precision": 0.8902755073975475,
+      "recall": 0.8907407407407408,
+      "f1-score": 0.8892255247853335,
+      "support": 540.0
+    },
+    "weighted avg": {
+      "precision": 0.8902755073975475,
+      "recall": 0.8907407407407407,
+      "f1-score": 0.8892255247853333,
+      "support": 540.0
+    }
+  },
+  "qrdn_external_clean_holdout": {
+    "n": 2250,
+    "qr_identities": 25,
+    "false_positive_rate_at_0_5": 0.0,
+    "nonclean_class_rate": 0.0,
+    "median_p_structural": 0.003471851348876953,
+    "p95_p_structural": 0.015267347916960716,
+    "maximum_p_structural": 0.03092283010482788
+  },
+  "onnx": {
+    "max_abs_logit_error": 4.76837158203125e-06,
+    "max_abs_probability_error": 1.2218952178955078e-06,
+    "latency_median_ms": 42.183949997706804,
+    "latency_p95_ms": 44.634604996826965,
+    "bytes": 44702737,
+    "sha256": "4184d4bee26b5cd2b3608392f80599f17f91e97a4a337b873a3f81121b01bce1"
+  },
+  "research_gates_passed": true,
+  "research_gate_failures": [],
+  "runtime_capture_audit": {
+    "accepted_sessions": 0,
+    "accepted_frames": 0,
+    "rejected_sessions": 0,
+    "rejected_reasons": {},
+    "sessions_per_class": {
+      "clean": 0,
+      "adversarial": 0,
+      "tampered": 0
+    },
+    "frames_per_split_class": {
+      "train": {
+        "clean": 0,
+        "adversarial": 0,
+        "tampered": 0
+      },
+      "val": {
+        "clean": 0,
+        "adversarial": 0,
+        "tampered": 0
+      },
+      "test": {
+        "clean": 0,
+        "adversarial": 0,
+        "tampered": 0
+      }
+    },
+    "sessions_per_split_class": {
+      "train": {
+        "clean": 0,
+        "adversarial": 0,
+        "tampered": 0
+      },
+      "val": {
+        "clean": 0,
+        "adversarial": 0,
+        "tampered": 0
+      },
+      "test": {
+        "clean": 0,
+        "adversarial": 0,
+        "tampered": 0
+      }
+    },
+    "groups_per_split": {
+      "train": 0,
+      "val": 0,
+      "test": 0
+    },
+    "leakage_groups": [],
+    "strict_ready": false,
+    "strict_failures": [
+      "clean: 0 sessions; require 100",
+      "clean test: 0 sessions; require 20",
+      "adversarial: 0 sessions; require 100",
+      "adversarial test: 0 sessions; require 20",
+      "tampered: 0 sessions; require 100",
+      "tampered test: 0 sessions; require 20"
+    ]
+  },
+  "deployment_gates_passed": false,
+  "deployment_gate_failures": [
+    "exact app-crop gate: clean: 0 sessions; require 100",
+    "exact app-crop gate: clean test: 0 sessions; require 20",
+    "exact app-crop gate: adversarial: 0 sessions; require 100",
+    "exact app-crop gate: adversarial test: 0 sessions; require 20",
+    "exact app-crop gate: tampered: 0 sessions; require 100",
+    "exact app-crop gate: tampered test: 0 sessions; require 20"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "display_name": "Semantic Training",
+  "version": "semantic-2026.02",
+  "architecture": "hashed character 3-5 gram averaged SGD logistic classifier",
+  "feature_config": {
+    "analyzer": "char",
+    "ngram_range": [
+      3,
+      5
+    ],
+    "n_features": 262144,
+    "alternate_sign": false,
+    "norm": "l2",
+    "lowercase": true
+  },
+  "seed": 42,
+  "trained_at": "2026-08-20T22:15:55.010911+00:00",
+  "artifact_bytes": 6060168,
+  "artifact_sha256": "a15a5a409df739465c2b94371c059cbd728c1b1e1c879f69e0400a858ed230ce",
+  "calibration_scale": 0.9031627566065689,
+  "calibration_intercept": 0.08086853299520722,
+  "gates_passed": true,
+  "gate_failures": []
+}

@@ -1,0 +1,15 @@
+# QRGuard API production dependencies.
+# Training, notebooks, test runners and data tooling intentionally stay out of
+# the 512 MiB Render free instance.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+httpx>=0.28
+tldextract>=5.3
+onnxruntime>=1.20
+tokenizers>=0.20
+numpy>=1.26
+pillow>=10
+joblib>=1.4
+scikit-learn>=1.5
+scipy>=1.13

@@ -1,0 +1,27 @@
+# QRGuard backend — runtime dependencies
+tldextract>=5.3
+httpx>=0.28
+
+# Model inference (no PyTorch at serving time — ONNX only, keeps the backend light)
+onnxruntime>=1.20
+tokenizers>=0.20        # Method 1 URL tokenization
+numpy>=1.26
+pillow>=10              # Structural image preprocessing
+
+# Added as modules are built (uncomment when needed):
+# fastapi
+# uvicorn[standard]
+# scikit-learn          # fusion meta-classifier
+
+# Dev / test
+pytest>=8
+respx>=0.22
+qrcode>=7               # generates QR images in structural tests
+scikit-learn>=1.5           # fusion meta-classifier
+pandas>=2.0                 # dataset scripts
+
+# API
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+scipy>=1.13                 # constrained fusion fit

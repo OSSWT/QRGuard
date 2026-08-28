@@ -1,0 +1,14 @@
+metric,value
+n,80000
+accuracy,0.8982875
+precision,0.908908908908909
+recall,0.8853
+f1,0.8969491267841087
+roc_auc,0.9566482468749999
+pr_auc,0.9616787307592103
+brier,0.07825645018509467
+ece,0.020249664690277128
+behavioural_benign_fpr,0.04
+behavioural_phishing_recall,1.0
+export_parity_max_abs_error,0.0
+latency_p95_ms,1.0320899953512706

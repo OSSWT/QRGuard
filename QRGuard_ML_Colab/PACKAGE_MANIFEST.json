@@ -1,0 +1,430 @@
+{
+  "package": "QRGuard_ML_Colab",
+  "files": [
+    {
+      "path": "01_Structural_Training_Colab.ipynb",
+      "bytes": 18724,
+      "sha256": "e8d21b2dda3ecef91a09e08be47e6b70d009722cce19248492d07f6e21a5d73b"
+    },
+    {
+      "path": "02_Semantic_Training_Colab.ipynb",
+      "bytes": 11339,
+      "sha256": "035c1832126a51e7254f10d07d592db5cbb4bad411488e7e97754deeac840dac"
+    },
+    {
+      "path": "DATA_REQUIREMENTS.md",
+      "bytes": 746,
+      "sha256": "a725af5e839f3aa244e53b2ef50c74484e3cb33a9121f3ae57705a5c36defad2"
+    },
+    {
+      "path": "QRGuard/backend/semantic/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "QRGuard/backend/semantic/semantic_features.py",
+      "bytes": 2954,
+      "sha256": "d6328ab30bf58cdf1fd861e5f3be9e8c1a397bb3611be0137f68fbfe31f4d529"
+    },
+    {
+      "path": "QRGuard/backend/semantic/semantic_service.py",
+      "bytes": 3309,
+      "sha256": "22948769b78e0160418b6f7daa6c216ac8282726bceeb67efafe5d93239b528b"
+    },
+    {
+      "path": "QRGuard/data/runtime_captures/audit.json",
+      "bytes": 1225,
+      "sha256": "7b634981d2d25956dd2011de8278a3998cffdd754df33c57eb47597f0ab8b1e6"
+    },
+    {
+      "path": "QRGuard/ml_training/__init__.py",
+      "bytes": 52,
+      "sha256": "df1ce685fd5dd6b817fb1ecbd199fe0cf50874682b052dde091175a6c9265231"
+    },
+    {
+      "path": "QRGuard/ml_training/COLOR_PIPELINE.md",
+      "bytes": 1938,
+      "sha256": "2ada8c919c2d8fd287fd8bb3602f510c8919e862a9b7161f9678ba48c6de46cf"
+    },
+    {
+      "path": "QRGuard/ml_training/configs/decision_layer.json",
+      "bytes": 534,
+      "sha256": "4b885ed48587a582357762d613a976113d55929bbf36952919d94c2455035129"
+    },
+    {
+      "path": "QRGuard/ml_training/configs/semantic.json",
+      "bytes": 553,
+      "sha256": "37e239d61d12c5f4c44849e841cdef016bd4e9a8d2ccd2456494d0f67db970dd"
+    },
+    {
+      "path": "QRGuard/ml_training/configs/structural.json",
+      "bytes": 724,
+      "sha256": "ee88ecc0e53a907683893478b9d7c8e7b588492b8368688c2d71339b9d77d430"
+    },
+    {
+      "path": "QRGuard/ml_training/datasets/download_verification.json",
+      "bytes": 873,
+      "sha256": "7a97d891005f20081efa245a841f2fd0f094505b943630e5dff3e44b73a0a102"
+    },
+    {
+      "path": "QRGuard/ml_training/datasets/manifests/semantic.template.csv",
+      "bytes": 110,
+      "sha256": "a390ddde53280273f68eb99f6b2327c10676f9897a401c4b4873e1073527ea92"
+    },
+    {
+      "path": "QRGuard/ml_training/datasets/manifests/structural.template.csv",
+      "bytes": 183,
+      "sha256": "132a5007e24cfc0782f88a7d6ce1929d2872d70b8ac8362c60a1d353ab562b09"
+    },
+    {
+      "path": "QRGuard/ml_training/datasets/README.md",
+      "bytes": 2103,
+      "sha256": "f2834636e09d59f34a4adb22b9ccd1710b1dfff6490fd3c74811f7f24995b562"
+    },
+    {
+      "path": "QRGuard/ml_training/EXECUTION_PLAN.md",
+      "bytes": 2511,
+      "sha256": "fc736648b4b4a300b3afddf777a1432f13146aadbb21cd5aa4bf5169e84d6769"
+    },
+    {
+      "path": "QRGuard/ml_training/README.md",
+      "bytes": 2488,
+      "sha256": "0f07729d773531476e4149c8105dc55099a760bfeaa3280b50539089ebff5082"
+    },
+    {
+      "path": "QRGuard/ml_training/references/DATASET_LICENSES.md",
+      "bytes": 1648,
+      "sha256": "ab6c1ebe0de0e2a7efd1ebbf63df973152d2e1c4767ee31386a9a57b08a7a573"
+    },
+    {
+      "path": "QRGuard/ml_training/references/dataset_registry.csv",
+      "bytes": 2870,
+      "sha256": "d329d57c85f661e199e7ba2be793163db5d6a3b59a90f1f3341a868b1c10faac"
+    },
+    {
+      "path": "QRGuard/ml_training/references/REFERENCES.bib",
+      "bytes": 4375,
+      "sha256": "52ba2971158cfc4b910d24093c98e6a357a7e83dab8838a7bf5b7ff483d18423"
+    },
+    {
+      "path": "QRGuard/ml_training/references/SOURCES.md",
+      "bytes": 4572,
+      "sha256": "ab376d3fe8228c46dc5c1717889e583becb9e81feb25f4a1fa7a8834ff73811a"
+    },
+    {
+      "path": "QRGuard/ml_training/requirements.txt",
+      "bytes": 475,
+      "sha256": "02b4cd0ccf74bafe959d6db4665a77b87d5d6707d9cea1aec69cda4763b85da4"
+    },
+    {
+      "path": "QRGuard/ml_training/RESULTS_INDEX.md",
+      "bytes": 4346,
+      "sha256": "1fe0568bd5fd9ccdb11905cec38ef7fd10eab5d1413a41b12da66cc360740c43"
+    },
+    {
+      "path": "QRGuard/ml_training/scripts/acquire_dynamsoft.py",
+      "bytes": 3700,
+      "sha256": "7405520ad37c69546b8f02807047f8d0c6b20244f47448428f2359c257f4e3e3"
+    },
+    {
+      "path": "QRGuard/ml_training/scripts/audit_environment.py",
+      "bytes": 2104,
+      "sha256": "d871b0c973481c1c7b53d56c52189c13f6954d839dd0004e3add0630e10840bb"
+    },
+    {
+      "path": "QRGuard/ml_training/scripts/baseline_inventory.py",
+      "bytes": 10685,
+      "sha256": "218d1335f9050c1981caaa17ecce6b767b39f989df7d9930f8a23242275f8ebc"
+    },
+    {
+      "path": "QRGuard/ml_training/scripts/validate_performance_bundle.py",
+      "bytes": 4026,
+      "sha256": "fbc9007239a84196270fce3c31828d5993e2e761df9d91b57dcc9f6d772058c7"
+    },
+    {
+      "path": "QRGuard/ml_training/scripts/verify_datasets.py",
+      "bytes": 2234,
+      "sha256": "2ac155e3409e47bc7d379cced5c26db53e086683e490b5ee2c05c79edd4b50ba"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/behavioural_acceptance.csv",
+      "bytes": 3944,
+      "sha256": "9b228e80ff60cde428bf8908d50d2c39d694c8083c85d2e7691442272f174397"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/calibration_curve.png",
+      "bytes": 63281,
+      "sha256": "e1fca6b386e7922b9c368d69f6ab48576d403a2acee9230f5ebd7a113f651815"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/confusion_matrix.png",
+      "bytes": 45096,
+      "sha256": "006edc8d03918fd42b9cf10fe0bc6d4e6750bd9ea33f8e42ad0026f1989cef99"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/dataset_composition.csv",
+      "bytes": 497,
+      "sha256": "f6c94263bb4977f417c4ff85c7e6759f5241bf462058cbe45d4fe26af32f3b39"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/hard_benign_results.csv",
+      "bytes": 2194,
+      "sha256": "9052b5a6c02210bec450505f3f18a8b169a8c3f1694d5f0ccc3e49c1908e8f4d"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/metrics.csv",
+      "bytes": 348,
+      "sha256": "8a28280515b52041694088b44f1b64ed127ace49833768faf47e49c908300042"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/metrics.json",
+      "bytes": 13203,
+      "sha256": "b7430da3f779e0263f63291bfda0906ac154825bfce99f41d5aef4ba19aa3128"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/per_source_results.csv",
+      "bytes": 498,
+      "sha256": "3ec3910dc2e35833f8d125c12b89fb7370b374af9fa9391eb12a9be09272df71"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/roc_pr_curves.png",
+      "bytes": 87792,
+      "sha256": "31b09115cc9faefaec712bb1f683ef8723857c060bb44527497b23a21a63f6b3"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/SEMANTIC_PERFORMANCE.md",
+      "bytes": 524,
+      "sha256": "130b4e9513ba45b6b2681286cf6d65ac852453c9e1122f7d3dc818e2084db02e"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/performance/semantic-2026.02/training_curves.png",
+      "bytes": 49285,
+      "sha256": "40a479fa37bd3778813d7b8e02ab401b63bdc9d299e6ce1fd2221fdd0abbd907"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/README.md",
+      "bytes": 1405,
+      "sha256": "8bc098549cfcef51c27a0a0335322b51dc9c7c9dfff1e3db94413decc4d361f6"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/src/__init__.py",
+      "bytes": 40,
+      "sha256": "e1bfee98f3cf93472fadb29032be291cc88b236075ac0a2e3fc3b9d1c2acd981"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/src/build_source_catalog.py",
+      "bytes": 2688,
+      "sha256": "434acac49fa64e4b4c7b567f826e4bae97dedcfc4f88d30032afa1be18eedc57"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/src/contract.py",
+      "bytes": 9788,
+      "sha256": "607bc4b5efe849cc921e3edb75a5621e972160d75f4146d890fb9ced38b27cac"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/src/prepare_colab_data.py",
+      "bytes": 7475,
+      "sha256": "8e3142041e304c460489d4d72e0269e0cb9111e9f29e0a57bcf6ccac95a6d8e6"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/src/train.py",
+      "bytes": 18083,
+      "sha256": "d29180816592e19d1d7dfa7a4998198173a7f460b7bad4bba0f19568964eda93"
+    },
+    {
+      "path": "QRGuard/ml_training/semantic/src/train_local.py",
+      "bytes": 24658,
+      "sha256": "1eef7ee835b3ff5aa20fd87100355c5ee29a564d3a6f07e44537cdf49d2a049b"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/confusion_matrix.png",
+      "bytes": 48606,
+      "sha256": "e6f9fdc2165c06a54f36f844d6f4cb47acc3d4335e4508eb9dcecb0c5a752423"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/dataset_composition.csv",
+      "bytes": 268,
+      "sha256": "46f688b1741c8ecbb4088a715f160ff313c6f262122595411ac1cf6cc9fa57be"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/metrics.csv",
+      "bytes": 253,
+      "sha256": "dc8f899c88df21fcff0d07d317428fb68b87ce4ed076011d370b411fa146c95a"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/metrics.json",
+      "bytes": 4530,
+      "sha256": "a2ed0a2ac1ad261e386e39004759185fc2f5dfb81f396c81b12888b687673950"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/qrdn_clean_distribution.png",
+      "bytes": 41417,
+      "sha256": "92d0ebb4c1ab14e477ae1c7c270261418d779855fcb91611af513e9675e168ab"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/STRUCTURAL_PERFORMANCE.md",
+      "bytes": 920,
+      "sha256": "cfa3d3c49f33ee883be71ee58011e893ab6de4b5e292f71db64efe08d172c829"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/training_curves.png",
+      "bytes": 75527,
+      "sha256": "00c3959dd0797d88651c6eba2f4b9bd1c172d6067cd83ef4e883c4dab94d9640"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/performance/structural-2026.02/training_history.csv",
+      "bytes": 606,
+      "sha256": "60036ec9ce0d806e499ef4c2756e2bdbbc2de0493e5530d8af736cd7ccab6694"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/README.md",
+      "bytes": 1108,
+      "sha256": "4d9b7bbc2085858331bf48e56b4a70b347a2e9ceb5595b321d83c378cce08da1"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/__init__.py",
+      "bytes": 42,
+      "sha256": "97348249806563c0ec9e44f1ec0f7bb90268018d64dd79af0738963d6625108a"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/evaluate_qrdn.py",
+      "bytes": 6476,
+      "sha256": "9f1bc4bfaa671fe16bbc2f3ec3dde7e9084f1405aa35ccda5f6306a87fdbaf05"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/prepare_dynamsoft_holdout.py",
+      "bytes": 8457,
+      "sha256": "a6bbebdf21ccc76685e616e681de6c6c3798551600e13b1658773a03dc726d9d"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/prepare_qr_surfaces.py",
+      "bytes": 8706,
+      "sha256": "11d9159c93360966beaecbc523c62e9491e966b1ae7fbbc80d99a936d90b320e"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/prepare_qrdn.py",
+      "bytes": 5419,
+      "sha256": "468cf30d4189512948f06b7f0fcd72deafb25825f36bdb93eaa929cc148c0da2"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/prepare_runtime_captures.py",
+      "bytes": 10135,
+      "sha256": "28b70d7b451a781f57a8428946133b30208e1e4da8574590b580a082ac8bc3b6"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/structural_recipes.py",
+      "bytes": 26267,
+      "sha256": "bd8ef19e37af45961c8d9a8536f12731848fbf8b7d972514d12d7c687235ba2b"
+    },
+    {
+      "path": "QRGuard/ml_training/structural/src/train_local.py",
+      "bytes": 33331,
+      "sha256": "6c55928366cd3cc0ad311e36ae0d386b358b855368df2625808b6739cb2d1aad"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2348,
+      "sha256": "f361671fcb996e5cbb2a9709da2b59176ab2b16a057c5b64dbef0de22c05c694"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/behavioural_acceptance.csv",
+      "bytes": 3944,
+      "sha256": "9b228e80ff60cde428bf8908d50d2c39d694c8083c85d2e7691442272f174397"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/calibration_curve.png",
+      "bytes": 63281,
+      "sha256": "e1fca6b386e7922b9c368d69f6ab48576d403a2acee9230f5ebd7a113f651815"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/confusion_matrix.png",
+      "bytes": 45096,
+      "sha256": "006edc8d03918fd42b9cf10fe0bc6d4e6750bd9ea33f8e42ad0026f1989cef99"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/dataset_composition.csv",
+      "bytes": 497,
+      "sha256": "f6c94263bb4977f417c4ff85c7e6759f5241bf462058cbe45d4fe26af32f3b39"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/hard_benign_results.csv",
+      "bytes": 2194,
+      "sha256": "9052b5a6c02210bec450505f3f18a8b169a8c3f1694d5f0ccc3e49c1908e8f4d"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/metrics.csv",
+      "bytes": 348,
+      "sha256": "8a28280515b52041694088b44f1b64ed127ace49833768faf47e49c908300042"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/metrics.json",
+      "bytes": 13203,
+      "sha256": "b7430da3f779e0263f63291bfda0906ac154825bfce99f41d5aef4ba19aa3128"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/per_source_results.csv",
+      "bytes": 498,
+      "sha256": "3ec3910dc2e35833f8d125c12b89fb7370b374af9fa9391eb12a9be09272df71"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/roc_pr_curves.png",
+      "bytes": 87792,
+      "sha256": "31b09115cc9faefaec712bb1f683ef8723857c060bb44527497b23a21a63f6b3"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/SEMANTIC_PERFORMANCE.md",
+      "bytes": 524,
+      "sha256": "130b4e9513ba45b6b2681286cf6d65ac852453c9e1122f7d3dc818e2084db02e"
+    },
+    {
+      "path": "reference_performance/semantic-2026.02/training_curves.png",
+      "bytes": 49285,
+      "sha256": "40a479fa37bd3778813d7b8e02ab401b63bdc9d299e6ce1fd2221fdd0abbd907"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/confusion_matrix.png",
+      "bytes": 48606,
+      "sha256": "e6f9fdc2165c06a54f36f844d6f4cb47acc3d4335e4508eb9dcecb0c5a752423"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/dataset_composition.csv",
+      "bytes": 268,
+      "sha256": "46f688b1741c8ecbb4088a715f160ff313c6f262122595411ac1cf6cc9fa57be"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/metrics.csv",
+      "bytes": 253,
+      "sha256": "dc8f899c88df21fcff0d07d317428fb68b87ce4ed076011d370b411fa146c95a"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/metrics.json",
+      "bytes": 4530,
+      "sha256": "a2ed0a2ac1ad261e386e39004759185fc2f5dfb81f396c81b12888b687673950"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/qrdn_clean_distribution.png",
+      "bytes": 41417,
+      "sha256": "92d0ebb4c1ab14e477ae1c7c270261418d779855fcb91611af513e9675e168ab"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/STRUCTURAL_PERFORMANCE.md",
+      "bytes": 920,
+      "sha256": "cfa3d3c49f33ee883be71ee58011e893ab6de4b5e292f71db64efe08d172c829"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/training_curves.png",
+      "bytes": 75527,
+      "sha256": "00c3959dd0797d88651c6eba2f4b9bd1c172d6067cd83ef4e883c4dab94d9640"
+    },
+    {
+      "path": "reference_performance/structural-2026.02/training_history.csv",
+      "bytes": 606,
+      "sha256": "60036ec9ce0d806e499ef4c2756e2bdbbc2de0493e5530d8af736cd7ccab6694"
+    },
+    {
+      "path": "REFERENCE_RESULTS.md",
+      "bytes": 1320,
+      "sha256": "810e7c21ed09fe384d71bd32b4e60b226a386e078032ebd49d1e622570148192"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# Secrets — NEVER commit API keys
+.env
+.env.*
+*.env
+*.env.txt
+*.key
+*_API_KEY*
+secrets*
+
+# Model artifacts (too large for git — keep in training/ locally & Google Drive)
+*.onnx
+*.pt
+*.pth
+*.pkl
+*.joblib
+training/artifacts/
+training/artifacts*.zip
+backend/fusion/fusion_weights.candidate.json
+
+# Canonical ML workspace: retain recipes/metadata, ignore large generated assets
+ml_training/datasets/**/raw/
+ml_training/datasets/**/processed/
+ml_training/datasets/**/downloads/
+ml_training/datasets/pictures_by_source/
+.colab_bundle_stage/
+QRGuard_colab_source.zip
+ml_training/structural/runs/
+ml_training/semantic/runs/
+ml_training/decision_layer/runs/
+ml_training/deployment/candidates/
+ml_training/deployment/approved/*.onnx
+ml_training/deployment/approved/*.tflite
+ml_training/.matplotlib_cache/
+
+# Datasets
+*.csv
+data/
+!ml_training/references/dataset_registry.csv
+!ml_training/datasets/manifests/*.template.csv
+!research_evidence/**/*.csv
+
+# Flutter / Android
+app/build/
+app/.dart_tool/
+app/.gradle/
+app/android/.gradle/
+app/*.iml
+app/android/local.properties
+app/android/key.properties
+app/android/*.jks
+app/android/*.keystore
+
+# OS / editor
+.DS_Store
+Thumbs.db
+logs/
+deploy/cloudrun/last_deployment.json
+deploy/web/last_deployment.json
+deploy/web/public/
+deploy/render/web/public/
+deploy/render/last_deployment.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+
+# Tranco download cache
+.tranco_cache/
+
+# Local build and development-session artefacts
+/build/
+/.claude/
+/CLAUDE.md
+/Run app.txt
+/app/devtools_options.yaml
+/docs/CLI_CONTINUATION_PROMPT.md
+/docs/CONTINUE_PROMPT.md
+/docs/FLUTTER_PLAN.md
+/docs/HANDOFF.md
+/docs/PROGRESS.md
+/docs/REPORT_NOTES.md
+/docs/DEVELOPMENT_SETUP.md
+/docs/FLUTTER_DEVELOPMENT_GUIDE.md
+/docs/OPERATION_MANUAL.md
+/docs/QUICKSTART.md
+/docs/TESTING_GUIDE.md
+
+# Locally retained article copies; publish citations and source links instead
+/research_evidence/**/references/articles_and_journals/*.pdf
+
+# Versioned runtime artifacts required by the public application and Docker image
+!/training/artifacts/
+/training/artifacts/*
+!/training/artifacts/structural/
+/training/artifacts/structural/*
+!/training/artifacts/structural/deploy_choice.json
+!/training/artifacts/structural/model_metadata.json
+!/training/artifacts/structural/structural_fp32.onnx
+!/training/artifacts/structural/temperature.json
+!/training/artifacts/semantic/
+/training/artifacts/semantic/*
+!/training/artifacts/semantic/model_metadata.json
+!/training/artifacts/semantic/semantic_model.joblib
+!/ml_training/structural/runs/
+/ml_training/structural/runs/*
+!/ml_training/structural/runs/structural-2026.02/
+/ml_training/structural/runs/structural-2026.02/*
+!/ml_training/structural/runs/structural-2026.02/artifacts/
+/ml_training/structural/runs/structural-2026.02/artifacts/*
+!/ml_training/structural/runs/structural-2026.02/artifacts/deploy_choice.json
+!/ml_training/structural/runs/structural-2026.02/artifacts/model_metadata.json
+!/ml_training/structural/runs/structural-2026.02/artifacts/structural_fp32.onnx
+!/ml_training/structural/runs/structural-2026.02/artifacts/temperature.json
