@@ -196,7 +196,7 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.1.1+8008`.
+The checked Android version is `1.1.2+8009`.
 
 ## Verification
 

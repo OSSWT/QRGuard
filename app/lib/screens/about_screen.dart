@@ -9,7 +9,7 @@ import 'settings_screen.dart';
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  static const _version = '1.1.1 (8008)';
+  static const _version = '1.1.2 (8009)';
 
   @override
   Widget build(BuildContext context) => Scaffold(
