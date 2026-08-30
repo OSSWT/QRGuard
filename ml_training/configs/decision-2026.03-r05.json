@@ -1,7 +1,7 @@
 {
   "display_name": "Risk Decision Layer recalibration",
   "experiment_version": "decision-2026.03-r05",
-  "status": "promoted_local_production_package_passed_external_deploy_pending",
+  "status": "deployed_and_remote_smoke_verified",
   "structural_dependency": "structural-2026.03-r01",
   "structural_artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
   "semantic_dependency": "semantic-2026.02_frozen",
@@ -48,6 +48,8 @@
     "requires_semantic_regression": true,
     "requires_manual_review": true,
     "local_promotion_completed": true,
-    "external_deployment_pending": true
+    "external_deployment_pending": false,
+    "external_deployment_completed": true,
+    "deploy_commit": "6f17d664e0d1f3f4e30d643c3592dceacabd32fa"
   }
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "status": "r01_r05_promoted_local_package_verified_external_deploy_pending",
+  "status": "r01_r05_deployed_and_remote_smoke_verified",
   "deployed": {
     "structural": {
       "display_name": "Structural Training",
@@ -76,7 +76,8 @@
       "deployment_gates_passed": true,
       "deployment_gate_failures": [],
       "promoted_to_local_runtime": true,
-      "external_deployment_pending": true
+      "external_deployment_pending": false,
+      "externally_deployed": true
     },
     "decision_layer": {
       "display_name": "Risk Decision Layer",
@@ -90,7 +91,8 @@
       "aggregate_and_cell_gates_passed": true,
       "candidate_stack_gates_passed": true,
       "promoted_to_local_runtime": true,
-      "external_deployment_pending": true
+      "external_deployment_pending": false,
+      "externally_deployed": true
     }
   },
   "rollback": {
@@ -104,14 +106,14 @@
     "backend_tests": "356 passed",
     "flutter_analyze": "no issues",
     "flutter_tests": "72 passed",
-    "flutter_release_apk": "production URL build 1.1.2+8009; 72810512 bytes; sha256 b2245c1b453c72006819e34b3a80626ab45c4bf2db44318a9f122c99def2da32; not installed or externally deployed",
+    "flutter_release_apk": "production URL build 1.1.2+8009; 72810512 bytes; sha256 52c74130822e92dcb27b3e0f2043cd190419c29195a3b40b9dba8169cf5b638c; hosted APK hash matched",
     "local_production_backend": "Uvicorn health ok with unified r01 and Decision r05",
     "smoke_matrix": {
-      "camera_clean_http": "Safe, risk 0",
+      "camera_clean_http": "Safe locally at risk 0; Safe remotely at risk 5",
       "camera_adversarial_http": "Blocked, risk 81",
-      "gallery_clean_http": "Safe, risk 0",
+      "gallery_clean_http": "Safe locally at risk 0; Safe remotely at risk 5",
       "gallery_tampered_http": "Blocked, risk 81",
-      "render_static_pages": "home/download/privacy/APK all HTTP 200"
+      "render_static_pages": "home/download/privacy/capture-plan/APK all HTTP 200"
     },
     "candidate_stack": {
       "locked_rows": 120,
@@ -123,6 +125,33 @@
       "gates_passed": true
     }
   },
-  "remaining_promotion_requirement": "Commit and push the reviewed promotion, let Render build the Docker image, then verify remote health and scan smoke before declaring external deployment complete.",
-  "recorded_at": "2026-08-31T03:21:21+08:00"
+  "external_deployment": {
+    "provider": "Render",
+    "source_repository": "https://github.com/OSSWT/QRGuard-Deploy",
+    "source_branch": "render-free-deploy",
+    "source_commit": "6f17d664e0d1f3f4e30d643c3592dceacabd32fa",
+    "api": {
+      "service_id": "srv-da8sa5c9v7es73cf7ol0",
+      "deploy_id": "dep-daa8vopf2nfc739j8f4g",
+      "url": "https://qrguard-api-osswt.onrender.com",
+      "status": "live",
+      "health": "ok",
+      "remote_smoke_passed": true
+    },
+    "web": {
+      "service_id": "srv-da8sa9ijnfac73btlihg",
+      "deploy_id": "dep-daa8vthf2nfc739j8vbg",
+      "url": "https://qrguard-app-osswt.onrender.com",
+      "status": "live",
+      "remote_smoke_passed": true
+    },
+    "apk": {
+      "bytes": 72810512,
+      "sha256": "52c74130822e92dcb27b3e0f2043cd190419c29195a3b40b9dba8169cf5b638c",
+      "hosted_hash_matched": true,
+      "signer_certificate_sha256": "ce47b65dab21523731dfd76a414068ad95dcce3e1ee02a54e80b04552191c1ec"
+    }
+  },
+  "remaining_promotion_requirement": "none; monitor production and retain the recorded rollback set",
+  "recorded_at": "2026-08-31T04:23:51+08:00"
 }

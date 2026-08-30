@@ -4,16 +4,16 @@ Last updated: 2026-08-31.
 
 ## Outcome
 
-Structural r01 and Decision r05 have been promoted into the repository's local
-production runtime paths. The rebuilt backend/static/APK package passed local
-smoke tests. GitHub and the external Render services have not yet changed.
+Structural r01 and Decision r05 are deployed. The rebuilt backend/static/APK
+package passed local smoke, GitHub `main` was updated, and both Render services
+passed remote health, scan, page and hosted-APK verification.
 
-| Component | Local production version | Status |
+| Component | Production version | Status |
 |---|---|---|
-| Structural | `structural-2026.03-r01` | Unified Gallery/Camera runtime; gates passed |
+| Structural | `structural-2026.03-r01` | Unified Gallery/Camera runtime; live |
 | Semantic | `semantic-2026.02` | Frozen accepted runtime |
-| Decision | `decision-2026.03-r05` | All aggregate and 36 cell gates passed |
-| Full stack | r01 + r05 | Production-path 120-row gate passed |
+| Decision | `decision-2026.03-r05` | All aggregate and 36 cell gates passed; live |
+| Full stack | r01 + r05 | Local and remote production smoke passed |
 
 ## Artifact identity
 
@@ -51,18 +51,23 @@ sample. It remains in the evidence and was not hidden by a source override.
   Gallery tampered Blocked; all HTTP 200 and non-Partial.
 - Flutter analyzer: no issues; Flutter tests: 72 passed.
 - Render static package: home, download, privacy and APK endpoints all HTTP 200.
-- Production-URL APK `1.1.2+8009`: 72,810,512 bytes; SHA-256
-  `b2245c1b453c72006819e34b3a80626ab45c4bf2db44318a9f122c99def2da32`.
+- Hosted production APK `1.1.2+8009`: 72,810,512 bytes; SHA-256
+  `52c74130822e92dcb27b3e0f2043cd190419c29195a3b40b9dba8169cf5b638c`;
+  remote download hash matched and APK Signature Scheme v2 verification passed.
 
 Docker CLI is not installed on this workstation. The Docker packaging contract
-passed, but Render must perform the actual container build after GitHub push.
+passed locally and Render's actual Docker build completed successfully.
 
-## Remaining external deployment boundary
+## External deployment identity
 
-1. Review the final Git diff and ensure no secret or ignored dataset is staged.
-2. Commit and push the promoted runtime set to GitHub.
-3. Trigger/observe the Render API and static-site builds.
-4. Verify remote `/health`, the hosted pages/APK and representative remote scans.
-5. Roll back to RUN5/Structural 2026.02/Decision 2026.02 if any remote gate fails.
+- GitHub main commit: `e942bbf583d6be227007e5821b2c5c0dd01c239b`.
+- Render source commit: `6f17d664e0d1f3f4e30d643c3592dceacabd32fa`.
+- API deploy: `dep-daa8vopf2nfc739j8f4g` — live; `/health` reports unified r01.
+- Web deploy: `dep-daa8vthf2nfc739j8vbg` — live; pages, capture plan and APK HTTP 200.
+- Remote scans: Camera clean Safe 5, Camera adversarial Blocked 81, Gallery
+  clean Safe 5, Gallery tampered Blocked 81; all non-Partial HTTP 200.
+
+No promotion milestone remains. Continue normal monitoring and use the recorded
+RUN5/Structural 2026.02/Decision 2026.02 rollback set if a regression appears.
 
 Evidence: `ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/`.

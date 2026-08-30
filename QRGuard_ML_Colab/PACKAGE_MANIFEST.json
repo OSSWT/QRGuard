@@ -63,8 +63,8 @@
     },
     {
       "path": "QRGuard/ML_START_HERE.md",
-      "bytes": 1780,
-      "sha256": "6019ba9fef709a10df8a464d83ae1ed004d1f8beaf0c6c56ed8c81c5ae320ba4"
+      "bytes": 1892,
+      "sha256": "c39f14713a5a13d0637aedbd10e10eeeb1893324f21e4744216c48625c540269"
     },
     {
       "path": "QRGuard/ml_training/__init__.py",
@@ -88,8 +88,8 @@
     },
     {
       "path": "QRGuard/ml_training/configs/decision-2026.03-r05.json",
-      "bytes": 1959,
-      "sha256": "ad5f0932b71f098e4be3d6b1d943e8893c2c68c9afb0449b66155019a00ed62d"
+      "bytes": 2038,
+      "sha256": "4f4b2bb0bdc73639588e4ff0cfcde23a03e9812c3729ad0361193b566202ebc5"
     },
     {
       "path": "QRGuard/ml_training/configs/decision_layer.json",
@@ -118,8 +118,8 @@
     },
     {
       "path": "QRGuard/ml_training/CURRENT_CHECKPOINT.md",
-      "bytes": 3073,
-      "sha256": "8e99d1314dc06a4013200a7b7251c7bd5e6023a107ab1fd6b1d92f12aad95efc"
+      "bytes": 3378,
+      "sha256": "0e365d2bae1f8564330abe22040377ba2c159639c822c37f9c35caea2bae166f"
     },
     {
       "path": "QRGuard/ml_training/datasets/download_verification.json",
@@ -148,8 +148,8 @@
     },
     {
       "path": "QRGuard/ml_training/decision_layer/DECISION_V3_LOCAL_RESULTS_2026-08-30.md",
-      "bytes": 2976,
-      "sha256": "5c9eda19834dec1f3f69595e2733defe86a17e33a8bfe09135fad64a13e62f22"
+      "bytes": 2965,
+      "sha256": "bb3510b915991f98dac439123939cf1e0929b20e0a56cc9d47936b20e8063b46"
     },
     {
       "path": "QRGuard/ml_training/decision_layer/performance/decision-2026.03-r05/ablation.png",
@@ -188,8 +188,8 @@
     },
     {
       "path": "QRGuard/ml_training/deployment/model_registry.json",
-      "bytes": 5026,
-      "sha256": "62b63ad36a1df8ec7d154979d031c81c97e964eb1ee4527977553b1f7fe31c9b"
+      "bytes": 6023,
+      "sha256": "ec1d84725b2e59e0eaf288f4f29722e73e8e494501aaad5c2b331ebb1282cf8c"
     },
     {
       "path": "QRGuard/ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/candidate_stack_metrics.json",
@@ -198,13 +198,13 @@
     },
     {
       "path": "QRGuard/ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/PRODUCTION_SMOKE.json",
-      "bytes": 2304,
-      "sha256": "4afc286a3209c2358f1a705d80f4bdd381a5952c8f4f98144aed2def9d5e9408"
+      "bytes": 3994,
+      "sha256": "ba8e432aedfdf3e4b2e0cf8f1cf95cd4504ed6f66349686f2ad34a448088d960"
     },
     {
       "path": "QRGuard/ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/README.md",
-      "bytes": 865,
-      "sha256": "abb545313c8958a87abb400fe62c983b8b1cef139edc63538be844237117c60a"
+      "bytes": 956,
+      "sha256": "8409b0b513f218180fb782d3c12f6a8bd58baf85daf8f48e438e8f3ca36960ab"
     },
     {
       "path": "QRGuard/ml_training/EXECUTION_PLAN.md",
@@ -213,8 +213,8 @@
     },
     {
       "path": "QRGuard/ml_training/LATEST.md",
-      "bytes": 1714,
-      "sha256": "31888c00a2aae68ec6db64da89070eac8bfafbb74d51e56ebf952c22b2bc706b"
+      "bytes": 1685,
+      "sha256": "23fa2bfe7d8d7a0c43473a8fbb397baa6ba85a4fa9419e2da38cbac671fac82b"
     },
     {
       "path": "QRGuard/ml_training/PERFORMANCE_VALIDATION.json",
@@ -253,8 +253,8 @@
     },
     {
       "path": "QRGuard/ml_training/RESULTS_INDEX.md",
-      "bytes": 4516,
-      "sha256": "91eb33263b50b7d3e21d8caaf9cb38fd0e7aa59974200bce339d68a4ce103c65"
+      "bytes": 4507,
+      "sha256": "8f2f5e0518dbcfa2a2fb8e8c7319412f2e7a589503af9c8a23357ba31aad5768"
     },
     {
       "path": "QRGuard/ml_training/scripts/acquire_dynamsoft.py",
@@ -953,8 +953,8 @@
     },
     {
       "path": "QRGuard/ml_training/structural/STRUCTURAL_V3_REAL_100X3_RESULTS_2026-08-31.md",
-      "bytes": 2313,
-      "sha256": "53c66f4130dadcfb27021b808fb9f0112bc49a7f10618e1b002acb027417dbb9"
+      "bytes": 2302,
+      "sha256": "ea6a6bdf8e5b05787b38a0ad89e827e3f1fdb07822cdf3dd824818c73804ccb1"
     },
     {
       "path": "QRGuard/ml_training/WORKSPACE_AUDIT_2026-08-30.md",
@@ -1083,8 +1083,8 @@
     },
     {
       "path": "REFERENCE_RESULTS.md",
-      "bytes": 2490,
-      "sha256": "a58e16eadd5a91cf0218e9ec15d6c43a57ff14317b4664e3fe96fafef8297b5c"
+      "bytes": 2475,
+      "sha256": "2b0ccc5c9656ae127b2b40e2bf8f9e2f1840e98fee302695f4ef9c2729a3d263"
     }
   ]
 }

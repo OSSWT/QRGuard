@@ -898,7 +898,7 @@ automatic production promotion. The second table contains the existing
 | Controlled nuisance conditions | 10 |
 | ONNX P95 latency (local reference machine) | 44.09 ms |
 | Research gates | PASS |
-| Deployment gates | PASS — promoted locally; external deploy pending |
+| Deployment gates | PASS — deployed and remote-smoke verified |
 
 ## Existing 2026.02 baseline and frozen Semantic reference
 
@@ -931,7 +931,7 @@ automatic production promotion. The second table contains the existing
 | Safe-tier false-negative rate | 0.0194 |
 | Exact three-tier accuracy | 0.8667 |
 | Security-impact policy acceptance | 0.9759 |
-| Internal Decision gates | PASS — all 36 cells; promoted locally |
+| Internal Decision gates | PASS — all 36 cells; deployed |
 
 Semantic `semantic-2026.02` passed its recorded gates. Structural
 `structural-2026.03-r01` and Decision `decision-2026.03-r05` passed their

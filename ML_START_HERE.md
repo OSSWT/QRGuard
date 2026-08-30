@@ -10,12 +10,13 @@ This is the single entry point for current ML work.
 - Decision `decision-2026.03-r05` is in the local production Fusion path.
 - The 120-row production-path evaluator, real Uvicorn HTTP smoke, backend suite,
   Flutter suite and Render static-package smoke passed.
-- GitHub push and external Render deployment remain pending.
+- GitHub `main` and the Render API/Web services now contain the verified
+  r01+r05 production set; remote health, scan and hosted-APK checks passed.
 
 Read these files in order:
 
 1. [`ml_training/CURRENT_CHECKPOINT.md`](ml_training/CURRENT_CHECKPOINT.md) —
-   current hashes, measurements and remaining external deployment steps.
+   current hashes, measurements and completed deployment identity.
 2. [`ml_training/LATEST.md`](ml_training/LATEST.md) — production and rollback sets.
 3. [`ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/README.md`](ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/README.md)
    — post-promotion evidence.
@@ -28,6 +29,6 @@ Read these files in order:
 
 ## Safety rule
 
-RUN5, Structural 2026.02 and Decision 2026.02 remain the rollback set. Do not
-declare external deployment complete until Render builds the promoted commit and
-remote health/scan smoke passes.
+RUN5, Structural 2026.02 and Decision 2026.02 remain the rollback set. Production
+is complete for the recorded campaign; keep monitoring and use only the recorded
+rollback artifacts if a production regression is observed.

@@ -17,9 +17,9 @@ two report phases, followed by the Risk Decision Layer and deployment evidence.
   distribution, and grouped-source results in the same performance folder.
 
 The artifact passed research, 100x3 exact-app, paired source-neutral, export,
-calibration and latency gates. It now occupies the local production path and
-passed post-copy evaluation; external deployment remains pending. Earlier failed
-candidates remain negative evidence and are not active runtime choices.
+calibration and latency gates. It occupies the production path, passed post-copy
+evaluation and is live on Render after remote smoke. Earlier failed candidates
+remain negative evidence and are not active runtime choices.
 
 ### External optical evaluation
 

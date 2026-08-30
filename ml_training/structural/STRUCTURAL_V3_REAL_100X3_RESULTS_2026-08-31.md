@@ -1,7 +1,7 @@
 # Structural v3 real 100x3 results — 2026-08-31
 
 Version: **`structural-2026.03-r01` — latest candidate**
-Status: **gates passed; promoted locally; external deployment pending**
+Status: **gates passed; deployed and remote-smoke verified**
 
 ## What changed
 

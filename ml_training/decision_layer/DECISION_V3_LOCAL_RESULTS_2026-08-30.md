@@ -1,7 +1,7 @@
 # Decision v3 local results — updated 2026-08-31
 
 Latest candidate: **`decision-2026.03-r05`**
-Status: **all gates passed; promoted locally; external deployment pending**
+Status: **all gates passed; deployed and remote-smoke verified**
 
 ## What was calibrated
 
