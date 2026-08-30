@@ -1,0 +1,31 @@
+{
+  "display_name": "Structural Training v3 pre-real baseline",
+  "experiment_version": "structural-2026.03-r01",
+  "status": "superseded_historical_candidate_without_exact_app_capture_training",
+  "seed": 42,
+  "classes": [
+    "clean",
+    "adversarial",
+    "tampered"
+  ],
+  "image_size": 224,
+  "architecture": "ImageNet-pretrained ResNet-18; unified Gallery/Camera artifact",
+  "semantic_policy": "freeze_semantic-2026.02_regression_only",
+  "historical_dataset_budget": {
+    "exact_app_target_sessions_per_class": 150,
+    "exact_app_training_sessions_per_class": 105,
+    "exact_app_validation_sessions_per_class": 22,
+    "exact_app_test_sessions_per_class": 23,
+    "exact_app_runtime_rows_available_during_training": 0
+  },
+  "historical_result": {
+    "grouped_test_accuracy": 0.9426,
+    "grouped_test_macro_f1": 0.9435,
+    "adversarial_recall": 0.9111,
+    "tampered_recall": 0.9278,
+    "qrdn_clean_false_positive_rate": 0.0,
+    "ece": 0.0194,
+    "deployment_approved": false
+  },
+  "superseded_reason": "The audited 100x3 exact-app dataset became available after this run. The historical artifact is retained only as the pre-real baseline and must not be promoted."
+}

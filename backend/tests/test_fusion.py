@@ -7,14 +7,17 @@ explanations) independently of whatever the current training run produced.
 
 import json
 
-import numpy as np
 import pytest
-
-from fusion.engine import DEFAULT_BLOCKED_MIN, FusionEngine, WeightsNotFound
+from fusion.engine import (
+    DEFAULT_BLOCKED_MIN,
+    FusionEngine,
+    WeightsNotFound,
+    load_engine,
+)
 from fusion.features import (
+    ABSENT,
     FEATURE_NAMES,
     N_FEATURES,
-    ABSENT,
     BranchInputs,
     build_feature_vector,
     feature_dict,
@@ -22,21 +25,26 @@ from fusion.features import (
 from semantic.rule_engine import FLAG_VOCABULARY
 
 
-def write_weights(tmp_path, coef=None, intercept=-4.0, safe_max=30, blocked_min=70,
-                  feature_names=None):
+def write_weights(
+    tmp_path, coef=None, intercept=-4.0, safe_max=30, blocked_min=70, feature_names=None
+):
     """Synthetic weights: only p_structural and p_url carry signal."""
     if coef is None:
         coef = [0.0] * N_FEATURES
         coef[FEATURE_NAMES.index("p_structural")] = 6.0
         coef[FEATURE_NAMES.index("p_url")] = 6.0
     path = tmp_path / "w.json"
-    path.write_text(json.dumps({
-        "feature_names": list(feature_names or FEATURE_NAMES),
-        "coef": coef,
-        "intercept": intercept,
-        "safe_max": safe_max,
-        "blocked_min": blocked_min,
-    }))
+    path.write_text(
+        json.dumps(
+            {
+                "feature_names": list(feature_names or FEATURE_NAMES),
+                "coef": coef,
+                "intercept": intercept,
+                "safe_max": safe_max,
+                "blocked_min": blocked_min,
+            }
+        )
+    )
     return path
 
 
@@ -50,14 +58,18 @@ class TestFeatureContract:
             assert f"rule_{flag}" in FEATURE_NAMES
 
     def test_values_and_present_indicators(self):
-        v = feature_dict(build_feature_vector(BranchInputs(p_structural=0.9, p_url=0.1)))
+        v = feature_dict(
+            build_feature_vector(BranchInputs(p_structural=0.9, p_url=0.1))
+        )
         assert v["p_structural"] == 0.9 and v["structural_present"] == 1.0
         assert v["p_url"] == 0.1 and v["semantic_present"] == 1.0
 
     def test_abstained_branch_adds_no_risk(self):
         # An abstaining branch must contribute nothing: with a large positive weight,
         # any placeholder value would manufacture risk from an absent branch.
-        v = feature_dict(build_feature_vector(BranchInputs(p_structural=None, p_url=0.4)))
+        v = feature_dict(
+            build_feature_vector(BranchInputs(p_structural=None, p_url=0.4))
+        )
         assert v["p_structural"] == ABSENT == 0.0
         assert v["structural_present"] == 0.0
 
@@ -70,8 +82,11 @@ class TestFeatureContract:
         assert v["llm_score"] == 0.9 and v["llm_invoked"] == 1.0
 
     def test_rule_flags_set_only_their_own_slots(self):
-        v = feature_dict(build_feature_vector(
-            BranchInputs(0.1, 0.1, rule_flags=["non_https", "shortened_url"])))
+        v = feature_dict(
+            build_feature_vector(
+                BranchInputs(0.1, 0.1, rule_flags=["non_https", "shortened_url"])
+            )
+        )
         assert v["rule_non_https"] == 1.0 and v["rule_shortened_url"] == 1.0
         assert v["rule_ip_literal_host"] == 0.0
 
@@ -151,6 +166,32 @@ class TestScoring:
         assert r.verdict == "safe"
         assert r.partial_analysis
 
+    def test_high_confidence_semantic_evidence_blocks_when_image_abstains(
+        self, tmp_path
+    ):
+        e = FusionEngine(write_weights(tmp_path, safe_max=30, blocked_min=70))
+        r = e.predict(BranchInputs(p_structural=None, p_url=0.70))
+        assert r.verdict == "blocked"
+        assert r.risk_score == 70
+        assert "semantic_only_high_confidence:policy_floor" in r.overrides
+
+    def test_moderate_semantic_evidence_alone_is_capped_at_warning(self, tmp_path):
+        coef = [0.0] * N_FEATURES
+        coef[FEATURE_NAMES.index("p_url")] = 10.0
+        e = FusionEngine(
+            write_weights(
+                tmp_path,
+                coef=coef,
+                intercept=0.0,
+                safe_max=30,
+                blocked_min=70,
+            )
+        )
+        r = e.predict(BranchInputs(p_structural=None, p_url=0.60))
+        assert r.verdict == "warning"
+        assert r.risk_score == 69
+        assert "semantic_only_moderate:policy_cap" in r.overrides
+
 
 class TestOverrides:
     def test_blocklist_forces_blocked(self, tmp_path):
@@ -170,8 +211,11 @@ class TestOverrides:
         # The learned score may move after retraining, but the product contract is
         # stable: an open network is always at least Warning.
         e = FusionEngine(write_weights(tmp_path, safe_max=38, blocked_min=55))
-        r = e.predict(BranchInputs(p_structural=None, p_url=None,
-                                   rule_flags=["open_wifi_network"]))
+        r = e.predict(
+            BranchInputs(
+                p_structural=None, p_url=None, rule_flags=["open_wifi_network"]
+            )
+        )
         assert r.verdict == "warning"
         assert r.risk_score >= 38
         assert any("policy_floor" in o for o in r.overrides)
@@ -179,21 +223,38 @@ class TestOverrides:
     def test_floor_still_applies_when_the_rule_has_a_trained_weight(self, tmp_path):
         coef = [0.0] * N_FEATURES
         coef[FEATURE_NAMES.index("rule_open_wifi_network")] = 0.5  # trained
-        e = FusionEngine(write_weights(tmp_path, coef=coef, safe_max=38, blocked_min=55))
+        e = FusionEngine(
+            write_weights(tmp_path, coef=coef, safe_max=38, blocked_min=55)
+        )
         r = e.predict(BranchInputs(rule_flags=["open_wifi_network"]))
         assert r.verdict == "warning"
         assert any("policy_floor" in o for o in r.overrides)
 
     def test_floor_never_lowers_an_already_high_score(self, tmp_path):
         e = FusionEngine(write_weights(tmp_path, safe_max=38, blocked_min=55))
-        r = e.predict(BranchInputs(p_structural=0.99, p_url=0.99,
-                                   rule_flags=["open_wifi_network"]))
+        r = e.predict(
+            BranchInputs(
+                p_structural=0.99, p_url=0.99, rule_flags=["open_wifi_network"]
+            )
+        )
         assert r.verdict == "blocked"
 
     def test_no_override_leaves_score_untouched(self, tmp_path):
         e = FusionEngine(write_weights(tmp_path))
         r = e.predict(BranchInputs(0.02, 0.02))
         assert r.overrides == []
+
+
+def test_load_engine_supports_explicit_candidate_environment(monkeypatch, tmp_path):
+    candidate = write_weights(tmp_path, safe_max=26, blocked_min=76)
+    monkeypatch.setenv("QRGUARD_FUSION_WEIGHTS", str(candidate))
+    load_engine.cache_clear()
+    try:
+        engine = load_engine()
+        assert engine.path == candidate
+        assert (engine.safe_max, engine.blocked_min) == (26, 76)
+    finally:
+        load_engine.cache_clear()
 
 
 class TestExplanations:

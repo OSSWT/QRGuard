@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "tested_at": "2026-08-31T03:21:21+08:00",
+  "status": "passed_local_production_package_external_deploy_pending",
+  "artifacts": {
+    "structural_version": "structural-2026.03-r01",
+    "structural_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+    "decision_version": "decision-2026.03-r05",
+    "decision_sha256": "e0d49a92cc0926e3025b3d431590084ece7ba476ce8041294f68f1ffac3b8385"
+  },
+  "backend": {
+    "health_status": "ok",
+    "structural": "unified=structural-2026.03-r01/structural_fp32.onnx; sources=gallery,camera",
+    "fusion": "safe<26 blocked>=76",
+    "semantic": "semantic_model.joblib",
+    "http_cases": [
+      {
+        "source": "camera",
+        "label": "clean",
+        "status_code": 200,
+        "verdict": "safe",
+        "risk_score": 0,
+        "structural_type": "clean",
+        "partial_analysis": false
+      },
+      {
+        "source": "camera",
+        "label": "adversarial",
+        "status_code": 200,
+        "verdict": "blocked",
+        "risk_score": 81,
+        "structural_type": "adversarial",
+        "partial_analysis": false
+      },
+      {
+        "source": "gallery",
+        "label": "clean",
+        "status_code": 200,
+        "verdict": "safe",
+        "risk_score": 0,
+        "structural_type": "clean",
+        "partial_analysis": false
+      },
+      {
+        "source": "gallery",
+        "label": "tampered",
+        "status_code": 200,
+        "verdict": "blocked",
+        "risk_score": 81,
+        "structural_type": "tampered",
+        "partial_analysis": false
+      }
+    ],
+    "regression_tests_passed": 356
+  },
+  "candidate_stack": {
+    "locked_rows": 120,
+    "gates_passed": true,
+    "paired_exact_verdict_agreement": 0.9833333333333333
+  },
+  "static_package": {
+    "home_status": 200,
+    "download_page_status": 200,
+    "privacy_page_status": 200,
+    "apk_head_status": 200,
+    "flutter_version": "1.1.2",
+    "flutter_build_number": "8009",
+    "apk_bytes": 72810512,
+    "apk_sha256": "b2245c1b453c72006819e34b3a80626ab45c4bf2db44318a9f122c99def2da32"
+  },
+  "container": {
+    "definition_contract_passed": true,
+    "local_docker_build": "not_run_docker_cli_not_installed",
+    "render_build_required_after_push": true
+  },
+  "external_state_changed": false
+}

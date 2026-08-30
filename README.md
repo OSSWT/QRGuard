@@ -50,32 +50,27 @@ automatic QRGuard-Mix-v2 model.
 
 | Component | Runtime version | Status |
 |---|---|---|
-| Structural - Gallery | RUN 5 EfficientNet-B0 | Stable pristine/gallery artifact |
-| Structural - Live Camera | `structural-2026.02`, ImageNet-pretrained ResNet-18 | Camera-robust runtime artifact; exact app-crop acceptance collection remains open |
-| Semantic | `semantic-2026.02`, hashed character 3–5 gram calibrated linear model | Gates passed and deployed |
-| Risk Decision Layer | `decision-2026.02`, QRGuard-Mix-v2 Fusion | Gates passed and deployed |
+| Structural - Gallery | `structural-2026.03-r01`, ImageNet-pretrained ResNet-18 | Unified source-neutral artifact; deployment gates passed |
+| Structural - Live Camera | `structural-2026.03-r01`, ImageNet-pretrained ResNet-18 | Unified source-neutral artifact; deployment gates passed |
+| Semantic | `semantic-2026.02`, hashed character 3–5 gram calibrated linear model | Gates passed |
+| Risk Decision Layer | `decision-2026.03-r05`, QRGuard-Mix-v2 Fusion | All 36 policy cells passed; Safe `<26`, Blocked `>=76` |
 
-Camera and Gallery use different calibrated image artifacts for their acquisition
-domains. Gallery keeps the continuous `1 - P(clean)` Structural score. Live Camera
-retains that raw score for auditability, corrects only global exposure, and uses the
-strongest competing manipulation class when the model's winning class is `clean`.
-This prevents two losing three-class probabilities from manufacturing a blocked
-binary result. A sub-0.95 camera manipulation confidence cannot be the sole reason a
-widely recognised low-risk URL becomes Blocked; the disagreement remains Warning.
-High-confidence camera attacks, risky URLs, and Gallery attacks keep the normal
-Fusion result. RUN 5 remains the Gallery artifact; `structural-2026.02` serves Live
-Camera because RUN 5 measured an 80.84% false-positive rate on the QR-DN holdout.
+Camera and Gallery now use the same calibrated Structural artifact. The candidate
+stack was evaluated through the production backend against the locked, group-
+disjoint exact-app holdout before local promotion. Historical split artifacts and
+the previous Decision model remain available only as rollback material under
+`ml_training/deployment/rollback/`.
 
 ## Measured results
 
-### Structural candidate `structural-2026.02`
+### Structural `structural-2026.03-r01`
 
-- Grouped synthetic test: accuracy 0.8907, macro-F1 0.8892.
-- Digital adversarial recall: 0.9611.
-- Tampered recall: 0.9222.
+- Exact-app locked test: 120 rows; Camera and Gallery each contain 20 samples per class.
+- Camera: clean false-block rate 0.00, adversarial blocked recall 0.95, tampered recall 1.00.
+- Gallery: clean false-block rate 0.00, adversarial and tampered recall 1.00.
+- Paired Camera/Gallery verdict agreement: 59/60 (0.9833).
 - QR-DN external clean holdout: 2,250 images, clean false-positive rate 0.0000.
-- Calibration ECE: 0.0126; ONNX CPU P95: 44.63 ms.
-- Deployment remains blocked by zero exact QRGuard runtime capture sessions.
+- ONNX CPU P95: 44.09 ms; all research and deployment gates passed.
 
 ### Semantic `semantic-2026.02`
 
@@ -86,13 +81,13 @@ Camera because RUN 5 measured an 80.84% false-positive rate on the QR-DN holdout
 - Training and serving share the same URL canonicalisation, including scheme-less
   URLs routed as `http://...`.
 
-### Risk Decision Layer `decision-2026.02`
+### Risk Decision Layer `decision-2026.03-r05`
 
 - QRGuard-Mix-v2: 1,800 samples, 36 payload/evidence cells.
-- Held-out test: 540 rows; ROC-AUC 0.9899.
-- Blocked-tier precision 0.9943; Safe-tier false-negative rate 0.0139.
-- Exact three-tier accuracy 0.8981; security-impact acceptance 0.9870.
-- Clean/abstaining camera open Wi-Fi cells: 100% Warning on the fixed holdout.
+- Held-out test: 540 rows; ROC-AUC 0.9820.
+- Blocked-tier precision 0.9912; Safe-tier false-negative rate 0.0194.
+- Exact three-tier accuracy 0.8667; policy acceptance 0.9759.
+- Every one of the 36 fixed policy cells passed its acceptance gate.
 
 Full metrics, per-cell tables, confusion matrices, calibration plots, and ablations
 are under `ml_training/*/performance/`.
@@ -208,16 +203,15 @@ flutter test
 flutter build apk --release
 ```
 
-Current verified result: 276 backend tests passed, Flutter analysis reported no
-issues, and 67 Flutter tests passed. The release workflow is documented separately
+Current verified result: 356 backend tests passed, Flutter analysis reported no
+issues, and 72 Flutter tests passed. The release workflow is documented separately
 from these source-level checks.
 
-## Known evidence boundary
+## Evidence boundary
 
-The remaining Structural deployment blocker is not a software crash: the repository
-contains no labelled, group-disjoint exact QRGuard app-camera sessions for clean,
-physical adversarial, and tampered classes. Public camera datasets improve optical
-coverage but cannot substitute for exact post-crop app inputs. The required minimum
-is 100 sessions per class, including at least 20 test sessions per class. Until those
-captures exist, the camera-domain artifact is a measured runtime correction rather
-than a claim that the exact app-camera deployment gate has passed.
+The Structural runtime audit now contains 300 accepted Camera sessions (100 per
+class), including 20 locked test sessions per class, plus paired Gallery evidence.
+No group leakage was found and the deployment gate passed. These measurements cover
+the defined campaign and devices; they are not a claim of universal performance on
+every camera, display, lighting condition, or unseen manipulation method. The exact
+promotion and deployment state is recorded in `ml_training/deployment/model_registry.json`.

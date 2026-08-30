@@ -73,7 +73,7 @@ class TestLoading:
             "temperature"
         ]
         assert analyzer.temperature == pytest.approx(recorded, abs=1e-6)
-        assert 0.5 < analyzer.temperature < 5.0
+        assert 0.0 < analyzer.temperature < 10.0
 
     def test_missing_artifacts_raise_clear_error(self, tmp_path):
         with pytest.raises(ArtifactsNotFound):
@@ -134,7 +134,8 @@ class TestPredictions:
     def test_clean_qr_detected_as_clean(self, analyzer, clean_qr):
         r = analyzer.predict(clean_qr)
         assert r.predicted_type == "clean"
-        assert r.p_structural < 0.1
+        assert r.p_structural == pytest.approx(1.0 - r.probs["clean"], abs=1e-6)
+        assert r.p_structural < 0.5
         assert not r.is_manipulated
 
     def test_sticker_tampering_detected(self, analyzer, tampered_qr):

@@ -1,0 +1,79 @@
+{
+  "display_name": "Risk Decision Layer",
+  "version": "decision-2026.03-r05",
+  "trained_on": "QRGuard-Mix-v2",
+  "n_train": 1260,
+  "n_test": 540,
+  "roc_auc": 0.9819907407407407,
+  "blocked_precision": 0.9912280701754386,
+  "safe_tier_fnr": 0.019444444444444445,
+  "exact_tier_accuracy": 0.8666666666666667,
+  "policy_acceptance_rate": 0.975925925925926,
+  "thresholds": {
+    "safe_max": 26,
+    "blocked_min": 76
+  },
+  "confusion_target_by_predicted": {
+    "safe": {
+      "safe": 85,
+      "warning": 48,
+      "blocked": 2
+    },
+    "warning": {
+      "safe": 0,
+      "warning": 44,
+      "blocked": 1
+    },
+    "blocked": {
+      "safe": 7,
+      "warning": 14,
+      "blocked": 339
+    }
+  },
+  "ablation": {
+    "structural_only": {
+      "roc_auc": 0.8530555555555557,
+      "accuracy": 0.8037037037037037
+    },
+    "semantic_only": {
+      "roc_auc": 0.7426003086419751,
+      "accuracy": 0.6574074074074074
+    },
+    "fused": {
+      "roc_auc": 0.9857407407407407,
+      "accuracy": 0.9648148148148148
+    }
+  },
+  "per_cell_gate_policy": {
+    "dangerous_url": "not-Safe >= 0.80 and Blocked recall >= 0.65",
+    "open_wifi_clean_or_abstain": "exact Warning >= 0.90",
+    "manipulated_or_executable": "exact Blocked >= 0.85",
+    "other_benign": "not-Blocked >= 0.90; exact tier also reported"
+  },
+  "gates_passed": true,
+  "gate_failures": [],
+  "model_fingerprint": {
+    "structural": {
+      "temperature": 0.4637561909457002,
+      "onnx_bytes": {
+        "structural_fp32.onnx": 44702737
+      },
+      "joblib_sha256": {},
+      "metadata_sha256": "e23b45ceab0080b4"
+    },
+    "semantic": {
+      "temperature": null,
+      "onnx_bytes": {},
+      "joblib_sha256": {
+        "semantic_model.joblib": "a15a5a409df73946"
+      },
+      "metadata_sha256": "e1d90be3658b31eb"
+    },
+    "dataset": {
+      "manifest_sha256": "6c30bba32aba6cd1",
+      "image_count": 1800,
+      "image_bytes": 37825776
+    }
+  },
+  "promotion_requested": false
+}

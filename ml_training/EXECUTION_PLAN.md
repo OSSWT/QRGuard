@@ -1,9 +1,11 @@
 # ML retraining execution plan
 
-Status on 2026-08-21: baseline audit, public-data acquisition, Structural v1/v2
-experiments, Semantic v2 promotion, Decision v2 promotion, backend/Flutter tests,
-and emulator smoke checks are complete. The only incomplete deployment evidence is
-the labelled exact QRGuard app-camera collection required by the Structural gate.
+Status on 2026-08-31: the audited 100x3 exact-app collection, Structural v3 real
+training, Semantic frozen-report validation, Decision r05 recalibration, full
+candidate-stack evaluation, backend regression and Flutter checks are complete.
+The candidate set passed its automated gates, was copied into the local runtime
+paths, and passed packaged post-copy smoke tests. Remaining work is the reviewed
+GitHub push, Render build and remote health/scan verification.
 
 ## 1. Freeze and measure the baseline
 
@@ -55,3 +57,7 @@ satisfied. Their outputs are not promoted independently into the application.
 - Run backend, Flutter, emulator, Gallery, and Live-camera regression suites.
 - Promote artifacts atomically and update `deployment/model_registry.json`.
 - Preserve the previous approved set for rollback.
+
+Current state: parity, backend, Flutter, locked Gallery/Camera evaluation, local
+artifact promotion and packaged runtime smoke passed. GitHub/Render deployment
+and remote verification remain pending.

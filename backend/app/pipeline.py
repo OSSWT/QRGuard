@@ -19,6 +19,7 @@ was not worth its latency and cost. It runs only when the user asks, via /deep-c
 
 from __future__ import annotations
 
+import os
 import time
 from dataclasses import dataclass
 from typing import Optional, Sequence
@@ -30,8 +31,10 @@ from semantic.duitnow_qr import parse_duitnow
 from semantic.payload_router import PayloadInfo, route_payload
 from semantic.rule_engine import RuleFlag, check_url
 from semantic.semantic_service import load_analyzer as load_semantic
+from structural.image_quality import assess_image_quality, normalize_measured_range
 from structural.structural_service import load_analyzer as load_structural
 from structural.structural_service import load_camera_analyzer as load_camera_structural
+from structural.structural_service import load_unified_candidate_analyzer
 
 from app.schemas import BranchScores, ScanResponse
 
@@ -59,6 +62,9 @@ class StructuralSignals:
     predicted_type: Optional[str]
     manipulation_confidence: Optional[float]
     confirmed_manipulation: bool = False
+    quality_status: Optional[str] = None
+    quality_conditions: tuple[str, ...] = ()
+    rescan_reason: Optional[str] = None
 
 
 _CAMERA_BLOCK_CONFIDENCE = 0.95
@@ -108,6 +114,36 @@ def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
     """
     if not images:
         return StructuralSignals(None, None, None, None)
+
+    unified_artifacts = os.getenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS")
+    if unified_artifacts:
+        quality = assess_image_quality(images[0])
+        if not quality.usable:
+            return StructuralSignals(
+                None,
+                None,
+                None,
+                None,
+                quality_status=quality.status,
+                quality_conditions=quality.conditions,
+                rescan_reason=quality.rescan_reason,
+            )
+        prepared = normalize_measured_range(images[0], quality)
+        result = load_unified_candidate_analyzer(unified_artifacts).predict(prepared)
+        score = float(result.p_structural)
+        manipulation_confidence = max(
+            float(result.probs.get("adversarial", 0.0)),
+            float(result.probs.get("tampered", 0.0)),
+        )
+        return StructuralSignals(
+            score,
+            score,
+            result.predicted_type,
+            manipulation_confidence,
+            confirmed_manipulation=result.predicted_type != "clean",
+            quality_status=quality.status,
+            quality_conditions=quality.conditions,
+        )
 
     image = _normalize_camera_capture(images[0]) if source == "camera" else images[0]
     analyzer = load_camera_structural() if source == "camera" else load_structural()
@@ -323,6 +359,8 @@ def run_scan(
     structural_status = (
         "completed"
         if structural.effective is not None
+        else "inconclusive"
+        if structural.quality_status == "unusable"
         else "unavailable"
         if source in {"camera", "gallery"} or image_expected
         else "not_applicable"
@@ -368,12 +406,40 @@ def run_scan(
     # The rule engine's evidence strings are more specific than the generic fusion
     # reason text, so they are merged in for flags that actually fired.
     reasons = list(fusion.reasons)
+    if structural.rescan_reason and structural.rescan_reason not in reasons:
+        reasons.append(structural.rescan_reason)
     for f in sem.flags:
         if f.evidence not in reasons:
             reasons.append(f.evidence)
 
     risk_score = fusion.risk_score
     verdict = fusion.verdict
+
+    # Source-neutral quality abstention means "insufficient image evidence",
+    # never "the image is safe" and never "the image is malicious". Keep the
+    # result at least Warning so both Gallery and Camera ask for a better scan.
+    if structural_status == "inconclusive" and verdict == "safe":
+        verdict = "warning"
+        risk_score = engine.safe_max
+        quality_reason = structural.rescan_reason or (
+            "Image quality is insufficient; capture the QR code again"
+        )
+        if quality_reason not in reasons:
+            reasons.append(quality_reason)
+
+    # A completed Structural prediction whose winning class is adversarial or
+    # tampered is confirmed manipulation evidence, not merely a continuous risk
+    # hint. Preserve that class-level decision across the Fusion boundary even
+    # when calibration leaves p_structural just below the numeric block cutoff.
+    # This rule is deliberately source-neutral for the unified candidate model.
+    # The explicit DuitNow and attendance hand-off policies below may still
+    # downgrade the result because those payloads require specialised handling.
+    if structural_status == "completed" and structural.confirmed_manipulation:
+        verdict = "blocked"
+        risk_score = max(risk_score, engine.blocked_min)
+        manipulation_reason = "Structural model confirmed QR manipulation"
+        if manipulation_reason not in reasons:
+            reasons.append(manipulation_reason)
 
     # Camera evidence below the model's high-confidence attack band must not be
     # the sole reason a widely recognised, low-risk URL becomes Blocked. This is
@@ -437,6 +503,9 @@ def run_scan(
             structural_status=structural_status,
             p_structural_raw=p_structural_raw,
             structural_type=structural_type,
+            structural_quality_status=structural.quality_status,
+            structural_quality_conditions=list(structural.quality_conditions),
+            structural_rescan_reason=structural.rescan_reason,
             p_url=sem.p_url,
             semantic_status=semantic_status,
             llm_score=None,

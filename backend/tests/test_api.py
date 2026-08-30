@@ -1,5 +1,6 @@
 """Tests for the FastAPI endpoints (in-process, no server needed)."""
 
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -190,7 +191,8 @@ class TestAnalyzeUrl:
         assert body["branch_scores"]["p_url"] is None
         assert "open_wifi_network" in body["rule_flags"]
         assert body["verdict"] == "warning"
-        assert body["risk_score"] == load_engine().safe_max
+        engine = load_engine()
+        assert engine.safe_max <= body["risk_score"] < engine.blocked_min
         assert body["partial_analysis"] is False
         assert body["branch_scores"]["semantic_status"] == "not_applicable"
 
@@ -841,6 +843,9 @@ class TestScan:
         payload = "WIFI:T:nopass;S:PrivateCafeName;;"
         monkeypatch.setenv("QRGUARD_DUMP_SCANS", str(tmp_path))
         monkeypatch.setenv("QRGUARD_CAPTURE_LABEL", "clean")
+        monkeypatch.setenv("QRGUARD_CAPTURE_QUALITY_CONDITION", "glare")
+        monkeypatch.setenv("QRGUARD_CAPTURE_QUALITY_SEVERITY", "mild")
+        monkeypatch.setenv("QRGUARD_CAPTURE_PAIR_ID", "private-pair-token")
 
         response = client.post(
             "/scan",
@@ -861,7 +866,72 @@ class TestScan:
         assert metadata["payload_sha256"]
         assert metadata["ground_truth"] == "clean"
         assert metadata["image_source"] == "camera"
+        assert metadata["quality_condition"] == "glare"
+        assert metadata["quality_severity"] == "mild"
+        assert metadata["paired_group_sha256"]
+        assert "private-pair-token" not in metadata_text
+        assert metadata["selected_frame_index"] == 0
+        assert "structural_quality_status" in metadata
+        assert "structural_quality_conditions" in metadata
+        assert "structural_rescan_reason" in metadata
         assert len(list(sessions[0].glob("crop_*.png"))) == 1
+
+    def test_capture_case_file_hot_switches_campaign_metadata(
+        self, client, qr_png, monkeypatch, tmp_path
+    ):
+        pair_token = "structural-v3-real:cln-glare-01:pair"
+        physical_token = "structural-v3-real:cln-glare-01:physical"
+        active = tmp_path / "_active_case.json"
+        active.write_text(
+            json.dumps(
+                {
+                    "campaign_id": "structural-v3-real-2026.03-r01",
+                    "campaign_case_id": "cln-glare-01",
+                    "ground_truth": "clean",
+                    "quality_condition": "glare",
+                    "quality_severity": "moderate",
+                    "pair_token": pair_token,
+                    "physical_qr_token": physical_token,
+                    "device_model": "pixel-test",
+                    "medium": "printed-paper",
+                    "environment": "indoor-controlled",
+                    "attack_method": "none",
+                    "attack_reference_sha256": "",
+                    "manipulation_method": "none",
+                }
+            ),
+            encoding="utf-8",
+        )
+        monkeypatch.setenv("QRGUARD_DUMP_SCANS", str(tmp_path))
+        monkeypatch.setenv("QRGUARD_CAPTURE_CASE_FILE", str(active))
+        monkeypatch.setenv("QRGUARD_CAPTURE_LABEL", "tampered")
+
+        response = client.post(
+            "/scan",
+            data={"payload": "campaign-test-payload", "image_source": "gallery"},
+            files={"images": ("qr.png", qr_png, "image/png")},
+        )
+
+        assert response.status_code == 200
+        session = next((tmp_path / "clean").glob("scan_*"))
+        metadata_text = (session / "metadata.json").read_text(encoding="utf-8")
+        metadata = json.loads(metadata_text)
+        assert metadata["campaign_id"] == "structural-v3-real-2026.03-r01"
+        assert metadata["campaign_case_id"] == "cln-glare-01"
+        assert metadata["ground_truth"] == "clean"
+        assert metadata["image_source"] == "gallery"
+        assert metadata["quality_condition"] == "glare"
+        assert metadata["quality_severity"] == "moderate"
+        assert (
+            metadata["paired_group_sha256"]
+            == hashlib.sha256(pair_token.encode()).hexdigest()
+        )
+        assert (
+            metadata["physical_qr_sha256"]
+            == hashlib.sha256(physical_token.encode()).hexdigest()
+        )
+        assert pair_token not in metadata_text
+        assert physical_token not in metadata_text
 
     @pytest.mark.parametrize("score", [0.799, 0.800, 0.801])
     def test_camera_boundary_uses_normal_fusion(

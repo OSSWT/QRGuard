@@ -3,6 +3,7 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
+    QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS=/srv/qrguard/training/artifacts/structural \
     PORT=8080
 
 WORKDIR /srv/qrguard
@@ -14,8 +15,6 @@ RUN python -m pip install --upgrade pip \
 COPY backend ./backend
 COPY training/artifacts/structural ./training/artifacts/structural
 COPY training/artifacts/semantic ./training/artifacts/semantic
-COPY ml_training/structural/runs/structural-2026.02/artifacts \
-    ./ml_training/structural/runs/structural-2026.02/artifacts
 
 RUN useradd --create-home --uid 10001 qrguard \
     && chown -R qrguard:qrguard /srv/qrguard

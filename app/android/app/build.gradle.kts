@@ -45,6 +45,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            // The Wi-Fi capture build installs beside the signed production app
+            // instead of requiring an uninstall that would erase local history.
+            applicationIdSuffix = ".capture"
+            versionNameSuffix = "-capture"
+        }
         release {
             if (!keystorePropertiesFile.isFile) {
                 throw GradleException(

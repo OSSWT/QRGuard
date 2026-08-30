@@ -1,0 +1,53 @@
+{
+  "display_name": "Risk Decision Layer recalibration",
+  "experiment_version": "decision-2026.03-r05",
+  "status": "promoted_local_production_package_passed_external_deploy_pending",
+  "structural_dependency": "structural-2026.03-r01",
+  "structural_artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+  "semantic_dependency": "semantic-2026.02_frozen",
+  "training_dataset": "QRGuard-Mix-v2",
+  "seed": 42,
+  "tiers": [
+    "safe",
+    "warning",
+    "blocked"
+  ],
+  "quality_abstention_policy": "p_structural_is_null_and_structural_present_is_zero",
+  "confirmed_manipulation_policy": "completed_nonclean_structural_class_is_at_least_blocked",
+  "target_blocked_precision_min": 0.95,
+  "target_safe_false_negative_rate_max": 0.02,
+  "paired_gallery_camera_verdict_agreement_min": 0.95,
+  "latest_local_run": {
+    "date": "2026-08-31",
+    "result": "passed_and_promoted_to_local_runtime",
+    "n_train": 1260,
+    "n_test": 540,
+    "roc_auc": 0.9819907407407407,
+    "blocked_precision": 0.9912280701754386,
+    "safe_tier_fnr": 0.019444444444444445,
+    "exact_tier_accuracy": 0.8666666666666667,
+    "policy_acceptance_rate": 0.975925925925926,
+    "safe_max": 26,
+    "blocked_min": 76,
+    "all_36_cell_gates_passed": true
+  },
+  "candidate_stack": {
+    "rows": 120,
+    "camera_clean_false_block_rate": 0.0,
+    "camera_adversarial_block_recall": 0.95,
+    "camera_tampered_block_recall": 1.0,
+    "gallery_clean_false_block_rate": 0.0,
+    "paired_exact_verdict_agreement": 0.9833333333333333,
+    "gates_passed": true
+  },
+  "artifact_sha256": "e0d49a92cc0926e3025b3d431590084ece7ba476ce8041294f68f1ffac3b8385",
+  "promotion": {
+    "automatic": false,
+    "requires_explicit_promote_flag": true,
+    "requires_structural_deployment_gates": true,
+    "requires_semantic_regression": true,
+    "requires_manual_review": true,
+    "local_promotion_completed": true,
+    "external_deployment_pending": true
+  }
+}

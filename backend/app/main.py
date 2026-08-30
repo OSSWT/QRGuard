@@ -20,7 +20,7 @@ import json
 import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
@@ -41,6 +41,89 @@ scan_log = logging.getLogger("uvicorn.error")
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
 MAX_SCAN_IMAGES = 5
 MAX_TOTAL_IMAGE_BYTES = 20 * 1024 * 1024
+CAPTURE_QUALITY_CONDITIONS = {
+    "normal",
+    "overexposure",
+    "underexposure",
+    "motion_blur",
+    "defocus_blur",
+    "far_distance",
+    "perspective",
+    "glare",
+    "shadow",
+    "screen_moire_or_compression",
+}
+CAPTURE_QUALITY_SEVERITIES = {"none", "mild", "moderate", "severe"}
+CAPTURE_ATTACK_METHODS = {
+    "none",
+    "eot_fgsm",
+    "eot_pgd",
+    "verified_physical_patch",
+    "other_verified",
+}
+CAPTURE_MANIPULATION_METHODS = {
+    "none",
+    "sticker_overlay",
+    "module_erasure",
+    "finder_damage",
+    "cut_and_paste",
+    "printed_obstruction",
+    "other_documented",
+}
+
+
+def _structural_startup_loaders():
+    """Select exactly the Structural analyzers used by the request pipeline."""
+    from structural.structural_service import load_analyzer as load_structural
+    from structural.structural_service import (
+        load_camera_analyzer as load_camera_structural,
+    )
+    from structural.structural_service import load_unified_candidate_analyzer
+
+    unified_artifacts = os.getenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "").strip()
+    if unified_artifacts:
+        return (
+            (
+                "structural-unified",
+                lambda: load_unified_candidate_analyzer(unified_artifacts),
+            ),
+        )
+    return (
+        ("structural", load_structural),
+        ("structural-camera", load_camera_structural),
+    )
+
+
+def _capture_case_context(capture_root: Path) -> dict[str, object]:
+    """Read an operator-controlled case file without restarting the backend."""
+    configured = os.getenv("QRGUARD_CAPTURE_CASE_FILE", "").strip()
+    if not configured:
+        return {}
+    path = Path(configured)
+    if not path.is_absolute():
+        path = capture_root / path
+    resolved_root = capture_root.resolve()
+    resolved_path = path.resolve()
+    try:
+        resolved_path.relative_to(resolved_root)
+    except ValueError as exc:
+        raise ValueError("capture case file must stay inside QRGUARD_DUMP_SCANS") from exc
+    payload = json.loads(resolved_path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise TypeError("capture case file must contain one JSON object")
+    return payload
+
+
+def _capture_identifier(value: object) -> str | None:
+    text = str(value or "").strip()
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.")
+    return text if 1 <= len(text) <= 80 and set(text) <= allowed else None
+
+
+def _capture_value(
+    context: dict[str, object], key: str, environment_name: str, default: str
+) -> str:
+    return str(context.get(key) or os.getenv(environment_name, default)).strip()
 
 
 @asynccontextmanager
@@ -52,14 +135,8 @@ async def lifespan(_: FastAPI):
     """
     from fusion.engine import load_engine
     from semantic.semantic_service import load_analyzer as load_semantic
-    from structural.structural_service import load_analyzer as load_structural
-    from structural.structural_service import (
-        load_camera_analyzer as load_camera_structural,
-    )
-
     for name, loader in (
-        ("structural", load_structural),
-        ("structural-camera", load_camera_structural),
+        *_structural_startup_loaders(),
         ("semantic", load_semantic),
         ("fusion", load_engine),
     ):
@@ -122,26 +199,116 @@ def _dump_if_requested(images, payload: str | None, image_source: str, result) -
         return
     try:
         target = Path(directory)
-        capture_label = os.getenv("QRGUARD_CAPTURE_LABEL", "unlabelled").lower()
+        context = _capture_case_context(target)
+        capture_label = _capture_value(
+            context, "ground_truth", "QRGUARD_CAPTURE_LABEL", "unlabelled"
+        ).lower()
         if capture_label not in {"clean", "adversarial", "tampered"}:
             capture_label = "unlabelled"
+        quality_condition = _capture_value(
+            context,
+            "quality_condition",
+            "QRGUARD_CAPTURE_QUALITY_CONDITION",
+            "normal",
+        ).lower()
+        if quality_condition not in CAPTURE_QUALITY_CONDITIONS:
+            quality_condition = "normal"
+        quality_severity = _capture_value(
+            context,
+            "quality_severity",
+            "QRGUARD_CAPTURE_QUALITY_SEVERITY",
+            "none",
+        ).lower()
+        if quality_severity not in CAPTURE_QUALITY_SEVERITIES:
+            quality_severity = "none"
         target = target / capture_label
         target.mkdir(parents=True, exist_ok=True)
-        stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        captured_at = datetime.now(timezone.utc)
+        stamp = captured_at.strftime("%Y%m%d_%H%M%S_%f")
         session = target / f"scan_{stamp}"
         session.mkdir()
         for index, image in enumerate(images):
             image.convert("RGB").save(session / f"crop_{index:02d}.png")
 
         branch = result.branch_scores
+        payload_hash = hashlib.sha256((payload or "").encode()).hexdigest()
+        pair_token = _capture_value(
+            context, "pair_token", "QRGUARD_CAPTURE_PAIR_ID", ""
+        )
+        paired_group = (
+            hashlib.sha256(pair_token.encode()).hexdigest()
+            if pair_token
+            else payload_hash
+        )
+        physical_token = _capture_value(
+            context,
+            "physical_qr_token",
+            "QRGUARD_CAPTURE_PHYSICAL_QR_ID",
+            "",
+        )
+        physical_qr = (
+            hashlib.sha256(physical_token.encode()).hexdigest()
+            if physical_token
+            else paired_group
+        )
+        attack_method = _capture_value(
+            context, "attack_method", "QRGUARD_CAPTURE_ATTACK_METHOD", "none"
+        ).lower()
+        if attack_method not in CAPTURE_ATTACK_METHODS:
+            attack_method = "none"
+        attack_reference = _capture_value(
+            context,
+            "attack_reference_sha256",
+            "QRGUARD_CAPTURE_ATTACK_REFERENCE_SHA256",
+            "",
+        ).lower()
+        if len(attack_reference) != 64 or any(
+            character not in "0123456789abcdef" for character in attack_reference
+        ):
+            attack_reference = ""
+        manipulation_method = _capture_value(
+            context,
+            "manipulation_method",
+            "QRGUARD_CAPTURE_MANIPULATION_METHOD",
+            "none",
+        ).lower()
+        if manipulation_method not in CAPTURE_MANIPULATION_METHODS:
+            manipulation_method = "none"
         metadata = {
-            "captured_at": datetime.now().astimezone().isoformat(),
+            "captured_at": captured_at.isoformat(),
+            "campaign_id": _capture_identifier(context.get("campaign_id")),
+            "campaign_case_id": _capture_identifier(
+                context.get("campaign_case_id")
+            ),
             "ground_truth": None if capture_label == "unlabelled" else capture_label,
-            "payload_sha256": hashlib.sha256((payload or "").encode()).hexdigest(),
+            "payload_sha256": payload_hash,
+            "paired_group_sha256": paired_group,
+            "physical_qr_sha256": physical_qr,
             "image_source": image_source,
+            "quality_condition": quality_condition,
+            "quality_severity": quality_severity,
+            "selected_frame_index": 0,
+            "device_model": _capture_value(
+                context, "device_model", "QRGUARD_CAPTURE_DEVICE", "not_recorded"
+            )[:80],
+            "medium": _capture_value(
+                context, "medium", "QRGUARD_CAPTURE_MEDIUM", "not_recorded"
+            )[:80],
+            "environment": _capture_value(
+                context,
+                "environment",
+                "QRGUARD_CAPTURE_ENVIRONMENT",
+                "not_recorded",
+            )[:80],
+            "attack_method": attack_method,
+            "attack_reference_sha256": attack_reference,
+            "manipulation_method": manipulation_method,
             "image_sizes": [[image.width, image.height] for image in images],
             "p_structural_effective": branch.p_structural,
             "structural_type": branch.structural_type,
+            "structural_quality_status": branch.structural_quality_status,
+            "structural_quality_conditions": branch.structural_quality_conditions,
+            "structural_rescan_reason": branch.structural_rescan_reason,
             "payload_type": result.payload_type,
             "rule_flags": result.rule_flags,
             "verdict": result.verdict,
@@ -161,26 +328,41 @@ def _llm_ready() -> bool:
     return is_configured()
 
 
+def _structural_health_status() -> str:
+    """Report the analyzer selection that the scan pipeline will actually use."""
+    from structural.structural_service import load_analyzer as load_structural
+    from structural.structural_service import (
+        load_camera_analyzer as load_camera_structural,
+    )
+    from structural.structural_service import load_unified_candidate_analyzer
+
+    unified_artifacts = os.getenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "").strip()
+    if unified_artifacts:
+        analyzer = load_unified_candidate_analyzer(unified_artifacts)
+        metadata_path = Path(unified_artifacts) / "model_metadata.json"
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        version = str(metadata.get("version", "unknown"))
+        return (
+            f"unified={version}/{analyzer.model_path.name}; "
+            "sources=gallery,camera"
+        )
+
+    return (
+        f"gallery=RUN5/{load_structural().model_path.name}; "
+        "camera=structural-2026.02/"
+        f"{load_camera_structural().model_path.name}"
+    )
+
+
 @app.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
     from fusion.engine import load_engine
     from semantic.domain_reputation import list_size
     from semantic.semantic_service import load_analyzer as load_semantic
-    from structural.structural_service import load_analyzer as load_structural
-    from structural.structural_service import (
-        load_camera_analyzer as load_camera_structural,
-    )
 
     components: dict[str, str] = {}
     for name, check in (
-        (
-            "structural",
-            lambda: (
-                f"gallery=RUN5/{load_structural().model_path.name}; "
-                "camera=structural-2026.02/"
-                f"{load_camera_structural().model_path.name}"
-            ),
-        ),
+        ("structural", _structural_health_status),
         ("semantic", lambda: load_semantic().model_path.name),
         (
             "fusion",

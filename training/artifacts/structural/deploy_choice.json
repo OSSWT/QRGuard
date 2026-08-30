@@ -1,1 +1,3 @@
-{"deploy_model": "structural_fp32.onnx"}
+{
+  "deploy_model": "structural_fp32.onnx"
+}

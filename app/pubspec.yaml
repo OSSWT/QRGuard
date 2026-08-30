@@ -42,6 +42,8 @@ dependencies:
   crypto: ^3.0.7
   shared_preferences: ^2.5.5
   image_picker: ^1.2.1
+  # Capture APK only: create bounded evidence ZIPs without a network connection.
+  archive: ^4.0.9
   # Web live scans need a snapshot of mobile_scanner's video element because
   # BarcodeCapture.image is only populated on Android/iOS/macOS.
   web: ^1.1.1
@@ -98,6 +100,7 @@ flutter:
   # Shared launcher and in-app brand artwork.
   assets:
     - assets/icon/qrguard_icon_source.png
+    - assets/capture/offline_capture_plan.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -12,7 +12,6 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED = {
     "structural": (
@@ -50,7 +49,17 @@ REQUIRED = {
 
 def validate(branch: str, version: str) -> dict:
     performance = ROOT / "ml_training" / branch / "performance" / version
-    required = REQUIRED[branch]
+    required = list(REQUIRED[branch])
+    if branch == "structural" and version.startswith("structural-2026.03"):
+        required.extend(
+            [
+                "per_quality_condition_results.csv",
+                "quality_abstention_results.csv",
+                "exported_gallery_camera_consistency.csv",
+                "exported_runtime_predictions.csv",
+                "exported_runtime_metrics.json",
+            ]
+        )
     missing = [
         name
         for name in required

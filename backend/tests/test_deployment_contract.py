@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -12,7 +11,9 @@ def test_container_packages_every_runtime_model_without_secrets():
 
     assert "training/artifacts/structural" in dockerfile
     assert "training/artifacts/semantic" in dockerfile
-    assert "structural-2026.02/artifacts" in dockerfile
+    assert "QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS" in dockerfile
+    assert "structural-2026.02/artifacts" not in dockerfile
+    assert "structural-2026.02" not in dockerignore
     assert "GEMINI_API_KEY" not in dockerfile
     assert dockerignore.startswith("**\n")
 

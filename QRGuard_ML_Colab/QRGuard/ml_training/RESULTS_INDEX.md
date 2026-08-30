@@ -5,20 +5,21 @@ two report phases, followed by the Risk Decision Layer and deployment evidence.
 
 ## Structural Training
 
-### Current replacement candidate
+### Current local production replacement
 
-- Run: `structural-2026.02`
+- Run: `structural-2026.03-r01`
 - Training source: `structural/src/train_local.py`
-- Run artifacts: `structural/runs/structural-2026.02/artifacts/`
-- Full report: `structural/performance/structural-2026.02/STRUCTURAL_PERFORMANCE.md`
-- Machine-readable metrics: `structural/performance/structural-2026.02/metrics.json`
+- Run artifacts: `structural/runs/structural-2026.03-r01/artifacts/`
+- Full report: `structural/performance/structural-2026.03-r01/STRUCTURAL_PERFORMANCE.md`
+- Machine-readable metrics: `structural/performance/structural-2026.03-r01/metrics.json`
+- Exact-app summary: `structural/STRUCTURAL_V3_REAL_100X3_RESULTS_2026-08-31.md`
 - Main figures: confusion matrix, calibration curve, training curves, score
   distribution, and grouped-source results in the same performance folder.
 
-The candidate passed research gates but was not promoted over the gallery model.
-Its exact app-camera gate has zero sessions in every class. `structural-2026.01`
-is retained as a negative experiment showing why post-attack camera simulation can
-destroy a digital perturbation and create incorrect training labels.
+The artifact passed research, 100x3 exact-app, paired source-neutral, export,
+calibration and latency gates. It now occupies the local production path and
+passed post-copy evaluation; external deployment remains pending. Earlier failed
+candidates remain negative evidence and are not active runtime choices.
 
 ### External optical evaluation
 
@@ -49,16 +50,17 @@ same character n-grams. v2 canonicalises both paths identically.
 
 ## Risk Decision Layer
 
-- Deployed run: `decision-2026.02`
+- Current local production: `decision-2026.03-r05` (`decision-2026.02` remains
+  rollback)
 - Training and report generator: `../scripts/train_fusion.py`
 - Frozen data: `../data/qrguard_mix_v2/manifest.csv` and 1,800 named images.
-- Run weights: `decision_layer/runs/decision-2026.02/artifacts/fusion_weights.json`
+- Run weights: `decision_layer/runs/decision-2026.03-r05/artifacts/fusion_weights.json`
 - Full report:
-  `decision_layer/performance/decision-2026.02/DECISION_LAYER_PERFORMANCE.md`
+  `decision_layer/performance/decision-2026.03-r05/DECISION_LAYER_PERFORMANCE.md`
 - Machine-readable metrics:
-  `decision_layer/performance/decision-2026.02/metrics.json`
+  `decision_layer/performance/decision-2026.03-r05/metrics.json`
 - Per-cell table:
-  `decision_layer/performance/decision-2026.02/per_cell_metrics.csv`
+  `decision_layer/performance/decision-2026.03-r05/per_cell_metrics.csv`
 - Figures: tier confusion matrix, risk-score distribution, and branch ablation.
 
 QRGuard-Mix-v2 crosses six payload families with six image/evidence modes. Runtime

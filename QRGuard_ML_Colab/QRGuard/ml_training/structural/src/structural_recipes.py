@@ -6,6 +6,7 @@ import csv
 import hashlib
 import json
 import math
+import os
 import random
 from pathlib import Path
 
@@ -13,8 +14,10 @@ import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 
+from ml_training.structural.src.nuisance_recipes import CONDITIONS, apply_nuisance
+
 ROOT = Path(__file__).resolve().parents[3]
-VERSION = "structural-2026.02"
+VERSION = os.getenv("QRGUARD_STRUCTURAL_VERSION", "structural-2026.02")
 PROCESSED = ROOT / "ml_training/datasets/structural/processed" / VERSION
 IMAGES = PROCESSED / "images"
 MANIFEST = PROCESSED / "manifest.csv"
@@ -23,6 +26,8 @@ SEED = 42
 BASE_COUNTS = {"train": 900, "validation": 180, "test": 180}
 CAMERA_FRACTION = 0.70
 CLASS_NAMES = ("clean", "adversarial", "tampered")
+IS_V3 = VERSION.startswith("structural-2026.03")
+V3_CONDITION_CHOICES = ("normal", "normal", "normal", *CONDITIONS[1:])
 
 
 def _seed(text: str) -> int:
@@ -284,7 +289,10 @@ def simulate_capture(image: Image.Image, rng: random.Random, np_rng) -> Image.Im
         inner
     )
     margin = rng.uniform(0.02, 0.12)
-    offset = lambda: rng.uniform(-margin, margin)
+
+    def offset() -> float:
+        return rng.uniform(-margin, margin)
+
     source = np.float32([[0, 0], [width, 0], [width, height], [0, height]])
     destination = np.float32(
         [
@@ -348,7 +356,24 @@ def _derive_clean_and_tampered(base_rows: list[dict]) -> list[dict]:
                 rng = random.Random(_seed(f"tamper:{SEED}:{key}"))
                 np_rng = np.random.default_rng(_seed(f"tamper-numpy:{SEED}:{key}"))
                 image = make_tampered(image, rng, np_rng)
-            image, camera_simulated = _camera_if_selected(image, key)
+            if IS_V3:
+                # The condition is controlled and recorded. It is nuisance
+                # context, never a Structural target. Severe/unreadable cases
+                # are reserved for the quality-abstention evaluation gate.
+                condition = V3_CONDITION_CHOICES[
+                    _seed(f"condition:{SEED}:{key}") % len(V3_CONDITION_CHOICES)
+                ]
+                severity = (
+                    "none"
+                    if condition == "normal"
+                    else ("mild", "moderate")[_seed(f"severity:{key}") % 2]
+                )
+                image = apply_nuisance(image, condition, severity, seed=key)
+                camera_simulated = condition != "normal"
+            else:
+                image, camera_simulated = _camera_if_selected(image, key)
+                condition = "not_annotated"
+                severity = "not_annotated"
             destination = (
                 IMAGES / base["split"] / class_name / f"{base['base_index']:05d}.png"
             )
@@ -366,6 +391,8 @@ def _derive_clean_and_tampered(base_rows: list[dict]) -> list[dict]:
                     "capture_kind": "camera_simulated"
                     if camera_simulated
                     else "pristine",
+                    "quality_condition": condition,
+                    "quality_severity": severity,
                     "attack_recipe": "none"
                     if class_name == "clean"
                     else "physical_overlay",
@@ -499,6 +526,8 @@ def _adversarial_row(base: dict, destination: Path, attack: str) -> dict:
         "group_id": base["group_id"],
         "source": "procedural_qrguard",
         "capture_kind": "digital_input",
+        "quality_condition": "normal",
+        "quality_severity": "none",
         "attack_recipe": attack,
         "is_exact_app_crop": False,
         "licence": "project_generated",
@@ -563,20 +592,42 @@ def _runtime_capture_rows() -> list[dict]:
     can decide deployment rather than merely improve an aggregate metric.
     """
     capture_root = ROOT / "data/runtime_captures"
-    manifest = capture_root / "manifest.csv"
+    v3_manifest = capture_root / "manifest_v3.csv"
+    manifest = v3_manifest if IS_V3 else capture_root / "manifest.csv"
     if not manifest.is_file():
         return []
     split_map = {
         "train": "train",
         "val": "validation",
+        "validation": "validation",
         "test": "runtime_holdout_test",
     }
     rows = []
     for capture in csv.DictReader(manifest.open(encoding="utf-8")):
-        label = capture.get("label_name", "")
-        split = split_map.get(capture.get("split", ""))
-        crop = capture_root / capture.get("crop_path", "")
+        if IS_V3 and str(capture.get("is_authoritative", "")).lower() != "true":
+            continue
+        label = capture.get("label", "") if IS_V3 else capture.get("label_name", "")
+        split_name = capture.get("split", "")
+        split = (
+            "runtime_holdout_test"
+            if IS_V3 and split_name == "test"
+            else split_map.get(split_name)
+        )
+        relative_crop = (
+            capture.get("sample_path", "") if IS_V3 else capture.get("crop_path", "")
+        )
+        crop = capture_root / relative_crop
         if label not in CLASS_NAMES or split is None or not crop.is_file():
+            continue
+        group_token = capture.get("payload_hash", "") if IS_V3 else capture["group_id"]
+        image_source = capture.get("image_source", "camera")
+        if (
+            IS_V3
+            and capture.get("quality_severity", "none").strip().lower() == "severe"
+        ):
+            # Runtime quality handling abstains before Structural inference.
+            # Keep severe evidence in manifest_v3 for the abstention report, not
+            # as a clean/adversarial/tampered classifier training row.
             continue
         rows.append(
             {
@@ -584,14 +635,77 @@ def _runtime_capture_rows() -> list[dict]:
                 "label": label,
                 "class_id": CLASS_NAMES.index(label),
                 "split": split,
-                "group_id": f"qrguard_runtime:{capture['group_id']}",
-                "session_id": capture.get("session_id", "not_recorded"),
-                "source": "qrguard_runtime",
+                "group_id": f"qrguard_runtime:{group_token}",
+                "session_id": capture.get(
+                    "capture_session", capture.get("session_id", "not_recorded")
+                ),
+                "source": (
+                    f"qrguard_runtime_v3_{image_source}" if IS_V3 else "qrguard_runtime"
+                ),
                 "capture_kind": "exact_app_crop",
-                "device_model": capture.get("device_model", "not_recorded"),
+                "device_model": capture.get(
+                    "device", capture.get("device_model", "not_recorded")
+                ),
+                "quality_condition": capture.get("quality_condition", "not_annotated"),
+                "quality_severity": capture.get("quality_severity", "not_annotated"),
+                "image_source": image_source,
+                "paired_group": capture.get("paired_group", group_token),
+                "physical_qr": capture.get("physical_qr", group_token),
+                "payload_hash": capture.get("payload_hash", group_token),
                 "attack_recipe": "human_verified_ground_truth",
                 "is_exact_app_crop": True,
                 "licence": "project_internal_opt_in",
+            }
+        )
+    return rows
+
+
+def _prepared_gallery_reference_rows() -> list[dict]:
+    """Load verified non-test digital references paired with Camera captures."""
+    if not IS_V3:
+        return []
+    manifest = ROOT / "data/prepared_gallery_references" / VERSION / "manifest.csv"
+    if not manifest.is_file():
+        return []
+    rows = []
+    for reference in csv.DictReader(manifest.open(encoding="utf-8")):
+        label = reference.get("label", "")
+        split = reference.get("split", "")
+        path = ROOT / reference.get("path", "")
+        if label not in CLASS_NAMES:
+            raise ValueError(f"invalid prepared Gallery label: {label!r}")
+        if split not in {"train", "validation"}:
+            raise ValueError(
+                "prepared Gallery references must exclude the locked test split: "
+                f"{reference.get('case_id', path.name)} -> {split!r}"
+            )
+        if not path.is_file():
+            raise FileNotFoundError(f"prepared Gallery reference not found: {path}")
+        payload_hash = reference.get("payload_hash", "")
+        if len(payload_hash) != 64:
+            raise ValueError(f"invalid prepared Gallery payload hash: {path}")
+        rows.append(
+            {
+                "path": path.relative_to(ROOT).as_posix(),
+                "label": label,
+                "class_id": CLASS_NAMES.index(label),
+                "split": split,
+                "group_id": f"qrguard_runtime:{payload_hash}",
+                "session_id": reference.get(
+                    "session_id", f"prepared-gallery:{path.stem}"
+                ),
+                "source": "qrguard_prepared_gallery_reference",
+                "capture_kind": "prepared_gallery_reference",
+                "device_model": "digital-reference",
+                "quality_condition": reference.get("quality_condition", "normal"),
+                "quality_severity": reference.get("quality_severity", "none"),
+                "image_source": "gallery",
+                "paired_group": reference.get("paired_group", payload_hash),
+                "physical_qr": reference.get("physical_qr", payload_hash),
+                "payload_hash": payload_hash,
+                "attack_recipe": reference.get("attack_recipe", "none"),
+                "is_exact_app_crop": False,
+                "licence": reference.get("licence", "project_generated_internal"),
             }
         )
     return rows
@@ -619,10 +733,17 @@ def prepare_dataset() -> Path:
     rows.extend(_derive_adversarial(base))
     rows.extend(_external_clean_rows())
     rows.extend(_runtime_capture_rows())
+    rows.extend(_prepared_gallery_reference_rows())
     for row in rows:
         row.setdefault("session_id", row["group_id"])
         row.setdefault("device_model", "not_recorded")
-    fields = list(rows[0])
+        row.setdefault("quality_condition", "not_annotated")
+        row.setdefault("quality_severity", "not_annotated")
+        row.setdefault("image_source", "not_annotated")
+        row.setdefault("paired_group", row["group_id"])
+        row.setdefault("physical_qr", row["group_id"])
+        row.setdefault("payload_hash", row["group_id"])
+    fields = list(dict.fromkeys(key for row in rows for key in row))
     with MANIFEST.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
@@ -656,7 +777,13 @@ def prepare_dataset() -> Path:
             for label in CLASS_NAMES
         },
         "groups": {split: len(groups) for split, groups in split_groups.items()},
-        "camera_fraction": CAMERA_FRACTION,
+        "camera_fraction": CAMERA_FRACTION if not IS_V3 else None,
+        "controlled_nuisance_fraction": (
+            sum(condition != "normal" for condition in V3_CONDITION_CHOICES)
+            / len(V3_CONDITION_CHOICES)
+            if IS_V3
+            else None
+        ),
         "adversarial_recipes": (
             "Gallery/digital-input FGSM and untargeted PGD-20, epsilon 0.004-0.05; "
             "no post-attack camera simulation because it invalidates the attack label"

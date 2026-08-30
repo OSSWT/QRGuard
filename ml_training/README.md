@@ -37,8 +37,8 @@ licences, manifests, counts, and SHA-256 hashes.
 
 A run is not deployable because aggregate accuracy is high. It must pass its
 branch-specific acceptance gates, export parity checks, and the end-to-end
-Gallery/Live-camera matrix. Failed candidates remain in `runs/`; the currently
-deployed baseline is left untouched.
+Gallery/Live-camera matrix. Failed candidates remain in history; an accepted
+promotion preserves the previous deployed set as rollback evidence.
 
 The canonical execution order is documented in [EXECUTION_PLAN.md](EXECUTION_PLAN.md).
 The final run folders, report tables, figures, citations, deployment artifacts, and

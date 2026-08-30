@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "campaign_id": "structural-v3-real-2026.03-r01",
+  "audited_at": "2026-08-30T14:54:12+00:00",
+  "master_dataset": {
+    "filename": "QRGuard_Structural_100x3_Master_Audited_20260830.zip",
+    "sha256": "f2c2e0c5b2fe2dfa7ecf1c2f9a6805f1dbd67147930b2f7ca17e065dd5d2606c",
+    "training_ready_member": "training_ready/QRGuard_Training_Ready_100x3.zip",
+    "training_ready_sha256": "797f31cc4ab5f871b992e9b94e52a1c85d7632d6f17cbdd4b52e09d20c03f48f"
+  },
+  "canonical_import": {
+    "inner_batches": 13,
+    "imported_export_sessions": 357,
+    "pre_existing_canonical_sessions": 4,
+    "accepted_effective_sessions": 361,
+    "accepted_camera_sessions": 300,
+    "accepted_gallery_sessions": 61,
+    "rejected_sessions": 0,
+    "split_leakage_groups": 0,
+    "manifest_sha256": "dc7e220712f7604cc74a1c7cecabc0b73ee63733fd48338311b01b386c415b96",
+    "audit_sha256": "631f02fbc7bf1d470a21fa681d8c8b68d19c5fbb5f47eb286a2374006976fc51"
+  },
+  "deployment_counts": {
+    "camera_per_class": {
+      "clean": 100,
+      "adversarial": 100,
+      "tampered": 100
+    },
+    "camera_test_groups_per_class": {
+      "clean": 20,
+      "adversarial": 20,
+      "tampered": 20
+    },
+    "paired_test_groups_per_class": {
+      "clean": 20,
+      "adversarial": 20,
+      "tampered": 20
+    },
+    "camera_per_quality_condition_per_class": 10
+  },
+  "quarantine": {
+    "excluded_from_training_ready": true,
+    "session_count": 143,
+    "reason": "QR payload/reference mismatch in the initial add-on exports"
+  },
+  "count_gate_passed": true,
+  "performance_gate_pending": true
+}

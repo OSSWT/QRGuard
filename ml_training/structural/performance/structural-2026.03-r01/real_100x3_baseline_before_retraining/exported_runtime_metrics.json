@@ -1,0 +1,191 @@
+{
+  "overall": {
+    "rows": 120,
+    "usable_rows": 120,
+    "abstention_rate": 0.0,
+    "accuracy_on_usable": 0.4666666666666667,
+    "clean_false_positive_rate": 0.0,
+    "adversarial_recall": 0.4,
+    "tampered_recall": 0.0
+  },
+  "per_source": {
+    "camera": {
+      "rows": 60,
+      "usable_rows": 60,
+      "abstention_rate": 0.0,
+      "accuracy_on_usable": 0.3333333333333333,
+      "clean_false_positive_rate": 0.0,
+      "adversarial_recall": 0.0,
+      "tampered_recall": 0.0
+    },
+    "gallery": {
+      "rows": 60,
+      "usable_rows": 60,
+      "abstention_rate": 0.0,
+      "accuracy_on_usable": 0.6,
+      "clean_false_positive_rate": 0.0,
+      "adversarial_recall": 0.8,
+      "tampered_recall": 0.0
+    }
+  },
+  "paired_gallery_camera": {
+    "overall": {
+      "n": 60,
+      "class_agreement": 0.7333333333333333,
+      "verdict_agreement": 0.7333333333333333,
+      "mean_absolute_probability_delta": 0.24698567800223828,
+      "p95_absolute_probability_delta": 0.769214479997754
+    },
+    "per_class": {
+      "adversarial": {
+        "n": 20,
+        "class_agreement": 0.2,
+        "verdict_agreement": 0.2,
+        "mean_absolute_probability_delta": 0.6520338270813226,
+        "p95_absolute_probability_delta": 0.8577365569770337
+      },
+      "clean": {
+        "n": 20,
+        "class_agreement": 1.0,
+        "verdict_agreement": 1.0,
+        "mean_absolute_probability_delta": 0.026971110701560976,
+        "p95_absolute_probability_delta": 0.07227397561073304
+      },
+      "tampered": {
+        "n": 20,
+        "class_agreement": 1.0,
+        "verdict_agreement": 1.0,
+        "mean_absolute_probability_delta": 0.061952096223831174,
+        "p95_absolute_probability_delta": 0.17923028469085697
+      }
+    }
+  },
+  "deployment_scope": "test",
+  "deployment_holdout": {
+    "scope": "test",
+    "overall": {
+      "rows": 120,
+      "usable_rows": 120,
+      "abstention_rate": 0.0,
+      "accuracy_on_usable": 0.4666666666666667,
+      "clean_false_positive_rate": 0.0,
+      "adversarial_recall": 0.4,
+      "tampered_recall": 0.0
+    },
+    "per_source": {
+      "camera": {
+        "rows": 60,
+        "usable_rows": 60,
+        "abstention_rate": 0.0,
+        "accuracy_on_usable": 0.3333333333333333,
+        "clean_false_positive_rate": 0.0,
+        "adversarial_recall": 0.0,
+        "tampered_recall": 0.0
+      },
+      "gallery": {
+        "rows": 60,
+        "usable_rows": 60,
+        "abstention_rate": 0.0,
+        "accuracy_on_usable": 0.6,
+        "clean_false_positive_rate": 0.0,
+        "adversarial_recall": 0.8,
+        "tampered_recall": 0.0
+      }
+    },
+    "paired_gallery_camera": {
+      "overall": {
+        "n": 60,
+        "class_agreement": 0.7333333333333333,
+        "verdict_agreement": 0.7333333333333333,
+        "mean_absolute_probability_delta": 0.24698567800223828,
+        "p95_absolute_probability_delta": 0.769214479997754
+      },
+      "per_class": {
+        "adversarial": {
+          "n": 20,
+          "class_agreement": 0.2,
+          "verdict_agreement": 0.2,
+          "mean_absolute_probability_delta": 0.6520338270813226,
+          "p95_absolute_probability_delta": 0.8577365569770337
+        },
+        "clean": {
+          "n": 20,
+          "class_agreement": 1.0,
+          "verdict_agreement": 1.0,
+          "mean_absolute_probability_delta": 0.026971110701560976,
+          "p95_absolute_probability_delta": 0.07227397561073304
+        },
+        "tampered": {
+          "n": 20,
+          "class_agreement": 1.0,
+          "verdict_agreement": 1.0,
+          "mean_absolute_probability_delta": 0.061952096223831174,
+          "p95_absolute_probability_delta": 0.17923028469085697
+        }
+      }
+    }
+  },
+  "all_authoritative": {
+    "overall": {
+      "rows": 361,
+      "usable_rows": 361,
+      "abstention_rate": 0.0,
+      "accuracy_on_usable": 0.37950138504155123,
+      "clean_false_positive_rate": 0.0,
+      "adversarial_recall": 0.13333333333333333,
+      "tampered_recall": 0.0
+    },
+    "per_source": {
+      "camera": {
+        "rows": 300,
+        "usable_rows": 300,
+        "abstention_rate": 0.0,
+        "accuracy_on_usable": 0.3333333333333333,
+        "clean_false_positive_rate": 0.0,
+        "adversarial_recall": 0.0,
+        "tampered_recall": 0.0
+      },
+      "gallery": {
+        "rows": 61,
+        "usable_rows": 61,
+        "abstention_rate": 0.0,
+        "accuracy_on_usable": 0.6065573770491803,
+        "clean_false_positive_rate": 0.0,
+        "adversarial_recall": 0.8,
+        "tampered_recall": 0.0
+      }
+    },
+    "paired_gallery_camera": {
+      "overall": {
+        "n": 61,
+        "class_agreement": 0.7377049180327869,
+        "verdict_agreement": 0.7377049180327869,
+        "mean_absolute_probability_delta": 0.2436282753211553,
+        "p95_absolute_probability_delta": 0.7691921964287758
+      },
+      "per_class": {
+        "adversarial": {
+          "n": 20,
+          "class_agreement": 0.2,
+          "verdict_agreement": 0.2,
+          "mean_absolute_probability_delta": 0.6520338270813226,
+          "p95_absolute_probability_delta": 0.8577365569770337
+        },
+        "clean": {
+          "n": 21,
+          "class_agreement": 1.0,
+          "verdict_agreement": 1.0,
+          "mean_absolute_probability_delta": 0.027695539451780774,
+          "p95_absolute_probability_delta": 0.07143354415893555
+        },
+        "tampered": {
+          "n": 20,
+          "class_agreement": 1.0,
+          "verdict_agreement": 1.0,
+          "mean_absolute_probability_delta": 0.061952096223831174,
+          "p95_absolute_probability_delta": 0.17923028469085697
+        }
+      }
+    }
+  }
+}

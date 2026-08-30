@@ -41,6 +41,9 @@ class BranchScores {
   final double? pStructural;
   final double? pStructuralRaw;
   final String? structuralType; // clean | adversarial | tampered
+  final String? structuralQualityStatus; // usable | marginal | unusable
+  final List<String> structuralQualityConditions;
+  final String? structuralRescanReason;
   final double? pUrl;
   final double? llmScore;
   final double? domainUnknown;
@@ -52,6 +55,9 @@ class BranchScores {
     this.pStructural,
     this.pStructuralRaw,
     this.structuralType,
+    this.structuralQualityStatus,
+    this.structuralQualityConditions = const [],
+    this.structuralRescanReason,
     this.pUrl,
     this.llmScore,
     this.domainUnknown,
@@ -68,6 +74,11 @@ class BranchScores {
       pStructural: pStructural,
       pStructuralRaw: _toDouble(json['p_structural_raw']),
       structuralType: json['structural_type'] as String?,
+      structuralQualityStatus: json['structural_quality_status'] as String?,
+      structuralQualityConditions: _toStringList(
+        json['structural_quality_conditions'],
+      ),
+      structuralRescanReason: json['structural_rescan_reason'] as String?,
       pUrl: pUrl,
       llmScore: _toDouble(json['llm_score']),
       domainUnknown: _toDouble(json['domain_unknown']),

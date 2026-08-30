@@ -37,6 +37,12 @@ Every processed Structural row must include:
 - `medium`, `environment`, `is_real_camera`, `is_exact_app_crop`
 - `split`, `parent_sample`, `sha256`, `licence`
 
+Structural v3 additionally requires `quality_condition`, `quality_severity`,
+`image_source`, `paired_group`, and `is_authoritative`. Quality is metadata and
+an evaluation slice; it never replaces the clean/adversarial/tampered target.
+Gallery and Camera rows for one case share `paired_group`, while burst frames
+share one `capture_session` and contribute only one authoritative model input.
+
 Every processed Semantic row must include:
 
 - `url`, `label`, `source_dataset`, `source_version`

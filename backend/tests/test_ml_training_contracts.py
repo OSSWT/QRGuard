@@ -1,10 +1,18 @@
 """Fast tests for the rebuilt ML/fusion data contracts."""
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
+import pytest
 
 from scripts.build_qrguard_mix import _payload, _target, make_qr
-from scripts.train_fusion import apply_runtime_policy, fit_constrained
+from scripts.train_fusion import (
+    apply_runtime_policy,
+    configure_candidate,
+    fit_constrained,
+    tune_thresholds,
+)
 
 
 def test_mix_v2_models_open_wifi_as_warning_not_fraud():
@@ -127,8 +135,63 @@ def test_uncertain_camera_moderate_semantic_score_cannot_hard_block():
         ]
     )
     adjusted, tiers = apply_runtime_policy(
-        np.asarray([79, 90]), rows, safe_max=45, blocked_min=55
+        np.asarray([79, 20]), rows, safe_max=45, blocked_min=55
     )
 
-    assert adjusted.tolist() == [54, 90]
+    assert adjusted.tolist() == [54, 55]
     assert tiers.tolist() == ["warning", "blocked"]
+
+
+def test_threshold_tuning_enforces_open_wifi_cell_gate_on_training_rows():
+    probabilities = np.asarray([0.05] * 20 + [0.58] * 5 + [0.90] * 100)
+    labels = np.asarray([0] * 25 + [1] * 100)
+    rows = pd.DataFrame(
+        [
+            {
+                "cell": "gallery_clean_benign_url",
+                "payload_kind": "benign_url",
+                "evidence_mode": "gallery_clean",
+                "target_tier": "safe",
+                "rule_flags": "",
+                "p_structural": 0.01,
+                "p_url": 0.01,
+                "domain_unknown": 0.0,
+            }
+        ]
+        * 20
+        + [
+            {
+                "cell": "gallery_clean_wifi_open",
+                "payload_kind": "wifi_open",
+                "evidence_mode": "gallery_clean",
+                "target_tier": "warning",
+                "rule_flags": "open_wifi_network",
+                "p_structural": 0.2,
+                "p_url": np.nan,
+                "domain_unknown": np.nan,
+            }
+        ]
+        * 5
+        + [
+            {
+                "cell": "gallery_tampered_benign_url",
+                "payload_kind": "benign_url",
+                "evidence_mode": "gallery_tampered",
+                "target_tier": "blocked",
+                "rule_flags": "",
+                "p_structural": 0.99,
+                "p_url": 0.01,
+                "domain_unknown": 0.0,
+            }
+        ]
+        * 100
+    )
+
+    _, blocked_min = tune_thresholds(probabilities, labels, rows)
+
+    assert blocked_min > 58
+
+
+def test_decision_candidate_version_cannot_escape_its_run_folder():
+    with pytest.raises(ValueError, match="invalid decision candidate version"):
+        configure_candidate(Path("candidate"), "../deploy")

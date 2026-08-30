@@ -89,6 +89,8 @@ void main() {
         'p_structural_raw': 0.85,
         'structural_type': 'adversarial',
         'structural_status': 'completed',
+        'structural_quality_status': 'marginal',
+        'structural_quality_conditions': ['motion_blur'],
         'image_source': 'camera',
         // Extra fields from an older server are safely ignored.
         'camera_structural_uncertain': true,
@@ -99,6 +101,8 @@ void main() {
       expect(branch.pStructural, 0.85);
       expect(branch.structuralType, 'adversarial');
       expect(branch.structuralStatus, AnalysisStatus.completed);
+      expect(branch.structuralQualityStatus, 'marginal');
+      expect(branch.structuralQualityConditions, ['motion_blur']);
     });
 
     test('distinguishes not-applicable from an unavailable branch', () {
@@ -110,6 +114,24 @@ void main() {
       expect(branch.structuralStatus, AnalysisStatus.unavailable);
       expect(branch.semanticStatus, AnalysisStatus.notApplicable);
       expect(branch.contentAnalysisResolved, isTrue);
+    });
+
+    test('keeps a quality abstention and rescan reason', () {
+      final branch = BranchScores.fromJson({
+        'structural_status': 'inconclusive',
+        'structural_quality_status': 'unusable',
+        'structural_quality_conditions': ['blur', 'underexposure'],
+        'structural_rescan_reason': 'Hold the camera steady and scan again.',
+      });
+
+      expect(branch.pStructural, isNull);
+      expect(branch.structuralStatus, AnalysisStatus.inconclusive);
+      expect(branch.structuralQualityStatus, 'unusable');
+      expect(branch.structuralQualityConditions, ['blur', 'underexposure']);
+      expect(
+        branch.structuralRescanReason,
+        'Hold the camera steady and scan again.',
+      );
     });
 
     test('an abstaining branch stays null, never 0', () {
@@ -253,18 +275,21 @@ void main() {
   });
 
   group('SettingsService backend migration', () {
-    test('old Render production API moves to the current release default', () async {
-      SharedPreferences.setMockInitialValues({
-        'backend_url': 'https://qrguard-osswt-20260824-api.onrender.com',
-      });
+    test(
+      'old Render production API moves to the current release default',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'backend_url': 'https://qrguard-osswt-20260824-api.onrender.com',
+        });
 
-      final url = await SettingsService().backendUrl();
+        final url = await SettingsService().backendUrl();
 
-      expect(url, SettingsService.defaultBackendUrl);
-      expect(
-        (await SharedPreferences.getInstance()).getString('backend_url'),
-        SettingsService.defaultBackendUrl,
-      );
-    });
+        expect(url, SettingsService.defaultBackendUrl);
+        expect(
+          (await SharedPreferences.getInstance()).getString('backend_url'),
+          SettingsService.defaultBackendUrl,
+        );
+      },
+    );
   });
 }

@@ -402,6 +402,316 @@ print('Archive:', archive)
     )
 
 
+def structural_v3_notebook() -> dict:
+    install_when_needed = (
+        "if RUN_MODE == 'report_only':\n"
+        "    print('report_only: dependency installation and GPU checks skipped')\n"
+        "else:\n"
+        + "".join(f"    {line}" for line in INSTALL.splitlines(keepends=True))
+        + "    import torch\n"
+        + "    if not torch.cuda.is_available():\n"
+        + "        raise RuntimeError('Enable a T4 GPU for training/evaluation.')\n"
+        + "    print('GPU:', torch.cuda.get_device_name(0))\n"
+    )
+    return _notebook(
+        [
+            _markdown(
+                "# QRGuard Structural v3 (LATEST)\n\n"
+                "One `structural-2026.03-r01` ResNet-18 artifact is evaluated on "
+                "both Gallery and Camera. Capture conditions are nuisance/quality "
+                "slices, not malicious labels. The notebook never promotes or deploys "
+                "the candidate automatically."
+            ),
+            _markdown("## Phase 0 - Choose exactly one run mode"),
+            _code(
+                r"""RUN_MODE = 'fresh'  # fresh | resume | evaluate_only | report_only
+RUN_ID = 'r01'        # choose a new ID for another fresh experiment
+VERSION = 'structural-2026.03-r01'
+VALID_MODES = {'fresh', 'resume', 'evaluate_only', 'report_only'}
+if RUN_MODE not in VALID_MODES:
+    raise ValueError(f'RUN_MODE must be one of {sorted(VALID_MODES)}')
+print('Mode:', RUN_MODE, '| Version:', VERSION, '| Run ID:', RUN_ID)
+"""
+            ),
+            _markdown("## Phase 1 - Reproducible source bundle and Drive"),
+            _code(COMMON_SETUP),
+            _code(
+                r"""DRIVE_ML = Path('/content/drive/MyDrive/QRGuard_ML')
+DRIVE_RUN = DRIVE_ML / 'runs' / VERSION / RUN_ID
+CHECKPOINT_DIR = DRIVE_RUN / 'checkpoints'
+OUTPUT_DRIVE = DRIVE_RUN / 'outputs'
+CACHE_DRIVE = DRIVE_ML / 'cache' / VERSION
+DATA_DRIVE = Path('/content/drive/MyDrive/QRGuard_ML_Data/structural')
+PERF = REPO / 'ml_training/structural/performance' / VERSION
+ARTIFACTS = REPO / 'ml_training/structural/runs' / VERSION / 'artifacts'
+PROCESSED_ROOT = REPO / 'ml_training/datasets/structural/processed'
+os.environ['QRGUARD_STRUCTURAL_VERSION'] = VERSION
+for directory in (DRIVE_RUN, CHECKPOINT_DIR, OUTPUT_DRIVE, CACHE_DRIVE):
+    directory.mkdir(parents=True, exist_ok=True)
+print('Persistent run:', DRIVE_RUN)
+"""
+            ),
+            _markdown("## Phase 2 - Install only when inference or training is needed"),
+            _code(install_when_needed),
+            _markdown(
+                "## Phase 3 - Restore report, or prepare a version-locked dataset\n\n"
+                "Prepared public data is cached in Drive. The combined manifest is "
+                "rebuilt only when the v3 capture manifest or config changes."
+            ),
+            _code(
+                r"""if RUN_MODE == 'report_only':
+    saved_performance = OUTPUT_DRIVE / 'performance'
+    if saved_performance.is_dir():
+        shutil.copytree(saved_performance, PERF, dirs_exist_ok=True)
+        print('Restored saved Drive performance; no model training/evaluation ran.')
+    elif (PERF / 'metrics.json').is_file():
+        print(
+            'No saved Drive report yet; displaying the bundled 2026-08-30 '
+            'local CPU reference. This is not a Colab run or deployment evidence.'
+        )
+    else:
+        raise FileNotFoundError(f'No saved or bundled report at {saved_performance}')
+else:
+    cached_processed = CACHE_DRIVE / 'processed'
+    if cached_processed.is_dir():
+        shutil.copytree(cached_processed, PROCESSED_ROOT, dirs_exist_ok=True)
+        print('Restored prepared Structural data from Drive cache')
+
+    downloads = REPO / 'ml_training/datasets/structural/downloads'
+    archives = {
+        DATA_DRIVE / 'QR-DN1.0.zip': downloads / 'qrdn/QR-DN1.0.zip',
+        DATA_DRIVE / 'qr_codes_in_surfaces.zip': downloads / 'qr_surfaces/qr_codes_in_surfaces.zip',
+    }
+    public_ready = all((PROCESSED_ROOT / name / 'manifest.csv').is_file()
+                       for name in ('qrdn', 'qr_surfaces'))
+    if not public_ready:
+        for source, destination in archives.items():
+            if not source.is_file():
+                raise FileNotFoundError(f'Missing official archive: {source}')
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+        run_module('ml_training.scripts.verify_datasets')
+        for archive, destination in (
+            (archives[DATA_DRIVE / 'QR-DN1.0.zip'], REPO / 'ml_training/datasets/structural/raw/qrdn'),
+            (archives[DATA_DRIVE / 'qr_codes_in_surfaces.zip'], REPO / 'ml_training/datasets/structural/raw/qr_surfaces'),
+        ):
+            destination.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(archive) as package:
+                package.extractall(destination)
+        run_module('ml_training.structural.src.prepare_qrdn')
+        run_module('ml_training.structural.src.prepare_qr_surfaces')
+
+    drive_captures = DATA_DRIVE / 'runtime_captures'
+    local_captures = REPO / 'data/runtime_captures'
+    local_captures.mkdir(parents=True, exist_ok=True)
+    if drive_captures.is_dir():
+        shutil.copytree(drive_captures, local_captures, dirs_exist_ok=True)
+    capture_audit = run_module(
+        'ml_training.structural.src.prepare_structural_v3_captures',
+        local_captures, '--strict', check=False,
+    )
+    print('Real paired capture gate:',
+          'READY' if capture_audit.returncode == 0 else 'NOT READY - candidate only')
+
+    capture_manifest = local_captures / 'manifest_v3.csv'
+    config_path = REPO / 'ml_training/configs' / f'{VERSION}.json'
+    cache_contract_path = CACHE_DRIVE / 'cache_contract.json'
+    expected_contract = {
+        'version': VERSION,
+        'config_sha256': hashlib.sha256(config_path.read_bytes()).hexdigest(),
+        'capture_manifest_sha256': hashlib.sha256(capture_manifest.read_bytes()).hexdigest(),
+    }
+    recorded_contract = (
+        json.loads(cache_contract_path.read_text())
+        if cache_contract_path.is_file() else None
+    )
+    combined_manifest = PROCESSED_ROOT / VERSION / 'manifest.csv'
+    if not combined_manifest.is_file() or recorded_contract != expected_contract:
+        run_module(
+            'ml_training.structural.src.train_local',
+            '--mode', RUN_MODE,
+            '--prepare-only', '--rebuild-data',
+        )
+        shutil.copytree(PROCESSED_ROOT, cached_processed, dirs_exist_ok=True)
+        cache_contract_path.write_text(json.dumps(expected_contract, indent=2))
+        print('Prepared dataset and refreshed Drive cache')
+    else:
+        print('Dataset cache identity matched; expensive preparation skipped')
+"""
+            ),
+            _markdown("## Phase 4 - Dataset composition and leakage audit"),
+            _code(
+                r"""if RUN_MODE != 'report_only':
+    import pandas as pd
+    manifest = pd.read_csv(PROCESSED_ROOT / VERSION / 'manifest.csv')
+    display(pd.crosstab(manifest.split, [manifest.label, manifest.source]))
+    groups = {name: set(part.group_id) for name, part in manifest.groupby('split')}
+    overlaps = {
+        f'{left}/{right}': len(groups[left] & groups[right])
+        for index, left in enumerate(groups)
+        for right in list(groups)[index + 1:]
+    }
+    assert not any(overlaps.values()), overlaps
+    print('Rows:', len(manifest), '| groups:', manifest.group_id.nunique())
+    if 'quality_condition' in manifest:
+        display(pd.crosstab(manifest.quality_condition, manifest.label))
+"""
+            ),
+            _markdown(
+                "## Phase 5 - Train/resume/evaluate, then save outputs\n\n"
+                "Every completed epoch is checkpointed to Drive. A gate failure "
+                "still produces a valid candidate report and never updates the app."
+            ),
+            _code(
+                r"""if RUN_MODE != 'report_only':
+    execution = run_module(
+        'ml_training.structural.src.train_local',
+        '--mode', RUN_MODE,
+        '--checkpoint-dir', CHECKPOINT_DIR,
+        check=False,
+    )
+    if PERF.is_dir():
+        shutil.copytree(PERF, OUTPUT_DRIVE / 'performance', dirs_exist_ok=True)
+    if ARTIFACTS.is_dir():
+        shutil.copytree(ARTIFACTS, OUTPUT_DRIVE / 'artifacts', dirs_exist_ok=True)
+    print('Execution return code:', execution.returncode)
+    if not (PERF / 'metrics.json').is_file():
+        raise RuntimeError('Execution stopped before a complete performance report.')
+"""
+            ),
+            _markdown("## Phase 6 - Display reusable performance evidence"),
+            _code(
+                r"""from IPython.display import Image as DisplayImage, Markdown, display
+import pandas as pd
+
+metrics_path = PERF / 'metrics.json'
+if not metrics_path.is_file():
+    raise FileNotFoundError(metrics_path)
+metrics = json.loads(metrics_path.read_text(encoding='utf-8'))
+if metrics.get('version') != VERSION:
+    raise RuntimeError(f"Wrong report version: {metrics.get('version')}")
+current_config = REPO / 'ml_training/configs' / f'{VERSION}.json'
+current_config_hash = hashlib.sha256(current_config.read_bytes()).hexdigest()
+if metrics.get('run_identity', {}).get('config_sha256') != current_config_hash:
+    raise RuntimeError('Saved report does not match this Structural config.')
+state_path = CHECKPOINT_DIR / 'run_state.json'
+if state_path.is_file():
+    saved_state = json.loads(state_path.read_text(encoding='utf-8'))
+    if saved_state.get('identity') != metrics.get('run_identity'):
+        raise RuntimeError('Saved report and checkpoint run identities disagree.')
+display(Markdown((PERF / 'STRUCTURAL_PERFORMANCE.md').read_text(encoding='utf-8')))
+display(pd.DataFrame([
+    {'Gate': 'Research', 'Passed': metrics['research_gates_passed'],
+     'Failures': '; '.join(metrics['research_gate_failures']) or 'none'},
+    {'Gate': 'Deployment', 'Passed': metrics['deployment_gates_passed'],
+     'Failures': '; '.join(metrics['deployment_gate_failures']) or 'none'},
+]))
+for name in ('training_curves.png', 'confusion_matrix.png', 'roc_pr_curves.png',
+             'calibration_curve.png', 'qrdn_clean_distribution.png'):
+    path = PERF / name
+    if path.is_file():
+        display(Markdown(f'### {name}'))
+        display(DisplayImage(filename=str(path)))
+for name in ('metrics.csv', 'dataset_composition.csv', 'per_source_results.csv',
+             'per_device_results.csv', 'per_quality_condition_results.csv',
+             'quality_abstention_results.csv', 'gallery_camera_consistency.csv',
+             'exported_gallery_camera_consistency.csv',
+             'exported_runtime_predictions.csv', 'misclassified_samples.csv',
+             'training_history.csv'):
+    path = PERF / name
+    if path.is_file() and path.stat().st_size:
+        display(Markdown(f'### {name}'))
+        display(pd.read_csv(path).head(50))
+print('Persistent output:', OUTPUT_DRIVE)
+"""
+            ),
+            _markdown("## Phase 7 - Validate report completeness (no promotion)"),
+            _code(
+                r"""validation = run_module(
+    'ml_training.scripts.validate_performance_bundle',
+    '--branch', 'structural', '--structural-version', VERSION,
+    check=False,
+) if RUN_MODE != 'report_only' else None
+if validation is not None:
+    print('Report validation return code:', validation.returncode)
+print('Done. This notebook did not push, deploy, or replace runtime models.')
+"""
+            ),
+        ]
+    )
+
+
+def semantic_frozen_notebook() -> dict:
+    return _notebook(
+        [
+            _markdown(
+                "# QRGuard Semantic semantic-2026.02 - frozen performance report\n\n"
+                "FYP2 keeps this trained semantic artifact frozen. This notebook "
+                "displays the checked-in measured evidence; it does not retrain it."
+            ),
+            _code(COMMON_SETUP),
+            _code(
+                r"""from IPython.display import Image as DisplayImage, Markdown, display
+import pandas as pd
+PERF = REPO / 'ml_training/semantic/performance/semantic-2026.02'
+metrics = json.loads((PERF / 'metrics.json').read_text(encoding='utf-8'))
+assert metrics['version'] == 'semantic-2026.02'
+display(Markdown((PERF / 'SEMANTIC_PERFORMANCE.md').read_text(encoding='utf-8')))
+display(metrics)
+for name in ('training_curves.png', 'confusion_matrix.png', 'roc_pr_curves.png',
+             'calibration_curve.png'):
+    display(DisplayImage(filename=str(PERF / name)))
+for name in ('metrics.csv', 'dataset_composition.csv', 'threshold_analysis.csv',
+             'per_source_results.csv', 'hard_benign_results.csv',
+             'behavioural_acceptance.csv'):
+    display(Markdown(f'### {name}'))
+    display(pd.read_csv(PERF / name).head(50))
+print('Semantic remains frozen; no training or deployment occurred.')
+"""
+            ),
+        ]
+    )
+
+
+def decision_frozen_notebook() -> dict:
+    return _notebook(
+        [
+            _markdown(
+                "# QRGuard Decision decision-2026.03-r05 — frozen performance report\n\n"
+                "This notebook displays the saved local Fusion/Decision evidence. "
+                "It does not retrain, promote, push, or deploy any model."
+            ),
+            _markdown("## Phase 0 — Reproducible workspace and Drive mount"),
+            _code(COMMON_SETUP),
+            _markdown("## Phase 1 — Display locked Decision performance evidence"),
+            _code(
+                r"""from IPython.display import Image as DisplayImage, Markdown, display
+import pandas as pd
+
+PERF = REPO / 'ml_training/decision_layer/performance/decision-2026.03-r05'
+metrics = json.loads((PERF / 'metrics.json').read_text(encoding='utf-8'))
+assert metrics['version'] == 'decision-2026.03-r05'
+assert metrics['gates_passed'] is True
+assert metrics['promotion_requested'] is False
+
+display(Markdown((PERF / 'DECISION_LAYER_PERFORMANCE.md').read_text(encoding='utf-8')))
+display(Markdown('## Locked metrics JSON'))
+display(metrics)
+display(Markdown('## Per-cell results'))
+display(pd.read_csv(PERF / 'per_cell_metrics.csv'))
+
+for name in ('tier_confusion_matrix.png', 'score_distribution.png', 'ablation.png'):
+    display(Markdown(f'### {name}'))
+    display(DisplayImage(filename=str(PERF / name)))
+
+print('The saved training run did not self-promote its outputs.')
+print('The repository later promoted r01+r05 locally; external deployment is pending.')
+"""
+            ),
+        ]
+    )
+
+
 def semantic_notebook() -> dict:
     return _notebook(
         [
@@ -514,14 +824,16 @@ print('Archive:', archive)
 
 README = """# QRGuard complete Google Colab ML package
 
-This folder is the self-contained hand-off for both trained QRGuard branches.
-It contains the canonical training/evaluation/export source, dataset contracts,
-licences and references, the current reference performance, and two Run-all
-Google Colab notebooks.
+This folder is the self-contained ML hand-off. Structural v3 is the current
+FYP2 candidate; Semantic `semantic-2026.02` is frozen and report-only. It
+contains the canonical source, dataset contracts, licences, references,
+check-pointable Structural notebook, frozen Semantic report notebook, and a
+frozen report of the latest Decision/Fusion candidate.
 
 The existing measured baseline/candidate numbers are summarised in
 `REFERENCE_RESULTS.md` and their original figures/JSON/CSV files are under
-`reference_performance/`. A fresh notebook run writes a new complete bundle to Drive.
+`reference_performance/`. Structural can create a new Drive run; the Semantic
+notebook displays its frozen evidence without retraining.
 
 ## Start here
 
@@ -532,10 +844,14 @@ The existing measured baseline/candidate numbers are summarised in
    - `MyDrive/QRGuard_ML_Data/structural/qr_codes_in_surfaces.zip`
 3. If available, copy labelled exact app captures to
    `MyDrive/QRGuard_ML_Data/structural/runtime_captures/`.
-4. Open `01_Structural_Training_Colab.ipynb`, select a T4 GPU, and Run all.
-5. Open `02_Semantic_Training_Colab.ipynb` and Run all. Kaggle may ask you to
-   authenticate/accept the Malicious URLs dataset terms on first acquisition.
-6. Complete outputs are copied to `MyDrive/QRGuard_ML_Results/`.
+4. Open `01_Structural_Training_Colab.ipynb`, choose `fresh`, `resume`,
+   `evaluate_only`, or `report_only`, select a T4 GPU when needed, and Run all.
+5. Open `02_Semantic_Frozen_Report_Colab.ipynb` to display the existing measured
+   Semantic evidence without retraining.
+6. Open `03_Decision_Frozen_Report_Colab.ipynb` to display the saved Fusion
+   metrics, per-cell table and ablation without retraining or promotion.
+7. Structural checkpoints and outputs are saved under
+   `MyDrive/QRGuard_ML/runs/structural-2026.03-r01/<RUN_ID>/`.
 
 Raw third-party datasets are not redistributed in this source package because
 they are large and governed by their source terms. Official URLs, DOI/licence,
@@ -546,10 +862,10 @@ the reproducibility material; the notebooks fetch or verify the actual data.
 
 A QR can decode successfully while the image-integrity model cannot safely use
 the camera frames. Decoding and Structural classification are different tasks.
-Synthetic camera augmentation cannot prove performance on QRGuard's exact crop
-pipeline, so Structural deployment remains `CANDIDATE ONLY` until the labelled
-app-camera gate passes. The notebook still produces all tables and figures and
-states exactly which gate is missing.
+Synthetic camera augmentation alone cannot prove performance on QRGuard's exact
+crop pipeline. The checked-in r01 candidate has now passed the labelled 100x3
+exact-app and paired gates and was later promoted into the local runtime. GitHub
+and external Render deployment remain separate, reviewed steps.
 
 ## Colour contract
 
@@ -560,11 +876,31 @@ camera colour-correction and serving parity contract.
 """
 
 
-REFERENCE_RESULTS = """# Existing measured Structural and Semantic performance
+REFERENCE_RESULTS = """# Existing measured Structural, Semantic and Decision performance
 
-These are the checked-in `2026.02` reference results, not invented notebook
-output. Run the two Colab notebooks to reproduce fresh artifacts in your own
-Google Drive.
+The first table is the measured 2026-08-31 local CPU v3 real-data candidate run.
+It is checked-in reproduction evidence, not invented notebook output and not an
+automatic production promotion. The second table contains the existing
+`2026.02` rollback baseline and frozen Semantic evidence.
+
+| Structural v3 local candidate metric | Measured result |
+|---|---:|
+| Grouped test accuracy | 0.9111 |
+| Grouped macro-F1 | 0.9095 |
+| Adversarial recall | 0.9889 |
+| Tampered recall | 0.9500 |
+| QR-DN clean false-positive rate | 0.0000 |
+| Exact-app Camera clean FPR | 0.0000 |
+| Exact-app Camera adversarial recall | 0.9500 |
+| Exact-app Camera tampered recall | 1.0000 |
+| Paired Camera/Gallery verdict agreement | 0.9833 |
+| ECE | 0.0278 |
+| Controlled nuisance conditions | 10 |
+| ONNX P95 latency (local reference machine) | 44.09 ms |
+| Research gates | PASS |
+| Deployment gates | PASS — promoted locally; external deploy pending |
+
+## Existing 2026.02 baseline and frozen Semantic reference
 
 | Branch / metric | Existing measured result |
 |---|---:|
@@ -585,12 +921,23 @@ Google Drive.
 | Semantic behavioural benign FPR | 0.0400 |
 | Semantic behavioural phishing recall | 1.0000 |
 
+## Decision v3 local candidate
+
+| Decision metric | Measured result |
+|---|---:|
+| Version | decision-2026.03-r05 |
+| ROC-AUC | 0.9820 |
+| Blocked-tier precision | 0.9912 |
+| Safe-tier false-negative rate | 0.0194 |
+| Exact three-tier accuracy | 0.8667 |
+| Security-impact policy acceptance | 0.9759 |
+| Internal Decision gates | PASS — all 36 cells; promoted locally |
+
 Semantic `semantic-2026.02` passed its recorded gates. Structural
-`structural-2026.02` passed its research gates but is **candidate only**, because
-the recorded exact QRGuard app-camera audit has zero labelled sessions. The
-Colab pipeline keeps that limitation explicit and cannot approve deployment
-until the real-camera sample/session gates and class-specific performance gates
-pass.
+`structural-2026.03-r01` and Decision `decision-2026.03-r05` passed their
+recorded local and integration gates and were later promoted into the local
+runtime. The Colab package itself never copies runtime files, pushes GitHub, or
+deploys services.
 """
 
 
@@ -603,16 +950,17 @@ MyDrive/
     structural/
       QR-DN1.0.zip
       qr_codes_in_surfaces.zip
-      runtime_captures/          # optional for training, mandatory to approve deployment
-    semantic/                    # generated cache; no manual copy required normally
-  QRGuard_ML_Results/            # generated by the notebooks
+      runtime_captures/          # paired Gallery/Camera exact app crops
+  QRGuard_ML/
+    cache/                       # reusable prepared Structural data
+    runs/                        # checkpoints, artifacts and performance
 ```
 
 Structural archive hashes are verified against
 `QRGuard/ml_training/datasets/download_verification.json`. Runtime capture
-folders must follow the schema documented by
-`prepare_runtime_captures.py`: 3–5 distinct exact PNG crops plus anonymised
-metadata per labelled session. Raw QR payloads are never required or stored.
+folders must follow `CAPTURE_GUIDE_V3.md`: 1–5 distinct exact PNG crops, one
+authoritative frame, Gallery/Camera pair metadata, measured quality condition,
+and anonymised identifiers. Raw QR payloads are never required or stored.
 """
 
 
@@ -662,24 +1010,44 @@ def build() -> None:
     (OUTPUT / "REFERENCE_RESULTS.md").write_text(
         REFERENCE_RESULTS, encoding="utf-8"
     )
-    structural_json = json.dumps(structural_notebook(), indent=1)
-    semantic_json = json.dumps(semantic_notebook(), indent=1)
+    structural_json = json.dumps(structural_v3_notebook(), indent=1)
+    semantic_json = json.dumps(semantic_frozen_notebook(), indent=1)
+    decision_json = json.dumps(decision_frozen_notebook(), indent=1)
     (OUTPUT / "01_Structural_Training_Colab.ipynb").write_text(
         structural_json, encoding="utf-8"
     )
+    (OUTPUT / "02_Semantic_Frozen_Report_Colab.ipynb").write_text(
+        semantic_json, encoding="utf-8"
+    )
+    (OUTPUT / "03_Decision_Frozen_Report_Colab.ipynb").write_text(
+        decision_json, encoding="utf-8"
+    )
+    # Keep the historical package path as a safe compatibility entry point.
+    # Its content is the same frozen report (no training cells), so existing
+    # bookmarks do not disappear or accidentally retrain Semantic.
     (OUTPUT / "02_Semantic_Training_Colab.ipynb").write_text(
         semantic_json, encoding="utf-8"
     )
-    (ROOT / "ml_training/structural/notebooks/structural_training_v2.ipynb").write_text(
+    (ROOT / "ml_training/structural/notebooks/structural_training_v3.ipynb").write_text(
         structural_json, encoding="utf-8"
     )
-    (ROOT / "ml_training/semantic/notebooks/semantic_training_v2.ipynb").write_text(
+    (ROOT / "ml_training/semantic/notebooks/semantic_frozen_report.ipynb").write_text(
         semantic_json, encoding="utf-8"
     )
 
     for relative in (
+        "ML_START_HERE.md",
         "ml_training/__init__.py",
         "ml_training/README.md",
+        "ml_training/LATEST.md",
+        "ml_training/CURRENT_CHECKPOINT.md",
+        "ml_training/PERFORMANCE_VALIDATION.json",
+        "ml_training/deployment/model_registry.json",
+        "ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/README.md",
+        "ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/PRODUCTION_SMOKE.json",
+        "ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/candidate_stack_metrics.json",
+        "ml_training/CLEANUP_REVIEW_2026-08-30.md",
+        "ml_training/WORKSPACE_AUDIT_2026-08-30.md",
         "ml_training/COLOR_PIPELINE.md",
         "ml_training/EXECUTION_PLAN.md",
         "ml_training/RESULTS_INDEX.md",
@@ -698,12 +1066,27 @@ def build() -> None:
         "ml_training/datasets/README.md",
         "ml_training/datasets/download_verification.json",
         "ml_training/datasets/manifests/structural.template.csv",
+        "ml_training/datasets/manifests/structural_v3.template.csv",
         "ml_training/datasets/manifests/semantic.template.csv",
         "ml_training/structural/README.md",
+        "ml_training/structural/CAPTURE_GUIDE_V3.md",
+        "ml_training/structural/COLAB_RUN_GUIDE_V3.md",
+        "ml_training/structural/OFFLINE_CAPTURE_AND_IMPORT.md",
+        "ml_training/structural/STRUCTURAL_V3_EXECUTION_PLAN.md",
+        "ml_training/structural/STRUCTURAL_V3_LOCAL_RESULTS_2026-08-30.md",
+        "ml_training/structural/STRUCTURAL_V3_REAL_100X3_RESULTS_2026-08-31.md",
         "ml_training/semantic/README.md",
+        "ml_training/decision_layer/README.md",
+        "ml_training/decision_layer/DECISION_V3_LOCAL_RESULTS_2026-08-30.md",
         "backend/semantic/__init__.py",
         "backend/semantic/semantic_features.py",
         "backend/semantic/semantic_service.py",
+        "backend/structural/__init__.py",
+        "backend/structural/image_quality.py",
+        "backend/structural/structural_service.py",
+        "scripts/evaluate_candidate_stack.py",
+        "scripts/import_prepared_gallery_references.py",
+        "scripts/train_fusion.py",
         "data/runtime_captures/audit.json",
     ):
         _copy_file(relative)
@@ -711,7 +1094,16 @@ def build() -> None:
         "ml_training/structural/performance/structural-2026.02",
     )
     _copy_tree(
+        "ml_training/structural/performance/structural-2026.03-r01",
+    )
+    _copy_tree(
         "ml_training/semantic/performance/semantic-2026.02",
+    )
+    _copy_tree(
+        "ml_training/decision_layer/performance/decision-2026.03-r05",
+    )
+    _copy_tree(
+        "ml_training/structural/campaigns/structural-v3-real-2026.03-r01",
     )
     # Preserve existing results as read-only context; fresh notebook outputs use
     # the canonical performance directories above and replace them phase by phase.

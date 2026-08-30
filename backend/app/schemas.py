@@ -32,6 +32,11 @@ class BranchScores(BaseModel):
     structural_type: Optional[str] = Field(
         None, description="clean | adversarial | tampered"
     )
+    structural_quality_status: Optional[str] = Field(
+        None, description="usable | marginal | unusable for the unified candidate"
+    )
+    structural_quality_conditions: list[str] = Field(default_factory=list)
+    structural_rescan_reason: Optional[str] = None
     p_url: Optional[float] = Field(
         None, description="phishing probability from Method 1; null if not a URL"
     )

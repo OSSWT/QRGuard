@@ -1,13 +1,15 @@
 # QRGuard complete Google Colab ML package
 
-This folder is the self-contained hand-off for both trained QRGuard branches.
-It contains the canonical training/evaluation/export source, dataset contracts,
-licences and references, the current reference performance, and two Run-all
-Google Colab notebooks.
+This folder is the self-contained ML hand-off. Structural v3 is the current
+FYP2 candidate; Semantic `semantic-2026.02` is frozen and report-only. It
+contains the canonical source, dataset contracts, licences, references,
+check-pointable Structural notebook, frozen Semantic report notebook, and a
+frozen report of the latest Decision/Fusion candidate.
 
 The existing measured baseline/candidate numbers are summarised in
 `REFERENCE_RESULTS.md` and their original figures/JSON/CSV files are under
-`reference_performance/`. A fresh notebook run writes a new complete bundle to Drive.
+`reference_performance/`. Structural can create a new Drive run; the Semantic
+notebook displays its frozen evidence without retraining.
 
 ## Start here
 
@@ -18,10 +20,14 @@ The existing measured baseline/candidate numbers are summarised in
    - `MyDrive/QRGuard_ML_Data/structural/qr_codes_in_surfaces.zip`
 3. If available, copy labelled exact app captures to
    `MyDrive/QRGuard_ML_Data/structural/runtime_captures/`.
-4. Open `01_Structural_Training_Colab.ipynb`, select a T4 GPU, and Run all.
-5. Open `02_Semantic_Training_Colab.ipynb` and Run all. Kaggle may ask you to
-   authenticate/accept the Malicious URLs dataset terms on first acquisition.
-6. Complete outputs are copied to `MyDrive/QRGuard_ML_Results/`.
+4. Open `01_Structural_Training_Colab.ipynb`, choose `fresh`, `resume`,
+   `evaluate_only`, or `report_only`, select a T4 GPU when needed, and Run all.
+5. Open `02_Semantic_Frozen_Report_Colab.ipynb` to display the existing measured
+   Semantic evidence without retraining.
+6. Open `03_Decision_Frozen_Report_Colab.ipynb` to display the saved Fusion
+   metrics, per-cell table and ablation without retraining or promotion.
+7. Structural checkpoints and outputs are saved under
+   `MyDrive/QRGuard_ML/runs/structural-2026.03-r01/<RUN_ID>/`.
 
 Raw third-party datasets are not redistributed in this source package because
 they are large and governed by their source terms. Official URLs, DOI/licence,
@@ -32,10 +38,10 @@ the reproducibility material; the notebooks fetch or verify the actual data.
 
 A QR can decode successfully while the image-integrity model cannot safely use
 the camera frames. Decoding and Structural classification are different tasks.
-Synthetic camera augmentation cannot prove performance on QRGuard's exact crop
-pipeline, so Structural deployment remains `CANDIDATE ONLY` until the labelled
-app-camera gate passes. The notebook still produces all tables and figures and
-states exactly which gate is missing.
+Synthetic camera augmentation alone cannot prove performance on QRGuard's exact
+crop pipeline. The checked-in r01 candidate has now passed the labelled 100x3
+exact-app and paired gates and was later promoted into the local runtime. GitHub
+and external Render deployment remain separate, reviewed steps.
 
 ## Colour contract
 

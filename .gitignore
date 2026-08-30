@@ -36,6 +36,7 @@ ml_training/structural/runs/
 ml_training/semantic/runs/
 ml_training/decision_layer/runs/
 ml_training/deployment/candidates/
+ml_training/deployment/rollback/**/local_legacy/
 ml_training/deployment/approved/*.onnx
 ml_training/deployment/approved/*.tflite
 ml_training/.matplotlib_cache/

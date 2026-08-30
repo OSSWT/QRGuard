@@ -8,8 +8,8 @@ Four stages, in order:
                       produces p_fraud. Logistic weights are linear, so each feature's
                       contribution to the score can be read off directly and turned
                       into a user-facing reason.
-  3. Override rules-- safety net applied AFTER the score (blocklist hits, executable
-                      payload schemes). Rules can only raise risk, never lower it.
+  3. Policy guards -- safety rules and partial-evidence bounds applied AFTER the
+                      score (blocklist, executable payloads, branch abstention).
   4. Decision      -- risk_score = round(100 * p_fraud), then
                       Safe < SAFE_MAX <= Warning < BLOCKED_MIN <= Blocked.
 
@@ -22,6 +22,7 @@ are added.
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -29,13 +30,19 @@ from typing import Optional, Sequence
 
 import numpy as np
 
-from fusion.features import FEATURE_NAMES, N_FEATURES, BranchInputs, build_feature_vector
+from fusion.features import (
+    FEATURE_NAMES,
+    N_FEATURES,
+    BranchInputs,
+    build_feature_vector,
+)
 
 _DEFAULT_WEIGHTS = Path(__file__).resolve().parent / "fusion_weights.json"
 
 # Defaults; the trained weights file overrides these with tuned values.
 DEFAULT_SAFE_MAX = 30
 DEFAULT_BLOCKED_MIN = 70
+SEMANTIC_ONLY_BLOCK_MIN = 0.70
 
 # Human-readable reason text per feature. Keys match FEATURE_NAMES entries.
 REASON_TEXT = {
@@ -76,13 +83,13 @@ class WeightsNotFound(FileNotFoundError):
 
 @dataclass(frozen=True)
 class FusionResult:
-    risk_score: int                     # 0-100
-    verdict: str                        # "safe" | "warning" | "blocked"
+    risk_score: int  # 0-100
+    verdict: str  # "safe" | "warning" | "blocked"
     p_fraud: float
     reasons: list[str] = field(default_factory=list)
     contributions: dict[str, float] = field(default_factory=dict)
     overrides: list[str] = field(default_factory=list)
-    partial_analysis: bool = False      # a branch abstained
+    partial_analysis: bool = False  # a branch abstained
 
 
 class FusionEngine:
@@ -157,6 +164,22 @@ class FusionEngine:
                     overrides.append(f"{flag}:policy_floor")
                     score = floor
 
+        # A missing/inconclusive image branch must add no synthetic risk. The
+        # remaining Semantic branch can still make a decisive call: calibrated
+        # high-confidence phishing evidence is Blocked, while a moderate score
+        # alone is capped at Warning unless a hard fact already forced Blocked.
+        semantic_only = inputs.p_structural is None and inputs.p_url is not None
+        hard_blocked = blocklist_hit or any(
+            flag in inputs.rule_flags for flag in HARD_OVERRIDE_FLAGS
+        )
+        if semantic_only and float(inputs.p_url) >= SEMANTIC_ONLY_BLOCK_MIN:
+            if score < self.blocked_min:
+                overrides.append("semantic_only_high_confidence:policy_floor")
+                score = self.blocked_min
+        elif semantic_only and score >= self.blocked_min and not hard_blocked:
+            overrides.append("semantic_only_moderate:policy_cap")
+            score = self.blocked_min - 1
+
         verdict = self.tier(score)
         partial = inputs.p_structural is None or inputs.p_url is None
 
@@ -184,7 +207,9 @@ class FusionEngine:
         return "blocked"
 
     @staticmethod
-    def _reasons(contributions: dict[str, float], overrides: Sequence[str]) -> list[str]:
+    def _reasons(
+        contributions: dict[str, float], overrides: Sequence[str]
+    ) -> list[str]:
         """Top risk drivers, strongest first, as user-facing sentences."""
         reasons: list[str] = []
         if "blocklist" in overrides:
@@ -199,4 +224,5 @@ class FusionEngine:
 @lru_cache(maxsize=1)
 def load_engine(weights_path: Optional[str] = None) -> FusionEngine:
     """Process-wide cached engine. FastAPI calls this once at startup."""
-    return FusionEngine(weights_path)
+    selected = weights_path or os.getenv("QRGUARD_FUSION_WEIGHTS")
+    return FusionEngine(selected)

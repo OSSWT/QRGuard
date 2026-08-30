@@ -1,0 +1,37 @@
+{
+  "display_name": "Risk Decision Layer recalibration",
+  "experiment_version": "decision-2026.03-r01",
+  "status": "decision_gates_passed_candidate_only_blocked_on_structural_real_capture",
+  "structural_dependency": "structural-2026.03-r01",
+  "semantic_dependency": "semantic-2026.02_frozen",
+  "training_dataset": "QRGuard-Mix-v2",
+  "seed": 42,
+  "tiers": [
+    "safe",
+    "warning",
+    "blocked"
+  ],
+  "quality_abstention_policy": "p_structural_is_null_and_structural_present_is_zero",
+  "target_blocked_precision_min": 0.95,
+  "target_safe_false_negative_rate_max": 0.02,
+  "paired_gallery_camera_verdict_agreement_min": 0.95,
+  "latest_local_run": {
+    "date": "2026-08-30",
+    "result": "passed_not_promoted",
+    "n_train": 1260,
+    "n_test": 540,
+    "roc_auc": 0.9818209876543211,
+    "blocked_precision": 0.9941690962099126,
+    "safe_tier_fnr": 0.019444444444444445,
+    "exact_tier_accuracy": 0.8777777777777778,
+    "policy_acceptance_rate": 0.975925925925926,
+    "safe_max": 14,
+    "blocked_min": 55
+  },
+  "promotion": {
+    "automatic": false,
+    "requires_explicit_promote_flag": true,
+    "requires_structural_deployment_gates": true,
+    "requires_semantic_regression": true
+  }
+}

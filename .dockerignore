@@ -12,16 +12,6 @@
 !training/artifacts/semantic/
 !training/artifacts/semantic/model_metadata.json
 !training/artifacts/semantic/semantic_model.joblib
-!ml_training/
-!ml_training/structural/
-!ml_training/structural/runs/
-!ml_training/structural/runs/structural-2026.02/
-!ml_training/structural/runs/structural-2026.02/artifacts/
-!ml_training/structural/runs/structural-2026.02/artifacts/deploy_choice.json
-!ml_training/structural/runs/structural-2026.02/artifacts/model_metadata.json
-!ml_training/structural/runs/structural-2026.02/artifacts/structural_fp32.onnx
-!ml_training/structural/runs/structural-2026.02/artifacts/temperature.json
-
 # Do not bake local validation and interpreter artefacts into the runtime image.
 backend/tests/
 backend/tests/**

@@ -24,11 +24,16 @@ sys.path.insert(0, str(ROOT / "backend"))
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # noqa: E402, I001
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
+from semantic.semantic_features import (  # noqa: E402
+    FEATURE_CONFIG,
+    enrich_url,
+    make_vectorizer,
+)
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import (
     accuracy_score,
@@ -42,8 +47,6 @@ from sklearn.metrics import (
     roc_curve,
 )
 
-
-from semantic.semantic_features import FEATURE_CONFIG, enrich_url, make_vectorizer  # noqa: E402
 from ml_training.semantic.src.contract import (  # noqa: E402
     acceptance_cases,
     add_hard_training_examples,
@@ -68,8 +71,9 @@ EPOCHS = 4
 
 
 def _registered_domain(url: str) -> str:
-    from semantic.semantic_features import registered_domain
     from urllib.parse import urlsplit
+
+    from semantic.semantic_features import registered_domain
 
     candidate = str(url) if "://" in str(url) else "http://" + str(url)
     try:
@@ -389,6 +393,21 @@ def _write_threshold_analysis(labels: np.ndarray, probabilities: np.ndarray) -> 
     pd.DataFrame(rows).to_csv(PERFORMANCE / "threshold_analysis.csv", index=False)
 
 
+def report_thresholds_only() -> None:
+    """Regenerate the missing threshold table without fitting or changing a model."""
+    data, _ = _load_data()
+    test = _build_splits(data)["test"]
+    from semantic.semantic_service import SemanticAnalyzer
+
+    analyzer = SemanticAnalyzer(ARTIFACTS)
+    probabilities = np.asarray(
+        [result.p_url for result in analyzer.predict_batch(test.url.tolist())]
+    )
+    _write_threshold_analysis(test.label.to_numpy(dtype=int), probabilities)
+    output = PERFORMANCE / "threshold_analysis.csv"
+    print(f"Frozen Semantic threshold report -> {output}")
+
+
 def main() -> None:
     random.seed(SEED)
     np.random.seed(SEED)
@@ -643,5 +662,13 @@ Deployment status: **{"PASSED" if not gate_failures else "REJECTED"}**
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.parse_args()
-    main()
+    parser.add_argument(
+        "--report-thresholds-only",
+        action="store_true",
+        help="regenerate threshold_analysis.csv from frozen artifacts; do not train",
+    )
+    options = parser.parse_args()
+    if options.report_thresholds_only:
+        report_thresholds_only()
+    else:
+        main()

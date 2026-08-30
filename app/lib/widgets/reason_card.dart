@@ -367,7 +367,8 @@ class BranchEvidence extends StatelessWidget {
         AnalysisStatus.completed => branch.structuralType ?? 'Analysed',
         AnalysisStatus.notApplicable => 'Not applicable',
         AnalysisStatus.unavailable => 'Unavailable',
-        AnalysisStatus.inconclusive => 'Image check not used',
+        AnalysisStatus.inconclusive =>
+          branch.structuralRescanReason ?? 'Rescan required',
       };
 
   String _semanticDetail(BranchScores branch, String payloadType) =>

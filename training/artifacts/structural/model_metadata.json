@@ -1,14 +1,9 @@
 {
-  "display_name": "Structural Training deployed baseline",
-  "version": "structural-run5",
-  "architecture": "EfficientNet-B0 3-class fine-tuning",
-  "artifact_sha256": "031ff0c355674bf77e08311b5c245a5d58dfb5de15a5c95c2511ca29539e997a",
-  "deployment_scope": "gallery plus camera multi-frame abstention policy",
-  "research_gates_passed": false,
-  "deployment_gates_passed": false,
-  "gate_failures": [
-    "camera clean FPR 0.1908 > 0.0500",
-    "adversarial recall 0.7547 < 0.8000"
-  ],
-  "replacement_candidate": "ml_training/structural/runs/structural-2026.02"
+  "display_name": "Structural Training",
+  "version": "structural-2026.03-r01",
+  "architecture": "ImageNet-pretrained ResNet-18; 3-class fine-tuning",
+  "artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+  "research_gates_passed": true,
+  "deployment_gates_passed": true,
+  "deployment_gate_failures": []
 }

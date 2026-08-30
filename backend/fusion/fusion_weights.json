@@ -20,40 +20,39 @@
     "rule_open_wifi_network"
   ],
   "coef": [
-    6.83298126013594,
-    -0.3135270672250001,
-    6.161409984771526,
-    -0.793980217126804,
+    6.918175652759276,
+    -1.5902459120936963,
+    6.041423263879789,
+    -0.7718368311777578,
     0.0,
     0.0,
-    0.8406084168978233,
-    6.549227341532169,
-    0.4106854503996005,
+    0.9045528106588513,
+    7.01310195871643,
+    0.4344739754953919,
     0.0,
     0.0,
-    5.472964079105049,
-    0.21358843727149,
-    0.8411681241115878,
+    6.3406729197231035,
+    0.5913824542750892,
+    0.6754885188229526,
     0.0,
+    0.9636027762960975,
     0.0,
-    0.0,
-    2.87494875575982
+    2.7022303322002688
   ],
-  "intercept": -3.202381621558405,
-  "safe_max": 45,
-  "blocked_min": 55,
+  "intercept": -3.1492232909483358,
+  "safe_max": 26,
+  "blocked_min": 76,
   "metadata": {
-    "version": "decision-2026.02",
+    "version": "decision-2026.03-r05",
     "trained_on": "QRGuard-Mix-v2",
     "model_fingerprint": {
       "structural": {
-        "temperature": 1.7350759506225586,
+        "temperature": 0.4637561909457002,
         "onnx_bytes": {
-          "structural_fp32.onnx": 16035559,
-          "structural_int8.onnx": 4360735
+          "structural_fp32.onnx": 44702737
         },
         "joblib_sha256": {},
-        "metadata_sha256": "2d110810bb859abb"
+        "metadata_sha256": "e23b45ceab0080b4"
       },
       "semantic": {
         "temperature": null,
@@ -71,12 +70,12 @@
     },
     "n_train": 1260,
     "n_test": 540,
-    "roc_auc_test": 0.9898919753086419,
-    "blocked_precision": 0.994269340974212,
-    "safe_fnr": 0.013888888888888888,
+    "roc_auc_test": 0.9819907407407407,
+    "blocked_precision": 0.9912280701754386,
+    "safe_fnr": 0.019444444444444445,
     "per_cell": {
       "camera_clean_consensus_benign_url": {
-        "mean_score": 4.1333,
+        "mean_score": 6.6667,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -85,7 +84,7 @@
         "blocked_rate": 0.0
       },
       "camera_clean_consensus_executable_uri": {
-        "mean_score": 95.0,
+        "mean_score": 96.9333,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -94,49 +93,49 @@
         "blocked_rate": 1.0
       },
       "camera_clean_consensus_phishing_url": {
-        "mean_score": 74.3333,
+        "mean_score": 76.4,
         "n": 15,
-        "exact_tier_accuracy": 0.7333,
-        "acceptance_rate": 0.8667,
-        "safe_rate": 0.1333,
-        "warning_rate": 0.1333,
-        "blocked_rate": 0.7333
+        "exact_tier_accuracy": 0.6667,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.0667,
+        "warning_rate": 0.2667,
+        "blocked_rate": 0.6667
       },
       "camera_clean_consensus_plain_text": {
-        "mean_score": 3.0,
+        "mean_score": 16.2667,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
+        "exact_tier_accuracy": 0.7333,
         "acceptance_rate": 1.0,
-        "safe_rate": 1.0,
-        "warning_rate": 0.0,
+        "safe_rate": 0.7333,
+        "warning_rate": 0.2667,
         "blocked_rate": 0.0
       },
       "camera_clean_consensus_wifi_open": {
-        "mean_score": 45.0,
+        "mean_score": 38.3333,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
-        "acceptance_rate": 1.0,
+        "exact_tier_accuracy": 0.9333,
+        "acceptance_rate": 0.9333,
         "safe_rate": 0.0,
-        "warning_rate": 1.0,
-        "blocked_rate": 0.0
+        "warning_rate": 0.9333,
+        "blocked_rate": 0.0667
       },
       "camera_clean_consensus_wifi_secure": {
-        "mean_score": 3.0,
+        "mean_score": 5.3333,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
+        "exact_tier_accuracy": 0.9333,
         "acceptance_rate": 1.0,
-        "safe_rate": 1.0,
-        "warning_rate": 0.0,
+        "safe_rate": 0.9333,
+        "warning_rate": 0.0667,
         "blocked_rate": 0.0
       },
       "camera_tampered_consensus_benign_url": {
-        "mean_score": 95.9333,
+        "mean_score": 86.5333,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
-        "acceptance_rate": 1.0,
-        "safe_rate": 0.0,
+        "exact_tier_accuracy": 0.9333,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.0667,
         "warning_rate": 0.0,
-        "blocked_rate": 1.0
+        "blocked_rate": 0.9333
       },
       "camera_tampered_consensus_executable_uri": {
         "mean_score": 100.0,
@@ -148,7 +147,7 @@
         "blocked_rate": 1.0
       },
       "camera_tampered_consensus_phishing_url": {
-        "mean_score": 99.5333,
+        "mean_score": 98.8667,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -157,16 +156,16 @@
         "blocked_rate": 1.0
       },
       "camera_tampered_consensus_plain_text": {
-        "mean_score": 95.0,
+        "mean_score": 82.2667,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
-        "acceptance_rate": 1.0,
-        "safe_rate": 0.0,
-        "warning_rate": 0.0,
-        "blocked_rate": 1.0
+        "exact_tier_accuracy": 0.8667,
+        "acceptance_rate": 0.8667,
+        "safe_rate": 0.0667,
+        "warning_rate": 0.0667,
+        "blocked_rate": 0.8667
       },
       "camera_tampered_consensus_wifi_open": {
-        "mean_score": 100.0,
+        "mean_score": 99.0,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -175,16 +174,16 @@
         "blocked_rate": 1.0
       },
       "camera_tampered_consensus_wifi_secure": {
-        "mean_score": 95.0,
+        "mean_score": 84.1333,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
-        "acceptance_rate": 1.0,
-        "safe_rate": 0.0,
+        "exact_tier_accuracy": 0.9333,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.0667,
         "warning_rate": 0.0,
-        "blocked_rate": 1.0
+        "blocked_rate": 0.9333
       },
       "camera_uncertain_abstain_benign_url": {
-        "mean_score": 36.7333,
+        "mean_score": 25.7333,
         "n": 15,
         "exact_tier_accuracy": 0.2667,
         "acceptance_rate": 0.9333,
@@ -193,7 +192,7 @@
         "blocked_rate": 0.0667
       },
       "camera_uncertain_abstain_executable_uri": {
-        "mean_score": 97.0,
+        "mean_score": 98.0,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -202,7 +201,7 @@
         "blocked_rate": 1.0
       },
       "camera_uncertain_abstain_phishing_url": {
-        "mean_score": 75.6,
+        "mean_score": 75.4667,
         "n": 15,
         "exact_tier_accuracy": 0.6667,
         "acceptance_rate": 1.0,
@@ -211,7 +210,7 @@
         "blocked_rate": 0.6667
       },
       "camera_uncertain_abstain_plain_text": {
-        "mean_score": 45.0,
+        "mean_score": 26.0,
         "n": 15,
         "exact_tier_accuracy": 0.0,
         "acceptance_rate": 1.0,
@@ -220,7 +219,7 @@
         "blocked_rate": 0.0
       },
       "camera_uncertain_abstain_wifi_open": {
-        "mean_score": 45.0,
+        "mean_score": 39.0,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -229,7 +228,7 @@
         "blocked_rate": 0.0
       },
       "camera_uncertain_abstain_wifi_secure": {
-        "mean_score": 45.0,
+        "mean_score": 26.0,
         "n": 15,
         "exact_tier_accuracy": 0.0,
         "acceptance_rate": 1.0,
@@ -238,7 +237,7 @@
         "blocked_rate": 0.0
       },
       "gallery_adversarial_benign_url": {
-        "mean_score": 95.5333,
+        "mean_score": 89.1333,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -247,7 +246,7 @@
         "blocked_rate": 1.0
       },
       "gallery_adversarial_executable_uri": {
-        "mean_score": 100.0,
+        "mean_score": 99.9333,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -256,7 +255,7 @@
         "blocked_rate": 1.0
       },
       "gallery_adversarial_phishing_url": {
-        "mean_score": 99.4667,
+        "mean_score": 98.8667,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -265,7 +264,7 @@
         "blocked_rate": 1.0
       },
       "gallery_adversarial_plain_text": {
-        "mean_score": 95.8,
+        "mean_score": 89.8667,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -274,7 +273,7 @@
         "blocked_rate": 1.0
       },
       "gallery_adversarial_wifi_open": {
-        "mean_score": 100.0,
+        "mean_score": 99.0,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -283,7 +282,7 @@
         "blocked_rate": 1.0
       },
       "gallery_adversarial_wifi_secure": {
-        "mean_score": 95.6,
+        "mean_score": 88.4667,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -292,16 +291,16 @@
         "blocked_rate": 1.0
       },
       "gallery_clean_benign_url": {
-        "mean_score": 4.1333,
+        "mean_score": 17.4,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
-        "acceptance_rate": 1.0,
-        "safe_rate": 1.0,
-        "warning_rate": 0.0,
-        "blocked_rate": 0.0
+        "exact_tier_accuracy": 0.8667,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.8667,
+        "warning_rate": 0.0667,
+        "blocked_rate": 0.0667
       },
       "gallery_clean_executable_uri": {
-        "mean_score": 96.0,
+        "mean_score": 96.2,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -310,49 +309,49 @@
         "blocked_rate": 1.0
       },
       "gallery_clean_phishing_url": {
-        "mean_score": 81.4,
+        "mean_score": 77.5333,
         "n": 15,
         "exact_tier_accuracy": 0.8,
-        "acceptance_rate": 0.8667,
-        "safe_rate": 0.1333,
-        "warning_rate": 0.0667,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.0667,
+        "warning_rate": 0.1333,
         "blocked_rate": 0.8
       },
       "gallery_clean_plain_text": {
-        "mean_score": 3.3333,
+        "mean_score": 8.2667,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
+        "exact_tier_accuracy": 0.9333,
         "acceptance_rate": 1.0,
-        "safe_rate": 1.0,
-        "warning_rate": 0.0,
+        "safe_rate": 0.9333,
+        "warning_rate": 0.0667,
         "blocked_rate": 0.0
       },
       "gallery_clean_wifi_open": {
-        "mean_score": 48.5333,
-        "n": 15,
-        "exact_tier_accuracy": 0.9333,
-        "acceptance_rate": 0.9333,
-        "safe_rate": 0.0,
-        "warning_rate": 0.9333,
-        "blocked_rate": 0.0667
-      },
-      "gallery_clean_wifi_secure": {
-        "mean_score": 3.4667,
+        "mean_score": 45.0,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
-        "safe_rate": 1.0,
-        "warning_rate": 0.0,
+        "safe_rate": 0.0,
+        "warning_rate": 1.0,
+        "blocked_rate": 0.0
+      },
+      "gallery_clean_wifi_secure": {
+        "mean_score": 4.5333,
+        "n": 15,
+        "exact_tier_accuracy": 0.9333,
+        "acceptance_rate": 1.0,
+        "safe_rate": 0.9333,
+        "warning_rate": 0.0667,
         "blocked_rate": 0.0
       },
       "gallery_tampered_benign_url": {
-        "mean_score": 97.4,
+        "mean_score": 86.8667,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
-        "acceptance_rate": 1.0,
-        "safe_rate": 0.0,
+        "exact_tier_accuracy": 0.9333,
+        "acceptance_rate": 0.9333,
+        "safe_rate": 0.0667,
         "warning_rate": 0.0,
-        "blocked_rate": 1.0
+        "blocked_rate": 0.9333
       },
       "gallery_tampered_executable_uri": {
         "mean_score": 100.0,
@@ -364,7 +363,7 @@
         "blocked_rate": 1.0
       },
       "gallery_tampered_phishing_url": {
-        "mean_score": 99.9333,
+        "mean_score": 99.6667,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -373,7 +372,7 @@
         "blocked_rate": 1.0
       },
       "gallery_tampered_plain_text": {
-        "mean_score": 89.8667,
+        "mean_score": 84.1333,
         "n": 15,
         "exact_tier_accuracy": 0.9333,
         "acceptance_rate": 0.9333,
@@ -382,7 +381,7 @@
         "blocked_rate": 0.9333
       },
       "gallery_tampered_wifi_open": {
-        "mean_score": 100.0,
+        "mean_score": 98.9333,
         "n": 15,
         "exact_tier_accuracy": 1.0,
         "acceptance_rate": 1.0,
@@ -391,13 +390,13 @@
         "blocked_rate": 1.0
       },
       "gallery_tampered_wifi_secure": {
-        "mean_score": 96.0667,
+        "mean_score": 82.6667,
         "n": 15,
-        "exact_tier_accuracy": 1.0,
-        "acceptance_rate": 1.0,
+        "exact_tier_accuracy": 0.8667,
+        "acceptance_rate": 0.8667,
         "safe_rate": 0.0,
-        "warning_rate": 0.0,
-        "blocked_rate": 1.0
+        "warning_rate": 0.1333,
+        "blocked_rate": 0.8667
       }
     },
     "per_cell_gate_policy": {
@@ -410,16 +409,16 @@
     "deployment_gate_failures": [],
     "ablation": {
       "structural_only": {
-        "roc_auc": 0.8713117283950615,
-        "accuracy": 0.8296296296296296
+        "roc_auc": 0.8530555555555557,
+        "accuracy": 0.8037037037037037
       },
       "semantic_only": {
         "roc_auc": 0.7426003086419751,
         "accuracy": 0.6574074074074074
       },
       "fused": {
-        "roc_auc": 0.9968518518518519,
-        "accuracy": 0.975925925925926
+        "roc_auc": 0.9857407407407407,
+        "accuracy": 0.9648148148148148
       }
     },
     "class_weight": "balanced",
@@ -432,7 +431,6 @@
     ],
     "zero_clamped_by_constraint": [
       "rule_non_https",
-      "rule_long_url",
       "rule_brand_in_subdomain"
     ],
     "llm_features_trained": false,

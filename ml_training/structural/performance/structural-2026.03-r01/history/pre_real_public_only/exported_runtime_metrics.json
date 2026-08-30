@@ -1,0 +1,13 @@
+{
+  "overall": {
+    "rows": 0,
+    "usable_rows": 0,
+    "abstention_rate": null,
+    "accuracy_on_usable": null,
+    "clean_false_positive_rate": null,
+    "adversarial_recall": null,
+    "tampered_recall": null
+  },
+  "per_source": {},
+  "paired_gallery_camera": null
+}
