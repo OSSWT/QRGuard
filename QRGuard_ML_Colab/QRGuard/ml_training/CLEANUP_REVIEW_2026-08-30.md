@@ -40,8 +40,9 @@ SHA-256:
 
 ## Removed after verification
 
-- 15 pytest temporary directories, all regenerable (12 from the main cleanup
-  pass and 3 created by the final promotion regression runs).
+- 16 pytest temporary directories, all regenerable (12 from the main cleanup
+  pass, 3 created by the final promotion regressions and 1 older ACL-locked
+  `pytest-training-20260830-0404` directory found during the deployment audit).
 - `.tmp/structural_100x3_import` (118,101,453 bytes), after verifying the final
   Master SHA-256, strict 361-session audit and 361-row canonical manifest.
 
