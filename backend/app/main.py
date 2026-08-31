@@ -287,7 +287,10 @@ def _dump_if_requested(images, payload: str | None, image_source: str, result) -
             "image_source": image_source,
             "quality_condition": quality_condition,
             "quality_severity": quality_severity,
-            "selected_frame_index": 0,
+            "selected_frame_index": 0 if len(images) == 1 else None,
+            "frame_aggregation": branch.structural_consensus,
+            "frames_received": branch.structural_frames_received,
+            "frames_analyzed": branch.structural_frames_analyzed,
             "device_model": _capture_value(
                 context, "device_model", "QRGUARD_CAPTURE_DEVICE", "not_recorded"
             )[:80],
@@ -408,15 +411,26 @@ async def scan(
     image: UploadFile | None = File(None, description="QR region crop (PNG/JPEG)"),
     images: list[UploadFile] | None = File(
         None,
-        description="Legacy live-camera crops; only the first usable crop is analysed",
+        description="Additional live-camera crops; Camera uses up to five-frame consensus",
     ),
     image_source: str = Form(
         "unknown", description="Image acquisition source: camera, gallery, or unknown"
+    ),
+    camera_evidence_policy: str | None = Form(
+        None,
+        description="temporal_consensus_v1 requires at least three distinct Camera crops",
     ),
 ) -> ScanResponse:
     """Full scan: image goes to the structural branch, payload to the semantic branch."""
     uploads = ([image] if image is not None else []) + list(images or [])
     image_required = image_source in {"camera", "gallery"}
+    if camera_evidence_policy not in {None, "", "temporal_consensus_v1"}:
+        raise HTTPException(status_code=422, detail="unsupported camera evidence policy")
+    if camera_evidence_policy and image_source != "camera":
+        raise HTTPException(
+            status_code=422,
+            detail="camera evidence policy is valid only for camera scans",
+        )
     if not (payload or "").strip() and not uploads:
         raise HTTPException(
             status_code=422, detail="provide a payload, an image, or both"
@@ -494,16 +508,17 @@ async def scan(
         pil_images = [gallery_crop]
         gallery_payload_decoded = True
 
-    # Camera and gallery share one Structural contract. New clients upload only
-    # one geometry-selected crop; for legacy multi-frame clients, preserve order
-    # and analyse the first usable crop rather than applying hidden consensus.
-    analysed_images = pil_images[:1]
+    # Gallery remains a deterministic single-image path. Camera clients may send
+    # a bounded temporal burst; the pipeline reports its explicit consensus and
+    # abstains when fewer than three crops contain deployment-range detail.
+    analysed_images = pil_images[:1] if image_source == "gallery" else pil_images
     result = run_scan(
         payload,
         image_source=image_source,
         images=analysed_images,
         image_expected=bool(uploads),
         payload_was_decoded=gallery_payload_decoded,
+        require_camera_consensus=camera_evidence_policy == "temporal_consensus_v1",
     )
     _dump_if_requested(analysed_images, payload, image_source, result)
     branch = result.branch_scores

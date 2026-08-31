@@ -403,6 +403,15 @@ class _ResultScreenState extends State<ResultScreen> {
             pStructural: _scan.branchScores.pStructural,
             pStructuralRaw: _scan.branchScores.pStructuralRaw,
             structuralType: _scan.branchScores.structuralType,
+            structuralQualityStatus: _scan.branchScores.structuralQualityStatus,
+            structuralQualityConditions:
+                _scan.branchScores.structuralQualityConditions,
+            structuralRescanReason: _scan.branchScores.structuralRescanReason,
+            structuralFramesReceived:
+                _scan.branchScores.structuralFramesReceived,
+            structuralFramesAnalyzed:
+                _scan.branchScores.structuralFramesAnalyzed,
+            structuralConsensus: _scan.branchScores.structuralConsensus,
             pUrl: _scan.branchScores.pUrl,
             llmScore: result.llmAvailable ? result.llmConfidence : null,
             domainUnknown: _scan.branchScores.domainUnknown,

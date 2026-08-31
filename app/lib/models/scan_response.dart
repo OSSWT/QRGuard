@@ -44,6 +44,9 @@ class BranchScores {
   final String? structuralQualityStatus; // usable | marginal | unusable
   final List<String> structuralQualityConditions;
   final String? structuralRescanReason;
+  final int structuralFramesReceived;
+  final int structuralFramesAnalyzed;
+  final String? structuralConsensus;
   final double? pUrl;
   final double? llmScore;
   final double? domainUnknown;
@@ -58,6 +61,9 @@ class BranchScores {
     this.structuralQualityStatus,
     this.structuralQualityConditions = const [],
     this.structuralRescanReason,
+    this.structuralFramesReceived = 0,
+    this.structuralFramesAnalyzed = 0,
+    this.structuralConsensus,
     this.pUrl,
     this.llmScore,
     this.domainUnknown,
@@ -79,6 +85,11 @@ class BranchScores {
         json['structural_quality_conditions'],
       ),
       structuralRescanReason: json['structural_rescan_reason'] as String?,
+      structuralFramesReceived:
+          (json['structural_frames_received'] as num?)?.round() ?? 0,
+      structuralFramesAnalyzed:
+          (json['structural_frames_analyzed'] as num?)?.round() ?? 0,
+      structuralConsensus: json['structural_consensus'] as String?,
       pUrl: pUrl,
       llmScore: _toDouble(json['llm_score']),
       domainUnknown: _toDouble(json['domain_unknown']),

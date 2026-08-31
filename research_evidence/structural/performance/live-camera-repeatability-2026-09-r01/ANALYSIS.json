@@ -1,0 +1,240 @@
+{
+  "frame_metrics": {
+    "adversarial_block_rate": 0.973333,
+    "adversarial_false_safe_rate": 0.026667,
+    "clean_false_block_rate": 0.133333,
+    "clean_non_safe_rate": 0.933333,
+    "quality_abstention_rate": 0.4
+  },
+  "integrity": {
+    "decoded_payload_hash_matches": 0,
+    "duplicate_crop_instances": 0,
+    "globally_unique_crops": 150
+  },
+  "matrix": [
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "near",
+      "frames": 25,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999586343765259,
+      "p_structural_median": 0.9867100715637207,
+      "p_structural_min": 0.052675068378448486,
+      "qr_coverage_median": 0.0219091796875,
+      "quality": {
+        "marginal": 20,
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 4,
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 5
+      },
+      "session_median_verdicts": {
+        "blocked": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "adversarial": 23,
+        "clean": 2
+      },
+      "verdicts": {
+        "blocked": 23,
+        "safe": 2
+      }
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "medium",
+      "frames": 25,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9998775124549866,
+      "p_structural_median": 0.9963010549545288,
+      "p_structural_min": 0.766019344329834,
+      "qr_coverage_median": 0.009403076171875,
+      "quality": {
+        "marginal": 24,
+        "usable": 1
+      },
+      "session_first_verdicts": {
+        "blocked": 5
+      },
+      "session_majority_verdicts": {
+        "blocked": 5
+      },
+      "session_median_verdicts": {
+        "blocked": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "adversarial": 25
+      },
+      "verdicts": {
+        "blocked": 25
+      }
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "far",
+      "frames": 25,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9983696341514587,
+      "p_structural_median": 0.9689728617668152,
+      "p_structural_min": 0.6334507465362549,
+      "qr_coverage_median": 0.007405598958333333,
+      "quality": {
+        "marginal": 19,
+        "usable": 6
+      },
+      "session_first_verdicts": {
+        "blocked": 5
+      },
+      "session_majority_verdicts": {
+        "blocked": 5
+      },
+      "session_median_verdicts": {
+        "blocked": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "adversarial": 25
+      },
+      "verdicts": {
+        "blocked": 25
+      }
+    },
+    {
+      "case_id": "STR-CLN-ANGLE",
+      "decoded_hash_matches": 0,
+      "distance": "near",
+      "frames": 25,
+      "ground_truth": "clean",
+      "p_structural_max": null,
+      "p_structural_median": null,
+      "p_structural_min": null,
+      "qr_coverage_median": 0.04267415364583333,
+      "quality": {
+        "unusable": 25
+      },
+      "session_first_verdicts": {
+        "warning": 5
+      },
+      "session_majority_verdicts": {
+        "warning": 5
+      },
+      "session_median_verdicts": {
+        "safe": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 25
+      },
+      "verdicts": {
+        "warning": 25
+      }
+    },
+    {
+      "case_id": "STR-CLN-ANGLE",
+      "decoded_hash_matches": 0,
+      "distance": "medium",
+      "frames": 25,
+      "ground_truth": "clean",
+      "p_structural_max": 0.8860253095626831,
+      "p_structural_median": 0.7085375189781189,
+      "p_structural_min": 0.6974749565124512,
+      "qr_coverage_median": 0.0181884765625,
+      "quality": {
+        "marginal": 5,
+        "unusable": 20
+      },
+      "session_first_verdicts": {
+        "blocked": 1,
+        "warning": 4
+      },
+      "session_majority_verdicts": {
+        "blocked": 1,
+        "warning": 4
+      },
+      "session_median_verdicts": {
+        "blocked": 1,
+        "safe": 4
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 20,
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5,
+        "warning": 20
+      }
+    },
+    {
+      "case_id": "STR-CLN-ANGLE",
+      "decoded_hash_matches": 0,
+      "distance": "far",
+      "frames": 25,
+      "ground_truth": "clean",
+      "p_structural_max": 0.9981803894042969,
+      "p_structural_median": 0.5219478905200958,
+      "p_structural_min": 0.19796979427337646,
+      "qr_coverage_median": 0.008125813802083333,
+      "quality": {
+        "marginal": 10,
+        "unusable": 15
+      },
+      "session_first_verdicts": {
+        "blocked": 1,
+        "safe": 1,
+        "warning": 3
+      },
+      "session_majority_verdicts": {
+        "blocked": 1,
+        "safe": 1,
+        "warning": 3
+      },
+      "session_median_verdicts": {
+        "blocked": 1,
+        "safe": 4
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 15,
+        "adversarial": 5,
+        "clean": 5
+      },
+      "verdicts": {
+        "blocked": 5,
+        "safe": 5,
+        "warning": 15
+      }
+    }
+  ],
+  "model": {
+    "artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+    "path": "training/artifacts/structural",
+    "version": "structural-2026.03-r01"
+  },
+  "schema_version": 1,
+  "session_metrics": {
+    "majority_adversarial_false_safe_rate": 0.0,
+    "majority_clean_false_block_rate": 0.133333,
+    "majority_structural_ground_truth_detection_rate": 0.533333,
+    "median_adversarial_false_safe_rate": 0.0,
+    "median_clean_false_block_rate": 0.133333,
+    "single_first_adversarial_false_safe_rate": 0.066667,
+    "single_first_clean_false_block_rate": 0.133333
+  },
+  "source": {
+    "filename": "QRGuard_Diagnostic_live_camera_repeatability_2026_09_r01_20260831T172854Z.zip",
+    "frame_count": 150,
+    "raw_payload_stored": false,
+    "session_count": 30,
+    "sha256": "859938e1eb44012cb268f25780cca25734955ba76facb66978f6d0e4ade6b3a3"
+  }
+}

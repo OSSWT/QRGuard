@@ -52,14 +52,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _history = HistoryService();
   final _picker = ImagePicker();
   final _stability = LiveQrStabilityGate(
-    stableFor: Duration.zero,
-    minimumSightings: 1,
-    maximumGap: const Duration(milliseconds: 700),
+    stableFor: const Duration(milliseconds: 600),
+    minimumSightings: 5,
+    maximumGap: const Duration(milliseconds: 900),
   );
 
   ApiClient? _api;
   _Candidate? _candidate;
   final List<_Candidate> _liveCandidates = [];
+  bool _capturingWebFrame = false;
   bool _navigating = false;
   bool _confirming = false;
   String? _dismissedPayload;
@@ -73,9 +74,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   static const _autoPromptDelay = Duration(milliseconds: 40);
   static const _candidateLifetime = Duration(milliseconds: 1800);
-  // One ML Kit-validated frame is authoritative. Retaining more full JPEGs adds
-  // memory/latency without making a decoded payload more trustworthy.
-  static const _maximumLiveCandidates = 1;
+  // Five temporally distinct crops allow the backend to use a declared median /
+  // majority consensus instead of letting one autofocus or exposure frame own
+  // the Structural verdict.
+  static const _maximumLiveCandidates = 5;
+  static const _minimumStructuralCropSide = 256.0;
 
   @override
   void initState() {
@@ -150,7 +153,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final barcode = readable.single;
     final payload = barcode.rawValue!.trim();
     final seenAt = DateTime.now();
-    final observation = _stability.observe(payload, seenAt);
     final nextCandidate = _Candidate(
       payload: payload,
       frame: capture.image,
@@ -158,6 +160,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       frameSize: capture.size,
       imageSource: 'camera',
     );
+    if (nextCandidate.hasUsableGeometry &&
+        nextCandidate.estimatedCropSide < _minimumStructuralCropSide) {
+      _autoPromptTimer?.cancel();
+      _scheduledPromptPayload = null;
+      _stability.reset();
+      _liveCandidates.clear();
+      _candidateLastSeen = seenAt;
+      setState(() {
+        _candidate = nextCandidate;
+        _candidateReady = false;
+        _message =
+            'QR detected, but it is too small for reliable image-integrity '
+            'analysis. Move closer until the code fills the guide.';
+      });
+      unawaited(_focusOnQr(barcode, capture.size));
+      _refreshCandidateExpiry(payload);
+      return;
+    }
+    final observation = _stability.observe(payload, seenAt);
     final previous = _candidate;
     final candidate =
         !observation.startedNewSequence &&
@@ -171,18 +192,48 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (_liveCandidates.length > _maximumLiveCandidates) {
         _liveCandidates.removeAt(0);
       }
+    } else if (kIsWeb && nextCandidate.hasUsableGeometry) {
+      unawaited(_retainWebFrame(nextCandidate));
     }
     _candidateLastSeen = seenAt;
+    final hasTemporalEvidence = _liveCandidates.length >= 3;
     setState(() {
       _message = null;
       _candidate = candidate;
-      _candidateReady = observation.ready;
+      _candidateReady = observation.ready && hasTemporalEvidence;
     });
     if (observation.startedNewSequence) {
       unawaited(_focusOnQr(barcode, capture.size));
     }
     _refreshCandidateExpiry(payload);
-    if (observation.ready) _scheduleAutoPrompt(payload);
+    if (_candidateReady) _scheduleAutoPrompt(payload);
+  }
+
+  Future<void> _retainWebFrame(_Candidate candidate) async {
+    if (_capturingWebFrame) return;
+    _capturingWebFrame = true;
+    try {
+      final frame = await captureLiveCameraFrame();
+      if (!mounted || frame == null || frame.isEmpty) return;
+      if (_candidate?.payload != candidate.payload) return;
+      final retained = candidate.withFrame(frame);
+      _liveCandidates.add(retained);
+      if (_liveCandidates.length > _maximumLiveCandidates) {
+        _liveCandidates.removeAt(0);
+      }
+      final ready =
+          _liveCandidates.length >= 3 &&
+          _stability.isReady(candidate.payload, DateTime.now());
+      setState(() {
+        if ((_candidate?.quality ?? 0) <= retained.quality) {
+          _candidate = retained;
+        }
+        _candidateReady = ready;
+      });
+      if (ready) _scheduleAutoPrompt(candidate.payload);
+    } finally {
+      _capturingWebFrame = false;
+    }
   }
 
   Future<void> _focusOnQr(Barcode barcode, Size frameSize) async {
@@ -276,8 +327,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         title: const Text('Scan this QR code?'),
         content: const Text(
-          'One QR code was detected. Continue to analyse its image integrity '
-          'and encoded destination?',
+          'One QR code remained clear across five camera frames. Continue to '
+          'analyse its image integrity and encoded destination?',
         ),
         actions: [
           TextButton(
@@ -975,11 +1026,25 @@ class _Candidate {
     imageSource: imageSource,
   );
 
-  bool get hasUsableImage =>
-      frame != null &&
-      corners.length == 4 &&
-      frameSize.width > 0 &&
-      frameSize.height > 0;
+  bool get hasUsableImage => frame != null && hasUsableGeometry;
+
+  bool get hasUsableGeometry =>
+      corners.length == 4 && frameSize.width > 0 && frameSize.height > 0;
+
+  double get estimatedCropSide {
+    if (!hasUsableGeometry) return 0;
+    final edges = <double>[];
+    for (var index = 0; index < corners.length; index++) {
+      final current = corners[index];
+      final next = corners[(index + 1) % corners.length];
+      edges.add(
+        math.sqrt(
+          math.pow(current.dx - next.dx, 2) + math.pow(current.dy - next.dy, 2),
+        ),
+      );
+    }
+    return edges.reduce((left, right) => left + right) / edges.length * 1.30;
+  }
 
   double get quality {
     if (frame == null ||

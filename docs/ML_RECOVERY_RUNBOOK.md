@@ -1,13 +1,14 @@
 # Live-camera and ML recovery runbook
 
-Status date: 2026-08-21
+Status date: 2026-09-01
 
-> **2026-08-24 runtime correction:** the consensus/abstention policy described
-> below is historical. Runtime now submits one clearest rectified crop. Gallery
-> uses RUN 5, while Live Camera uses the camera-robust `structural-2026.02`
-> artifact. Both scores enter the same Fusion contract continuously. This fixes
-> the known RUN 5 camera clean false-positive failure without hiding a completed
-> camera score. Exact app-crop collection remains the final deployment gate.
+> **2026-09-01 runtime correction:** Gallery remains a single-image path. Live
+> Camera now requires a deployment-range QR crop, retains five consecutive
+> rectified frames, and uses median-score / majority-class consensus only when
+> at least three frames are analyzable. Smaller or insufficient evidence asks
+> the user to move closer and rescan. This policy was selected after the locked
+> 30-session / 150-frame repeatability study and passed the independent 120-row
+> candidate-stack gate. See `LIVE_CAMERA_REPEATABILITY_STUDY.md`.
 
 ## Why Gallery was normal and Live camera was not
 
@@ -22,13 +23,12 @@ The payload was not changing. The image distribution was.
 4. Open Wi-Fi has no `p_url`; its correct policy is Warning. One noisy image
    score therefore dominated the only semantic evidence and produced Blocked.
 
-The immediate runtime fix uses 3–5 independently cropped frames. A single frame,
-an unstable sequence, or a borderline sequence makes Structural abstain. It can
-raise an otherwise Safe result to Warning, but cannot manufacture a Blocked
-verdict. Stable clean sequences contribute zero risk; only stable, repeated,
-high-confidence tampering is accepted as attack evidence. URL/rule evidence can
-still Block on its own. Pixel-identical replayed uploads are de-duplicated and do
-not count as independent frames; the training audit rejects such sessions too.
+The live-camera runtime uses up to five independently cropped frames. At least
+three must be 256 pixels or larger and pass the image-quality path. Scores are
+aggregated by median and classes by majority. Insufficient evidence makes
+Structural abstain and returns a rescan Warning; URL/rule evidence can still
+Block on its own. Pixel-identical uploads are de-duplicated and do not count as
+independent frames; the training audit rejects such sessions too.
 
 ## Collect exact runtime evidence
 

@@ -45,6 +45,34 @@ void main() {
     expect(img.decodeImage(crop!), isNotNull);
   });
 
+  test('multi-frame preparation retains every usable temporal crop', () {
+    final frame = img.Image(width: 320, height: 240);
+    img.fill(frame, color: img.ColorRgb8(235, 235, 235));
+    final encoded = Uint8List.fromList(img.encodeJpg(frame, quality: 85));
+    final crops = prepareUsableCropsInBackground([
+      for (var index = 0; index < 5; index++)
+        CropRequest(
+          frame: encoded,
+          cornerCoordinates: [
+            80.0 + index,
+            40,
+            220.0 + index,
+            40,
+            220.0 + index,
+            180,
+            80.0 + index,
+            180,
+          ],
+          frameWidth: 320,
+          frameHeight: 240,
+          normalizeCameraColor: true,
+        ),
+    ]);
+
+    expect(crops, hasLength(5));
+    expect(crops.every((crop) => img.decodeImage(crop) != null), isTrue);
+  });
+
   testWidgets('camera scan without valid image asks for a rescan', (
     tester,
   ) async {
@@ -76,6 +104,58 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Back to Scanner'), findsOneWidget);
+    api.dispose();
+  });
+
+  testWidgets('camera scan never falls back to fewer than three crops', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final api = _RecordingApi();
+    final frame = img.Image(width: 420, height: 420);
+    img.fill(frame, color: img.ColorRgb8(235, 235, 235));
+    final encoded = Uint8List.fromList(img.encodeJpg(frame, quality: 90));
+    final evidence = [
+      for (var index = 0; index < 2; index++)
+        QrFrameEvidence(
+          frame: encoded,
+          corners: const [
+            Offset(70, 70),
+            Offset(350, 70),
+            Offset(350, 350),
+            Offset(70, 350),
+          ],
+          frameSize: const Size(420, 420),
+        ),
+    ];
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildTheme(Brightness.dark),
+        home: AnalysingScreen(
+          api: api,
+          history: HistoryService(),
+          saveHistory: false,
+          payload: 'plain text',
+          imageSource: 'camera',
+          evidence: evidence,
+        ),
+      ),
+    );
+
+    await tester.pump();
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 500)),
+    );
+    await tester.pump();
+
+    expect(api.calls, 0);
+    expect(
+      find.textContaining('at least three clear camera frames'),
+      findsOneWidget,
+    );
     api.dispose();
   });
 
@@ -160,6 +240,7 @@ class _TimesOutApi extends ApiClient {
   Future<ScanResponse> scan({
     String? payload,
     Uint8List? imageBytes,
+    List<Uint8List> additionalImageBytes = const [],
     String imageSource = 'unknown',
   }) {
     calls++;
@@ -177,17 +258,20 @@ class _RecordingApi extends ApiClient {
   int calls = 0;
   String? payload;
   Uint8List? imageBytes;
+  List<Uint8List> additionalImageBytes = const [];
   String? imageSource;
 
   @override
   Future<ScanResponse> scan({
     String? payload,
     Uint8List? imageBytes,
+    List<Uint8List> additionalImageBytes = const [],
     String imageSource = 'unknown',
   }) {
     calls++;
     this.payload = payload;
     this.imageBytes = imageBytes;
+    this.additionalImageBytes = additionalImageBytes;
     this.imageSource = imageSource;
     return Future<ScanResponse>.error(const ApiException('captured'));
   }

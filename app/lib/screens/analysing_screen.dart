@@ -53,6 +53,10 @@ class _ImageEvidenceUnavailable implements Exception {
   const _ImageEvidenceUnavailable();
 }
 
+class _InsufficientCameraFrames implements Exception {
+  const _InsufficientCameraFrames();
+}
+
 /// Rectifies the first usable geometry-ranked frame and stops immediately.
 ///
 /// The previous implementation decoded/cropped up to five full frames to rank
@@ -61,6 +65,13 @@ class _ImageEvidenceUnavailable implements Exception {
 /// by QR coverage and geometry, so one pass with fallback is both faster and
 /// more robust across ordinary, projected, angled and low-light QR codes.
 Uint8List? prepareFirstUsableCropInBackground(List<CropRequest> requests) {
+  final crops = prepareUsableCropsInBackground(requests);
+  return crops.isEmpty ? null : crops.first;
+}
+
+/// Rectifies every usable temporal frame in order for backend consensus.
+List<Uint8List> prepareUsableCropsInBackground(List<CropRequest> requests) {
+  final crops = <Uint8List>[];
   for (final request in requests) {
     if (request.cornerCoordinates.length != 8) continue;
     final corners = <Offset>[
@@ -76,9 +87,9 @@ Uint8List? prepareFirstUsableCropInBackground(List<CropRequest> requests) {
       frameSize: Size(request.frameWidth, request.frameHeight),
       normalizeCameraColor: request.normalizeCameraColor,
     );
-    if (crop != null && crop.isNotEmpty) return crop;
+    if (crop != null && crop.isNotEmpty) crops.add(crop);
   }
-  return null;
+  return crops;
 }
 
 class AnalysingScreen extends StatefulWidget {
@@ -136,10 +147,10 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
     'Computing risk',
   ];
 
-  Future<Uint8List?> _prepareBestCrop(List<QrFrameEvidence> evidence) async {
-    if (evidence.isEmpty) return null;
-    return compute(prepareFirstUsableCropInBackground, [
-      for (final sample in evidence.take(3))
+  Future<List<Uint8List>> _prepareCrops(List<QrFrameEvidence> evidence) async {
+    if (evidence.isEmpty) return const [];
+    return compute(prepareUsableCropsInBackground, [
+      for (final sample in evidence.take(5))
         CropRequest(
           frame: sample.frame,
           cornerCoordinates: [
@@ -192,22 +203,25 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
       // Select and rectify on the visible Analysing screen. Previously this
       // work happened while Home still said "stable frame ready", which looked
       // like a frozen scan on physical phones.
-      final imageBytes =
-          widget.selectedImageBytes ??
-          (evidence.isEmpty
-              ? null
-              : await _prepareBestCrop(evidence).timeout(
-                  widget.cropTimeout,
-                  onTimeout: () => throw const _CropPreparationTimeout(),
-                ));
-      if (imageBytes == null &&
+      final imageFrames = widget.selectedImageBytes != null
+          ? [widget.selectedImageBytes!]
+          : evidence.isEmpty
+          ? const <Uint8List>[]
+          : await _prepareCrops(evidence).timeout(
+              widget.cropTimeout,
+              onTimeout: () => throw const _CropPreparationTimeout(),
+            );
+      if (imageFrames.isEmpty &&
           (widget.imageSource == 'camera' || widget.imageSource == 'gallery')) {
         throw const _ImageEvidenceUnavailable();
       }
+      if (widget.imageSource == 'camera' && imageFrames.length < 3) {
+        throw const _InsufficientCameraFrames();
+      }
       if (!mounted) return;
       setState(() {
-        _crop = imageBytes;
-        _imageUnavailable = imageBytes == null;
+        _crop = imageFrames.isEmpty ? null : imageFrames.first;
+        _imageUnavailable = imageFrames.isEmpty;
         _stage = 1;
       });
 
@@ -233,7 +247,8 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
       });
       final scan = await widget.api.scan(
         payload: widget.payload,
-        imageBytes: imageBytes,
+        imageBytes: imageFrames.isEmpty ? null : imageFrames.first,
+        additionalImageBytes: imageFrames.skip(1).toList(growable: false),
         imageSource: widget.imageSource,
       );
       _requestWatchdog?.cancel();
@@ -272,6 +287,14 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
           _error =
               'QRGuard could not prepare a valid camera image. Return to the '
               'scanner, keep the whole code in view and try again.';
+        });
+      }
+    } on _InsufficientCameraFrames {
+      if (mounted && runId == _runId) {
+        setState(() {
+          _error =
+              'QRGuard needs at least three clear camera frames. Return to the '
+              'scanner, move closer and hold the whole code steady.';
         });
       }
     } on TimeoutException {

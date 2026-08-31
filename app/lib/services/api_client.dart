@@ -57,28 +57,52 @@ class ApiClient {
   Future<ScanResponse> scan({
     String? payload,
     Uint8List? imageBytes,
+    List<Uint8List> additionalImageBytes = const [],
     String imageSource = 'unknown',
   }) async {
-    if ((payload == null || payload.trim().isEmpty) && imageBytes == null) {
+    final frames = <Uint8List>[
+      if (imageBytes != null && imageBytes.isNotEmpty) imageBytes,
+      ...additionalImageBytes.where((bytes) => bytes.isNotEmpty),
+    ];
+    if ((payload == null || payload.trim().isEmpty) && frames.isEmpty) {
       throw const ApiException('Nothing to scan.');
     }
     if ((imageSource == 'camera' || imageSource == 'gallery') &&
-        (imageBytes == null || imageBytes.isEmpty)) {
+        frames.isEmpty) {
       throw const ApiException(
         'A valid QR image is required for a camera or gallery scan. Return to '
         'the scanner and try again.',
       );
     }
+    if (frames.length > 5) {
+      throw const ApiException('At most five camera frames can be analysed.');
+    }
 
     final request = http.MultipartRequest('POST', _uri('/scan'));
     request.fields['image_source'] = imageSource;
+    if (imageSource == 'camera') {
+      request.fields['camera_evidence_policy'] = 'temporal_consensus_v1';
+    }
     if (payload != null && payload.trim().isNotEmpty) {
       request.fields['payload'] = payload;
     }
-    if (imageBytes != null) {
+    if (frames.isNotEmpty) {
       request.files.add(
-        http.MultipartFile.fromBytes('image', imageBytes, filename: 'qr.png'),
+        http.MultipartFile.fromBytes(
+          'image',
+          frames.first,
+          filename: 'qr-00.png',
+        ),
       );
+      for (var index = 1; index < frames.length; index++) {
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'images',
+            frames[index],
+            filename: 'qr-${index.toString().padLeft(2, '0')}.png',
+          ),
+        );
+      }
     }
 
     try {

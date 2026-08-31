@@ -148,3 +148,112 @@ def test_confirmed_candidate_manipulation_blocks_for_both_sources(monkeypatch) -
         assert result.branch_scores.structural_status == "completed"
         assert result.branch_scores.structural_type == "tampered"
         assert "Structural model confirmed QR manipulation" in result.reasons
+
+
+def test_camera_consensus_rejects_two_manipulated_outliers(monkeypatch) -> None:
+    class CandidateAnalyzer:
+        def predict(self, image):
+            marker = image.convert("RGB").getpixel((0, 0))[0]
+            manipulated = marker in {249, 247}
+            return StructuralResult(
+                p_structural=0.95 if manipulated else 0.08,
+                predicted_type="adversarial" if manipulated else "clean",
+                probs={
+                    "clean": 0.05 if manipulated else 0.92,
+                    "adversarial": 0.93 if manipulated else 0.05,
+                    "tampered": 0.02 if manipulated else 0.03,
+                },
+            )
+
+    monkeypatch.setenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "candidate/artifacts")
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: CandidateAnalyzer(),
+    )
+    images = []
+    for index in range(5):
+        image = _high_contrast_qr_like().resize((300, 300))
+        image.putpixel((0, 0), (250 - index, 250 - index, 250 - index))
+        images.append(image)
+
+    result = _analyse_images(images, "camera")
+
+    assert result.predicted_type == "clean"
+    assert result.confirmed_manipulation is False
+    assert result.effective == 0.08
+    assert result.frames_received == 5
+    assert result.frames_analyzed == 5
+    assert result.consensus == "median_score_majority_class"
+
+
+def test_camera_consensus_requires_three_deployment_scale_crops(monkeypatch) -> None:
+    monkeypatch.setenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "candidate/artifacts")
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: (_ for _ in ()).throw(AssertionError("model must not run")),
+    )
+    images = [_high_contrast_qr_like().resize((180, 180)) for _ in range(5)]
+
+    result = _analyse_images(images, "camera")
+
+    assert result.effective is None
+    assert result.quality_status == "unusable"
+    assert result.quality_conditions == ("small_camera_crop",)
+    assert result.frames_received == 5
+    assert result.frames_analyzed == 0
+    assert result.consensus == "insufficient_quality"
+
+
+def test_declared_temporal_camera_never_falls_back_to_one_frame(monkeypatch) -> None:
+    monkeypatch.setenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "candidate/artifacts")
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: (_ for _ in ()).throw(AssertionError("model must not run")),
+    )
+
+    result = run_scan(
+        payload="plain text",
+        images=[_high_contrast_qr_like().resize((320, 320))],
+        image_source="camera",
+        image_expected=True,
+        require_camera_consensus=True,
+    )
+
+    assert result.verdict == "warning"
+    assert result.branch_scores.p_structural is None
+    assert result.branch_scores.structural_status == "inconclusive"
+    assert result.branch_scores.structural_frames_received == 1
+    assert result.branch_scores.structural_consensus == "insufficient_quality"
+
+
+def test_recoverable_camera_overexposure_is_range_corrected(monkeypatch) -> None:
+    observed = {}
+
+    class CandidateAnalyzer:
+        def predict(self, image):
+            values = np.asarray(image.convert("L"))
+            observed["range"] = int(values.max()) - int(values.min())
+            return StructuralResult(
+                p_structural=0.04,
+                predicted_type="clean",
+                probs={"clean": 0.96, "adversarial": 0.03, "tampered": 0.01},
+            )
+
+    monkeypatch.setenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "candidate/artifacts")
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: CandidateAnalyzer(),
+    )
+    source = np.asarray(_high_contrast_qr_like().resize((300, 300)), dtype=np.float32)
+    overexposed = Image.fromarray(
+        np.clip(source * 0.38 + 155, 0, 255).astype(np.uint8),
+        mode="RGB",
+    )
+
+    result = _analyse_images([overexposed], "camera")
+
+    assert result.effective == 0.04
+    assert result.quality_status == "marginal"
+    assert "overexposure" in result.quality_conditions
+    assert "range_corrected" in result.quality_conditions
+    assert observed["range"] >= 200

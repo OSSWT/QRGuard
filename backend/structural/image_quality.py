@@ -120,7 +120,10 @@ def assess_image_quality(image: Image.Image) -> ImageQualityReport:
 
 
 def normalize_measured_range(
-    image: Image.Image, report: ImageQualityReport | None = None
+    image: Image.Image,
+    report: ImageQualityReport | None = None,
+    *,
+    allow_unusable: bool = False,
 ) -> Image.Image:
     """Apply conservative global range correction selected from pixel measures.
 
@@ -131,7 +134,7 @@ def normalize_measured_range(
 
     report = report or assess_image_quality(image)
     rgb_image = image.convert("RGB")
-    if not report.usable or report.status == "usable":
+    if (not report.usable and not allow_unusable) or report.status == "usable":
         return rgb_image
     if report.dynamic_range < 35:
         return rgb_image

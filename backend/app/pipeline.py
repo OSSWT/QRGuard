@@ -21,8 +21,11 @@ from __future__ import annotations
 
 import os
 import time
+from collections import Counter
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Optional, Sequence
+from statistics import median
+from typing import Optional
 
 from fusion.engine import load_engine
 from fusion.features import BranchInputs
@@ -55,7 +58,7 @@ class SemanticSignals:
 
 @dataclass(frozen=True)
 class StructuralSignals:
-    """Structural evidence from the one selected QR crop."""
+    """Structural evidence from one crop or a bounded camera consensus."""
 
     effective: Optional[float]
     raw_score: Optional[float]
@@ -65,9 +68,21 @@ class StructuralSignals:
     quality_status: Optional[str] = None
     quality_conditions: tuple[str, ...] = ()
     rescan_reason: Optional[str] = None
+    frames_received: int = 0
+    frames_analyzed: int = 0
+    consensus: Optional[str] = None
 
 
 _CAMERA_BLOCK_CONFIDENCE = 0.95
+_CAMERA_CONSENSUS_MIN_FRAMES = 3
+# The promoted exact-app camera holdout contains crops from 257 px upward. The
+# model has no deployment evidence below that acquisition scale; upsampling a
+# 120 px high-version QR to 224 px manufactured confident false manipulation in
+# the physical-phone repeatability study. New multi-frame camera callers must
+# therefore provide at least three crops inside the validated range.
+_CAMERA_MIN_CROP_SIDE = 256
+_RECOVERABLE_DYNAMIC_RANGE = 70.0
+_RECOVERABLE_FOCUS = 55.0
 
 
 def _normalize_camera_capture(image):
@@ -92,43 +107,60 @@ def _normalize_camera_capture(image):
     return Image.fromarray(normalized, mode="RGB")
 
 
-def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
-    """Score one crop without treating acquisition artefacts as attacks.
+def _recover_unified_camera_quality(image, quality):
+    """Recover exposure range only when measured detail still exists.
 
-    The Flutter client geometry-ranks live observations and sends the first usable
-    rectified crop. Gallery keeps the stable pristine-image model. Camera starts
-    with the camera-domain candidate; when that candidate claims manipulation,
-    the independently trained stable model must confirm non-clean evidence before
-    it can raise the effective score. This asymmetric second opinion matters:
-
-    * the stable model alone has an 81.91% false-positive rate on QR-DN camera
-      crops, so it must never replace the camera model;
-    * the camera candidate is not deployment-gated on exact app crops and can
-      call ordinary exposure/edge artefacts adversarial;
-    * agreement reduced the grouped clean false-positive rate while retaining
-      93%+ attack recall in the checked local corpus.
-
-    ``raw_score`` remains the unmodified camera-candidate output for audit. Only
-    the evidence sent to fusion is conservative. Legacy clients may still submit
-    several crops; only the first is authoritative.
+    This is one global affine transform; it cannot redraw modules, remove local
+    colour perturbations, heal an overlay, or sharpen blur. The original quality
+    conditions remain in the response together with ``range_corrected``.
     """
-    if not images:
-        return StructuralSignals(None, None, None, None)
+    exposure_only = set(quality.conditions).issubset(
+        {"underexposure", "overexposure", "low_contrast"}
+    )
+    if (
+        not exposure_only
+        or quality.dynamic_range < _RECOVERABLE_DYNAMIC_RANGE
+        or quality.laplacian_variance < _RECOVERABLE_FOCUS
+    ):
+        return None
+    prepared = normalize_measured_range(image, quality, allow_unusable=True)
+    recovered = assess_image_quality(prepared)
+    if not recovered.usable:
+        return None
+    return prepared
 
+
+def _analyse_one_image(image, source: str) -> StructuralSignals:
+    """Score one crop using the currently selected Structural artifact."""
     unified_artifacts = os.getenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS")
     if unified_artifacts:
-        quality = assess_image_quality(images[0])
+        quality = assess_image_quality(image)
+        quality_status = quality.status
+        quality_conditions = quality.conditions
         if not quality.usable:
-            return StructuralSignals(
-                None,
-                None,
-                None,
-                None,
-                quality_status=quality.status,
-                quality_conditions=quality.conditions,
-                rescan_reason=quality.rescan_reason,
+            prepared = (
+                _recover_unified_camera_quality(image, quality)
+                if source == "camera"
+                else None
             )
-        prepared = normalize_measured_range(images[0], quality)
+            if prepared is None:
+                return StructuralSignals(
+                    None,
+                    None,
+                    None,
+                    None,
+                    quality_status=quality.status,
+                    quality_conditions=quality.conditions,
+                    rescan_reason=quality.rescan_reason,
+                    frames_received=1,
+                    consensus="single_frame",
+                )
+            quality_status = "marginal"
+            quality_conditions = tuple(
+                dict.fromkeys((*quality.conditions, "range_corrected"))
+            )
+        else:
+            prepared = normalize_measured_range(image, quality)
         result = load_unified_candidate_analyzer(unified_artifacts).predict(prepared)
         score = float(result.p_structural)
         manipulation_confidence = max(
@@ -141,11 +173,14 @@ def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
             result.predicted_type,
             manipulation_confidence,
             confirmed_manipulation=result.predicted_type != "clean",
-            quality_status=quality.status,
-            quality_conditions=quality.conditions,
+            quality_status=quality_status,
+            quality_conditions=quality_conditions,
+            frames_received=1,
+            frames_analyzed=1,
+            consensus="single_frame",
         )
 
-    image = _normalize_camera_capture(images[0]) if source == "camera" else images[0]
+    image = _normalize_camera_capture(image) if source == "camera" else image
     analyzer = load_camera_structural() if source == "camera" else load_structural()
     result = analyzer.predict(image)
     score = float(result.p_structural)
@@ -172,6 +207,9 @@ def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
             score,
             result.predicted_type,
             manipulation_confidence,
+            frames_received=1,
+            frames_analyzed=1,
+            consensus="single_frame",
         )
 
     # A suspected camera manipulation gets a second, independent view. Requiring
@@ -196,6 +234,136 @@ def _analyse_images(images: Sequence, source: str) -> StructuralSignals:
         result.predicted_type if models_confirm_manipulation else "clean",
         effective,
         models_confirm_manipulation,
+        frames_received=1,
+        frames_analyzed=1,
+        consensus="single_frame",
+    )
+
+
+def _consensus(signals: list[StructuralSignals], received: int) -> StructuralSignals:
+    """Aggregate independent camera frames by median score and majority class."""
+    valid = [signal for signal in signals if signal.effective is not None]
+    if len(valid) < _CAMERA_CONSENSUS_MIN_FRAMES:
+        conditions = tuple(
+            dict.fromkeys(
+                condition
+                for signal in signals
+                for condition in signal.quality_conditions
+            )
+        )
+        return StructuralSignals(
+            None,
+            None,
+            None,
+            None,
+            quality_status="unusable",
+            quality_conditions=conditions or ("insufficient_clear_frames",),
+            rescan_reason=(
+                "QR image detail is insufficient; move closer and hold the code "
+                "inside the guide before scanning again."
+            ),
+            frames_received=received,
+            frames_analyzed=len(valid),
+            consensus="insufficient_quality",
+        )
+
+    nonclean = [
+        signal
+        for signal in valid
+        if signal.confirmed_manipulation
+        and signal.predicted_type in {"adversarial", "tampered"}
+    ]
+    confirmed = len(nonclean) > len(valid) / 2
+    predicted_type = "clean"
+    if confirmed:
+        predicted_type = Counter(
+            signal.predicted_type for signal in nonclean
+        ).most_common(1)[0][0]
+    statuses = {signal.quality_status for signal in valid}
+    conditions = tuple(
+        dict.fromkeys(
+            condition
+            for signal in valid
+            for condition in signal.quality_conditions
+        )
+    )
+    return StructuralSignals(
+        effective=float(median(signal.effective for signal in valid)),
+        raw_score=float(median(signal.raw_score for signal in valid)),
+        predicted_type=predicted_type,
+        manipulation_confidence=float(
+            median(signal.manipulation_confidence for signal in valid)
+        ),
+        confirmed_manipulation=confirmed,
+        quality_status="marginal" if "marginal" in statuses else "usable",
+        quality_conditions=conditions,
+        frames_received=received,
+        frames_analyzed=len(valid),
+        consensus="median_score_majority_class",
+    )
+
+
+def _analyse_images(
+    images: Sequence,
+    source: str,
+    *,
+    require_camera_consensus: bool = False,
+) -> StructuralSignals:
+    """Score Gallery once or form a bounded multi-frame Camera consensus.
+
+    One-image callers retain the established contract. New Camera callers send
+    five independently rectified crops. Crops below the minimum exact-app
+    deployment scale are not treated as clean or malicious; at least three
+    in-range frames are required before a consensus can reach Fusion.
+    """
+    if not images:
+        return StructuralSignals(None, None, None, None)
+    selected = list(images[:5])
+    if source != "camera":
+        return _analyse_one_image(selected[0], source)
+    if len(selected) < _CAMERA_CONSENSUS_MIN_FRAMES:
+        if not require_camera_consensus:
+            return _analyse_one_image(selected[0], source)
+        return StructuralSignals(
+            None,
+            None,
+            None,
+            None,
+            quality_status="unusable",
+            quality_conditions=("insufficient_camera_frames",),
+            rescan_reason=(
+                "Fewer than three distinct camera frames were available; hold "
+                "the QR code steady and scan again."
+            ),
+            frames_received=len(selected),
+            frames_analyzed=0,
+            consensus="insufficient_quality",
+        )
+
+    in_range = [
+        image
+        for image in selected
+        if min(image.width, image.height) >= _CAMERA_MIN_CROP_SIDE
+    ]
+    if len(in_range) < _CAMERA_CONSENSUS_MIN_FRAMES:
+        return StructuralSignals(
+            None,
+            None,
+            None,
+            None,
+            quality_status="unusable",
+            quality_conditions=("small_camera_crop",),
+            rescan_reason=(
+                "QR image detail is insufficient; move closer and hold the code "
+                "inside the guide before scanning again."
+            ),
+            frames_received=len(selected),
+            frames_analyzed=0,
+            consensus="insufficient_quality",
+        )
+    return _consensus(
+        [_analyse_one_image(image, source) for image in in_range],
+        received=len(selected),
     )
 
 
@@ -335,6 +503,7 @@ def run_scan(
     images: Optional[Sequence] = None,
     image_expected: bool = False,
     payload_was_decoded: bool = False,
+    require_camera_consensus: bool = False,
 ) -> ScanResponse:
     """Full pipeline for one scan. `image` is an optional PIL Image of the QR crop.
 
@@ -352,7 +521,11 @@ def run_scan(
     image_list = (
         list(images) if images is not None else ([] if image is None else [image])
     )
-    structural = _analyse_images(image_list, source)
+    structural = _analyse_images(
+        image_list,
+        source,
+        require_camera_consensus=require_camera_consensus,
+    )
     p_structural_raw = structural.raw_score
     p_structural = structural.effective
     structural_type = structural.predicted_type
@@ -506,6 +679,9 @@ def run_scan(
             structural_quality_status=structural.quality_status,
             structural_quality_conditions=list(structural.quality_conditions),
             structural_rescan_reason=structural.rescan_reason,
+            structural_frames_received=structural.frames_received,
+            structural_frames_analyzed=structural.frames_analyzed,
+            structural_consensus=structural.consensus,
             p_url=sem.p_url,
             semantic_status=semantic_status,
             llm_score=None,

@@ -88,6 +88,16 @@ def _pixel_distinct_pngs(source: bytes, count: int) -> list[bytes]:
     return variants
 
 
+def _resize_png(source: bytes, side: int) -> bytes:
+    """Resize a fixture into the camera deployment-size range."""
+    from PIL import Image
+
+    image = Image.open(io.BytesIO(source)).convert("RGB").resize((side, side))
+    output = io.BytesIO()
+    image.save(output, "PNG")
+    return output.getvalue()
+
+
 def _conditioned_fixture(
     filename: str, *, brightness: float = 1.0, blur: float = 0.0
 ) -> bytes:
@@ -209,7 +219,10 @@ class TestAnalyzeUrl:
     def test_empty_payload_rejected(self, client):
         assert client.post("/analyze-url", json={"payload": "   "}).status_code == 422
 
-    def test_deep_check_offered_only_when_not_safe(self, client):
+    def test_deep_check_offered_only_when_not_safe(self, client, monkeypatch):
+        # Availability is conditional on a deployment secret. Keep this contract
+        # test deterministic without requiring a real credential in local CI.
+        monkeypatch.setattr("app.pipeline._llm_configured", lambda: True)
         safe = client.post(
             "/analyze-url", json={"payload": "https://www.google.com/maps"}
         ).json()
@@ -273,7 +286,11 @@ class TestScan:
         assert body["branch_scores"]["p_structural_raw"] == pytest.approx(0.59)
         assert body["branch_scores"]["p_structural"] == pytest.approx(0.59)
         assert body["branch_scores"]["image_source"] == "camera"
-        assert "structural_consensus" not in body["branch_scores"]
+        assert body["branch_scores"]["structural_frames_received"] == 3
+        assert body["branch_scores"]["structural_frames_analyzed"] == 3
+        assert body["branch_scores"]["structural_consensus"] == (
+            "median_score_majority_class"
+        )
         assert body["verdict"] == "blocked"
 
     def test_camera_clean_class_uses_strongest_competing_score(
@@ -691,7 +708,7 @@ class TestScan:
         assert body["branch_scores"]["p_structural_raw"] > 0.9
         assert body["verdict"] == "blocked"
 
-    def test_legacy_repeated_uploads_use_the_first_crop(self, client, tampered_png):
+    def test_duplicate_repeated_uploads_are_deduplicated(self, client, tampered_png):
         body = client.post(
             "/scan",
             data={
@@ -704,12 +721,40 @@ class TestScan:
             ],
         ).json()
 
-        assert "structural_consensus" not in body["branch_scores"]
+        assert body["branch_scores"]["structural_frames_received"] == 1
+        assert body["branch_scores"]["structural_frames_analyzed"] == 1
+        assert body["branch_scores"]["structural_consensus"] == "single_frame"
         assert body["branch_scores"]["p_structural"] > 0.9
         assert body["branch_scores"]["p_structural_raw"] > 0.9
         assert body["verdict"] == "blocked"
 
+    def test_temporal_client_does_not_fall_back_after_duplicate_frames(
+        self, client, tampered_png
+    ):
+        body = client.post(
+            "/scan",
+            data={
+                "payload": "https://www.google.com/maps",
+                "image_source": "camera",
+                "camera_evidence_policy": "temporal_consensus_v1",
+            },
+            files=[
+                ("images", (f"replay-{index}.png", tampered_png, "image/png"))
+                for index in range(3)
+            ],
+        ).json()
+
+        assert body["branch_scores"]["p_structural"] is None
+        assert body["branch_scores"]["structural_status"] == "inconclusive"
+        assert body["branch_scores"]["structural_frames_received"] == 1
+        assert body["branch_scores"]["structural_frames_analyzed"] == 0
+        assert body["branch_scores"]["structural_consensus"] == (
+            "insufficient_quality"
+        )
+        assert body["verdict"] == "warning"
+
     def test_repeated_stable_camera_tampering_can_block(self, client, tampered_png):
+        deployment_size_tampered = _resize_png(tampered_png, 300)
         body = client.post(
             "/scan",
             data={
@@ -718,7 +763,9 @@ class TestScan:
             },
             files=[
                 ("images", (f"qr-{index}.png", frame, "image/png"))
-                for index, frame in enumerate(_pixel_distinct_pngs(tampered_png, 3))
+                for index, frame in enumerate(
+                    _pixel_distinct_pngs(deployment_size_tampered, 3)
+                )
             ],
         ).json()
 
@@ -756,7 +803,7 @@ class TestScan:
         assert body["branch_scores"]["p_structural"] == pytest.approx(0.08)
         assert body["verdict"] == "safe"
 
-    def test_legacy_multi_upload_does_not_average_scores(
+    def test_multi_upload_uses_median_score(
         self, client, qr_png, monkeypatch
     ):
         class UnstableCleanAnalyzer:
@@ -789,8 +836,13 @@ class TestScan:
             ],
         ).json()
 
-        assert body["branch_scores"]["p_structural_raw"] == pytest.approx(0.05)
-        assert body["branch_scores"]["p_structural"] == pytest.approx(0.0375)
+        assert body["branch_scores"]["p_structural_raw"] == pytest.approx(0.12)
+        assert body["branch_scores"]["p_structural"] == pytest.approx(0.09)
+        assert body["branch_scores"]["structural_frames_received"] == 3
+        assert body["branch_scores"]["structural_frames_analyzed"] == 3
+        assert body["branch_scores"]["structural_consensus"] == (
+            "median_score_majority_class"
+        )
         assert body["verdict"] == "safe"
 
     def test_corrupt_legacy_frames_do_not_replace_the_first_valid_crop(
@@ -870,11 +922,14 @@ class TestScan:
         assert metadata["quality_severity"] == "mild"
         assert metadata["paired_group_sha256"]
         assert "private-pair-token" not in metadata_text
-        assert metadata["selected_frame_index"] == 0
+        assert metadata["selected_frame_index"] is None
+        assert metadata["frame_aggregation"] == "median_score_majority_class"
+        assert metadata["frames_received"] == 3
+        assert metadata["frames_analyzed"] == 3
         assert "structural_quality_status" in metadata
         assert "structural_quality_conditions" in metadata
         assert "structural_rescan_reason" in metadata
-        assert len(list(sessions[0].glob("crop_*.png"))) == 1
+        assert len(list(sessions[0].glob("crop_*.png"))) == 3
 
     def test_capture_case_file_hot_switches_campaign_metadata(
         self, client, qr_png, monkeypatch, tmp_path

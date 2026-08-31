@@ -37,6 +37,12 @@ class BranchScores(BaseModel):
     )
     structural_quality_conditions: list[str] = Field(default_factory=list)
     structural_rescan_reason: Optional[str] = None
+    structural_frames_received: int = Field(0, ge=0, le=5)
+    structural_frames_analyzed: int = Field(0, ge=0, le=5)
+    structural_consensus: Optional[str] = Field(
+        None,
+        description="single_frame | median_score_majority_class | insufficient_quality",
+    )
     p_url: Optional[float] = Field(
         None, description="phishing probability from Method 1; null if not a URL"
     )

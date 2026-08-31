@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "campaign_id": "live-camera-repeatability-2026-09-r01",
+  "frames_per_session": 5,
+  "repeats_per_distance": 5,
+  "distances": [
+    {
+      "id": "near",
+      "label": "Near",
+      "instruction": "Move close enough that the QR occupies about 60-75% of the preview. Keep all four corners visible."
+    },
+    {
+      "id": "medium",
+      "label": "Medium",
+      "instruction": "Keep the QR at a normal scanning distance, occupying about 30-50% of the preview."
+    },
+    {
+      "id": "far",
+      "label": "Far",
+      "instruction": "Move back until the QR occupies about 15-25% of the preview, while it remains readable."
+    }
+  ],
+  "privacy": {
+    "raw_payload_stored": false,
+    "payload_identifier": "sha256 of on-device decoded text"
+  },
+  "cases": [
+    {
+      "case_id": "STR-CLN-ANGLE",
+      "label": "Clean / angle",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "fe74318790fb43bdb962642baf173c7508a1ea3d5117d1219b53b8c24f13e490",
+      "instruction": "Display only STR-CLN-ANGLE.png. Keep its recorded angle unchanged and vary only camera distance."
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "label": "Adversarial / normal",
+      "ground_truth": "adversarial",
+      "expected_payload_sha256": "802a272718df6ab5b00a465af65a8233b51c513397108f8025bd965c0559b4fc",
+      "instruction": "Display only STR-ADV-NORMAL.png. Do not add glare, tilt or another degradation; vary only camera distance."
+    }
+  ]
+}

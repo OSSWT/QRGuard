@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "evaluated_at": "2026-08-31T18:58:44.784453+00:00",
+  "scope": "canonical authoritative locked test; full backend candidate stack",
+  "probe_payload": "https://www.google.com/maps",
+  "structural_version": "structural-2026.03-r01",
+  "structural_artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+  "decision_version": "decision-2026.03-r05",
+  "fusion_weights_sha256": "e0d49a92cc0926e3025b3d431590084ece7ba476ce8041294f68f1ffac3b8385",
+  "manifest_sha256": "dc7e220712f7604cc74a1c7cecabc0b73ee63733fd48338311b01b386c415b96",
+  "metrics": {
+    "rows": 120,
+    "per_source": {
+      "camera": {
+        "rows": 60,
+        "usable_rows": 60,
+        "clean_false_block_rate": 0.0,
+        "adversarial_block_recall": 0.95,
+        "tampered_block_recall": 1.0
+      },
+      "gallery": {
+        "rows": 60,
+        "usable_rows": 60,
+        "clean_false_block_rate": 0.0,
+        "adversarial_block_recall": 1.0,
+        "tampered_block_recall": 1.0
+      }
+    },
+    "paired": {
+      "complete_pairs": 60,
+      "exact_verdict_agreement": 0.9833333333333333,
+      "blocked_verdict_agreement": 0.9833333333333333
+    }
+  },
+  "gates_passed": true,
+  "gate_failures": [],
+  "predictions_sha256": "657ced911160249dffba8d73648952a971cdbe6469d9d888f9e9ff19faa9f922"
+}

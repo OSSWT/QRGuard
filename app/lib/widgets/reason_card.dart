@@ -364,7 +364,11 @@ class BranchEvidence extends StatelessWidget {
 
   String _structuralDetail(BranchScores branch) =>
       switch (branch.structuralStatus) {
-        AnalysisStatus.completed => branch.structuralType ?? 'Analysed',
+        AnalysisStatus.completed =>
+          branch.structuralFramesAnalyzed >= 3
+              ? '${branch.structuralType ?? 'Analysed'} · '
+                    '${branch.structuralFramesAnalyzed}-frame consensus'
+              : branch.structuralType ?? 'Analysed',
         AnalysisStatus.notApplicable => 'Not applicable',
         AnalysisStatus.unavailable => 'Unavailable',
         AnalysisStatus.inconclusive =>

@@ -127,6 +127,28 @@ void main() {
     expect(find.textContaining('inconclusive'), findsNothing);
   });
 
+  testWidgets('live-camera details disclose the five-frame consensus', (
+    tester,
+  ) async {
+    await pumpResult(
+      tester,
+      _scan(
+        verdict: Verdict.safe,
+        risk: 3,
+        pStructural: 0.02,
+        structuralType: 'clean',
+        imageSource: 'camera',
+        structuralFramesReceived: 5,
+        structuralFramesAnalyzed: 5,
+        structuralConsensus: 'median_score_majority_class',
+      ),
+    );
+
+    await tester.tap(find.text('Details'));
+    await tester.pumpAndSettle();
+    expect(find.text('clean · 5-frame consensus'), findsOneWidget);
+  });
+
   testWidgets('Blocked URL requires the separate acknowledgement step', (
     tester,
   ) async {
@@ -289,6 +311,9 @@ ScanResponse _scan({
   double? pStructuralRaw,
   String? structuralType,
   String imageSource = 'unknown',
+  int structuralFramesReceived = 0,
+  int structuralFramesAnalyzed = 0,
+  String? structuralConsensus,
 }) => ScanResponse(
   verdict: verdict,
   riskScore: risk,
@@ -316,6 +341,9 @@ ScanResponse _scan({
         ? AnalysisStatus.completed
         : AnalysisStatus.notApplicable,
     imageSource: imageSource,
+    structuralFramesReceived: structuralFramesReceived,
+    structuralFramesAnalyzed: structuralFramesAnalyzed,
+    structuralConsensus: structuralConsensus,
   ),
   partialAnalysis: partial,
   deepCheckAvailable: false,

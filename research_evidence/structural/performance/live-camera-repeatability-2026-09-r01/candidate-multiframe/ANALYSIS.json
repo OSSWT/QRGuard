@@ -1,0 +1,137 @@
+{
+  "candidate": {
+    "aggregation": "median_score_majority_class",
+    "artifact_path": "training/artifacts/structural",
+    "maximum_frames": 5,
+    "minimum_analyzable_frames": 3,
+    "minimum_crop_side": 256
+  },
+  "evaluation": "production_multi_frame_candidate",
+  "matrix": [
+    {
+      "analyzed_frames": 4,
+      "case_id": "STR-ADV-NORMAL",
+      "distance": "near",
+      "eligible_frames": 4,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1,
+        "rescan": 4
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 4,
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1,
+        "warning": 4
+      }
+    },
+    {
+      "analyzed_frames": 0,
+      "case_id": "STR-ADV-NORMAL",
+      "distance": "medium",
+      "eligible_frames": 0,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "rescan": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 5
+      },
+      "verdicts": {
+        "warning": 5
+      }
+    },
+    {
+      "analyzed_frames": 0,
+      "case_id": "STR-ADV-NORMAL",
+      "distance": "far",
+      "eligible_frames": 0,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "rescan": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 5
+      },
+      "verdicts": {
+        "warning": 5
+      }
+    },
+    {
+      "analyzed_frames": 18,
+      "case_id": "STR-CLN-ANGLE",
+      "distance": "near",
+      "eligible_frames": 19,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 4,
+        "rescan": 1
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 1,
+        "clean": 4
+      },
+      "verdicts": {
+        "safe": 4,
+        "warning": 1
+      }
+    },
+    {
+      "analyzed_frames": 0,
+      "case_id": "STR-CLN-ANGLE",
+      "distance": "medium",
+      "eligible_frames": 0,
+      "ground_truth": "clean",
+      "outcomes": {
+        "rescan": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 5
+      },
+      "verdicts": {
+        "warning": 5
+      }
+    },
+    {
+      "analyzed_frames": 0,
+      "case_id": "STR-CLN-ANGLE",
+      "distance": "far",
+      "eligible_frames": 0,
+      "ground_truth": "clean",
+      "outcomes": {
+        "rescan": 5
+      },
+      "sessions": 5,
+      "structural_types": {
+        "abstained": 5
+      },
+      "verdicts": {
+        "warning": 5
+      }
+    }
+  ],
+  "metrics": {
+    "adversarial_false_safe_rate": 0.0,
+    "clean_false_block_rate": 0.0,
+    "correct_session_rate": 0.16666666666666666,
+    "definitive_adversarial_correct_rate": 1.0,
+    "definitive_clean_correct_rate": 1.0,
+    "rescan_session_rate": 0.8333333333333334
+  },
+  "payload_policy": "neutral_non_url_structural_only",
+  "schema_version": 1,
+  "source": {
+    "filename": "QRGuard_Diagnostic_live_camera_repeatability_2026_09_r01_20260831T172854Z.zip",
+    "frame_count": 150,
+    "raw_payload_stored": false,
+    "session_count": 30,
+    "sha256": "859938e1eb44012cb268f25780cca25734955ba76facb66978f6d0e4ade6b3a3"
+  }
+}

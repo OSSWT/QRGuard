@@ -94,13 +94,15 @@ are under `ml_training/*/performance/`.
 
 ## Live-camera policy
 
-- Require a stable on-device decode before analysis.
-- Retain at most three geometry-ranked observations and rectify the first usable
-  crop in one background pass; fall back only when an earlier frame is invalid.
+- Require five stable on-device sightings before analysis.
+- Require deployment-supported crop detail (at least 256 pixels after
+  rectification); otherwise ask the user to move closer instead of guessing.
+- Retain up to five distinct rectified observations, require at least three
+  analyzable crops, aggregate scores by median and classes by majority.
 - Snapshot the active browser video before stopping a Web scan because
   `mobile_scanner` Web detections do not include encoded image bytes.
-- Correct global camera exposure without thresholding, blurring, or removing local
-  colour/shape evidence; preserve the raw model score in every response.
+- Correct only recoverable global camera exposure without thresholding, blurring,
+  or removing local colour/shape evidence; preserve the raw median model score.
 - Treat a low-risk known URL plus medium-confidence camera manipulation evidence as
   cross-modal Warning, while high-confidence attacks remain eligible for Blocked.
 - A declared Camera/Gallery scan must contain a decodable crop. If acquisition
@@ -190,7 +192,7 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.1.2+8009`.
+The checked Android version is `1.1.3+8010`.
 
 ## Verification
 
@@ -202,9 +204,11 @@ flutter test
 flutter build apk --release
 ```
 
-Current verified result: 356 backend tests passed, Flutter analysis reported no
-issues, and 72 Flutter tests passed. The release workflow is documented separately
-from these source-level checks.
+Current live-camera change verification: the independent 120-row candidate-stack
+gate passed, 362 backend tests passed (plus one optional skip; two local demo-hash
+checks correctly detected an uncommitted user image change), Flutter analysis
+reported no issues, and 78 Flutter tests passed. The release workflow is
+documented separately from these source-level checks.
 
 ## Evidence boundary
 

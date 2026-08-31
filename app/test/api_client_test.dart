@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -46,6 +48,33 @@ void main() {
       api.dispose();
     },
   );
+
+  test(
+    'camera consensus uploads one primary and four temporal frames',
+    () async {
+      final client = _RecordingMultipartClient();
+      final api = ApiClient(baseUrl: 'http://127.0.0.1:8001', client: client);
+
+      await api.scan(
+        payload: 'plain text',
+        imageSource: 'camera',
+        imageBytes: Uint8List.fromList([1]),
+        additionalImageBytes: [
+          for (var index = 2; index <= 5; index++) Uint8List.fromList([index]),
+        ],
+      );
+
+      expect(client.fileFields, [
+        'image',
+        'images',
+        'images',
+        'images',
+        'images',
+      ]);
+      expect(client.cameraEvidencePolicy, 'temporal_consensus_v1');
+      api.dispose();
+    },
+  );
 }
 
 class _StallingBodyClient extends http.BaseClient {
@@ -62,5 +91,34 @@ class _StallingBodyClient extends http.BaseClient {
   void close() {
     _body.close();
     super.close();
+  }
+}
+
+class _RecordingMultipartClient extends http.BaseClient {
+  List<String> fileFields = const [];
+  String? cameraEvidencePolicy;
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    final multipart = request as http.MultipartRequest;
+    fileFields = multipart.files.map((file) => file.field).toList();
+    cameraEvidencePolicy = multipart.fields['camera_evidence_policy'];
+    final body = jsonEncode({
+      'verdict': 'safe',
+      'risk_score': 1,
+      'reasons': <String>[],
+      'payload_type': 'text',
+      'branch_scores': {
+        'structural_status': 'completed',
+        'semantic_status': 'not_applicable',
+        'image_source': 'camera',
+      },
+      'partial_analysis': false,
+      'deep_check_available': false,
+      'payload': 'plain text',
+      'payload_source': 'provided',
+      'elapsed_ms': 1,
+    });
+    return http.StreamedResponse(Stream.value(utf8.encode(body)), 200);
   }
 }
