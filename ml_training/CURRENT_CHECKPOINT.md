@@ -60,9 +60,9 @@ passed locally and Render's actual Docker build completed successfully.
 
 ## Dataset and project organization
 
-The 2026-08-31 organization pass is maintained on branch
-`chore/project-organization-2026-08-31`. It remains separate from `main` and
-does not change the deployed production package until it is reviewed and merged.
+The 2026-08-31 organization pass was recorded in commit `7136c6a` and
+fast-forwarded to GitHub `main`. It did not replace the deployed models or APK;
+the verified Render production package remains at source `6f17d664`.
 
 - Public dataset contracts, citations, generated-QR inventory, and demo material
   now share the canonical root `ml_training/datasets/`.
@@ -103,8 +103,9 @@ Organization regression evidence:
 - Remote scans: Camera clean Safe 5, Camera adversarial Blocked 81, Gallery
   clean Safe 5, Gallery tampered Blocked 81; all non-Partial HTTP 200.
 
-No promotion milestone remains. The only repository milestone is review and
-approval of the organization branch before an optional merge/deploy.
+No promotion or repository-organization milestone remains. A Render redeploy is
+not required for this dataset/documentation organization because the deployed
+models, decision artifact, API package, and APK were not replaced.
 Continue normal monitoring and use the recorded RUN5/Structural
 2026.02/Decision 2026.02 rollback set if a regression appears.
 

@@ -38,7 +38,7 @@ false-negative rate and 0.9759 policy acceptance on the fixed 540-row holdout.
 5. Local artifact promotion and production package smoke. **Completed.**
 6. GitHub push, Render build and remote smoke. **Completed.**
 7. Dataset, Colab, demo, release and local workspace organization.
-   **Completed on the organization branch; awaiting merge into `main`.**
+   **Completed and fast-forwarded to GitHub `main` in `7136c6a`.**
 
 ## Supervisor QR demo
 
@@ -50,8 +50,9 @@ manual evidence and remain `pending`; they are not represented as completed by
 the automated API checks.
 
 The public-repository organization is on
-`chore/project-organization-2026-08-31`, based on `880ce22`. The production
-baseline remains unchanged until this branch is reviewed, merged, and, if
-needed, redeployed.
+`chore/project-organization-2026-08-31`, based on `880ce22`, and its initial
+commit `7136c6a` is now on GitHub `main`. The verified Render production package
+remains unchanged at `6f17d664`; no model or APK replacement was part of this
+organization pass.
 
 See `CURRENT_CHECKPOINT.md` for exact hashes and verification evidence.
