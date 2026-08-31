@@ -9,7 +9,7 @@ what is evaluation-only, and what is still required.
 | QR-DN1.0 v2 | admitted clean training data plus external clean holdout | 6,750 images: 4,500 official train, 2,250 official test; 50/25 disjoint identities | CC BY 4.0 | `ml_training/datasets/structural/processed/qrdn/`; DOI `10.17632/t2bdr663ms.2` |
 | QR Codes on Different Surfaces v1 | auxiliary clean train only | 92 photos, 67 accepted crops; one shared QR bitmap | CC BY 4.0 | `ml_training/datasets/structural/processed/qr_surfaces/`; DOI `10.17632/m6mfwc52vk.1` |
 | QRGuard procedural examples | admitted clean/adversarial/tampered grouped examples | candidate composition: 900 train per procedural class; 180 validation and 180 grouped test per class where applicable | project-generated | `ml_training/datasets/structural/processed/structural-2026.02/` |
-| QRGuard runtime captures | mandatory final deployment evidence | currently 0 exact app-crop sessions; target at least 100 sessions/class and 20 independent test groups/class | project internal | `data/runtime_captures/` |
+| QRGuard runtime captures | mandatory final deployment evidence; completed and locked | 361 accepted sessions in the canonical import history; deployed evaluation uses 300 Camera samples (100/class) and 60 Gallery/Camera pairs with no split leakage | project internal | `data/runtime_captures/`; external master under `04_Datasets/01_Structural/Real_App_Captures_100x3/00_Final_Master/` |
 | Dynamsoft challenging QR data | quarantined acquisition holdout only; never training or class metrics | 73 Git-verified source files, 90,378,510 bytes; 232 image crops and 1 video crop accepted | no repository-wide licence found | `ml_training/datasets/holdout/` |
 | BarBeR | possible auxiliary clean source | publisher reports 8,748 images and 9,818 annotations across barcode types | account required; component terms must be verified | official BarBeR site |
 | BoofCV QR benchmark | reserve for independent robustness holdout | not admitted | verify redistribution terms | official BoofCV benchmark |
@@ -39,4 +39,7 @@ what is evaluation-only, and what is still required.
   labels are established.
 
 The snapshot audits under `manifests/` document these decisions without copying
-the gigabyte-scale archives or generated images.
+the gigabyte-scale archives or generated images. The current r01 production
+results and exact hashes are recorded in
+`ml_training/structural/STRUCTURAL_V3_REAL_100X3_RESULTS_2026-08-31.md` and the
+deployment model registry.

@@ -9,9 +9,10 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "QRGuard_ML_Colab"
+DIST = ROOT / "dist"
+OUTPUT = DIST / "QRGuard_ML_Colab"
 REPO = OUTPUT / "QRGuard"
-ZIP_PATH = ROOT / "QRGuard_ML_Colab.zip"
+ZIP_PATH = DIST / "QRGuard_ML_Colab.zip"
 
 
 def _markdown(source: str) -> dict:
@@ -992,24 +993,25 @@ def _copy_tree(relative: str, *, patterns: tuple[str, ...] | None = None) -> Non
 
 
 def build() -> None:
-    resolved_root = ROOT.resolve()
+    resolved_dist = DIST.resolve()
     resolved_output = OUTPUT.resolve()
     if (
-        resolved_output.parent != resolved_root
+        resolved_output.parent != resolved_dist
         or resolved_output.name != "QRGuard_ML_Colab"
     ):
-        raise RuntimeError(f"refusing to clean unexpected package path: {resolved_output}")
+        raise RuntimeError(
+            f"refusing to clean unexpected package path: {resolved_output}"
+        )
     if OUTPUT.exists():
         # OUTPUT is fully generated. Cleaning it prevents stale files (including
         # an accidentally nested prior package) from accumulating across builds.
         shutil.rmtree(OUTPUT)
     OUTPUT.mkdir(parents=True, exist_ok=True)
+    ZIP_PATH.parent.mkdir(parents=True, exist_ok=True)
     REPO.mkdir(parents=True, exist_ok=True)
     (OUTPUT / "README.md").write_text(README, encoding="utf-8")
     (OUTPUT / "DATA_REQUIREMENTS.md").write_text(DATA_REQUIREMENTS, encoding="utf-8")
-    (OUTPUT / "REFERENCE_RESULTS.md").write_text(
-        REFERENCE_RESULTS, encoding="utf-8"
-    )
+    (OUTPUT / "REFERENCE_RESULTS.md").write_text(REFERENCE_RESULTS, encoding="utf-8")
     structural_json = json.dumps(structural_v3_notebook(), indent=1)
     semantic_json = json.dumps(semantic_frozen_notebook(), indent=1)
     decision_json = json.dumps(decision_frozen_notebook(), indent=1)
@@ -1022,18 +1024,17 @@ def build() -> None:
     (OUTPUT / "03_Decision_Frozen_Report_Colab.ipynb").write_text(
         decision_json, encoding="utf-8"
     )
-    # Keep the historical package path as a safe compatibility entry point.
-    # Its content is the same frozen report (no training cells), so existing
-    # bookmarks do not disappear or accidentally retrain Semantic.
-    (OUTPUT / "02_Semantic_Training_Colab.ipynb").write_text(
-        semantic_json, encoding="utf-8"
-    )
     (ROOT / "ml_training/structural/notebooks/structural_training_v3.ipynb").write_text(
         structural_json, encoding="utf-8"
     )
     (ROOT / "ml_training/semantic/notebooks/semantic_frozen_report.ipynb").write_text(
         semantic_json, encoding="utf-8"
     )
+    decision_notebook = (
+        ROOT / "ml_training/decision_layer/notebooks/decision_frozen_report.ipynb"
+    )
+    decision_notebook.parent.mkdir(parents=True, exist_ok=True)
+    decision_notebook.write_text(decision_json, encoding="utf-8")
 
     for relative in (
         "ML_START_HERE.md",
@@ -1056,7 +1057,7 @@ def build() -> None:
         _copy_file(relative)
     for relative in (
         "ml_training/configs",
-        "ml_training/references",
+        "ml_training/datasets/references",
         "ml_training/scripts",
         "ml_training/structural/src",
         "ml_training/semantic/src",
@@ -1087,9 +1088,12 @@ def build() -> None:
         "scripts/evaluate_candidate_stack.py",
         "scripts/import_prepared_gallery_references.py",
         "scripts/train_fusion.py",
-        "data/runtime_captures/audit.json",
     ):
         _copy_file(relative)
+    # Private exact-app captures are not published. Include their aggregate audit
+    # when it is installed locally, but keep public-source bundle builds valid.
+    if (ROOT / "data/runtime_captures/audit.json").is_file():
+        _copy_file("data/runtime_captures/audit.json")
     _copy_tree(
         "ml_training/structural/performance/structural-2026.02",
     )

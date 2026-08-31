@@ -69,10 +69,10 @@ abstention, so training metrics do not omit serving behaviour.
 
 ## Datasets, licences, and citations
 
-- Human-readable verified sources: `references/SOURCES.md`
-- Machine-readable registry: `references/dataset_registry.csv`
-- Licence/access decisions: `references/DATASET_LICENSES.md`
-- Report-ready BibTeX: `references/REFERENCES.bib`
+- Human-readable verified sources: `datasets/references/SOURCES.md`
+- Machine-readable registry: `datasets/references/dataset_registry.csv`
+- Licence/access decisions: `datasets/references/DATASET_LICENSES.md`
+- Report-ready BibTeX: `datasets/references/REFERENCES.bib`
 - Archive hashes: `datasets/download_verification.json`
 
 Do not use or cite a quarantined dataset as training data. Dynamsoft crops are for

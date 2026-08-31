@@ -1,1 +1,0 @@
-"""Structural Training implementation."""

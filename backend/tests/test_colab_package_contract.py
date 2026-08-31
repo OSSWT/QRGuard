@@ -9,10 +9,19 @@ import json
 import zipfile
 from pathlib import Path
 
+import pytest
+
 from ml_training.scripts.validate_performance_bundle import REQUIRED
 
 ROOT = Path(__file__).resolve().parents[2]
-PACKAGE = ROOT / "QRGuard_ML_Colab"
+PACKAGE = ROOT / "dist/QRGuard_ML_Colab"
+
+
+@pytest.fixture(scope="module", autouse=True)
+def _build_current_colab_package():
+    from scripts.build_colab_bundle import build
+
+    build()
 
 
 def _source(notebook: dict) -> str:
@@ -23,7 +32,6 @@ def test_colab_code_cells_are_valid_python():
     for notebook_name in (
         "01_Structural_Training_Colab.ipynb",
         "02_Semantic_Frozen_Report_Colab.ipynb",
-        "02_Semantic_Training_Colab.ipynb",
         "03_Decision_Frozen_Report_Colab.ipynb",
     ):
         notebook = json.loads((PACKAGE / notebook_name).read_text(encoding="utf-8"))
@@ -42,9 +50,7 @@ def test_colab_notebooks_have_complete_phases_and_performance_outputs():
         (PACKAGE / "02_Semantic_Frozen_Report_Colab.ipynb").read_text(encoding="utf-8")
     )
     decision = json.loads(
-        (PACKAGE / "03_Decision_Frozen_Report_Colab.ipynb").read_text(
-            encoding="utf-8"
-        )
+        (PACKAGE / "03_Decision_Frozen_Report_Colab.ipynb").read_text(encoding="utf-8")
     )
     structural_source = _source(structural)
     semantic_source = _source(semantic)
@@ -102,7 +108,7 @@ def test_package_manifest_hashes_every_handoff_file():
 
 
 def test_colab_zip_is_readable_and_contains_the_manifest():
-    archive_path = ROOT / "QRGuard_ML_Colab.zip"
+    archive_path = ROOT / "dist/QRGuard_ML_Colab.zip"
     with zipfile.ZipFile(archive_path) as archive:
         assert archive.testzip() is None
         assert not any(
@@ -133,8 +139,7 @@ def test_structural_adversarial_wrapper_moves_buffers_to_training_device():
 
 def test_package_contains_locked_real_capture_campaign():
     schedule = (
-        PACKAGE
-        / "QRGuard/ml_training/structural/campaigns/"
+        PACKAGE / "QRGuard/ml_training/structural/campaigns/"
         "structural-v3-real-2026.03-r01/campaign.csv"
     )
     with schedule.open(newline="", encoding="utf-8") as handle:

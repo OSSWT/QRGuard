@@ -41,4 +41,4 @@ source to training.
    and expected calibration error background.
 
 The repository-wide BibTeX source remains
-`ml_training/references/REFERENCES.bib`.
+`ml_training/datasets/references/REFERENCES.bib`.

@@ -348,7 +348,7 @@ def _structural_health_status() -> str:
         )
 
     return (
-        f"gallery=RUN5/{load_structural().model_path.name}; "
+        f"gallery=active/{load_structural().model_path.name}; "
         "camera=structural-2026.02/"
         f"{load_camera_structural().model_path.name}"
     )

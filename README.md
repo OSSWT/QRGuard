@@ -120,11 +120,10 @@ ml_training/
   structural/           Structural source, runs and report-ready performance
   semantic/             Semantic source, runs and report-ready performance
   decision_layer/       Fusion runs, per-cell metrics and figures
-  datasets/             raw/processed/holdout data contract
-  references/           dataset registry, licences, BibTeX and verified sources
+  datasets/             Structural/Semantic data, references, generated QR provenance and demo pack
   deployment/           model registry and rollback material
   configs/              versioned experiment configurations
-training/               deployed artifacts and legacy compatibility entry points
+training/               current deployed artifacts and explicit rollback boundary
 scripts/                server, QRGuard-Mix and evaluation utilities
 research_evidence/
   structural/           Structural notebooks, manifests and performance evidence
@@ -132,9 +131,9 @@ research_evidence/
 docs/                   Setup, testing, design and FYP documentation
 ```
 
-`ml_training/` is the source of truth for new report material. Legacy names such as
-Method 1 and RUN numbers remain only where compatibility or historical comparison
-requires them.
+`ml_training/` is the source of truth for report material. Legacy names such as
+Method 1 and RUN numbers remain only in explicit rollback code or historical
+comparison evidence; old runtime folders are kept outside the active repository.
 
 ## Datasets and provenance
 
@@ -147,7 +146,7 @@ requires them.
 - Semantic sources retain source tags and domain-grouped splits; exact cleaning,
   conflict removal, and duplicate counts are stored in each run.
 
-See `ml_training/references/SOURCES.md`, `dataset_registry.csv`,
+See `ml_training/datasets/references/SOURCES.md`, `dataset_registry.csv`,
 `DATASET_LICENSES.md`, and `REFERENCES.bib` before citing or redistributing data.
 The organised evidence entry point is
 `research_evidence/README.md`; it deliberately does not duplicate

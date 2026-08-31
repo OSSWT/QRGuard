@@ -4,6 +4,10 @@ Structural Training consumes the QR image crop and predicts `clean`,
 `adversarial`, or `tampered`. Image quality such as blur, glare, perspective, or
 camera noise is a capture condition, not an attack label.
 
+The canonical Colab entry point is
+`notebooks/structural_training_v3.ipynb`. Older notebook generations are archived
+outside the public repository.
+
 The tensor contract is RGB (not CMYK/Lab), 224×224 and ImageNet-normalised; see
 `../COLOR_PIPELINE.md`. Audited exact QRGuard app crops in
 `data/runtime_captures/manifest.csv` are automatically added to grouped

@@ -47,4 +47,4 @@ here rather than as a third ML branch.
    [PMLR v70](https://proceedings.mlr.press/v70/guo17a.html).
 
 Repository-wide report-ready BibTeX remains at
-`ml_training/references/REFERENCES.bib`.
+`ml_training/datasets/references/REFERENCES.bib`.

@@ -1,9 +1,10 @@
-"""Structural Analysis — domain-matched 3-class CNN inference.
+"""Structural Analysis — calibrated three-class QR image inference.
 
-Gallery uses the stable RUN 5 artifact. Live camera uses the camera-robust
-``structural-2026.02`` artifact because RUN 5 has an independently measured
-80.84% false-positive rate on camera-derived clean QR crops. Both analyzers
-return the same calibrated manipulation contract:
+Production sets ``QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS`` and uses the promoted
+``structural-2026.03-r01`` artifact for both Gallery and Live Camera. If that
+explicit production selection is absent, the compatibility path uses the active
+``training/artifacts/structural`` directory for Gallery and the retained
+``structural-2026.02`` camera model. Both paths return the same contract:
 
     clean (0) / adversarial (1) / tampered (2)
     p_structural = 1 − P(clean)     -> the Fusion Engine signal
@@ -25,7 +26,6 @@ import json
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional
 
 import numpy as np
 
@@ -141,7 +141,7 @@ def _softmax(x: np.ndarray) -> np.ndarray:
 
 
 @lru_cache(maxsize=2)
-def load_analyzer(artifacts_dir: Optional[str] = None) -> StructuralAnalyzer:
+def load_analyzer(artifacts_dir: str | None = None) -> StructuralAnalyzer:
     """Process-wide cached analyzer for one artifact directory."""
     return StructuralAnalyzer(artifacts_dir)
 

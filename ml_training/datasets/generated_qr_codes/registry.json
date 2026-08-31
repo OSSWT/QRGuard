@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "inventory_date": "2026-08-31",
+  "hash_contract": "sha256(path\\0size\\0file_sha256\\n) over sorted paths",
+  "datasets": [
+    {
+      "dataset_id": "legacy-benign-malicious-5000",
+      "path": "data/structural/qr_images",
+      "file_pattern": "**/*.png",
+      "file_count": 5000,
+      "total_bytes": 4637467,
+      "tree_sha256": "4684bad87d1a142724df0685b8bb87052f59610880fc84a13ea3fe873d66010b",
+      "groups": {
+        "benign": 2500,
+        "malicious": 2500
+      },
+      "intended_use": "legacy compatibility only; not current Structural training",
+      "exposure_states": [
+        "legacy_not_current"
+      ],
+      "generator": "historical generator not retained as a current recipe",
+      "source_manifest": null,
+      "source_manifest_sha256": null
+    },
+    {
+      "dataset_id": "structural-2026.03-r01-procedural-images",
+      "path": "ml_training/datasets/structural/processed/structural-2026.03-r01/images",
+      "file_pattern": "**/*.png",
+      "file_count": 5040,
+      "total_bytes": 97394036,
+      "tree_sha256": "98dca0bbf66a1c6a6a1cca358c0bc346b14c1c25903372c937494059dda06b49",
+      "groups": {
+        "base": 1260,
+        "test": 540,
+        "train": 2700,
+        "validation": 540
+      },
+      "intended_use": "current Structural run; split membership is manifest-governed",
+      "exposure_states": [
+        "training",
+        "validation",
+        "locked_test"
+      ],
+      "generator": "ml_training/structural/src/structural_recipes.py",
+      "source_manifest": "ml_training/datasets/structural/processed/structural-2026.03-r01/manifest.csv",
+      "source_manifest_sha256": "e4aad0f2e378b9e35565493e297fd0a0ea862dff710ce5f78528008a64a79d45"
+    },
+    {
+      "dataset_id": "structural-v3-real-2026.03-r01-capture-references",
+      "path": "data/capture_pilot/structural-v3-real-2026.03-r01",
+      "file_pattern": "**/*-gallery-reference.png",
+      "file_count": 450,
+      "total_bytes": 2959211,
+      "tree_sha256": "b7d254b7b85ef091759554f36289d50a1b79eb585c903fbb84b10101070b168a",
+      "groups": {
+        "adversarial/angle": 15,
+        "adversarial/defocus": 15,
+        "adversarial/far": 15,
+        "adversarial/glare": 15,
+        "adversarial/motion": 15,
+        "adversarial/normal": 15,
+        "adversarial/overexp": 15,
+        "adversarial/screen": 15,
+        "adversarial/shadow": 15,
+        "adversarial/underexp": 15,
+        "clean/angle": 15,
+        "clean/defocus": 15,
+        "clean/far": 15,
+        "clean/glare": 15,
+        "clean/motion": 15,
+        "clean/normal": 15,
+        "clean/overexp": 15,
+        "clean/screen": 15,
+        "clean/shadow": 15,
+        "clean/underexp": 15,
+        "tampered/angle": 15,
+        "tampered/defocus": 15,
+        "tampered/far": 15,
+        "tampered/glare": 15,
+        "tampered/motion": 15,
+        "tampered/normal": 15,
+        "tampered/overexp": 15,
+        "tampered/screen": 15,
+        "tampered/shadow": 15,
+        "tampered/underexp": 15
+      },
+      "intended_use": "display/print references for exact-app real capture",
+      "exposure_states": [
+        "capture_reference"
+      ],
+      "generator": "ml_training/structural/src/capture_campaign.py",
+      "source_manifest": null,
+      "source_manifest_sha256": null
+    },
+    {
+      "dataset_id": "structural-2026.03-r01-prepared-gallery-references",
+      "path": "data/prepared_gallery_references/structural-2026.03-r01/images",
+      "file_pattern": "**/*.png",
+      "file_count": 239,
+      "total_bytes": 10505375,
+      "tree_sha256": "8968487f19a74d809f958a76280604ec0df1213dfb437a03be4f47f4248e02c5",
+      "groups": {
+        "adversarial": 80,
+        "clean": 79,
+        "tampered": 80
+      },
+      "intended_use": "train/validation Gallery reference import; locked test excluded",
+      "exposure_states": [
+        "training",
+        "validation"
+      ],
+      "generator": "scripts/import_prepared_gallery_references.py",
+      "source_manifest": "data/prepared_gallery_references/structural-2026.03-r01/manifest.csv",
+      "source_manifest_sha256": "f2a8cfcd921834d7efe8b309c00ecb3ddf64aae34dea8c3b32b94dd962315573"
+    },
+    {
+      "dataset_id": "qr-codes-demo-2026-08-31-r01-r05",
+      "path": "ml_training/datasets/qr_codes_demo",
+      "file_pattern": "**/*.png",
+      "file_count": 42,
+      "total_bytes": 9313176,
+      "tree_sha256": "2a3892b5a4ed5669fb450911905b4621160ecfd738955fd2412238d8615c25fa",
+      "groups": {
+        "Semantic_and_Payload_Cases": 12,
+        "Structural_Cases": 30
+      },
+      "intended_use": "post-training supervisor demonstration; never training or independent performance evidence",
+      "exposure_states": [
+        "demo_only",
+        "post_training_exposed"
+      ],
+      "generator": "scripts/build_qr_codes_demo.py",
+      "source_manifest": "ml_training/datasets/qr_codes_demo/MANIFEST.json",
+      "source_manifest_sha256": "4e19c47c6244973b2aba25ca884aac12bc532bcd90f6ce58a7f7baec41ff0e93"
+    },
+    {
+      "dataset_id": "legacy-api-test-qrs",
+      "path": "data/test_qrs",
+      "file_pattern": "*.png",
+      "file_count": 21,
+      "total_bytes": 664474,
+      "tree_sha256": "9305367ceb6f25568a78420eff8d18620380b14220f14597e15919501f54de19",
+      "groups": {},
+      "intended_use": "superseded manual API tests; not current demo evidence",
+      "exposure_states": [
+        "legacy_not_current"
+      ],
+      "generator": "scripts/make_test_qrs.py",
+      "source_manifest": null,
+      "source_manifest_sha256": null
+    },
+    {
+      "dataset_id": "legacy-gallery-test-cards",
+      "path": "data/app_gallery/QRGuard_Test_QRs",
+      "file_pattern": "*.png",
+      "file_count": 17,
+      "total_bytes": 1153061,
+      "tree_sha256": "024aa620f7841799e8ddc15bb8d4ad6ddb45465986b2d80a4e56e7cfec35cc27",
+      "groups": {},
+      "intended_use": "superseded Gallery cards; not current demo evidence",
+      "exposure_states": [
+        "legacy_not_current"
+      ],
+      "generator": "scripts/make_gallery_qrs.py",
+      "source_manifest": null,
+      "source_manifest_sha256": null
+    }
+  ]
+}

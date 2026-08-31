@@ -37,5 +37,21 @@ false-negative rate and 0.9759 policy acceptance on the fixed 540-row holdout.
 4. Full candidate and production-path stack gates. **Completed.**
 5. Local artifact promotion and production package smoke. **Completed.**
 6. GitHub push, Render build and remote smoke. **Completed.**
+7. Dataset, Colab, demo, release and local workspace organization.
+   **Completed on the organization branch; awaiting merge into `main`.**
+
+## Supervisor QR demo
+
+The canonical pack is `ml_training/datasets/qr_codes_demo/` and contains 42
+cards: 30 Structural and 12 Semantic/payload cases. Expected outcomes matched
+42/42 Gallery and 42/42 Camera-request API checks both locally and against the
+deployed Render service. Physical phone `live_camera` scans and screenshots are
+manual evidence and remain `pending`; they are not represented as completed by
+the automated API checks.
+
+The public-repository organization is on
+`chore/project-organization-2026-08-31`, based on `880ce22`. The production
+baseline remains unchanged until this branch is reviewed, merged, and, if
+needed, redeployed.
 
 See `CURRENT_CHECKPOINT.md` for exact hashes and verification evidence.

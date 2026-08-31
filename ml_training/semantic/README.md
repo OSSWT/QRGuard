@@ -3,6 +3,10 @@
 Semantic Training consumes decoded URL/payload text. It does not consume camera
 pixels. URL rows are grouped by registrable domain to prevent train/test leakage.
 
+The deployed branch is frozen. Its canonical Colab entry point is the report-only
+`notebooks/semantic_frozen_report.ipynb`; earlier training notebooks are archived
+outside the public repository.
+
 The source-labelled inspection catalog is generated at
 `ml_training/datasets/semantic/processed/semantic-2026.02/by_source/` by
 `src/build_source_catalog.py`. Folder names identify provenance directly:

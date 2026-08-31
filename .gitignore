@@ -31,6 +31,7 @@ ml_training/datasets/**/processed/
 ml_training/datasets/**/downloads/
 ml_training/datasets/pictures_by_source/
 .colab_bundle_stage/
+/dist/
 QRGuard_colab_source.zip
 ml_training/structural/runs/
 ml_training/semantic/runs/
@@ -44,8 +45,10 @@ ml_training/.matplotlib_cache/
 # Datasets
 *.csv
 data/
-!ml_training/references/dataset_registry.csv
+!ml_training/datasets/references/dataset_registry.csv
 !ml_training/datasets/manifests/*.template.csv
+!ml_training/datasets/qr_codes_demo/*.csv
+!ml_training/datasets/qr_codes_demo/**/*.csv
 !research_evidence/**/*.csv
 
 # Flutter / Android
@@ -79,6 +82,7 @@ deploy/render/last_deployment.json
 
 # Local build and development-session artefacts
 /build/
+/.tmp/
 /.claude/
 /CLAUDE.md
 /Run app.txt

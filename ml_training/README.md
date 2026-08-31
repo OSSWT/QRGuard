@@ -25,6 +25,8 @@ ml_training/
   structural/           image-model code, notebooks and performance outputs
   semantic/             URL/payload-model code, notebooks and performance outputs
   decision_layer/       branch fusion, threshold calibration and cell gates
+  datasets/             Structural/Semantic data contracts, shared references,
+                        generated QR provenance and QR_Codes_Demo
   deployment/           candidate/approved model registry and promotion checks
   scripts/              shared dataset, environment and reporting utilities
 ```
@@ -47,6 +49,8 @@ The exact RGB preprocessing and coloured-QR coverage are documented in
 [COLOR_PIPELINE.md](COLOR_PIPELINE.md).
 
 The complete Drive/Colab hand-off is generated with
-`python scripts/build_colab_bundle.py`. It creates `QRGuard_ML_Colab/` and
-`QRGuard_ML_Colab.zip`, including separate Run-all notebooks for Structural and
-Semantic Training, performance validation, dataset provenance and reference results.
+`python scripts/build_colab_bundle.py`. It creates the ignored
+`dist/QRGuard_ML_Colab/` and `dist/QRGuard_ML_Colab.zip`; generated copies are no
+longer tracked beside their canonical sources. The package contains Structural
+training plus frozen Semantic and Decision report notebooks, performance validation,
+dataset provenance and reference results.

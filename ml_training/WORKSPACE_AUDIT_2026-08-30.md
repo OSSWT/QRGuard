@@ -22,12 +22,12 @@ implementation. No file was deleted during the audit.
 | `training/artifacts/structural/` | Current Gallery runtime artifact; do not overwrite during candidate work |
 | `training/artifacts/semantic/` | Frozen accepted Semantic runtime artifact |
 | `research_evidence/` | Report-facing evidence snapshot |
-| `QRGuard_ML_Colab/` and zip | Generated, tracked Colab hand-off; rebuild only after source changes pass tests |
+| `dist/QRGuard_ML_Colab/` and zip | Ignored Colab hand-off generated from canonical sources |
 | `deploy/` | Deployment definitions; unchanged until manual promotion |
 
-The apparent copies under `QRGuard_ML_Colab` and `research_evidence` are
-intentional snapshots. They should be regenerated from canonical sources, not
-edited independently.
+The report-facing copies under `research_evidence` are intentional snapshots.
+The Colab hand-off is regenerated from canonical sources and is never edited
+independently.
 
 ## Large local data — retain while training
 
@@ -54,6 +54,14 @@ No legacy model or zip may be removed solely because it has the same filename as
 another artifact; hashes, registry references and rollback purpose must be
 checked first.
 
+## 2026-08-31 organisation update
+
+The tracked root-level `QRGuard_ML_Colab/` snapshot and ZIP were verified as
+generated duplicates and retired. Canonical notebooks are retained under
+`ml_training/*/notebooks/`; the builder and its contract tests now regenerate an
+ignored package under `dist/`. This update supersedes the earlier classification
+of the root-level generated package as a tracked retention item.
+
 ## Regenerable cleanup candidates — no deletion yet
 
 | Candidate | Approximate effect | Condition before removal |
@@ -64,9 +72,8 @@ checked first.
 | `QRGuard_colab_source.zip` | small | Superseded by canonical bundle builder |
 | old ignored `training/artifacts/**` archives/models | potentially over 1.5 GiB | Complete hash/reference/rollback audit |
 
-`QRGuard_ML_Colab/` and `QRGuard_ML_Colab.zip` are tracked generated outputs, so
-they are not casual cleanup targets. Rebuilding them produces a reviewable Git
-diff.
+The previous root-level tracked package has now been replaced by the ignored
+`dist/` build output described above.
 
 ## Secret handling
 

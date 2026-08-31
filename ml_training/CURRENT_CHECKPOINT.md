@@ -43,7 +43,7 @@ sample. It remains in the evidence and was not hidden by a source override.
 
 ## Post-promotion verification
 
-- Backend regression: 356 tests passed.
+- Backend regression after project organization: 360 tests passed.
 - Production-path exact-app evaluator: all gates passed on 120 locked rows.
 - Actual Uvicorn health: unified r01, Semantic 2026.02, Safe < 26 and
   Blocked >= 76.
@@ -58,6 +58,42 @@ sample. It remains in the evidence and was not hidden by a source override.
 Docker CLI is not installed on this workstation. The Docker packaging contract
 passed locally and Render's actual Docker build completed successfully.
 
+## Dataset and project organization
+
+The 2026-08-31 organization pass is maintained on branch
+`chore/project-organization-2026-08-31`. It remains separate from `main` and
+does not change the deployed production package until it is reviewed and merged.
+
+- Public dataset contracts, citations, generated-QR inventory, and demo material
+  now share the canonical root `ml_training/datasets/`.
+- Structural and Semantic references are separated below
+  `ml_training/datasets/references/`.
+- Generated QR sets are recorded in
+  `ml_training/datasets/generated_qr_codes/registry.json`.
+- The supervisor pack is named `qr_codes_demo` in the repository and
+  `QR_Codes_Demo` in the local hand-off tree.
+- The tracked generated `QRGuard_ML_Colab/` mirror and root ZIP were replaced by
+  ignored, reproducible output under `dist/`; the current hand-off ZIP is stored
+  outside the repository.
+- One canonical notebook is retained per Structural, Semantic, and Decision
+  workflow. Superseded notebooks and legacy runtime runs were hash-preserved
+  outside the public repository.
+
+The QR Codes Demo contains 42 cards: 30 Structural cases and 12
+Semantic/payload cases. Local and deployed-Render API validation both matched
+the expected Gallery and Camera-request outcomes: 42/42 per mode, 84/84 HTTP
+200 in each environment. These automated Camera requests are not a substitute
+for physical phone camera evidence; the real `live_camera` result and supervisor
+screenshots remain deliberately marked `pending`.
+
+Organization regression evidence:
+
+- Backend: 360 passed.
+- Flutter: 72 passed; analyzer clean.
+- Demo contract and Colab contract: 10 passed.
+- Ruff on the new/modified organization scripts and tests: clean.
+- Git whitespace validation: clean.
+
 ## External deployment identity
 
 - GitHub main commit: `e942bbf583d6be227007e5821b2c5c0dd01c239b`.
@@ -67,7 +103,9 @@ passed locally and Render's actual Docker build completed successfully.
 - Remote scans: Camera clean Safe 5, Camera adversarial Blocked 81, Gallery
   clean Safe 5, Gallery tampered Blocked 81; all non-Partial HTTP 200.
 
-No promotion milestone remains. Continue normal monitoring and use the recorded
-RUN5/Structural 2026.02/Decision 2026.02 rollback set if a regression appears.
+No promotion milestone remains. The only repository milestone is review and
+approval of the organization branch before an optional merge/deploy.
+Continue normal monitoring and use the recorded RUN5/Structural
+2026.02/Decision 2026.02 rollback set if a regression appears.
 
 Evidence: `ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/`.

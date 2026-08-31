@@ -2,6 +2,7 @@
 
 ```text
 datasets/
+  references/   shared registry/citations plus Structural and Semantic indexes
   structural/
     downloads/   source archives (not tracked)
     raw/         immutable extracted source data (not tracked)
@@ -12,9 +13,20 @@ datasets/
   holdout/
     raw/         independent robustness sources (not tracked)
     processed/   fixed evaluation inputs (not tracked)
+  generated_qr_codes/  generator provenance and model-exposure registry
+  qr_codes_demo/       post-training demonstration/evaluation QR pack
   pictures_by_source/  source-prefixed hardlink catalog for inspection (not tracked)
   manifests/     schemas/templates; generated manifests are not tracked
 ```
+
+`references/` is the single source for both branches. It contains the shared
+dataset registry, licences and BibTeX plus explicit Structural and Semantic
+indexes. `generated_qr_codes/` records QR images created by this project,
+including legacy, procedural and capture-reference datasets.
+
+`qr_codes_demo/` is deliberately separate from training and locked evaluation.
+It demonstrates the already deployed stack and must remain `demo_only` in every
+future manifest.
 
 For a human-readable folder of QR pictures, open
 [`pictures_by_source/`](pictures_by_source/README.md). It contains
