@@ -195,13 +195,14 @@ flutter run
 
 The checked Android version is `1.1.4+8011`.
 
-Production `1.1.3+8010` is live at
+Production `1.1.4+8011` is live at
 [qrguard-app-osswt.onrender.com](https://qrguard-app-osswt.onrender.com), backed by
 [qrguard-api-osswt.onrender.com](https://qrguard-api-osswt.onrender.com/health)
-from deployment commit `eff3ed7`. Online smoke tests confirmed three-frame clean
-Safe and adversarial Blocked consensus, duplicate-frame rejection, and an APK
-SHA-256 matching the signed release:
-`694FB666B02F33B1DD6461A4750A9978FD8E31646E808240A6EE3E7F834193E3`.
+from deployment commit `c82bb9e`. Online smoke tests confirmed three-frame clean
+Safe and adversarial Blocked consensus, duplicate-frame rejection, three
+consecutive canonical SEM-11 Safe results, timing telemetry, and an APK SHA-256
+matching the signed release:
+`09873FADAE5EC0E17C6ED8E047B72459D531C1CCCC67D2469F25FB7BF4BD0AAC`.
 
 ## Verification
 
