@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import io
 import json
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK = ROOT / "ml_training/datasets/qr_codes_demo"
+SEM_11_SHA256 = "77c08242bc486c603a995108b1b7f2ac945f5b8acd01a3398abff030f568415e"
 
 
 def _json(name: str) -> dict:
@@ -68,3 +71,50 @@ def test_demo_sha256_manifest_matches_every_pack_file():
         if path.is_file() and path.name != "SHA256SUMS.txt"
     }
     assert declared == actual
+
+
+def test_canonical_sem_11_is_safe_across_three_temporal_consensus_scans():
+    from PIL import Image
+    from structural.qr_decoder import decode_and_crop_qrs
+
+    sem_11 = PACK / "Semantic_and_Payload_Cases/SEM-11-PLAIN-TEXT.png"
+    assert hashlib.sha256(sem_11.read_bytes()).hexdigest() == SEM_11_SHA256
+    with Image.open(sem_11) as card:
+        detections = decode_and_crop_qrs(card.convert("RGB"))
+    assert len(detections) == 1
+    payload, crop = detections[0]
+    assert payload == "QRGuard demo order 4471"
+
+    frames = []
+    for index in range(3):
+        frame = crop.copy().convert("RGB")
+        frame.putpixel((index, 0), (250 - index, 250 - index, 250 - index))
+        output = io.BytesIO()
+        frame.save(output, "PNG")
+        frames.append(output.getvalue())
+
+    os.environ["QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS"] = str(
+        (ROOT / "training/artifacts/structural").resolve()
+    )
+    from app.main import app
+    from fastapi.testclient import TestClient
+
+    with TestClient(app) as client:
+        for _ in range(3):
+            response = client.post(
+                "/scan",
+                data={
+                    "payload": payload,
+                    "image_source": "camera",
+                    "camera_evidence_policy": "temporal_consensus_v1",
+                },
+                files=[
+                    ("images", (f"sem-11-{index}.png", raw, "image/png"))
+                    for index, raw in enumerate(frames)
+                ],
+            )
+            assert response.status_code == 200
+            body = response.json()
+            assert body["verdict"] == "safe"
+            assert body["branch_scores"]["structural_type"] == "clean"
+            assert body["branch_scores"]["structural_frames_analyzed"] == 3

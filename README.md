@@ -97,8 +97,9 @@ are under `ml_training/*/performance/`.
 - Require five stable on-device sightings before analysis.
 - Require deployment-supported crop detail (at least 256 pixels after
   rectification); otherwise ask the user to move closer instead of guessing.
-- Retain up to five distinct rectified observations, require at least three
-  analyzable crops, aggregate scores by median and classes by majority.
+- Retain five geometry-ranked observations as a fallback pool, prepare and
+  upload the best three crops that meet the 256 px gate, then aggregate scores
+  by median and classes by majority.
 - Snapshot the active browser video before stopping a Web scan because
   `mobile_scanner` Web detections do not include encoded image bytes.
 - Correct only recoverable global camera exposure without thresholding, blurring,
@@ -192,7 +193,7 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.1.3+8010`.
+The checked Android version is `1.1.4+8011`.
 
 Production `1.1.3+8010` is live at
 [qrguard-app-osswt.onrender.com](https://qrguard-app-osswt.onrender.com), backed by
@@ -212,11 +213,11 @@ flutter test
 flutter build apk --release
 ```
 
-Current live-camera change verification: the independent 120-row candidate-stack
-gate passed, 362 backend tests passed (plus one optional skip; two local demo-hash
-checks correctly detected an uncommitted user image change), Flutter analysis
-reported no issues, and 78 Flutter tests passed. The release workflow is
-documented separately from these source-level checks.
+Current change verification: the independent 120-row candidate-stack gate passed,
+366 backend tests passed plus one optional skip, Flutter analysis reported no
+issues, and 86 Flutter tests passed. The canonical SEM-11 fixture also completed
+three consecutive declared three-frame consensus scans as Safe. The release
+workflow is documented separately from these source-level checks.
 
 ## Evidence boundary
 

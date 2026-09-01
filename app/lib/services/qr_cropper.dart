@@ -44,6 +44,7 @@ Uint8List? cropToCode({
   required List<Offset> corners,
   Size frameSize = Size.zero,
   bool normalizeCameraColor = false,
+  int minimumOutputSide = _minSide,
 }) {
   if (corners.isEmpty) return null;
 
@@ -116,7 +117,7 @@ Uint8List? cropToCode({
         math.min(decoded.width, decoded.height),
       )
       .toInt();
-  if (outputSide < _minSide) return null;
+  if (outputSide < math.max(_minSide, minimumOutputSide)) return null;
 
   try {
     var rectified = img.copyRectify(

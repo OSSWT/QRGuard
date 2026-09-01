@@ -3,9 +3,9 @@
 Status date: 2026-09-01
 
 > **2026-09-01 runtime correction:** Gallery remains a single-image path. Live
-> Camera now requires a deployment-range QR crop, retains five consecutive
-> rectified frames, and uses median-score / majority-class consensus only when
-> at least three frames are analyzable. Smaller or insufficient evidence asks
+> Camera now requires a deployment-range QR crop, retains five geometry-ranked
+> observations as fallback, and prepares/uploads the best three eligible crops
+> for median-score / majority-class consensus. Smaller or insufficient evidence asks
 > the user to move closer and rescan. This policy was selected after the locked
 > 30-session / 150-frame repeatability study and passed the independent 120-row
 > candidate-stack gate. See `LIVE_CAMERA_REPEATABILITY_STUDY.md`.
@@ -23,9 +23,10 @@ The payload was not changing. The image distribution was.
 4. Open Wi-Fi has no `p_url`; its correct policy is Warning. One noisy image
    score therefore dominated the only semantic evidence and produced Blocked.
 
-The live-camera runtime uses up to five independently cropped frames. At least
-three must be 256 pixels or larger and pass the image-quality path. Scores are
-aggregated by median and classes by majority. Insufficient evidence makes
+The live-camera runtime retains up to five independent observations, but stops
+after preparing the first three geometry-ranked crops that are at least 256
+pixels and pass the image-quality path. Only those three are uploaded. Scores
+are aggregated by median and classes by majority. Insufficient evidence makes
 Structural abstain and returns a rescan Warning; URL/rule evidence can still
 Block on its own. Pixel-identical uploads are de-duplicated and do not count as
 independent frames; the training audit rejects such sessions too.

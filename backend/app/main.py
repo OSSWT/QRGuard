@@ -19,6 +19,7 @@ import io
 import json
 import logging
 import os
+import time
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -411,7 +412,7 @@ async def scan(
     image: UploadFile | None = File(None, description="QR region crop (PNG/JPEG)"),
     images: list[UploadFile] | None = File(
         None,
-        description="Additional live-camera crops; Camera uses up to five-frame consensus",
+        description="Additional live-camera crops for bounded temporal consensus",
     ),
     image_source: str = Form(
         "unknown", description="Image acquisition source: camera, gallery, or unknown"
@@ -422,6 +423,7 @@ async def scan(
     ),
 ) -> ScanResponse:
     """Full scan: image goes to the structural branch, payload to the semantic branch."""
+    route_started = time.perf_counter()
     uploads = ([image] if image is not None else []) + list(images or [])
     image_required = image_source in {"camera", "gallery"}
     if camera_evidence_policy not in {None, "", "temporal_consensus_v1"}:
@@ -445,6 +447,7 @@ async def scan(
             status_code=413, detail=f"at most {MAX_SCAN_IMAGES} images are allowed"
         )
 
+    image_decode_started = time.perf_counter()
     pil_images = []
     total_bytes = 0
     seen_image_hashes: set[str] = set()
@@ -477,6 +480,9 @@ async def scan(
             # rejected below so they cannot receive a misleading Partial result.
             log.warning("unreadable image upload; structural branch abstains")
             continue
+    image_read_decode_ms = int(
+        (time.perf_counter() - image_decode_started) * 1000
+    )
 
     if image_required and not pil_images:
         raise HTTPException(
@@ -489,6 +495,7 @@ async def scan(
     # before Structural sees the image. This prevents a whole screenshot/room from
     # being mistaken for a tampered QR and preserves the one-code contract used by
     # the native Gallery picker.
+    gallery_crop_started = time.perf_counter()
     gallery_payload_decoded = False
     if image_source == "gallery" and not (payload or "").strip() and pil_images:
         from structural.qr_decoder import decode_and_crop_qrs
@@ -507,6 +514,9 @@ async def scan(
         payload, gallery_crop = detections[0]
         pil_images = [gallery_crop]
         gallery_payload_decoded = True
+    gallery_decode_crop_ms = int(
+        (time.perf_counter() - gallery_crop_started) * 1000
+    )
 
     # Gallery remains a deterministic single-image path. Camera clients may send
     # a bounded temporal burst; the pipeline reports its explicit consensus and
@@ -520,6 +530,12 @@ async def scan(
         payload_was_decoded=gallery_payload_decoded,
         require_camera_consensus=camera_evidence_policy == "temporal_consensus_v1",
     )
+    result.timings_ms = {
+        "image_read_decode": image_read_decode_ms,
+        "gallery_decode_crop": gallery_decode_crop_ms,
+        **result.timings_ms,
+        "server_total": int((time.perf_counter() - route_started) * 1000),
+    }
     _dump_if_requested(analysed_images, payload, image_source, result)
     branch = result.branch_scores
     # Deliberately omit the payload and domain: this is enough to diagnose a

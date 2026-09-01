@@ -355,11 +355,24 @@ class BranchEvidence extends StatelessWidget {
         ],
         const SizedBox(height: 14),
         Text(
-          'Analysed in ${scan.elapsedMs} ms',
+          _timingSummary(scan),
           style: TextStyle(color: context.qrColors.secondaryText, fontSize: 12),
         ),
       ],
     );
+  }
+
+  String _timingSummary(ScanResponse scan) {
+    final timings = scan.timingsMs;
+    final server = timings['server_total'] ?? scan.elapsedMs;
+    final crop = timings['client_crop_png_encode'];
+    final total = timings['client_visible_total'];
+    if (crop == null && total == null) return 'Analysed in $server ms';
+    return [
+      'Server $server ms',
+      if (crop != null) 'Crop/PNG $crop ms',
+      if (total != null) 'Total $total ms',
+    ].join(' · ');
   }
 
   String _structuralDetail(BranchScores branch) =>

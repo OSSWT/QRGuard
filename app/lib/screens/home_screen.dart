@@ -74,9 +74,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   static const _autoPromptDelay = Duration(milliseconds: 40);
   static const _candidateLifetime = Duration(milliseconds: 1800);
-  // Five temporally distinct crops allow the backend to use a declared median /
-  // majority consensus instead of letting one autofocus or exposure frame own
-  // the Structural verdict.
+  // Retain five temporally distinct candidates as a fallback pool. Analysing
+  // prepares and uploads the first three geometry-ranked crops that actually
+  // meet the 256 px deployment boundary, then the backend forms consensus.
   static const _maximumLiveCandidates = 5;
   static const _minimumStructuralCropSide = 256.0;
 

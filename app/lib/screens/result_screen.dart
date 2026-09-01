@@ -427,6 +427,7 @@ class _ResultScreenState extends State<ResultScreen> {
           payload: _scan.payload,
           payloadSource: _scan.payloadSource,
           elapsedMs: _scan.elapsedMs,
+          timingsMs: _scan.timingsMs,
         );
       });
     } on ApiException catch (error) {

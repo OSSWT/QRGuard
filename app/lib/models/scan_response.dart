@@ -126,6 +126,7 @@ class ScanResponse {
   final String? payload;
   final String payloadSource; // provided | decoded | undecodable
   final int elapsedMs;
+  final Map<String, int> timingsMs;
 
   const ScanResponse({
     required this.verdict,
@@ -141,6 +142,7 @@ class ScanResponse {
     this.payload,
     this.payloadSource = 'provided',
     this.elapsedMs = 0,
+    this.timingsMs = const {},
   });
 
   factory ScanResponse.fromJson(Map<String, dynamic> json) => ScanResponse(
@@ -159,6 +161,24 @@ class ScanResponse {
     payload: json['payload'] as String?,
     payloadSource: json['payload_source'] as String? ?? 'provided',
     elapsedMs: (json['elapsed_ms'] as num?)?.round() ?? 0,
+    timingsMs: _toTimingMap(json['timings_ms']),
+  );
+
+  ScanResponse withTimings(Map<String, int> additionalTimings) => ScanResponse(
+    verdict: verdict,
+    riskScore: riskScore,
+    reasons: reasons,
+    payloadType: payloadType,
+    branchScores: branchScores,
+    normalizedUrl: normalizedUrl,
+    registeredDomain: registeredDomain,
+    ruleFlags: ruleFlags,
+    partialAnalysis: partialAnalysis,
+    deepCheckAvailable: deepCheckAvailable,
+    payload: payload,
+    payloadSource: payloadSource,
+    elapsedMs: elapsedMs,
+    timingsMs: {...timingsMs, ...additionalTimings},
   );
 
   /// What the user should be shown as the destination. Always the expanded /
@@ -171,6 +191,15 @@ class ScanResponse {
   bool get isHiHiveAttendance =>
       payloadType == 'attendance' && (payload ?? '').startsWith('Q01:*:');
   bool get couldNotDecode => payloadSource == 'undecodable';
+}
+
+Map<String, int> _toTimingMap(Object? raw) {
+  if (raw is! Map) return const {};
+  return {
+    for (final entry in raw.entries)
+      if (entry.key is String && entry.value is num)
+        entry.key as String: (entry.value as num).round(),
+  };
 }
 
 class DeepCheckResponse {

@@ -226,6 +226,22 @@ def test_declared_temporal_camera_never_falls_back_to_one_frame(monkeypatch) -> 
     assert result.branch_scores.structural_consensus == "insufficient_quality"
 
 
+def test_declared_temporal_camera_with_no_frames_is_an_inconclusive_rescan() -> None:
+    result = run_scan(
+        payload="plain text",
+        images=[],
+        image_source="camera",
+        image_expected=True,
+        require_camera_consensus=True,
+    )
+
+    assert result.verdict == "warning"
+    assert result.branch_scores.p_structural is None
+    assert result.branch_scores.structural_status == "inconclusive"
+    assert result.branch_scores.structural_frames_received == 0
+    assert result.branch_scores.structural_consensus == "insufficient_quality"
+
+
 def test_recoverable_camera_overexposure_is_range_corrected(monkeypatch) -> None:
     observed = {}
 

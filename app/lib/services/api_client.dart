@@ -74,8 +74,11 @@ class ApiClient {
         'the scanner and try again.',
       );
     }
+    if (imageSource == 'camera' && frames.length > 3) {
+      throw const ApiException('At most three camera frames can be analysed.');
+    }
     if (frames.length > 5) {
-      throw const ApiException('At most five camera frames can be analysed.');
+      throw const ApiException('At most five images can be analysed.');
     }
 
     final request = http.MultipartRequest('POST', _uri('/scan'));
@@ -106,13 +109,22 @@ class ApiClient {
     }
 
     try {
+      var uploadAndHeadersMs = 0;
+      var responseBodyMs = 0;
       // Cover both waiting for response headers and consuming the response
       // body. Timing out only `send()` can leave the UI waiting forever when a
       // connection returns headers but stalls while streaming the JSON body.
       final response =
           await (() async {
+            final uploadTimer = Stopwatch()..start();
             final streamed = await _client.send(request);
-            return http.Response.fromStream(streamed);
+            uploadTimer.stop();
+            uploadAndHeadersMs = uploadTimer.elapsedMilliseconds;
+            final bodyTimer = Stopwatch()..start();
+            final response = await http.Response.fromStream(streamed);
+            bodyTimer.stop();
+            responseBodyMs = bodyTimer.elapsedMilliseconds;
+            return response;
           })().timeout(
             timeout,
             onTimeout: () {
@@ -124,7 +136,10 @@ class ApiClient {
               throw TimeoutException('scan request exceeded $timeout');
             },
           );
-      return ScanResponse.fromJson(_decode(response));
+      return ScanResponse.fromJson(_decode(response)).withTimings({
+        'client_upload_response_headers': uploadAndHeadersMs,
+        'client_response_body': responseBodyMs,
+      });
     } on ApiException {
       rethrow;
     } catch (e) {

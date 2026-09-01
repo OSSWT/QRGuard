@@ -89,6 +89,12 @@ class HistoryService {
 
   Database? _db;
   final List<ScanRecord> _webRecords = [];
+  int _nextWebId = 1;
+
+  HistoryService();
+
+  @visibleForTesting
+  HistoryService.withDatabase(Database database) : _db = database;
 
   Future<Database> get _database async => _db ??= await openDatabase(
     p.join(await getDatabasesPath(), _dbName),
@@ -146,11 +152,13 @@ class HistoryService {
       'partial_analysis': scan.partialAnalysis,
       'payload_source': scan.payloadSource,
       'elapsed_ms': scan.elapsedMs,
+      'timings_ms': scan.timingsMs,
     });
   }
 
   Future<void> record(ScanResponse scan) async {
     final record = ScanRecord(
+      id: kIsWeb ? _nextWebId++ : null,
       payloadHash: hashPayload(scan.payload ?? ''),
       registeredDomain: scan.registeredDomain,
       verdict: effectiveHistoryVerdict(scan).name,
@@ -186,9 +194,34 @@ class HistoryService {
   Future<void> clear() async {
     if (kIsWeb) {
       _webRecords.clear();
+      _nextWebId = 1;
       return;
     }
-    await (await _database).delete(_table);
+    final db = await _database;
+    await db.transaction((txn) async {
+      await txn.delete(_table);
+      // AUTOINCREMENT stores its next value here. Clear All is the one
+      // operation where starting again at History record 1 is intentional.
+      await txn.delete(
+        'sqlite_sequence',
+        where: 'name = ?',
+        whereArgs: [_table],
+      );
+    });
+  }
+
+  Future<void> deleteByIds(Iterable<int> recordIds) async {
+    final ids = recordIds.where((id) => id > 0).toSet().toList(growable: false);
+    if (ids.isEmpty) return;
+    if (kIsWeb) {
+      _webRecords.removeWhere((record) => ids.contains(record.id));
+      return;
+    }
+    final placeholders = List.filled(ids.length, '?').join(', ');
+    await (await _database).rawDelete(
+      'DELETE FROM $_table WHERE id IN ($placeholders)',
+      ids,
+    );
   }
 
   /// Drop the oldest rows once the table grows past [_maxRecords].

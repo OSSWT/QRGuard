@@ -20,6 +20,7 @@ class CropRequest {
     required this.frameWidth,
     required this.frameHeight,
     required this.normalizeCameraColor,
+    this.minimumOutputSide = 24,
   });
 
   final Uint8List frame;
@@ -30,6 +31,7 @@ class CropRequest {
   final double frameWidth;
   final double frameHeight;
   final bool normalizeCameraColor;
+  final int minimumOutputSide;
 }
 
 /// One live-camera frame whose QR corners are expressed in [frameSize].
@@ -73,23 +75,41 @@ Uint8List? prepareFirstUsableCropInBackground(List<CropRequest> requests) {
 List<Uint8List> prepareUsableCropsInBackground(List<CropRequest> requests) {
   final crops = <Uint8List>[];
   for (final request in requests) {
-    if (request.cornerCoordinates.length != 8) continue;
-    final corners = <Offset>[
-      for (var index = 0; index < 8; index += 2)
-        Offset(
-          request.cornerCoordinates[index],
-          request.cornerCoordinates[index + 1],
-        ),
-    ];
-    final crop = cropToCode(
-      frame: request.frame,
-      corners: corners,
-      frameSize: Size(request.frameWidth, request.frameHeight),
-      normalizeCameraColor: request.normalizeCameraColor,
-    );
+    final crop = _prepareCrop(request);
     if (crop != null && crop.isNotEmpty) crops.add(crop);
   }
   return crops;
+}
+
+/// Keep five temporal candidates as fallback, but stop after the best three
+/// deployment-scale crops are prepared. Home geometry-ranks the requests first.
+List<Uint8List> prepareBestThreeCropsInBackground(List<CropRequest> requests) {
+  final crops = <Uint8List>[];
+  for (final request in requests) {
+    final crop = _prepareCrop(request);
+    if (crop == null || crop.isEmpty) continue;
+    crops.add(crop);
+    if (crops.length == 3) break;
+  }
+  return crops;
+}
+
+Uint8List? _prepareCrop(CropRequest request) {
+  if (request.cornerCoordinates.length != 8) return null;
+  final corners = <Offset>[
+    for (var index = 0; index < 8; index += 2)
+      Offset(
+        request.cornerCoordinates[index],
+        request.cornerCoordinates[index + 1],
+      ),
+  ];
+  return cropToCode(
+    frame: request.frame,
+    corners: corners,
+    frameSize: Size(request.frameWidth, request.frameHeight),
+    normalizeCameraColor: request.normalizeCameraColor,
+    minimumOutputSide: request.minimumOutputSide,
+  );
 }
 
 class AnalysingScreen extends StatefulWidget {
@@ -149,7 +169,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
 
   Future<List<Uint8List>> _prepareCrops(List<QrFrameEvidence> evidence) async {
     if (evidence.isEmpty) return const [];
-    return compute(prepareUsableCropsInBackground, [
+    return compute(prepareBestThreeCropsInBackground, [
       for (final sample in evidence.take(5))
         CropRequest(
           frame: sample.frame,
@@ -159,6 +179,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
           frameWidth: sample.frameSize.width,
           frameHeight: sample.frameSize.height,
           normalizeCameraColor: widget.imageSource == 'camera',
+          minimumOutputSide: widget.imageSource == 'camera' ? 256 : 24,
         ),
     ]);
   }
@@ -179,6 +200,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
 
   Future<void> _run() async {
     if (_running) return;
+    final visibleTimer = Stopwatch()..start();
     final runId = ++_runId;
     setState(() {
       _running = true;
@@ -203,6 +225,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
       // Select and rectify on the visible Analysing screen. Previously this
       // work happened while Home still said "stable frame ready", which looked
       // like a frozen scan on physical phones.
+      final cropTimer = Stopwatch()..start();
       final imageFrames = widget.selectedImageBytes != null
           ? [widget.selectedImageBytes!]
           : evidence.isEmpty
@@ -211,6 +234,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
               widget.cropTimeout,
               onTimeout: () => throw const _CropPreparationTimeout(),
             );
+      cropTimer.stop();
       if (imageFrames.isEmpty &&
           (widget.imageSource == 'camera' || widget.imageSource == 'gallery')) {
         throw const _ImageEvidenceUnavailable();
@@ -245,12 +269,20 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
           _error = _serverTimeoutMessage;
         });
       });
-      final scan = await widget.api.scan(
+      final requestTimer = Stopwatch()..start();
+      final response = await widget.api.scan(
         payload: widget.payload,
         imageBytes: imageFrames.isEmpty ? null : imageFrames.first,
         additionalImageBytes: imageFrames.skip(1).toList(growable: false),
         imageSource: widget.imageSource,
       );
+      requestTimer.stop();
+      visibleTimer.stop();
+      final scan = response.withTimings({
+        'client_crop_png_encode': cropTimer.elapsedMilliseconds,
+        'client_http_round_trip': requestTimer.elapsedMilliseconds,
+        'client_visible_total': visibleTimer.elapsedMilliseconds,
+      });
       _requestWatchdog?.cancel();
       _slowTimer?.cancel();
       if (!mounted || runId != _runId) return;

@@ -1099,3 +1099,10 @@ class TestScan:
             files={"image": ("qr.png", qr_png, "image/png")},
         ).json()
         assert 0 <= body["elapsed_ms"] < 2000
+        timings = body["timings_ms"]
+        assert timings["pipeline_total"] == body["elapsed_ms"]
+        assert timings["server_total"] >= timings["pipeline_total"]
+        assert timings["structural_inference"] >= 0
+        assert timings["semantic_inference"] >= 0
+        assert timings["fusion"] >= 0
+        assert timings["image_read_decode"] >= 0

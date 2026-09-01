@@ -92,8 +92,8 @@ The selected correction is an acquisition-and-consensus policy, not retraining
 on these two exposed demo references:
 
 1. Require the detected QR to produce a rectified crop of at least 256 pixels.
-2. Retain up to five distinct consecutive camera crops and require at least
-   three analyzable frames.
+2. Retain five geometry-ranked observations as fallback, but prepare and upload
+   only the best three crops that meet the 256 px deployment gate.
 3. Apply only a global measured-range exposure correction when detail/focus is
    still recoverable.
 4. Aggregate the effective score by median and the Structural class by majority.
@@ -112,3 +112,18 @@ test rows: camera clean false-Blocked 0%, camera adversarial Blocked recall 95%,
 camera tampered Blocked recall 100%, and paired camera/gallery exact-verdict
 agreement 98.33%. These held-out results are the regression gate; the two demo
 QRs remain diagnostic evidence only.
+
+## 2026-09-01 three-frame latency refinement
+
+The app still requires five stable on-device sightings and keeps five candidate
+observations for fallback. It now stops crop/PNG preparation after the first
+three geometry-ranked candidates that genuinely meet the 256 px boundary, and
+uploads only those three crops. Backend consensus and all fail-closed rules are
+unchanged.
+
+Replaying the same hash-locked diagnostic archive preserved all outcomes and
+reduced definitive-session pipeline latency from a 194 ms median / 253.2 ms mean
+to 115 ms / 155.8 ms. Clean false-Blocked and adversarial false-Safe both remained
+0%; every definitive clean and adversarial decision remained correct. The
+120-row authoritative candidate-stack gate passed unchanged. See
+`THREE_VS_FIVE_FRAME_COMPARISON.md`.

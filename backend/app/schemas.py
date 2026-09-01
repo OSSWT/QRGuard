@@ -83,6 +83,10 @@ class ScanResponse(BaseModel):
         "image could not be read, so the semantic branch abstained",
     )
     elapsed_ms: int
+    timings_ms: dict[str, int] = Field(
+        default_factory=dict,
+        description="Privacy-safe stage timings; contains no payload or image data",
+    )
 
 
 class AnalyzeUrlRequest(BaseModel):

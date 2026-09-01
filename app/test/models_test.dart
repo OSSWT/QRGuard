@@ -34,7 +34,13 @@ const _phishingScan = '''
   "deep_check_available": true,
   "payload": "http://maybank2u-verify.xyz/login/update.php",
   "payload_source": "decoded",
-  "elapsed_ms": 287
+  "elapsed_ms": 287,
+  "timings_ms": {
+    "structural_inference": 260,
+    "semantic_inference": 1,
+    "fusion": 0,
+    "pipeline_total": 287
+  }
 }''';
 
 const _undecodableScan = '''
@@ -70,6 +76,8 @@ void main() {
       expect(s.ruleFlags, contains('suspicious_tld'));
       expect(s.deepCheckAvailable, isTrue);
       expect(s.payloadSource, 'decoded');
+      expect(s.timingsMs['structural_inference'], 260);
+      expect(s.timingsMs['pipeline_total'], 287);
     });
 
     test('keeps both branch scores distinct', () {

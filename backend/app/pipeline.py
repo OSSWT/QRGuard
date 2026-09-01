@@ -311,14 +311,17 @@ def _analyse_images(
 ) -> StructuralSignals:
     """Score Gallery once or form a bounded multi-frame Camera consensus.
 
-    One-image callers retain the established contract. New Camera callers send
-    five independently rectified crops. Crops below the minimum exact-app
+    One-image callers retain the established contract. Current Camera callers
+    send the best three eligible crops from a five-observation fallback pool.
+    Crops below the minimum exact-app
     deployment scale are not treated as clean or malicious; at least three
     in-range frames are required before a consensus can reach Fusion.
     """
-    if not images:
-        return StructuralSignals(None, None, None, None)
     selected = list(images[:5])
+    if not selected and not (
+        source == "camera" and require_camera_consensus
+    ):
+        return StructuralSignals(None, None, None, None)
     if source != "camera":
         return _analyse_one_image(selected[0], source)
     if len(selected) < _CAMERA_CONSENSUS_MIN_FRAMES:
@@ -521,11 +524,13 @@ def run_scan(
     image_list = (
         list(images) if images is not None else ([] if image is None else [image])
     )
+    structural_started = time.perf_counter()
     structural = _analyse_images(
         image_list,
         source,
         require_camera_consensus=require_camera_consensus,
     )
+    structural_ms = int((time.perf_counter() - structural_started) * 1000)
     p_structural_raw = structural.raw_score
     p_structural = structural.effective
     structural_type = structural.predicted_type
@@ -539,6 +544,7 @@ def run_scan(
         else "not_applicable"
     )
 
+    payload_decode_started = time.perf_counter()
     payload_source = "decoded" if payload_was_decoded else "provided"
     if not (payload or "").strip():
         payload = None
@@ -554,7 +560,9 @@ def run_scan(
                 None,
             )
         payload_source = "decoded" if payload else "undecodable"
+    payload_decode_ms = int((time.perf_counter() - payload_decode_started) * 1000)
 
+    semantic_started = time.perf_counter()
     sem = analyse_payload(payload or "")
     flag_names = [f.flag for f in sem.flags]
     semantic_status = (
@@ -564,7 +572,9 @@ def run_scan(
         if sem.p_url is not None
         else "not_applicable"
     )
+    semantic_ms = int((time.perf_counter() - semantic_started) * 1000)
 
+    fusion_started = time.perf_counter()
     engine = load_engine()
     fusion = engine.predict(
         BranchInputs(
@@ -575,7 +585,9 @@ def run_scan(
             domain_unknown=sem.domain_unknown,
         )
     )
+    fusion_ms = int((time.perf_counter() - fusion_started) * 1000)
 
+    policy_started = time.perf_counter()
     # The rule engine's evidence strings are more specific than the generic fusion
     # reason text, so they are merged in for flags that actually fired.
     reasons = list(fusion.reasons)
@@ -663,6 +675,9 @@ def run_scan(
         if attendance_reason not in reasons:
             reasons.append(attendance_reason)
 
+    policy_ms = int((time.perf_counter() - policy_started) * 1000)
+    total_ms = int((time.perf_counter() - started) * 1000)
+
     return ScanResponse(
         verdict=verdict,
         risk_score=risk_score,
@@ -701,5 +716,13 @@ def run_scan(
         ),
         payload=payload,
         payload_source=payload_source,
-        elapsed_ms=int((time.perf_counter() - started) * 1000),
+        elapsed_ms=total_ms,
+        timings_ms={
+            "structural_inference": structural_ms,
+            "payload_decode": payload_decode_ms,
+            "semantic_inference": semantic_ms,
+            "fusion": fusion_ms,
+            "policy": policy_ms,
+            "pipeline_total": total_ms,
+        },
     )

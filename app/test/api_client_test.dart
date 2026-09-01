@@ -49,32 +49,52 @@ void main() {
     },
   );
 
-  test(
-    'camera consensus uploads one primary and four temporal frames',
-    () async {
-      final client = _RecordingMultipartClient();
-      final api = ApiClient(baseUrl: 'http://127.0.0.1:8001', client: client);
+  test('camera consensus uploads the three selected temporal frames', () async {
+    final client = _RecordingMultipartClient();
+    final api = ApiClient(baseUrl: 'http://127.0.0.1:8001', client: client);
 
-      await api.scan(
+    final scan = await api.scan(
+      payload: 'plain text',
+      imageSource: 'camera',
+      imageBytes: Uint8List.fromList([1]),
+      additionalImageBytes: [
+        for (var index = 2; index <= 3; index++) Uint8List.fromList([index]),
+      ],
+    );
+
+    expect(client.fileFields, ['image', 'images', 'images']);
+    expect(client.cameraEvidencePolicy, 'temporal_consensus_v1');
+    expect(scan.timingsMs, contains('client_upload_response_headers'));
+    expect(scan.timingsMs, contains('client_response_body'));
+    api.dispose();
+  });
+
+  test('camera scan rejects more than three selected crops', () async {
+    final client = _RecordingMultipartClient();
+    final api = ApiClient(baseUrl: 'http://127.0.0.1:8001', client: client);
+
+    await expectLater(
+      api.scan(
         payload: 'plain text',
         imageSource: 'camera',
         imageBytes: Uint8List.fromList([1]),
         additionalImageBytes: [
-          for (var index = 2; index <= 5; index++) Uint8List.fromList([index]),
+          Uint8List.fromList([2]),
+          Uint8List.fromList([3]),
+          Uint8List.fromList([4]),
         ],
-      );
-
-      expect(client.fileFields, [
-        'image',
-        'images',
-        'images',
-        'images',
-        'images',
-      ]);
-      expect(client.cameraEvidencePolicy, 'temporal_consensus_v1');
-      api.dispose();
-    },
-  );
+      ),
+      throwsA(
+        isA<ApiException>().having(
+          (error) => error.message,
+          'message',
+          contains('At most three'),
+        ),
+      ),
+    );
+    expect(client.fileFields, isEmpty);
+    api.dispose();
+  });
 }
 
 class _StallingBodyClient extends http.BaseClient {

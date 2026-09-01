@@ -73,6 +73,40 @@ void main() {
     expect(crops.every((crop) => img.decodeImage(crop) != null), isTrue);
   });
 
+  test('best-three preparation skips undersized crops and stops at three', () {
+    final frame = img.Image(width: 480, height: 480);
+    img.fill(frame, color: img.ColorRgb8(235, 235, 235));
+    final encoded = Uint8List.fromList(img.encodeJpg(frame, quality: 90));
+    final requests = [
+      for (final side in [140.0, 230.0, 225.0, 220.0, 210.0])
+        CropRequest(
+          frame: encoded,
+          cornerCoordinates: [
+            40,
+            40,
+            40 + side,
+            40,
+            40 + side,
+            40 + side,
+            40,
+            40 + side,
+          ],
+          frameWidth: 480,
+          frameHeight: 480,
+          normalizeCameraColor: true,
+          minimumOutputSide: 256,
+        ),
+    ];
+
+    final crops = prepareBestThreeCropsInBackground(requests);
+
+    expect(crops, hasLength(3));
+    expect(
+      crops.map((crop) => img.decodeImage(crop)!.width),
+      everyElement(greaterThanOrEqualTo(256)),
+    );
+  });
+
   testWidgets('camera scan without valid image asks for a rescan', (
     tester,
   ) async {
