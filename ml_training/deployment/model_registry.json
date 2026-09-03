@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "status": "r07_controlled_release_installed_locally_pending_external_update",
+  "status": "r07_controlled_release_deployed_and_remote_verified",
   "deployed": {
     "structural": {
       "display_name": "Structural Training",
@@ -84,8 +84,8 @@
         "fresh candidate-bound independent blind acceptance remains pending"
       ],
       "promoted_to_local_runtime": true,
-      "external_deployment_pending": true,
-      "externally_deployed": false,
+      "external_deployment_pending": false,
+      "externally_deployed": true,
       "development_calibration": {
         "clean_false_block_rate_by_version_band": 0.0,
         "attack_base_recall_low_v1_v3": 1.0,
@@ -125,15 +125,17 @@
     "backend_tests": "470 passed, 3 skipped",
     "flutter_analyze": "no issues",
     "flutter_tests": "104 passed",
-    "flutter_release_apk": "production URL build 1.2.0+8012; 73462225 bytes; sha256 c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c; APK Signature Scheme v2 verified; release copy hash matched; external hosting pending",
+    "flutter_release_apk": "production URL build 1.2.0+8012; 73462225 bytes; sha256 c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c; APK Signature Scheme v2 verified; hosted copy hash matched",
     "local_production_backend": "Uvicorn health ok with unified structural-r07-corrective-v1 and Decision r05",
     "smoke_matrix": {
-      "scope": "previous r01 remote baseline; r07 remote verification pending",
-      "camera_clean_http": "Safe locally at risk 0; Safe remotely at risk 5",
-      "camera_adversarial_http": "Blocked, risk 81",
-      "gallery_clean_http": "Safe locally at risk 0; Safe remotely at risk 5",
-      "gallery_tampered_http": "Blocked, risk 81",
-      "render_static_pages": "home/download/privacy/capture-plan/APK all HTTP 200"
+      "scope": "r07 remote deployment verified against the canonical 42-case demo pack",
+      "remote_demo_cases": 42,
+      "remote_requests": 84,
+      "gallery_matches_intended": "42/42",
+      "camera_simulation_matches_intended": "42/42",
+      "all_requests_http_200": true,
+      "render_web_version": "1.2.0+8012",
+      "hosted_apk_hash_matched": true
     },
     "candidate_stack": {
       "locked_rows": 120,
@@ -149,26 +151,25 @@
     "provider": "Render",
     "source_repository": "https://github.com/OSSWT/QRGuard-Deploy",
     "source_branch": "render-free-deploy",
-    "source_commit": "6f17d664e0d1f3f4e30d643c3592dceacabd32fa",
+    "source_commit": "6f1f0aed33bde9bcfe1f62f2696c717203dffe98",
     "api": {
       "service_id": "srv-da8sa5c9v7es73cf7ol0",
-      "deploy_id": "dep-daa8vopf2nfc739j8f4g",
       "url": "https://qrguard-api-osswt.onrender.com",
       "status": "live",
-      "structural_version": "structural-2026.03-r01",
+      "structural_version": "structural-r07-corrective-v1",
       "health": "ok",
       "remote_smoke_passed": true
     },
     "web": {
       "service_id": "srv-da8sa9ijnfac73btlihg",
-      "deploy_id": "dep-daa8vthf2nfc739j8vbg",
       "url": "https://qrguard-app-osswt.onrender.com",
       "status": "live",
+      "version": "1.2.0+8012",
       "remote_smoke_passed": true
     },
     "apk": {
-      "bytes": 72810512,
-      "sha256": "52c74130822e92dcb27b3e0f2043cd190419c29195a3b40b9dba8169cf5b638c",
+      "bytes": 73462225,
+      "sha256": "c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c",
       "hosted_hash_matched": true,
       "signer_certificate_sha256": "ce47b65dab21523731dfd76a414068ad95dcce3e1ee02a54e80b04552191c1ec"
     }

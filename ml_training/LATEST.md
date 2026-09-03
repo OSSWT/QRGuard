@@ -7,7 +7,7 @@
 | Structural | **`structural-r07-corrective-v1`** | User-authorized controlled release for Gallery and Camera; formal fresh blind acceptance pending |
 | Semantic | `semantic-2026.02` | Frozen accepted model |
 | Decision | **`decision-2026.03-r05`** | Accepted; Safe < 26, Blocked >= 76 |
-| Full stack | r07 + r05 | Local backend, Flutter tests and signed package verified; external update recorded separately |
+| Full stack | r07 + r05 | Local and Render production paths verified; controlled-release limitations remain disclosed |
 
 The r07 controlled attack-calibration set contains 72 sessions and 360 validated
 frames. Twenty-five of 48 planned attack cases survived the physical
@@ -33,7 +33,10 @@ the fixed 540-row holdout.
 - Flutter tests: 104 passed.
 - Android: signed `1.2.0+8012`, 73,462,225 bytes, SHA-256
   `c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c`.
-- Local production-path health: unified r07 for Gallery and Camera.
+- Local and Render production-path health: unified r07 for Gallery and Camera.
+- Remote demo smoke: 42/42 Gallery and 42/42 Camera-simulation outcomes matched
+  across 84 successful requests.
+- Production Web: `1.2.0+8012`; hosted APK SHA-256 matches the signed artifact.
 
 ## Rollback and evidence
 

@@ -207,11 +207,12 @@ flutter run
 
 The checked Android version is `1.2.0+8012`.
 
-Release `1.2.0+8012` is locally built and signed for the production endpoint. Its
+Release `1.2.0+8012` is built, signed and deployed to the production endpoint. Its
 APK is 73,462,225 bytes with SHA-256
 `c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c`.
-The repository records external hosting separately so a local build is never
-mistaken for a completed live deployment.
+The hosted APK matches that hash. The production API reports unified
+`structural-r07-corrective-v1`, and the production Web version endpoint reports
+`1.2.0+8012`.
 
 ## Verification
 
@@ -227,6 +228,9 @@ Current change verification: 470 backend tests passed with three conditional
 skips, Flutter analysis reported no issues, and 104 Flutter tests passed. The
 production-endpoint Web build and signed Android release both completed; the APK
 identity and signer certificate were verified independently of the build step.
+The deployed API also completed the canonical 42-case remote demo smoke with
+42/42 intended Gallery outcomes, 42/42 intended Camera-simulation outcomes and
+84/84 HTTP 200 responses.
 
 ## Evidence boundary
 

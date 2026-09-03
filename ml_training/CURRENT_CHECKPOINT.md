@@ -2,15 +2,16 @@
 
 ## Outcome
 
-`structural-r07-corrective-v1` is installed in the local production runtime as a
-user-authorized controlled release. Semantic `semantic-2026.02` and Decision
+`structural-r07-corrective-v1` is installed in the local production runtime and
+deployed to the production Render API as a user-authorized controlled release.
+Semantic `semantic-2026.02` and Decision
 `decision-2026.03-r05` remain unchanged. The Structural candidate is not recorded
 as formally promoted because a new candidate-bound independent blind acceptance
 is still pending.
 
 | Component | Runtime version | Status |
 |---|---|---|
-| Structural | `structural-r07-corrective-v1` | Controlled Gallery/Camera runtime; local package verified |
+| Structural | `structural-r07-corrective-v1` | Controlled Gallery/Camera runtime; local and Render production paths verified |
 | Semantic | `semantic-2026.02` | Frozen accepted runtime |
 | Decision | `decision-2026.03-r05` | Accepted runtime; Safe < 26 and Blocked >= 76 |
 
@@ -57,6 +58,12 @@ across every phone, display, printer, lighting condition or future attack.
 - Production Web and signed Android builds: passed.
 - Local Uvicorn health: `unified=structural-r07-corrective-v1`, sources Gallery
   and Camera.
+- Production API health: `unified=structural-r07-corrective-v1`, sources Gallery
+  and Camera.
+- Production demo smoke: 42/42 Gallery and 42/42 Camera-simulation verdicts
+  matched their intended outcomes across 84 HTTP 200 responses.
+- Production Web reports `1.2.0+8012`; the hosted APK is 73,462,225 bytes and its
+  SHA-256 matches the signed release artifact exactly.
 
 ## Rollback
 
@@ -65,6 +72,5 @@ The exact pre-r07 runtime remains available from the canonical
 `deployment/rollback/structural-before-r07-controlled-release/ROLLBACK.json`
 records all four file hashes. No duplicate 44.7 MB rollback binary is stored.
 
-External deployment status is recorded only in
-`deployment/model_registry.json`; a local build is not represented as live until
-remote health, Web and hosted-APK checks pass.
+External deployment status is recorded in `deployment/model_registry.json`.
+Remote API health, Web version, inference smoke and hosted-APK checks have passed.
