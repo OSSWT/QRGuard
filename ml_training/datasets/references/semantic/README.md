@@ -15,3 +15,13 @@ training pool. Its measured train/validation/independent-test composition is
 
 The exact URLs and dataset IDs are in `../dataset_registry.csv`; licence and
 redistribution decisions are in `../DATASET_LICENSES.md`.
+
+The three frozen standardised source files are stored locally under
+`data/method1/`; the active processed pool/splits are under
+`ml_training/datasets/semantic/processed/semantic-2026.02/`. Both locations are
+Git-ignored. Their exact row counts and SHA-256 identities are published in
+`../../DATASET_INVENTORY.json` and explained in `../../DATASET_CATALOG.md`.
+
+Known limitation: the retained Tranco CSV is hash-locked, but its permanent
+Tranco list ID was not recorded at acquisition. Do not invent one; a future
+replacement must preserve its permanent ID.

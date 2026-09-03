@@ -1,13 +1,16 @@
 ﻿order,case_id,image_path,purpose
 1,STR-CLN-NORMAL,Structural_Cases/STR-CLN-NORMAL.png,Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.
-2,SEM-01-SAFE-HTTPS,Semantic_and_Payload_Cases/SEM-01-SAFE-HTTPS.png,Clean image and reserved safe demonstration URL.
-3,SEM-02-BRAND-PHISH,Semantic_and_Payload_Cases/SEM-02-BRAND-PHISH.png,Clean QR; Semantic branch must identify phishing-style URL risk.
-4,STR-ADV-NORMAL,Structural_Cases/STR-ADV-NORMAL.png,Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.
-5,STR-TMP-NORMAL,Structural_Cases/STR-TMP-NORMAL.png,Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.
+2,STR-ADV-NORMAL,Structural_Cases/STR-ADV-NORMAL.png,Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.
+3,STR-TMP-NORMAL,Structural_Cases/STR-TMP-NORMAL.png,Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.
+4,SEM-01-SAFE-HTTPS,Semantic_and_Payload_Cases/SEM-01-SAFE-HTTPS.png,Clean image and reserved safe demonstration URL.
+5,SEM-02-BRAND-PHISH,Semantic_and_Payload_Cases/SEM-02-BRAND-PHISH.png,Clean QR; Semantic branch must identify phishing-style URL risk.
 6,SEM-03-RAW-IP,Semantic_and_Payload_Cases/SEM-03-RAW-IP.png,Documentation-only IP range; no live destination.
 7,SEM-04-PUNYCODE,Semantic_and_Payload_Cases/SEM-04-PUNYCODE.png,Reserved invalid domain containing an IDN/punycode look-alike.
 8,SEM-05-USERINFO,Semantic_and_Payload_Cases/SEM-05-USERINFO.png,The real host follows the @ character.
-9,SEM-09-WIFI-OPEN,Semantic_and_Payload_Cases/SEM-09-WIFI-OPEN.png,Non-URL payload with an open-network warning floor.
-10,SEM-11-PLAIN-TEXT,Semantic_and_Payload_Cases/SEM-11-PLAIN-TEXT.png,Harmless non-URL text; URL analysis is correctly not applicable.
-11,STR-CLN-GLARE,Structural_Cases/STR-CLN-GLARE.png,Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.
-12,STR-CLN-ANGLE,Structural_Cases/STR-CLN-ANGLE.png,Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.
+9,SEM-06-DEEP-SUBDOMAINS,Semantic_and_Payload_Cases/SEM-06-DEEP-SUBDOMAINS.png,Demonstrates suspicious URL nesting without a live destination.
+10,SEM-07-SHORTENER,Semantic_and_Payload_Cases/SEM-07-SHORTENER.png,Do not open; scan only to demonstrate shortener handling.
+11,SEM-08-JAVASCRIPT,Semantic_and_Payload_Cases/SEM-08-JAVASCRIPT.png,Executable payload hard-rule demonstration.
+12,SEM-09-WIFI-OPEN,Semantic_and_Payload_Cases/SEM-09-WIFI-OPEN.png,Non-URL payload with an open-network warning floor.
+13,SEM-10-WIFI-SECURE,Semantic_and_Payload_Cases/SEM-10-WIFI-SECURE.png,Recognised password-protected Wi-Fi payload; URL analysis is not applicable.
+14,SEM-11-PLAIN-TEXT,Semantic_and_Payload_Cases/SEM-11-PLAIN-TEXT.png,Harmless non-URL text; URL analysis is correctly not applicable.
+15,SEM-12-DUITNOW-DUMMY,Semantic_and_Payload_Cases/SEM-12-DUITNOW-DUMMY.png,CRC-valid dummy DuitNow fixture; the payment app remains the confirmation boundary.

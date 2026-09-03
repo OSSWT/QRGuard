@@ -16,8 +16,8 @@ its exact downloaded version has been checked.
 | OQR | USENIX paper/artifact availability | Use templates only after artifact terms are recorded; locally recaptured images are project data |
 | Sensors 2025 genuine/forged | Available from corresponding author on reasonable request | Do not claim possession until written access is received |
 | PhiUSIIL | CC BY 4.0 via UCI | Permitted with attribution |
-| Malicious URLs (Kaggle) | Subject to the dataset page/Kaggle terms | Retain locally; do not redistribute archive |
-| Tranco | Research ranking service | Record exact list ID/date and cite the NDSS paper |
+| Malicious URLs (Kaggle) | Dataset page declares CC0 Public Domain | Permitted for research/training; retain source attribution and do not publish the large local copy in this repository |
+| Tranco | Research ranking service with component attribution terms listed by Tranco | Retain the frozen local snapshot; cite the NDSS paper and disclose that its permanent list ID was not captured |
 | QRGuard consumed M8 clean replay | Project-internal opt-in captures; original holdout has been unblinded | Clean crops only for r07 development; never promotion evidence; do not redistribute |
 
 `dataset_registry.csv` is the machine-readable source of truth. Archive hashes and

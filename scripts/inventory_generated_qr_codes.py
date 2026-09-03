@@ -84,30 +84,6 @@ def _campaign_group(path: Path) -> str:
 
 SETS = (
     GeneratedSet(
-        dataset_id="legacy-benign-malicious-5000",
-        relative_root="data/structural/qr_images",
-        pattern="**/*.png",
-        intended_use="legacy compatibility only; not current Structural training",
-        exposure_states=("legacy_not_current",),
-        generator="historical generator not retained as a current recipe",
-        group_from_path=lambda path: path.parts[0],
-    ),
-    GeneratedSet(
-        dataset_id="structural-2026.03-r01-procedural-images",
-        relative_root=(
-            "ml_training/datasets/structural/processed/structural-2026.03-r01/images"
-        ),
-        pattern="**/*.png",
-        intended_use="current Structural run; split membership is manifest-governed",
-        exposure_states=("training", "validation", "locked_test"),
-        generator="ml_training/structural/src/structural_recipes.py",
-        source_manifest=(
-            "ml_training/datasets/structural/processed/"
-            "structural-2026.03-r01/manifest.csv"
-        ),
-        group_from_path=lambda path: path.parts[0],
-    ),
-    GeneratedSet(
         dataset_id="structural-v3-real-2026.03-r01-capture-references",
         relative_root="data/capture_pilot/structural-v3-real-2026.03-r01",
         pattern="**/*-gallery-reference.png",
@@ -131,7 +107,7 @@ SETS = (
         group_from_path=lambda path: path.parts[0],
     ),
     GeneratedSet(
-        dataset_id="qr-codes-demo-2026-08-31-r01-r05",
+        dataset_id="qrguard-presentation-demo-r07",
         relative_root="ml_training/datasets/qr_codes_demo",
         pattern="**/*.png",
         intended_use=(
@@ -144,19 +120,19 @@ SETS = (
         group_from_path=lambda path: path.parts[0],
     ),
     GeneratedSet(
-        dataset_id="legacy-api-test-qrs",
+        dataset_id="qrguard-api-regression-fixtures",
         relative_root="data/test_qrs",
         pattern="*.png",
-        intended_use="superseded manual API tests; not current demo evidence",
-        exposure_states=("legacy_not_current",),
+        intended_use="active backend and Flutter QR-cropping regression fixtures",
+        exposure_states=("test_fixture",),
         generator="scripts/make_test_qrs.py",
     ),
     GeneratedSet(
-        dataset_id="legacy-gallery-test-cards",
+        dataset_id="qrguard-gallery-test-cards",
         relative_root="data/app_gallery/QRGuard_Test_QRs",
         pattern="*.png",
-        intended_use="superseded Gallery cards; not current demo evidence",
-        exposure_states=("legacy_not_current",),
+        intended_use="active manual Gallery scanning QA cards",
+        exposure_states=("manual_test_fixture",),
         generator="scripts/make_gallery_qrs.py",
     ),
 )
@@ -165,7 +141,6 @@ SETS = (
 def main() -> None:
     payload = {
         "schema_version": 1,
-        "inventory_date": "2026-08-31",
         "hash_contract": "sha256(path\\0size\\0file_sha256\\n) over sorted paths",
         "datasets": [_tree_record(spec) for spec in SETS],
     }

@@ -1050,6 +1050,8 @@ def build() -> None:
         "ml_training/DATASET_RETENTION.json",
         "ml_training/COLOR_PIPELINE.md",
         "ml_training/RESULTS_INDEX.md",
+        "ml_training/datasets/DATASET_CATALOG.md",
+        "ml_training/datasets/DATASET_INVENTORY.json",
         "ml_training/requirements.txt",
     ):
         _copy_file(relative)

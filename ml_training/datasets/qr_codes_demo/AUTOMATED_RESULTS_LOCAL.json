@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "pack_id": "qr-codes-demo-2026-08-31-r01-r05",
-  "generated_at": "2026-08-31T11:14:18.313603+00:00",
+  "pack_id": "qrguard-presentation-demo-r07",
+  "generated_at": "2026-09-03T14:15:19.385019+00:00",
   "target": "local",
-  "target_label": "in-process locked production stack with QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS=training/artifacts/structural",
+  "target_label": "in-process stack with QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS=training/artifacts/structural",
   "camera_mode": "API simulation using the manifest payload plus a locally decoded and perspective-corrected QR crop; not physical Live Camera evidence",
   "case_count": 42,
   "request_count": 84,
@@ -21,7 +21,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 987,
+        "request_elapsed_ms": 5845,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -31,8 +31,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 5.125999450683594e-05,
-        "p_structural_raw": 5.125999450683594e-05,
+        "p_structural": 0.0023459792137145996,
+        "p_structural_raw": 0.0023459792137145996,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -40,11 +40,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.0538654330922923,
-        "server_elapsed_ms": 769
+        "server_elapsed_ms": 3961
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 71,
+        "request_elapsed_ms": 606,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -54,8 +54,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 5.125999450683594e-05,
-        "p_structural_raw": 5.125999450683594e-05,
+        "p_structural": 0.0023459792137145996,
+        "p_structural_raw": 0.0023459792137145996,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -63,7 +63,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.0538654330922923,
-        "server_elapsed_ms": 52
+        "server_elapsed_ms": 520
       }
     },
     {
@@ -74,7 +74,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 231,
+        "request_elapsed_ms": 902,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -84,8 +84,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.000398099422454834,
-        "p_structural_raw": 0.000398099422454834,
+        "p_structural": 0.0028679370880126953,
+        "p_structural_raw": 0.0028679370880126953,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -93,11 +93,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08313613407926877,
-        "server_elapsed_ms": 78
+        "server_elapsed_ms": 244
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 111,
+        "request_elapsed_ms": 680,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -107,8 +107,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.000398099422454834,
-        "p_structural_raw": 0.000398099422454834,
+        "p_structural": 0.0028679370880126953,
+        "p_structural_raw": 0.0028679370880126953,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -116,7 +116,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08313613407926877,
-        "server_elapsed_ms": 92
+        "server_elapsed_ms": 601
       }
     },
     {
@@ -127,7 +127,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 237,
+        "request_elapsed_ms": 742,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -137,8 +137,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 5.424022674560547e-05,
-        "p_structural_raw": 5.424022674560547e-05,
+        "p_structural": 0.0018017888069152832,
+        "p_structural_raw": 0.0018017888069152832,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -146,11 +146,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.18703537862538436,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 155
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 60,
+        "request_elapsed_ms": 511,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -160,8 +160,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 5.424022674560547e-05,
-        "p_structural_raw": 5.424022674560547e-05,
+        "p_structural": 0.0018017888069152832,
+        "p_structural_raw": 0.0018017888069152832,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -169,7 +169,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.18703537862538436,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 466
       }
     },
     {
@@ -180,7 +180,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 190,
+        "request_elapsed_ms": 824,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -190,8 +190,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 8.749961853027344e-05,
-        "p_structural_raw": 8.749961853027344e-05,
+        "p_structural": 0.0032630562782287598,
+        "p_structural_raw": 0.0032630562782287598,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -199,11 +199,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.16239045004188357,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 162
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 66,
+        "request_elapsed_ms": 602,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -213,8 +213,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 8.749961853027344e-05,
-        "p_structural_raw": 8.749961853027344e-05,
+        "p_structural": 0.0032630562782287598,
+        "p_structural_raw": 0.0032630562782287598,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -222,7 +222,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.16239045004188357,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 553
       }
     },
     {
@@ -233,7 +233,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 244,
+        "request_elapsed_ms": 846,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -243,8 +243,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.00048673152923583984,
-        "p_structural_raw": 0.00048673152923583984,
+        "p_structural": 0.003705918788909912,
+        "p_structural_raw": 0.003705918788909912,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -252,11 +252,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11817598194979483,
-        "server_elapsed_ms": 76
+        "server_elapsed_ms": 253
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 90,
+        "request_elapsed_ms": 626,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -266,8 +266,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.00048673152923583984,
-        "p_structural_raw": 0.00048673152923583984,
+        "p_structural": 0.003705918788909912,
+        "p_structural_raw": 0.003705918788909912,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -275,7 +275,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11817598194979483,
-        "server_elapsed_ms": 73
+        "server_elapsed_ms": 571
       }
     },
     {
@@ -286,7 +286,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 210,
+        "request_elapsed_ms": 736,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -296,20 +296,20 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.054031431674957275,
-        "p_structural_raw": 0.054031431674957275,
-        "structural_quality_status": "marginal",
+        "p_structural": 0.0022292137145996094,
+        "p_structural_raw": 0.0022292137145996094,
+        "structural_quality_status": "usable",
         "structural_quality_conditions": [
-          "overexposure"
+          "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.09780933580797214,
-        "server_elapsed_ms": 72
+        "p_url": 0.06950674352487021,
+        "server_elapsed_ms": 172
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 89,
+        "request_elapsed_ms": 534,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -319,16 +319,16 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.054031431674957275,
-        "p_structural_raw": 0.054031431674957275,
-        "structural_quality_status": "marginal",
+        "p_structural": 0.0022292137145996094,
+        "p_structural_raw": 0.0022292137145996094,
+        "structural_quality_status": "usable",
         "structural_quality_conditions": [
-          "overexposure"
+          "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.09780933580797214,
-        "server_elapsed_ms": 72
+        "p_url": 0.06950674352487021,
+        "server_elapsed_ms": 499
       }
     },
     {
@@ -339,7 +339,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 187,
+        "request_elapsed_ms": 737,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -349,8 +349,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 4.5180320739746094e-05,
-        "p_structural_raw": 4.5180320739746094e-05,
+        "p_structural": 0.004305839538574219,
+        "p_structural_raw": 0.004305839538574219,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -358,11 +358,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12244529796118052,
-        "server_elapsed_ms": 55
+        "server_elapsed_ms": 199
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 63,
+        "request_elapsed_ms": 478,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -372,8 +372,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 4.5180320739746094e-05,
-        "p_structural_raw": 4.5180320739746094e-05,
+        "p_structural": 0.004305839538574219,
+        "p_structural_raw": 0.004305839538574219,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -381,7 +381,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12244529796118052,
-        "server_elapsed_ms": 46
+        "server_elapsed_ms": 415
       }
     },
     {
@@ -392,7 +392,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 209,
+        "request_elapsed_ms": 1068,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -402,8 +402,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0008249878883361816,
-        "p_structural_raw": 0.0008249878883361816,
+        "p_structural": 0.00185394287109375,
+        "p_structural_raw": 0.00185394287109375,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -411,11 +411,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11775148472338019,
-        "server_elapsed_ms": 71
+        "server_elapsed_ms": 319
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 86,
+        "request_elapsed_ms": 553,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -425,8 +425,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0008249878883361816,
-        "p_structural_raw": 0.0008249878883361816,
+        "p_structural": 0.00185394287109375,
+        "p_structural_raw": 0.00185394287109375,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -434,7 +434,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11775148472338019,
-        "server_elapsed_ms": 67
+        "server_elapsed_ms": 502
       }
     },
     {
@@ -445,7 +445,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 207,
+        "request_elapsed_ms": 832,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -455,20 +455,20 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.00019687414169311523,
-        "p_structural_raw": 0.00019687414169311523,
-        "structural_quality_status": "marginal",
+        "p_structural": 0.008352994918823242,
+        "p_structural_raw": 0.008352994918823242,
+        "structural_quality_status": "usable",
         "structural_quality_conditions": [
-          "overexposure"
+          "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.1509021859989841,
-        "server_elapsed_ms": 68
+        "p_url": 0.06490499014260073,
+        "server_elapsed_ms": 177
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 95,
+        "request_elapsed_ms": 777,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -478,16 +478,16 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.00019687414169311523,
-        "p_structural_raw": 0.00019687414169311523,
-        "structural_quality_status": "marginal",
+        "p_structural": 0.008352994918823242,
+        "p_structural_raw": 0.008352994918823242,
+        "structural_quality_status": "usable",
         "structural_quality_conditions": [
-          "overexposure"
+          "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.1509021859989841,
-        "server_elapsed_ms": 75
+        "p_url": 0.06490499014260073,
+        "server_elapsed_ms": 667
       }
     },
     {
@@ -498,7 +498,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 227,
+        "request_elapsed_ms": 1148,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -508,8 +508,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.00244826078414917,
-        "p_structural_raw": 0.00244826078414917,
+        "p_structural": 0.0017527341842651367,
+        "p_structural_raw": 0.0017527341842651367,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -517,11 +517,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08907189193596424,
-        "server_elapsed_ms": 71
+        "server_elapsed_ms": 352
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 99,
+        "request_elapsed_ms": 613,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -531,8 +531,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.00244826078414917,
-        "p_structural_raw": 0.00244826078414917,
+        "p_structural": 0.0017527341842651367,
+        "p_structural_raw": 0.0017527341842651367,
         "structural_quality_status": "marginal",
         "structural_quality_conditions": [
           "overexposure"
@@ -540,7 +540,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08907189193596424,
-        "server_elapsed_ms": 80
+        "server_elapsed_ms": 555
       }
     },
     {
@@ -551,9 +551,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 271,
+        "request_elapsed_ms": 1236,
         "verdict": "blocked",
-        "risk_score": 89,
+        "risk_score": 83,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -564,8 +564,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9986717104911804,
-        "p_structural_raw": 0.9986717104911804,
+        "p_structural": 0.9229418039321899,
+        "p_structural_raw": 0.9229418039321899,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -573,13 +573,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11641510291265666,
-        "server_elapsed_ms": 52
+        "server_elapsed_ms": 167
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 66,
+        "request_elapsed_ms": 2369,
         "verdict": "blocked",
-        "risk_score": 89,
+        "risk_score": 83,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -590,8 +590,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9986717104911804,
-        "p_structural_raw": 0.9986717104911804,
+        "p_structural": 0.9229418039321899,
+        "p_structural_raw": 0.9229418039321899,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -599,7 +599,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11641510291265666,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 2323
       }
     },
     {
@@ -610,7 +610,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 195,
+        "request_elapsed_ms": 838,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -623,8 +623,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9990317225456238,
-        "p_structural_raw": 0.9990317225456238,
+        "p_structural": 0.9983974099159241,
+        "p_structural_raw": 0.9983974099159241,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -632,11 +632,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13553339418086713,
-        "server_elapsed_ms": 54
+        "server_elapsed_ms": 165
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 66,
+        "request_elapsed_ms": 497,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -649,8 +649,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9990317225456238,
-        "p_structural_raw": 0.9990317225456238,
+        "p_structural": 0.9983974099159241,
+        "p_structural_raw": 0.9983974099159241,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -658,7 +658,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13553339418086713,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 441
       }
     },
     {
@@ -669,7 +669,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 198,
+        "request_elapsed_ms": 798,
         "verdict": "blocked",
         "risk_score": 88,
         "partial_analysis": false,
@@ -682,8 +682,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9996111392974854,
-        "p_structural_raw": 0.9996111392974854,
+        "p_structural": 0.9960722923278809,
+        "p_structural_raw": 0.9960722923278809,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -691,11 +691,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.09710336113272851,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 171
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 70,
+        "request_elapsed_ms": 459,
         "verdict": "blocked",
         "risk_score": 88,
         "partial_analysis": false,
@@ -708,8 +708,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9996111392974854,
-        "p_structural_raw": 0.9996111392974854,
+        "p_structural": 0.9960722923278809,
+        "p_structural_raw": 0.9960722923278809,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -717,7 +717,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.09710336113272851,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 410
       }
     },
     {
@@ -728,9 +728,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 205,
+        "request_elapsed_ms": 687,
         "verdict": "blocked",
-        "risk_score": 89,
+        "risk_score": 76,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -741,8 +741,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9986006021499634,
-        "p_structural_raw": 0.9986006021499634,
+        "p_structural": 0.8473719358444214,
+        "p_structural_raw": 0.8473719358444214,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -750,13 +750,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11765949184252748,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 163
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 70,
+        "request_elapsed_ms": 566,
         "verdict": "blocked",
-        "risk_score": 89,
+        "risk_score": 76,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -767,8 +767,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9986006021499634,
-        "p_structural_raw": 0.9986006021499634,
+        "p_structural": 0.8473719358444214,
+        "p_structural_raw": 0.8473719358444214,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -776,7 +776,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11765949184252748,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 504
       }
     },
     {
@@ -787,9 +787,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 193,
+        "request_elapsed_ms": 775,
         "verdict": "blocked",
-        "risk_score": 90,
+        "risk_score": 89,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -800,8 +800,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9997866153717041,
-        "p_structural_raw": 0.9997866153717041,
+        "p_structural": 0.9811208844184875,
+        "p_structural_raw": 0.9811208844184875,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -809,13 +809,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12943447514356002,
-        "server_elapsed_ms": 51
+        "server_elapsed_ms": 204
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 68,
+        "request_elapsed_ms": 455,
         "verdict": "blocked",
-        "risk_score": 90,
+        "risk_score": 89,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -826,8 +826,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9997866153717041,
-        "p_structural_raw": 0.9997866153717041,
+        "p_structural": 0.9811208844184875,
+        "p_structural_raw": 0.9811208844184875,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -835,7 +835,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12943447514356002,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 398
       }
     },
     {
@@ -846,7 +846,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 190,
+        "request_elapsed_ms": 771,
         "verdict": "blocked",
         "risk_score": 89,
         "partial_analysis": false,
@@ -859,8 +859,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9997373819351196,
-        "p_structural_raw": 0.9997373819351196,
+        "p_structural": 0.9982141256332397,
+        "p_structural_raw": 0.9982141256332397,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -868,11 +868,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12127705676330743,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 162
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 70,
+        "request_elapsed_ms": 505,
         "verdict": "blocked",
         "risk_score": 89,
         "partial_analysis": false,
@@ -885,8 +885,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9997373819351196,
-        "p_structural_raw": 0.9997373819351196,
+        "p_structural": 0.9982141256332397,
+        "p_structural_raw": 0.9982141256332397,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -894,7 +894,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12127705676330743,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 436
       }
     },
     {
@@ -905,9 +905,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 199,
+        "request_elapsed_ms": 876,
         "verdict": "blocked",
-        "risk_score": 83,
+        "risk_score": 92,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -918,22 +918,22 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9441817998886108,
-        "p_structural_raw": 0.9441817998886108,
+        "p_structural": 0.996703028678894,
+        "p_structural_raw": 0.996703028678894,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.08988192806584898,
-        "server_elapsed_ms": 52
+        "p_url": 0.18536945485273398,
+        "server_elapsed_ms": 165
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 70,
+        "request_elapsed_ms": 1121,
         "verdict": "blocked",
-        "risk_score": 83,
+        "risk_score": 92,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -944,16 +944,16 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9441817998886108,
-        "p_structural_raw": 0.9441817998886108,
+        "p_structural": 0.996703028678894,
+        "p_structural_raw": 0.996703028678894,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.08988192806584898,
-        "server_elapsed_ms": 50
+        "p_url": 0.18536945485273398,
+        "server_elapsed_ms": 1069
       }
     },
     {
@@ -964,9 +964,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 179,
+        "request_elapsed_ms": 702,
         "verdict": "blocked",
-        "risk_score": 87,
+        "risk_score": 76,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -977,8 +977,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9982225298881531,
-        "p_structural_raw": 0.9982225298881531,
+        "p_structural": 0.8787747025489807,
+        "p_structural_raw": 0.8787747025489807,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -986,13 +986,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08213286390571632,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 138
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 69,
+        "request_elapsed_ms": 1165,
         "verdict": "blocked",
-        "risk_score": 87,
+        "risk_score": 76,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -1003,8 +1003,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9982225298881531,
-        "p_structural_raw": 0.9982225298881531,
+        "p_structural": 0.8787747025489807,
+        "p_structural_raw": 0.8787747025489807,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1012,7 +1012,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08213286390571632,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 1110
       }
     },
     {
@@ -1023,9 +1023,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 424,
+        "request_elapsed_ms": 1750,
         "verdict": "blocked",
-        "risk_score": 88,
+        "risk_score": 87,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -1036,8 +1036,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.999928891658783,
-        "p_structural_raw": 0.999928891658783,
+        "p_structural": 0.9824832081794739,
+        "p_structural_raw": 0.9824832081794739,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1045,13 +1045,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.10419239650261383,
-        "server_elapsed_ms": 51
+        "server_elapsed_ms": 156
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 68,
+        "request_elapsed_ms": 433,
         "verdict": "blocked",
-        "risk_score": 88,
+        "risk_score": 87,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -1062,8 +1062,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.999928891658783,
-        "p_structural_raw": 0.999928891658783,
+        "p_structural": 0.9824832081794739,
+        "p_structural_raw": 0.9824832081794739,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1071,7 +1071,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.10419239650261383,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 374
       }
     },
     {
@@ -1082,7 +1082,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 186,
+        "request_elapsed_ms": 715,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1095,8 +1095,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9987758994102478,
-        "p_structural_raw": 0.9987758994102478,
+        "p_structural": 0.9969412684440613,
+        "p_structural_raw": 0.9969412684440613,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1104,11 +1104,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13906969663037974,
-        "server_elapsed_ms": 52
+        "server_elapsed_ms": 157
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 74,
+        "request_elapsed_ms": 474,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1121,8 +1121,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "adversarial",
-        "p_structural": 0.9987758994102478,
-        "p_structural_raw": 0.9987758994102478,
+        "p_structural": 0.9969412684440613,
+        "p_structural_raw": 0.9969412684440613,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1130,7 +1130,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13906969663037974,
-        "server_elapsed_ms": 55
+        "server_elapsed_ms": 411
       }
     },
     {
@@ -1141,7 +1141,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 194,
+        "request_elapsed_ms": 779,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1154,8 +1154,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999213218688965,
-        "p_structural_raw": 0.9999213218688965,
+        "p_structural": 0.999610424041748,
+        "p_structural_raw": 0.999610424041748,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1163,11 +1163,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12995833674451543,
-        "server_elapsed_ms": 51
+        "server_elapsed_ms": 147
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 70,
+        "request_elapsed_ms": 1847,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1180,8 +1180,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999213218688965,
-        "p_structural_raw": 0.9999213218688965,
+        "p_structural": 0.999610424041748,
+        "p_structural_raw": 0.999610424041748,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1189,7 +1189,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.12995833674451543,
-        "server_elapsed_ms": 51
+        "server_elapsed_ms": 1793
       }
     },
     {
@@ -1200,9 +1200,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 219,
+        "request_elapsed_ms": 617,
         "verdict": "blocked",
-        "risk_score": 93,
+        "risk_score": 89,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -1213,22 +1213,22 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9995083808898926,
-        "p_structural_raw": 0.9995083808898926,
-        "structural_quality_status": "marginal",
+        "p_structural": 0.9995437264442444,
+        "p_structural_raw": 0.9995437264442444,
+        "structural_quality_status": "usable",
         "structural_quality_conditions": [
-          "overexposure"
+          "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.2031272233000487,
-        "server_elapsed_ms": 67
+        "p_url": 0.10549147599435398,
+        "server_elapsed_ms": 142
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 82,
+        "request_elapsed_ms": 424,
         "verdict": "blocked",
-        "risk_score": 93,
+        "risk_score": 89,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -1239,16 +1239,16 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9995083808898926,
-        "p_structural_raw": 0.9995083808898926,
-        "structural_quality_status": "marginal",
+        "p_structural": 0.9995437264442444,
+        "p_structural_raw": 0.9995437264442444,
+        "structural_quality_status": "usable",
         "structural_quality_conditions": [
-          "overexposure"
+          "normal"
         ],
         "structural_rescan_reason": null,
         "semantic_status": "completed",
-        "p_url": 0.2031272233000487,
-        "server_elapsed_ms": 65
+        "p_url": 0.10549147599435398,
+        "server_elapsed_ms": 377
       }
     },
     {
@@ -1259,7 +1259,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 196,
+        "request_elapsed_ms": 789,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1272,8 +1272,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999334216117859,
-        "p_structural_raw": 0.9999334216117859,
+        "p_structural": 0.9992708563804626,
+        "p_structural_raw": 0.9992708563804626,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1281,11 +1281,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13628834620422492,
-        "server_elapsed_ms": 54
+        "server_elapsed_ms": 181
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 69,
+        "request_elapsed_ms": 578,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1298,8 +1298,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999334216117859,
-        "p_structural_raw": 0.9999334216117859,
+        "p_structural": 0.9992708563804626,
+        "p_structural_raw": 0.9992708563804626,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1307,7 +1307,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13628834620422492,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 507
       }
     },
     {
@@ -1318,7 +1318,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 182,
+        "request_elapsed_ms": 1032,
         "verdict": "blocked",
         "risk_score": 92,
         "partial_analysis": false,
@@ -1331,8 +1331,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999059438705444,
-        "p_structural_raw": 0.9999059438705444,
+        "p_structural": 0.9994574189186096,
+        "p_structural_raw": 0.9994574189186096,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1340,11 +1340,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.16241200119424556,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 225
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 61,
+        "request_elapsed_ms": 442,
         "verdict": "blocked",
         "risk_score": 92,
         "partial_analysis": false,
@@ -1357,8 +1357,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999059438705444,
-        "p_structural_raw": 0.9999059438705444,
+        "p_structural": 0.9994574189186096,
+        "p_structural_raw": 0.9994574189186096,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1366,7 +1366,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.16241200119424556,
-        "server_elapsed_ms": 47
+        "server_elapsed_ms": 393
       }
     },
     {
@@ -1377,7 +1377,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 203,
+        "request_elapsed_ms": 901,
         "verdict": "blocked",
         "risk_score": 89,
         "partial_analysis": false,
@@ -1390,8 +1390,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.999865710735321,
-        "p_structural_raw": 0.999865710735321,
+        "p_structural": 0.9996938109397888,
+        "p_structural_raw": 0.9996938109397888,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1399,11 +1399,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11852802720614279,
-        "server_elapsed_ms": 55
+        "server_elapsed_ms": 156
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 70,
+        "request_elapsed_ms": 454,
         "verdict": "blocked",
         "risk_score": 89,
         "partial_analysis": false,
@@ -1416,8 +1416,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.999865710735321,
-        "p_structural_raw": 0.999865710735321,
+        "p_structural": 0.9996938109397888,
+        "p_structural_raw": 0.9996938109397888,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1425,7 +1425,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11852802720614279,
-        "server_elapsed_ms": 52
+        "server_elapsed_ms": 399
       }
     },
     {
@@ -1436,7 +1436,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 195,
+        "request_elapsed_ms": 811,
         "verdict": "blocked",
         "risk_score": 87,
         "partial_analysis": false,
@@ -1449,8 +1449,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999894499778748,
-        "p_structural_raw": 0.9999894499778748,
+        "p_structural": 0.9994738101959229,
+        "p_structural_raw": 0.9994738101959229,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1458,11 +1458,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08703628932597034,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 156
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 63,
+        "request_elapsed_ms": 385,
         "verdict": "blocked",
         "risk_score": 87,
         "partial_analysis": false,
@@ -1475,8 +1475,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999894499778748,
-        "p_structural_raw": 0.9999894499778748,
+        "p_structural": 0.9994738101959229,
+        "p_structural_raw": 0.9994738101959229,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1484,7 +1484,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.08703628932597034,
-        "server_elapsed_ms": 46
+        "server_elapsed_ms": 343
       }
     },
     {
@@ -1495,7 +1495,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 182,
+        "request_elapsed_ms": 861,
         "verdict": "blocked",
         "risk_score": 93,
         "partial_analysis": false,
@@ -1508,8 +1508,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9998185038566589,
-        "p_structural_raw": 0.9998185038566589,
+        "p_structural": 0.9994717836380005,
+        "p_structural_raw": 0.9994717836380005,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1517,11 +1517,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.18972120842213772,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 265
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 63,
+        "request_elapsed_ms": 365,
         "verdict": "blocked",
         "risk_score": 93,
         "partial_analysis": false,
@@ -1534,8 +1534,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9998185038566589,
-        "p_structural_raw": 0.9998185038566589,
+        "p_structural": 0.9994717836380005,
+        "p_structural_raw": 0.9994717836380005,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1543,7 +1543,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.18972120842213772,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 320
       }
     },
     {
@@ -1554,7 +1554,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 189,
+        "request_elapsed_ms": 762,
         "verdict": "blocked",
         "risk_score": 86,
         "partial_analysis": false,
@@ -1567,8 +1567,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9991121888160706,
-        "p_structural_raw": 0.9991121888160706,
+        "p_structural": 0.9979956746101379,
+        "p_structural_raw": 0.9979956746101379,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1576,11 +1576,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.07286054072685656,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 150
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 70,
+        "request_elapsed_ms": 521,
         "verdict": "blocked",
         "risk_score": 86,
         "partial_analysis": false,
@@ -1593,8 +1593,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9991121888160706,
-        "p_structural_raw": 0.9991121888160706,
+        "p_structural": 0.9979956746101379,
+        "p_structural_raw": 0.9979956746101379,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1602,7 +1602,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.07286054072685656,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 471
       }
     },
     {
@@ -1613,7 +1613,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 185,
+        "request_elapsed_ms": 877,
         "verdict": "blocked",
         "risk_score": 93,
         "partial_analysis": false,
@@ -1626,8 +1626,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999693632125854,
-        "p_structural_raw": 0.9999693632125854,
+        "p_structural": 0.999543309211731,
+        "p_structural_raw": 0.999543309211731,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1635,11 +1635,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.19372842218403494,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 181
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 69,
+        "request_elapsed_ms": 455,
         "verdict": "blocked",
         "risk_score": 93,
         "partial_analysis": false,
@@ -1652,8 +1652,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999693632125854,
-        "p_structural_raw": 0.9999693632125854,
+        "p_structural": 0.999543309211731,
+        "p_structural_raw": 0.999543309211731,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1661,7 +1661,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.19372842218403494,
-        "server_elapsed_ms": 52
+        "server_elapsed_ms": 400
       }
     },
     {
@@ -1672,7 +1672,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 196,
+        "request_elapsed_ms": 746,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1685,8 +1685,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999356269836426,
-        "p_structural_raw": 0.9999356269836426,
+        "p_structural": 0.9996902942657471,
+        "p_structural_raw": 0.9996902942657471,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1694,11 +1694,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13990786980436384,
-        "server_elapsed_ms": 51
+        "server_elapsed_ms": 165
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 75,
+        "request_elapsed_ms": 1908,
         "verdict": "blocked",
         "risk_score": 90,
         "partial_analysis": false,
@@ -1711,8 +1711,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "tampered",
-        "p_structural": 0.9999356269836426,
-        "p_structural_raw": 0.9999356269836426,
+        "p_structural": 0.9996902942657471,
+        "p_structural_raw": 0.9996902942657471,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1720,7 +1720,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.13990786980436384,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 1852
       }
     },
     {
@@ -1731,7 +1731,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 190,
+        "request_elapsed_ms": 968,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -1741,8 +1741,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.022207975387573242,
-        "p_structural_raw": 0.022207975387573242,
+        "p_structural": 0.023117780685424805,
+        "p_structural_raw": 0.023117780685424805,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1750,11 +1750,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11028046628354772,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 215
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 67,
+        "request_elapsed_ms": 456,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -1764,8 +1764,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.022207975387573242,
-        "p_structural_raw": 0.022207975387573242,
+        "p_structural": 0.023117780685424805,
+        "p_structural_raw": 0.023117780685424805,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1773,7 +1773,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.11028046628354772,
-        "server_elapsed_ms": 56
+        "server_elapsed_ms": 420
       }
     },
     {
@@ -1784,9 +1784,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 301,
+        "request_elapsed_ms": 1234,
         "verdict": "blocked",
-        "risk_score": 78,
+        "risk_score": 80,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -1802,8 +1802,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0008824467658996582,
-        "p_structural_raw": 0.0008824467658996582,
+        "p_structural": 0.015307962894439697,
+        "p_structural_raw": 0.015307962894439697,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1811,13 +1811,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.974348619619489,
-        "server_elapsed_ms": 57
+        "server_elapsed_ms": 157
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 61,
+        "request_elapsed_ms": 1365,
         "verdict": "blocked",
-        "risk_score": 78,
+        "risk_score": 80,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -1833,8 +1833,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0008824467658996582,
-        "p_structural_raw": 0.0008824467658996582,
+        "p_structural": 0.015307962894439697,
+        "p_structural_raw": 0.015307962894439697,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1842,7 +1842,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.974348619619489,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 1331
       }
     },
     {
@@ -1853,9 +1853,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 192,
+        "request_elapsed_ms": 866,
         "verdict": "blocked",
-        "risk_score": 95,
+        "risk_score": 96,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -1872,8 +1872,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.15712881088256836,
-        "p_structural_raw": 0.15712881088256836,
+        "p_structural": 0.18175119161605835,
+        "p_structural_raw": 0.18175119161605835,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1881,13 +1881,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.9961118880562588,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 167
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 62,
+        "request_elapsed_ms": 448,
         "verdict": "blocked",
-        "risk_score": 95,
+        "risk_score": 96,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -1904,8 +1904,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.15712881088256836,
-        "p_structural_raw": 0.15712881088256836,
+        "p_structural": 0.18175119161605835,
+        "p_structural_raw": 0.18175119161605835,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1913,7 +1913,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.9961118880562588,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 400
       }
     },
     {
@@ -1924,7 +1924,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 193,
+        "request_elapsed_ms": 767,
         "verdict": "warning",
         "risk_score": 30,
         "partial_analysis": false,
@@ -1942,8 +1942,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.02183479070663452,
-        "p_structural_raw": 0.02183479070663452,
+        "p_structural": 0.02437204122543335,
+        "p_structural_raw": 0.02437204122543335,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1951,11 +1951,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.593562271510023,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 162
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 72,
+        "request_elapsed_ms": 430,
         "verdict": "warning",
         "risk_score": 30,
         "partial_analysis": false,
@@ -1973,8 +1973,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.02183479070663452,
-        "p_structural_raw": 0.02183479070663452,
+        "p_structural": 0.02437204122543335,
+        "p_structural_raw": 0.02437204122543335,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -1982,7 +1982,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.593562271510023,
-        "server_elapsed_ms": 57
+        "server_elapsed_ms": 397
       }
     },
     {
@@ -1993,7 +1993,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 191,
+        "request_elapsed_ms": 778,
         "verdict": "blocked",
         "risk_score": 80,
         "partial_analysis": false,
@@ -2011,8 +2011,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.004064679145812988,
-        "p_structural_raw": 0.004064679145812988,
+        "p_structural": 0.005729198455810547,
+        "p_structural_raw": 0.005729198455810547,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2020,11 +2020,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.9842895841469359,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 163
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 60,
+        "request_elapsed_ms": 472,
         "verdict": "blocked",
         "risk_score": 80,
         "partial_analysis": false,
@@ -2042,8 +2042,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.004064679145812988,
-        "p_structural_raw": 0.004064679145812988,
+        "p_structural": 0.005729198455810547,
+        "p_structural_raw": 0.005729198455810547,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2051,7 +2051,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.9842895841469359,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 432
       }
     },
     {
@@ -2062,9 +2062,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 193,
+        "request_elapsed_ms": 764,
         "verdict": "blocked",
-        "risk_score": 89,
+        "risk_score": 90,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "url",
@@ -2081,8 +2081,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0022084712982177734,
-        "p_structural_raw": 0.0022084712982177734,
+        "p_structural": 0.01846778392791748,
+        "p_structural_raw": 0.01846778392791748,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2090,13 +2090,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.9945618360677255,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 174
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 61,
+        "request_elapsed_ms": 393,
         "verdict": "blocked",
-        "risk_score": 89,
+        "risk_score": 90,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "url",
@@ -2113,8 +2113,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0022084712982177734,
-        "p_structural_raw": 0.0022084712982177734,
+        "p_structural": 0.01846778392791748,
+        "p_structural_raw": 0.01846778392791748,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2122,7 +2122,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.9945618360677255,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 352
       }
     },
     {
@@ -2133,7 +2133,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 196,
+        "request_elapsed_ms": 650,
         "verdict": "blocked",
         "risk_score": 100,
         "partial_analysis": false,
@@ -2149,8 +2149,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.06067532300949097,
-        "p_structural_raw": 0.06067532300949097,
+        "p_structural": 0.030635833740234375,
+        "p_structural_raw": 0.030635833740234375,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2158,11 +2158,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.7905565307133227,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 159
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 62,
+        "request_elapsed_ms": 435,
         "verdict": "blocked",
         "risk_score": 100,
         "partial_analysis": false,
@@ -2178,8 +2178,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.06067532300949097,
-        "p_structural_raw": 0.06067532300949097,
+        "p_structural": 0.030635833740234375,
+        "p_structural_raw": 0.030635833740234375,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2187,7 +2187,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "completed",
         "p_url": 0.7905565307133227,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 388
       }
     },
     {
@@ -2198,7 +2198,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 182,
+        "request_elapsed_ms": 650,
         "verdict": "blocked",
         "risk_score": 95,
         "partial_analysis": false,
@@ -2213,8 +2213,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.10956728458404541,
-        "p_structural_raw": 0.10956728458404541,
+        "p_structural": 0.08798599243164062,
+        "p_structural_raw": 0.08798599243164062,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2222,11 +2222,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 51
+        "server_elapsed_ms": 143
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 63,
+        "request_elapsed_ms": 385,
         "verdict": "blocked",
         "risk_score": 95,
         "partial_analysis": false,
@@ -2241,8 +2241,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.10956728458404541,
-        "p_structural_raw": 0.10956728458404541,
+        "p_structural": 0.08798599243164062,
+        "p_structural_raw": 0.08798599243164062,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2250,7 +2250,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 53
+        "server_elapsed_ms": 353
       }
     },
     {
@@ -2261,7 +2261,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 187,
+        "request_elapsed_ms": 675,
         "verdict": "warning",
         "risk_score": 26,
         "partial_analysis": false,
@@ -2276,8 +2276,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.008157074451446533,
-        "p_structural_raw": 0.008157074451446533,
+        "p_structural": 0.019525527954101562,
+        "p_structural_raw": 0.019525527954101562,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2285,11 +2285,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 151
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 57,
+        "request_elapsed_ms": 383,
         "verdict": "warning",
         "risk_score": 26,
         "partial_analysis": false,
@@ -2304,8 +2304,8 @@
         ],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.008157074451446533,
-        "p_structural_raw": 0.008157074451446533,
+        "p_structural": 0.019525527954101562,
+        "p_structural_raw": 0.019525527954101562,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2313,7 +2313,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 47
+        "server_elapsed_ms": 346
       }
     },
     {
@@ -2324,7 +2324,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 190,
+        "request_elapsed_ms": 721,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -2334,8 +2334,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0012511014938354492,
-        "p_structural_raw": 0.0012511014938354492,
+        "p_structural": 0.017657697200775146,
+        "p_structural_raw": 0.017657697200775146,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2343,11 +2343,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 134
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 61,
+        "request_elapsed_ms": 391,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -2357,8 +2357,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.0012511014938354492,
-        "p_structural_raw": 0.0012511014938354492,
+        "p_structural": 0.017657697200775146,
+        "p_structural_raw": 0.017657697200775146,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2366,7 +2366,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 48
+        "server_elapsed_ms": 365
       }
     },
     {
@@ -2377,9 +2377,9 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 194,
+        "request_elapsed_ms": 640,
         "verdict": "safe",
-        "risk_score": 7,
+        "risk_score": 1,
         "partial_analysis": false,
         "payload_source": "decoded",
         "payload_type": "text",
@@ -2387,8 +2387,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.3171618580818176,
-        "p_structural_raw": 0.3171618580818176,
+        "p_structural": 0.07966923713684082,
+        "p_structural_raw": 0.07966923713684082,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2396,13 +2396,13 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 49
+        "server_elapsed_ms": 150
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 63,
+        "request_elapsed_ms": 397,
         "verdict": "safe",
-        "risk_score": 7,
+        "risk_score": 1,
         "partial_analysis": false,
         "payload_source": "provided",
         "payload_type": "text",
@@ -2410,8 +2410,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.3171618580818176,
-        "p_structural_raw": 0.3171618580818176,
+        "p_structural": 0.07966923713684082,
+        "p_structural_raw": 0.07966923713684082,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2419,7 +2419,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 50
+        "server_elapsed_ms": 366
       }
     },
     {
@@ -2430,7 +2430,7 @@
       "camera_simulation_matches_intended": true,
       "gallery": {
         "http_status": 200,
-        "request_elapsed_ms": 203,
+        "request_elapsed_ms": 656,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -2440,8 +2440,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.010048925876617432,
-        "p_structural_raw": 0.010048925876617432,
+        "p_structural": 0.00335848331451416,
+        "p_structural_raw": 0.00335848331451416,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2449,11 +2449,11 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 51
+        "server_elapsed_ms": 116
       },
       "camera_simulation": {
         "http_status": 200,
-        "request_elapsed_ms": 67,
+        "request_elapsed_ms": 372,
         "verdict": "safe",
         "risk_score": 1,
         "partial_analysis": false,
@@ -2463,8 +2463,8 @@
         "reasons": [],
         "structural_status": "completed",
         "structural_type": "clean",
-        "p_structural": 0.010048925876617432,
-        "p_structural_raw": 0.010048925876617432,
+        "p_structural": 0.00335848331451416,
+        "p_structural_raw": 0.00335848331451416,
         "structural_quality_status": "usable",
         "structural_quality_conditions": [
           "normal"
@@ -2472,7 +2472,7 @@
         "structural_rescan_reason": null,
         "semantic_status": "not_applicable",
         "p_url": null,
-        "server_elapsed_ms": 56
+        "server_elapsed_ms": 336
       }
     }
   ]

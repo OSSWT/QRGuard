@@ -21,7 +21,12 @@ def _json(name: str) -> dict:
 def test_demo_manifest_has_the_declared_scope_and_no_training_role():
     manifest = _json("MANIFEST.json")
     cases = manifest["cases"]
-    assert manifest["pack_id"] == "qr-codes-demo-2026-08-31-r01-r05"
+    assert manifest["pack_id"] == "qrguard-presentation-demo-r07"
+    assert manifest["model_lock"] == {
+        "structural": "structural-r07-corrective-v1",
+        "semantic": "semantic-2026.02",
+        "decision": "decision-2026.03-r05",
+    }
     assert manifest["case_count"] == 42 == len(cases)
     assert manifest["independent_performance_claim"] is False
     assert sum(case["category"] == "structural" for case in cases) == 30
@@ -34,6 +39,32 @@ def test_demo_manifest_has_the_declared_scope_and_no_training_role():
         image = PACK / case["image_path"]
         assert image.is_file()
         assert hashlib.sha256(image.read_bytes()).hexdigest() == case["image_sha256"]
+
+
+def test_quick_presentation_covers_every_declared_demo_type():
+    with (PACK / "QUICK_DEMO_ORDER.csv").open(
+        newline="", encoding="utf-8-sig"
+    ) as handle:
+        rows = list(csv.DictReader(handle))
+    ids = {row["case_id"] for row in rows}
+    assert len(rows) == 15
+    assert {"STR-CLN-NORMAL", "STR-ADV-NORMAL", "STR-TMP-NORMAL"} <= ids
+    assert {f"SEM-{index:02d}-{suffix}" for index, suffix in (
+        (1, "SAFE-HTTPS"),
+        (2, "BRAND-PHISH"),
+        (3, "RAW-IP"),
+        (4, "PUNYCODE"),
+        (5, "USERINFO"),
+        (6, "DEEP-SUBDOMAINS"),
+        (7, "SHORTENER"),
+        (8, "JAVASCRIPT"),
+        (9, "WIFI-OPEN"),
+        (10, "WIFI-SECURE"),
+        (11, "PLAIN-TEXT"),
+        (12, "DUITNOW-DUMMY"),
+    )} <= ids
+    assert (PACK / "PRESENTATION_DEMO.html").is_file()
+    assert (PACK / "PRESENTATION_GUIDE.md").is_file()
 
 
 def test_local_and_deployed_automated_results_match_all_intended_outcomes():

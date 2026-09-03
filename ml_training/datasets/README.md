@@ -21,11 +21,17 @@ datasets/
 `references/` is the single source for both branches. It contains the shared
 dataset registry, licences and BibTeX plus explicit Structural and Semantic
 indexes. `generated_qr_codes/` records QR images created by this project,
-including legacy, procedural and capture-reference datasets.
+including active test fixtures, capture references and presentation assets.
 
 `qr_codes_demo/` is deliberately separate from training and locked evaluation.
 It demonstrates the already deployed stack and must remain `demo_only` in every
 future manifest.
+
+Start with [`DATASET_CATALOG.md`](DATASET_CATALOG.md) for the complete human-
+readable inventory: local paths, admitted roles, source URLs, licences, counts,
+split boundaries and GitHub retention decisions. `DATASET_INVENTORY.json` is the
+matching reproducible local existence/reference/hash audit. Regenerate it with
+`python scripts/audit_ml_datasets.py` from the repository root.
 
 Structural images are classified through their authoritative manifests. Do not
 materialize a second `pictures_by_source` hardlink catalog: it duplicates the

@@ -1,8 +1,9 @@
 # Dataset sources and report usage
 
-Last verified: 2026-09-02. Links below point to the official repository, data
-record, publisher, or project page. `REFERENCES.bib` contains report-ready citation
-records.
+Links below point to the official repository, data record, publisher, or project
+page. `REFERENCES.bib` contains report-ready citation records. Exact local paths,
+row counts, hashes and admission decisions are in `../DATASET_CATALOG.md` and
+`../DATASET_INVENTORY.json`.
 
 ## Local acquisition record (2026-08-21)
 
@@ -26,9 +27,10 @@ records.
 
 ### Primary project data
 
-- **QRGuard Runtime Captures** — exact post-rectification crops produced by the
-  application. This is the only source that directly measures the deployed camera
-  input distribution. Collection is still required for all three labels.
+- **QRGuard Runtime Captures** — 361 verified exact post-rectification crops
+  produced by the application: 300 Camera sessions (100 per Structural class)
+  and 61 Gallery sessions. This is the only source that directly measures the
+  deployed camera input distribution.
 
 - **Consumed M8 clean development replay** — 80 exact-app clean crops from 16
   previously blinded QR identities. r07 uses a fixed 12-identity train / 4-identity
@@ -100,12 +102,14 @@ attacks, because localization/noise labels do not prove manipulation.
 - **PhiUSIIL** — primary labelled phishing/legitimate URL corpus from UCI, CC BY
   4.0. QRGuard remaps the published labels to `0=benign`, `1=dangerous`.
   <https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset>
-- **Malicious URLs** — multi-class URL corpus (`benign`, `phishing`, `defacement`,
-  `malware`). Keep its source tag because its provenance and label quality differ
-  from UCI.
+- **Malicious URLs** — 651,191-row multi-class URL corpus (`benign`, `phishing`,
+  `defacement`, `malware`), listed as CC0 Public Domain on its Kaggle data page.
+  Keep its source tag because its provenance and label quality differ from UCI.
   <https://www.kaggle.com/datasets/sid321axn/malicious-urls-dataset>
 - **Tranco** — research-oriented top-site ranking used only to broaden benign
-  registered-domain coverage. Record the exact list ID/date in each run.
+  registered-domain coverage. The retained 150,000-row snapshot has a locked
+  file hash, but its permanent list ID was not recorded at acquisition; this is
+  disclosed rather than reconstructed. A replacement run must record its ID.
   <https://tranco-list.eu/>
 
 ## Non-duplication rule

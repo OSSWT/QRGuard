@@ -5,13 +5,17 @@ external dataset. The actual image trees remain Git-ignored; their paths,
 counts, roles, source manifests and deterministic tree hashes are recorded in
 `registry.json`.
 
-The registry separates:
+The registry records the active generated sets:
 
-- legacy benign/malicious QR images that are not part of the current run;
-- procedural Structural images governed by the current run manifest;
 - QR references created for the exact-app Gallery/Camera capture campaign;
 - train/validation Gallery references with locked-test references excluded;
-- superseded manual API/Gallery demonstration cards.
+- the post-lock presentation demonstration pack;
+- active backend/Flutter regression fixtures; and
+- active manual Gallery scanning QA cards.
+
+Regenerable legacy image caches are deliberately excluded from this registry
+and from the repository. Current training inputs are catalogued separately in
+[`../DATASET_CATALOG.md`](../DATASET_CATALOG.md).
 
 Regenerate the inventory from the repository root:
 

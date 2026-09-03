@@ -20,13 +20,10 @@ active or rollback stack.
 ```text
 ml_training/
   configs/              immutable JSON configuration per experiment
-  datasets/             raw/processed data locations and manifest contract
-  references/           citations, licences, provenance, dataset registry
+  datasets/             data contracts, provenance, references and demo assets
   structural/           image-model code, notebooks and performance outputs
   semantic/             URL/payload-model code, notebooks and performance outputs
   decision_layer/       branch fusion, threshold calibration and cell gates
-  datasets/             Structural/Semantic data contracts, shared references,
-                        generated QR provenance and QR_Codes_Demo
   deployment/           candidate/approved model registry and promotion checks
   scripts/              shared dataset, environment and reporting utilities
 ```
@@ -46,6 +43,13 @@ Current run folders, report tables, figures, citations, deployment artifacts and
 the remaining evidence boundary are indexed in [RESULTS_INDEX.md](RESULTS_INDEX.md).
 The exact RGB preprocessing and coloured-QR coverage are documented in
 [COLOR_PIPELINE.md](COLOR_PIPELINE.md).
+
+The complete human-readable dataset source, licence, split and retention record
+is [datasets/DATASET_CATALOG.md](datasets/DATASET_CATALOG.md). Its deterministic
+local presence/hash audit is
+[datasets/DATASET_INVENTORY.json](datasets/DATASET_INVENTORY.json), and the
+presentation-safe QR pack is under
+[datasets/qr_codes_demo/](datasets/qr_codes_demo/README_%E4%B8%AD%E6%96%87_English.md).
 
 The complete Drive/Colab hand-off is generated with
 `python scripts/build_colab_bundle.py`. It creates the ignored

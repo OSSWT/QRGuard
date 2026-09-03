@@ -11,3 +11,7 @@
 The exact URLs and dataset IDs are in `../dataset_registry.csv`; licence and
 redistribution decisions are in `../DATASET_LICENSES.md`. Procedurally generated
 QRs are project data and are recorded under `../../generated_qr_codes/`.
+
+Exact local paths, archive/manifest hashes, row counts and the distinction
+between admitted, quarantined, consumed and regenerable data are in
+`../../DATASET_CATALOG.md` and `../../DATASET_INVENTORY.json`.

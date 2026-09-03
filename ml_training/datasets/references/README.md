@@ -4,6 +4,11 @@ This is the single reference entry point for both trained branches. It records
 source identity, access conditions, licences, citations, hashes and each
 dataset's admitted role without redistributing restricted source archives.
 
+- [`../DATASET_CATALOG.md`](../DATASET_CATALOG.md) is the complete operational
+  catalogue for Structural, Semantic and Decision training data.
+- [`../DATASET_INVENTORY.json`](../DATASET_INVENTORY.json) is the machine-
+  readable local presence, row/reference and SHA-256 audit.
+
 - [`structural/README.md`](structural/README.md) lists image, camera, generated
   and acquisition-holdout sources used by Structural training and evaluation.
 - [`semantic/README.md`](semantic/README.md) lists URL/payload corpora and

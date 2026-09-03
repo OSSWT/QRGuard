@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+  "pack_id": "qrguard-presentation-demo-r07",
   "model_lock": {
-    "structural": "structural-2026.03-r01",
+    "structural": "structural-r07-corrective-v1",
     "semantic": "semantic-2026.02",
     "decision": "decision-2026.03-r05"
   },
@@ -23,7 +23,7 @@
       "structural_ground_truth": "clean",
       "scan_condition": "normal",
       "source_path": "data/runtime_captures/clean/scan_20260830_061330_585723/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -40,7 +40,7 @@
       "structural_ground_truth": "clean",
       "scan_condition": "angle",
       "source_path": "data/runtime_captures/clean/scan_20260830_120205_239152_9692c27c/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -57,7 +57,7 @@
       "structural_ground_truth": "clean",
       "scan_condition": "defocus",
       "source_path": "data/runtime_captures/clean/scan_20260830_115748_148072_cfdac572/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -74,7 +74,7 @@
       "structural_ground_truth": "clean",
       "scan_condition": "far",
       "source_path": "data/runtime_captures/clean/scan_20260830_134925_170419_2cd8f474/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -102,13 +102,13 @@
       "intended_verdict": "SAFE",
       "note": "Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.",
       "image_path": "Structural_Cases/STR-CLN-MOTION.png",
-      "image_sha256": "c281e89e9a93ea1064db5d8f1377ca17467d3b5b03c3d966f5439561c4f08cee",
-      "payload_sha256": "b11e8dadd750005cbc882e1eef8b7daba8cc7feb4d0b319c849e951971223130",
-      "decoded_payload": "https://example.com/?qg3=cln-motion-04-76dc8f9c93605662916094318773735d",
+      "image_sha256": "e6feea03ab8d42947d926a15a213cca1108bf7597f59a334bbdf173fc609bce3",
+      "payload_sha256": "1b246de336201da443377597bbf5b19c6dbaa7496eebf1eeeb71b72fd216ce82",
+      "decoded_payload": "https://example.com/?qg3=cln-motion-11-269916f573a3db9978989f2117ba3a77",
       "structural_ground_truth": "clean",
       "scan_condition": "motion",
-      "source_path": "data/runtime_captures/clean/scan_20260830_134838_251909_51e06e79/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_path": "data/runtime_captures/clean/scan_20260830_115744_363927_02bbc7ea/crop_00.png",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -125,7 +125,7 @@
       "structural_ground_truth": "clean",
       "scan_condition": "overexp",
       "source_path": "data/runtime_captures/clean/scan_20260830_120627_617714_3fba83b3/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -142,7 +142,7 @@
       "structural_ground_truth": "clean",
       "scan_condition": "screen",
       "source_path": "data/runtime_captures/clean/scan_20260830_120545_556770_34a90b74/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -153,13 +153,13 @@
       "intended_verdict": "SAFE",
       "note": "Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.",
       "image_path": "Structural_Cases/STR-CLN-SHADOW.png",
-      "image_sha256": "4123e1095f338df365a8c7cc82b99d9ebd4b9697857fbe8ef9004dc5db1b43ad",
-      "payload_sha256": "a5e285e21be8736fe778600595098852594257833664bbca37e93afe95a9f0d4",
-      "decoded_payload": "https://example.com/?qg3=cln-shadow-01-e6549e4c7c65a6e67a78191443b6b8c3",
+      "image_sha256": "6edf14a7cc6fe8e11bde97e7ddd36574238458ea23b03da5db1cba6a93fe1c7b",
+      "payload_sha256": "f544079076987e303822da1a5fe65c9e5e1a22cfa27c4de8e0075e863f1c1d77",
+      "decoded_payload": "https://example.com/?qg3=cln-shadow-14-df0663a3360785ad1a885becfdbaa5a7",
       "structural_ground_truth": "clean",
       "scan_condition": "shadow",
-      "source_path": "data/runtime_captures/clean/scan_20260830_120237_907680_4d4b04cd/crop_00.png",
-      "source_exposure": "exact_app_crop/train; exposed production dataset; not independent",
+      "source_path": "data/runtime_captures/clean/scan_20260830_142127_562920_29d92dda/crop_00.png",
+      "source_exposure": "exact_app_crop/validation; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -176,7 +176,7 @@
       "structural_ground_truth": "clean",
       "scan_condition": "underexp",
       "source_path": "data/runtime_captures/clean/scan_20260830_115703_589823_e6ef293d/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -193,7 +193,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "normal",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_120633_217412_6a5fb614/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -210,7 +210,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "angle",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_135340_942209_347d7752/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -227,7 +227,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "defocus",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_135215_100173_55ca6da2/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -244,7 +244,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "far",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_120833_920193_96704d17/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -278,7 +278,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "motion",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_120807_806009_97323a0f/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -289,13 +289,13 @@
       "intended_verdict": "BLOCKED",
       "note": "Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.",
       "image_path": "Structural_Cases/STR-ADV-OVEREXP.png",
-      "image_sha256": "75beb09d3e5fde96cc0ebfff00545795a249642cd89ee4b9d53d883655ea066d",
-      "payload_sha256": "beacbb734e179aa3df36367e5c89b38a411bc5571acf5322f904d18f96a26463",
-      "decoded_payload": "https://example.com/?qg3=adv-overexp-02-951582903c43c338b4480e69847fc504",
+      "image_sha256": "1997cb8836932bf85cd231285ecc18e9cf79be0d744aba8379644347108b6eaa",
+      "payload_sha256": "521ae0141ab647f7304f7083d5c2fb64c125439fe7113030915a75a66df896ff",
+      "decoded_payload": "https://example.com/?qg3=adv-overexp-12-4fefcf15603fd945266ec8fbd80a5a0f",
       "structural_ground_truth": "adversarial",
       "scan_condition": "overexp",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_120706_537550_9d45cba7/crop_00.png",
-      "source_exposure": "exact_app_crop/validation; exposed production dataset; not independent",
+      "source_path": "data/runtime_captures/adversarial/scan_20260830_135112_212824_3e64e24a/crop_00.png",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -312,7 +312,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "screen",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_121238_655536_7fe0d1ab/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -329,7 +329,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "shadow",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_121224_851933_3307d7b1/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -346,7 +346,7 @@
       "structural_ground_truth": "adversarial",
       "scan_condition": "underexp",
       "source_path": "data/runtime_captures/adversarial/scan_20260830_120724_650707_a2425348/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -363,7 +363,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "normal",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121302_400622_c1a28ab8/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -374,13 +374,13 @@
       "intended_verdict": "BLOCKED",
       "note": "Embeds a recorded exact QRGuard camera crop with the named condition; scan normally without adding another degradation.",
       "image_path": "Structural_Cases/STR-TMP-ANGLE.png",
-      "image_sha256": "257efd52a0e9aac75335fc373b67b34e21fc9ab52d0436c1362d04092b9c84b9",
-      "payload_sha256": "30cdcbb0dc77a6acd9c34dd61fc43c1e8b151c5819347034106f9240a1a404f8",
-      "decoded_payload": "https://example.com/?qg3=tmp-angle-04-d2b32b32840c64666b158a9106e19baf",
+      "image_sha256": "9ffc49367babc208a296d01844b237b62ba5ba331324652926134038b36dffa4",
+      "payload_sha256": "56810c108886cf1740fad84d1e59bda73d318b0dd637362102c78c63b5b15fd5",
+      "decoded_payload": "https://example.com/?qg3=tmp-angle-11-3b822735740e17a36ee70993cc96def9",
       "structural_ground_truth": "tampered",
       "scan_condition": "angle",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_135556_445741_f683e414/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_path": "data/runtime_captures/tampered/scan_20260830_121434_910157_7edfc16f/crop_00.png",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -397,7 +397,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "defocus",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121402_036235_323f5bc0/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -414,7 +414,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "far",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121414_180132_167140df/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -431,7 +431,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "glare",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121440_033987_c3223f6d/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -448,7 +448,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "motion",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121335_504158_efca5f30/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -465,7 +465,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "overexp",
       "source_path": "data/runtime_captures/tampered/scan_20260830_135430_753240_efee90ef/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -482,7 +482,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "screen",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121506_085850_b459bfda/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -499,7 +499,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "shadow",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121449_987503_0d942741/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },
@@ -516,7 +516,7 @@
       "structural_ground_truth": "tampered",
       "scan_condition": "underexp",
       "source_path": "data/runtime_captures/tampered/scan_20260830_121328_252334_6231d335/crop_00.png",
-      "source_exposure": "exact_app_crop/runtime_holdout_test; exposed production dataset; not independent",
+      "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
     },

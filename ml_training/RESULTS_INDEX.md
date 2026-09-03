@@ -56,6 +56,8 @@ the current hashed character n-gram model.
 
 ## Datasets, licences and citations
 
+- Complete dataset catalogue: `datasets/DATASET_CATALOG.md`
+- Verified local inventory: `datasets/DATASET_INVENTORY.json`
 - Verified sources: `datasets/references/SOURCES.md`
 - Machine-readable registry: `datasets/references/dataset_registry.csv`
 - Licence decisions: `datasets/references/DATASET_LICENSES.md`

@@ -8,21 +8,28 @@ analysis branch in the report.
 Promotion requires aggregate security gates, all payload/image cell gates, and
 the fixed UTAR/Open-Wi-Fi/branch-unavailable regressions.
 
-## Structural v3 recalibration
+## Current deployed decision layer
 
-`decision-2026.03-r05` passed its aggregate and all 36 cell gates against the
-accepted `structural-2026.03-r01` fingerprint. The 120-row full candidate stack
-also passed its exact-app Camera/Gallery gate. Semantic remains frozen at
-`semantic-2026.02`. Structural r01 and Decision r05 have now replaced the local
-runtime files and passed post-copy smoke tests; GitHub/Render deployment remains
-pending.
+`decision-2026.03-r05` passed its aggregate and all 36 cell gates when it was
+trained on the frozen `QRGuard-Mix-v2` branch-signal fingerprint. Semantic stays
+frozen at `semantic-2026.02`. The deployed image branch is now
+`structural-r07-corrective-v1`; the controlled r07 release and Decision r05 have
+passed the recorded production smoke matrix.
+
+The 1,800-row QRGuard-Mix-v2 manifest and all referenced local images remain
+available. The manifest SHA-256 is
+`6c30bba32aba6cd1b80ef21fe556db73ffc0f73ca0d19015c516dcdd6454cc16`.
+See `../datasets/DATASET_CATALOG.md` for provenance and split details.
 
 Run the candidate without changing the app's current weights:
 
 ```powershell
-python scripts/train_fusion.py --structural-artifacts ml_training/structural/runs/structural-2026.03-r01/artifacts --decision-version decision-2026.03-r05
+python scripts/train_fusion.py --structural-artifacts training/artifacts/structural --decision-version <new-version>
 ```
 
-The normal command writes only a versioned candidate and performance bundle.
-Runtime `backend/fusion/fusion_weights.json` changes only when a later reviewed
-command includes `--promote` and every decision-layer gate passes.
+Do not overwrite the frozen r05 evidence. A later Decision version must first
+regenerate `data/qrguard_mix_v2/branch_signals.csv` against the intended
+Structural/Semantic artifacts and record the new fingerprint. The normal command
+writes only a versioned candidate and performance bundle. Runtime
+`backend/fusion/fusion_weights.json` changes only when a reviewed command includes
+`--promote` and every decision-layer gate passes.

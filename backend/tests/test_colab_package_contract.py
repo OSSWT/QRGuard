@@ -108,6 +108,19 @@ def test_package_manifest_hashes_every_handoff_file():
         )
 
 
+def test_package_contains_complete_dataset_catalogue_and_inventory():
+    repository = PACKAGE / "QRGuard"
+    catalogue = repository / "ml_training/datasets/DATASET_CATALOG.md"
+    inventory_path = repository / "ml_training/datasets/DATASET_INVENTORY.json"
+
+    assert catalogue.is_file()
+    inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+    assert inventory["summary"]["all_required_verified"] is True
+    assert inventory["summary"]["required_verified"] == 20
+    assert inventory["summary"]["optional_verified"] == 1
+    assert inventory["summary"]["private_archives_verified"] == 5
+
+
 def test_colab_zip_is_readable_and_contains_the_manifest():
     archive_path = ROOT / "dist/QRGuard_ML_Colab.zip"
     with zipfile.ZipFile(archive_path) as archive:

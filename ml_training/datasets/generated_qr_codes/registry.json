@@ -1,53 +1,7 @@
 {
   "schema_version": 1,
-  "inventory_date": "2026-08-31",
-  "inventory_snapshot": true,
-  "current_retention_policy": "../../DATASET_RETENTION.json",
   "hash_contract": "sha256(path\\0size\\0file_sha256\\n) over sorted paths",
   "datasets": [
-    {
-      "dataset_id": "legacy-benign-malicious-5000",
-      "path": "data/structural/qr_images",
-      "file_pattern": "**/*.png",
-      "file_count": 5000,
-      "total_bytes": 4637467,
-      "tree_sha256": "4684bad87d1a142724df0685b8bb87052f59610880fc84a13ea3fe873d66010b",
-      "groups": {
-        "benign": 2500,
-        "malicious": 2500
-      },
-      "intended_use": "legacy compatibility only; not current Structural training",
-      "exposure_states": [
-        "legacy_not_current"
-      ],
-      "generator": "historical generator not retained as a current recipe",
-      "source_manifest": null,
-      "source_manifest_sha256": null
-    },
-    {
-      "dataset_id": "structural-2026.03-r01-procedural-images",
-      "path": "ml_training/datasets/structural/processed/structural-2026.03-r01/images",
-      "file_pattern": "**/*.png",
-      "file_count": 5040,
-      "total_bytes": 97394036,
-      "tree_sha256": "98dca0bbf66a1c6a6a1cca358c0bc346b14c1c25903372c937494059dda06b49",
-      "groups": {
-        "base": 1260,
-        "test": 540,
-        "train": 2700,
-        "validation": 540
-      },
-      "intended_use": "historical generated-cache fingerprint; production artifacts and performance evidence are retained",
-      "retention_status": "removed_regenerable_cache",
-      "exposure_states": [
-        "training",
-        "validation",
-        "locked_test"
-      ],
-      "generator": "ml_training/structural/src/structural_recipes.py",
-      "source_manifest": "ml_training/datasets/structural/processed/structural-2026.03-r01/manifest.csv",
-      "source_manifest_sha256": "e4aad0f2e378b9e35565493e297fd0a0ea862dff710ce5f78528008a64a79d45"
-    },
     {
       "dataset_id": "structural-v3-real-2026.03-r01-capture-references",
       "path": "data/capture_pilot/structural-v3-real-2026.03-r01",
@@ -117,12 +71,12 @@
       "source_manifest_sha256": "f2a8cfcd921834d7efe8b309c00ecb3ddf64aae34dea8c3b32b94dd962315573"
     },
     {
-      "dataset_id": "qr-codes-demo-2026-08-31-r01-r05",
+      "dataset_id": "qrguard-presentation-demo-r07",
       "path": "ml_training/datasets/qr_codes_demo",
       "file_pattern": "**/*.png",
       "file_count": 42,
-      "total_bytes": 9313176,
-      "tree_sha256": "2a3892b5a4ed5669fb450911905b4621160ecfd738955fd2412238d8615c25fa",
+      "total_bytes": 9276375,
+      "tree_sha256": "5cd1df8c74813c20a46a05c34e1267e9604412a71d6fad302b23863fde158858",
       "groups": {
         "Semantic_and_Payload_Cases": 12,
         "Structural_Cases": 30
@@ -134,35 +88,35 @@
       ],
       "generator": "scripts/build_qr_codes_demo.py",
       "source_manifest": "ml_training/datasets/qr_codes_demo/MANIFEST.json",
-      "source_manifest_sha256": "4e19c47c6244973b2aba25ca884aac12bc532bcd90f6ce58a7f7baec41ff0e93"
+      "source_manifest_sha256": "2f11cdde42d0435598b1ed2a3c77f311c41af8df43342b9e7b4e658fb6b116dd"
     },
     {
-      "dataset_id": "legacy-api-test-qrs",
+      "dataset_id": "qrguard-api-regression-fixtures",
       "path": "data/test_qrs",
       "file_pattern": "*.png",
       "file_count": 21,
       "total_bytes": 664474,
       "tree_sha256": "9305367ceb6f25568a78420eff8d18620380b14220f14597e15919501f54de19",
       "groups": {},
-      "intended_use": "superseded manual API tests; not current demo evidence",
+      "intended_use": "active backend and Flutter QR-cropping regression fixtures",
       "exposure_states": [
-        "legacy_not_current"
+        "test_fixture"
       ],
       "generator": "scripts/make_test_qrs.py",
       "source_manifest": null,
       "source_manifest_sha256": null
     },
     {
-      "dataset_id": "legacy-gallery-test-cards",
+      "dataset_id": "qrguard-gallery-test-cards",
       "path": "data/app_gallery/QRGuard_Test_QRs",
       "file_pattern": "*.png",
       "file_count": 17,
       "total_bytes": 1153061,
       "tree_sha256": "024aa620f7841799e8ddc15bb8d4ad6ddb45465986b2d80a4e56e7cfec35cc27",
       "groups": {},
-      "intended_use": "superseded Gallery cards; not current demo evidence",
+      "intended_use": "active manual Gallery scanning QA cards",
       "exposure_states": [
-        "legacy_not_current"
+        "manual_test_fixture"
       ],
       "generator": "scripts/make_gallery_qrs.py",
       "source_manifest": null,

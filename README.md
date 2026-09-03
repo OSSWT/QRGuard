@@ -162,8 +162,13 @@ kept in the active repository.
 - Semantic sources retain source tags and domain-grouped splits; exact cleaning,
   conflict removal, and duplicate counts are stored in each run.
 
-See `ml_training/datasets/references/SOURCES.md`, `dataset_registry.csv`,
+See the complete
+[`DATASET_CATALOG.md`](ml_training/datasets/DATASET_CATALOG.md), machine-readable
+[`DATASET_INVENTORY.json`](ml_training/datasets/DATASET_INVENTORY.json), and the
+supporting `references/SOURCES.md`, `dataset_registry.csv`,
 `DATASET_LICENSES.md`, and `REFERENCES.bib` before citing or redistributing data.
+The compact presentation flow and its QR cards are in
+[`qr_codes_demo/`](ml_training/datasets/qr_codes_demo/README_%E4%B8%AD%E6%96%87_English.md).
 The organised evidence entry point is
 `research_evidence/README.md`; it deliberately does not duplicate
 the large canonical training datasets.

@@ -196,8 +196,13 @@ def _validate(
     if target == "local":
         artifacts = artifacts.resolve(strict=True)
         client: Any = LocalClient(artifacts)
+        try:
+            artifact_label = artifacts.relative_to(ROOT).as_posix()
+        except ValueError:
+            artifact_label = f"external-artifact-directory/{artifacts.name}"
         target_label = (
-            f"in-process stack with QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS={artifacts}"
+            "in-process stack with QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS="
+            f"{artifact_label}"
         )
     else:
         client = httpx.Client(base_url=remote_url.rstrip("/"), timeout=90.0)
