@@ -56,6 +56,34 @@ void main() {
     expect(find.text('Details'), findsOneWidget);
   });
 
+  testWidgets(
+    'inconclusive Structural evidence requires a non-bypassable rescan',
+    (tester) async {
+      await pumpResult(
+        tester,
+        _scan(
+          verdict: Verdict.warning,
+          risk: 34,
+          structuralStatus: AnalysisStatus.inconclusive,
+          structuralRescanReason:
+              'The dense QR did not have enough observed pixels per module',
+          structuralModuleCount: 73,
+          structuralMinModulePixels: 4.5,
+        ),
+      );
+
+      expect(find.text('Why a rescan is required'), findsOneWidget);
+      expect(find.text('Rescan QR'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('structural_rescan_notice')),
+        findsOneWidget,
+      );
+      expect(find.textContaining('73x73'), findsOneWidget);
+      expect(find.text('Proceed anyway'), findsNothing);
+      expect(find.text('Check this link in depth'), findsNothing);
+    },
+  );
+
   testWidgets('live-camera adversarial score is used without consensus UI', (
     tester,
   ) async {
@@ -314,6 +342,11 @@ ScanResponse _scan({
   int structuralFramesReceived = 0,
   int structuralFramesAnalyzed = 0,
   String? structuralConsensus,
+  AnalysisStatus structuralStatus = AnalysisStatus.completed,
+  String? structuralRescanReason,
+  List<String> structuralQualityConditions = const [],
+  int? structuralModuleCount,
+  double? structuralMinModulePixels,
 }) => ScanResponse(
   verdict: verdict,
   riskScore: risk,
@@ -329,14 +362,20 @@ ScanResponse _scan({
       : null,
   ruleFlags: ruleFlags,
   branchScores: BranchScores(
-    pStructural: partial ? null : (pStructural ?? 0.08),
+    pStructural: partial || structuralStatus != AnalysisStatus.completed
+        ? null
+        : (pStructural ?? 0.08),
     pStructuralRaw: partial ? null : pStructuralRaw,
-    structuralType: partial ? null : (structuralType ?? 'clean'),
+    structuralType: partial || structuralStatus != AnalysisStatus.completed
+        ? null
+        : (structuralType ?? 'clean'),
     pUrl: payloadType == 'url' ? pUrl : null,
     domainUnknown: 0,
-    structuralStatus: partial
-        ? AnalysisStatus.unavailable
-        : AnalysisStatus.completed,
+    structuralStatus: partial ? AnalysisStatus.unavailable : structuralStatus,
+    structuralRescanReason: structuralRescanReason,
+    structuralQualityConditions: structuralQualityConditions,
+    structuralModuleCount: structuralModuleCount,
+    structuralMinModulePixels: structuralMinModulePixels,
     semanticStatus: payloadType == 'url'
         ? AnalysisStatus.completed
         : AnalysisStatus.notApplicable,

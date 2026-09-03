@@ -41,6 +41,10 @@ class _ResultScreenState extends State<ResultScreen> {
       ? _scan.displayTarget
       : 'DuitNow recipient: ${_duitNow!.recipientName}';
 
+  bool get _requiresStructuralRescan =>
+      _kind != _ResultKind.blocked &&
+      _scan.branchScores.structuralStatus == AnalysisStatus.inconclusive;
+
   _ResultKind get _kind {
     // A missing branch may raise Safe to the fail-closed Partial/Warning state,
     // but it must never downgrade an explicit backend Blocked verdict.
@@ -89,6 +93,10 @@ class _ResultScreenState extends State<ResultScreen> {
               color: style.color,
               title: _summaryTitle,
             ),
+            if (_requiresStructuralRescan) ...[
+              const SizedBox(height: 14),
+              _StructuralRescanNotice(scan: _scan),
+            ],
             const SizedBox(height: 14),
             Card(
               child: ExpansionTile(
@@ -134,14 +142,25 @@ class _ResultScreenState extends State<ResultScreen> {
     ];
   }
 
-  String get _summaryTitle => switch (_kind) {
-    _ResultKind.safe => 'Why this looks safe',
-    _ResultKind.warning => 'Why caution is needed',
-    _ResultKind.blocked => 'Why this was blocked',
-    _ResultKind.partial => 'Why this result needs caution',
-  };
+  String get _summaryTitle => _requiresStructuralRescan
+      ? 'Why a rescan is required'
+      : switch (_kind) {
+          _ResultKind.safe => 'Why this looks safe',
+          _ResultKind.warning => 'Why caution is needed',
+          _ResultKind.blocked => 'Why this was blocked',
+          _ResultKind.partial => 'Why this result needs caution',
+        };
 
   String get _summaryText {
+    if (_requiresStructuralRescan) {
+      final reason = _scan.branchScores.structuralRescanReason;
+      final explanation = reason == null || reason.trim().isEmpty
+          ? 'The captured QR image did not contain enough reliable detail.'
+          : _asSentence(reason);
+      return 'QRGuard could not make a reliable QR-image decision. '
+          '$explanation This scan was not marked Safe. Capture it again '
+          'before opening or using the payload.';
+    }
     final evidence = _summaryEvidence;
     return switch (_kind) {
       _ResultKind.safe =>
@@ -304,8 +323,12 @@ class _ResultScreenState extends State<ResultScreen> {
         widgets.add(
           FilledButton.icon(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_back_rounded),
-            label: const Text('Go Back'),
+            icon: Icon(
+              _requiresStructuralRescan
+                  ? Icons.qr_code_scanner_rounded
+                  : Icons.arrow_back_rounded,
+            ),
+            label: Text(_requiresStructuralRescan ? 'Rescan QR' : 'Go Back'),
           ),
         );
         break;
@@ -320,7 +343,7 @@ class _ResultScreenState extends State<ResultScreen> {
         break;
     }
 
-    if (_scan.isUrl && _deep == null) {
+    if (_scan.isUrl && _deep == null && !_requiresStructuralRescan) {
       widgets.add(const SizedBox(height: 10));
       widgets.add(
         OutlinedButton.icon(
@@ -341,6 +364,7 @@ class _ResultScreenState extends State<ResultScreen> {
     }
 
     if (_canProceed &&
+        !_requiresStructuralRescan &&
         (_kind == _ResultKind.warning || _kind == _ResultKind.partial)) {
       widgets.add(const SizedBox(height: 6));
       widgets.add(
@@ -407,6 +431,9 @@ class _ResultScreenState extends State<ResultScreen> {
             structuralQualityConditions:
                 _scan.branchScores.structuralQualityConditions,
             structuralRescanReason: _scan.branchScores.structuralRescanReason,
+            structuralModuleCount: _scan.branchScores.structuralModuleCount,
+            structuralMinModulePixels:
+                _scan.branchScores.structuralMinModulePixels,
             structuralFramesReceived:
                 _scan.branchScores.structuralFramesReceived,
             structuralFramesAnalyzed:
@@ -729,6 +756,63 @@ class _UpdatedBanner extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _StructuralRescanNotice extends StatelessWidget {
+  const _StructuralRescanNotice({required this.scan});
+
+  final ScanResponse scan;
+
+  @override
+  Widget build(BuildContext context) {
+    final branch = scan.branchScores;
+    final moduleCount = branch.structuralModuleCount;
+    final modulePixels = branch.structuralMinModulePixels;
+    final measurement = moduleCount == null || modulePixels == null
+        ? null
+        : 'Observed a ${moduleCount}x$moduleCount grid at '
+              '${modulePixels.toStringAsFixed(1)} pixels per module; at least '
+              '5.0 pixels per module is required.';
+
+    return Card(
+      key: const ValueKey('structural_rescan_notice'),
+      color: context.qrColors.warningSurface,
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.center_focus_strong,
+                  color: context.qrColors.warning,
+                ),
+                const SizedBox(width: 10),
+                const Expanded(
+                  child: Text(
+                    'Capture clearer QR evidence',
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                ),
+              ],
+            ),
+            if (measurement != null) ...[
+              const SizedBox(height: 10),
+              Text(measurement, style: const TextStyle(height: 1.4)),
+            ],
+            const SizedBox(height: 8),
+            const Text(
+              'Move closer for a dense QR, keep the complete code and its '
+              'clear border inside the guide, reduce glare, and hold the '
+              'phone steady. Incomplete image evidence is never treated as Safe.',
+              style: TextStyle(height: 1.4),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _PartialNotice extends StatelessWidget {

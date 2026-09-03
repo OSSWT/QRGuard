@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../services/camera_exposure_policy.dart';
+import '../services/capture_quality.dart';
 import '../services/diagnostic_capture_service.dart';
 import '../theme.dart';
 import 'analysing_screen.dart';
@@ -45,6 +47,12 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
   bool _armed = false;
   bool _processingFrame = false;
   bool _busy = true;
+  bool _exposureSettled = false;
+  bool _exposureAdjusted = false;
+  bool _exposureSupported = false;
+  bool _meteringRequested = false;
+  int? _exposureIndex;
+  double? _exposureEv;
   String? _message;
 
   @override
@@ -113,6 +121,7 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
       _frameHashes.clear();
       _sessionPayload = null;
       _lastAcceptedAt = null;
+      _resetAcquisitionState();
       _message =
           'Hold the phone naturally. QRGuard will save '
           '${widget.service.plan.framesPerSession} different temporal crops.';
@@ -143,7 +152,17 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
       _frameHashes.clear();
       _sessionPayload = null;
       _lastAcceptedAt = null;
+      _resetAcquisitionState();
     });
+  }
+
+  void _resetAcquisitionState() {
+    _exposureSettled = false;
+    _exposureAdjusted = false;
+    _exposureSupported = false;
+    _meteringRequested = false;
+    _exposureIndex = null;
+    _exposureEv = null;
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
@@ -182,12 +201,96 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
     _processingFrame = true;
     try {
       final barcode = readable.values.single;
+      final corners = [
+        for (final corner in barcode.corners) ...[corner.dx, corner.dy],
+      ];
+      if (!_meteringRequested &&
+          barcode.corners.length == 4 &&
+          capture.size.width > 0 &&
+          capture.size.height > 0) {
+        _meteringRequested = true;
+        final centre = Offset(
+          barcode.corners.map((point) => point.dx).reduce((a, b) => a + b) / 4,
+          barcode.corners.map((point) => point.dy).reduce((a, b) => a + b) / 4,
+        );
+        try {
+          await _scanner.setFocusPoint(
+            Offset(
+              centre.dx / capture.size.width,
+              centre.dy / capture.size.height,
+            ),
+          );
+          if (!_armed || !mounted) return;
+          setState(
+            () => _message =
+                'AF/AE/AWB metering requested. Waiting for a fresh frame.',
+          );
+          return;
+        } catch (_) {
+          // Unsupported cameras proceed to the quality gate and never gain a
+          // Safe verdict merely because metering was unavailable.
+        }
+      }
+      final rawQualityTelemetry = await compute(
+        assessFrameCaptureQuality,
+        CaptureFrameQualityRequest(
+          frame: capture.image!,
+          cornerCoordinates: corners,
+          frameWidth: capture.size.width,
+          frameHeight: capture.size.height,
+        ),
+      ).timeout(const Duration(seconds: 8));
+      if (!_armed || !mounted) return;
+      final rawQuality = rawQualityTelemetry == null
+          ? null
+          : CaptureQualityReport.fromTelemetry(rawQualityTelemetry);
+
+      if (!_exposureSettled) {
+        var adjusted = false;
+        try {
+          final exposure = await _scanner.getExposureCompensationState();
+          if (!_armed || !mounted) return;
+          _exposureSupported = exposure.supported;
+          _exposureIndex = exposure.currentIndex;
+          _exposureEv = exposure.currentEv;
+          if (rawQuality != null) {
+            final plan = planCaptureExposureAdjustment(
+              quality: rawQuality,
+              exposure: exposure,
+            );
+            if (plan != null) {
+              final actualIndex = await _scanner.setExposureCompensationIndex(
+                plan.targetIndex,
+              );
+              if (!_armed || !mounted) return;
+              _exposureIndex = actualIndex;
+              _exposureEv = actualIndex * plan.stepEv;
+              _exposureAdjusted = true;
+              adjusted = true;
+            }
+          }
+        } catch (_) {
+          // Exposure compensation is best-effort. The crop gate below remains
+          // authoritative on devices that do not expose CameraX EV controls.
+        }
+        _exposureSettled = true;
+        if (adjusted) {
+          _frames.clear();
+          _frameHashes.clear();
+          _sessionPayload = null;
+          _lastAcceptedAt = null;
+          setState(
+            () => _message =
+                'Camera exposure adjusted. Waiting for fresh post-adjustment frames.',
+          );
+          return;
+        }
+      }
+
       final crop = await compute(prepareFirstUsableCropInBackground, [
         CropRequest(
           frame: capture.image!,
-          cornerCoordinates: [
-            for (final corner in barcode.corners) ...[corner.dx, corner.dy],
-          ],
+          cornerCoordinates: corners,
           frameWidth: capture.size.width,
           frameHeight: capture.size.height,
           normalizeCameraColor: true,
@@ -198,6 +301,16 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
         setState(
           () => _message =
               'A decoded frame could not be rectified. Keep all four corners visible.',
+        );
+        return;
+      }
+      final structuralQuality = assessCaptureQuality(crop);
+      if (structuralQuality == null || !structuralQuality.usable) {
+        final reasons = structuralQuality?.conditions.join(', ') ?? 'unknown';
+        setState(
+          () => _message =
+              'Frame rejected by the acquisition gate ($reasons). '
+              'Hold steady, reduce glare, or move closer.',
         );
         return;
       }
@@ -217,9 +330,13 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
           capturedAt: now,
           frameWidth: capture.size.width,
           frameHeight: capture.size.height,
-          cornerCoordinates: [
-            for (final corner in barcode.corners) ...[corner.dx, corner.dy],
-          ],
+          cornerCoordinates: corners,
+          rawAcquisitionQuality: rawQualityTelemetry,
+          structuralCropQuality: structuralQuality.toTelemetry(),
+          exposureCompensationSupported: _exposureSupported,
+          exposureCompensationIndex: _exposureIndex,
+          exposureCompensationEv: _exposureEv,
+          exposureAdjustedDuringSession: _exposureAdjusted,
         ),
       );
       if (_frames.length >= widget.service.plan.framesPerSession) {
@@ -267,6 +384,7 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
         _frameHashes.clear();
         _sessionPayload = null;
         _lastAcceptedAt = null;
+        _resetAcquisitionState();
         _message = count >= widget.service.plan.repeatsPerDistance
             ? '${_captureCase.caseId} / ${_distance.label} is complete. '
                   'Select the next distance.'
@@ -396,7 +514,9 @@ class _DiagnosticCaptureScreenState extends State<DiagnosticCaptureScreen>
                   for (final item in plan.cases)
                     DropdownMenuItem(
                       value: item,
-                      child: Text('${item.caseId} · ${item.groundTruth}'),
+                      child: Text(
+                        diagnosticCaptureCaseDisplayLabel(plan, item),
+                      ),
                     ),
                 ],
                 onChanged: _armed || _busy
@@ -612,4 +732,15 @@ class _ProgressGrid extends StatelessWidget {
 String _friendly(Object error) {
   if (error is DiagnosticCaptureException) return error.message;
   return error.toString().replaceFirst(RegExp(r'^Exception: '), '');
+}
+
+String diagnosticCaptureCaseDisplayLabel(
+  DiagnosticCapturePlan plan,
+  DiagnosticCase captureCase,
+) {
+  final isBlindHoldout = plan.distances.any(
+    (distance) => distance.metadata['role'] == 'blind_holdout',
+  );
+  if (isBlindHoldout) return captureCase.caseId;
+  return '${captureCase.caseId} · ${captureCase.groundTruth}';
 }

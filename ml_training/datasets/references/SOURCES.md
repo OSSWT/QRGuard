@@ -1,6 +1,6 @@
 # Dataset sources and report usage
 
-Last verified: 2026-08-21. Links below point to the official repository, data
+Last verified: 2026-09-02. Links below point to the official repository, data
 record, publisher, or project page. `REFERENCES.bib` contains report-ready citation
 records.
 
@@ -29,6 +29,12 @@ records.
 - **QRGuard Runtime Captures** — exact post-rectification crops produced by the
   application. This is the only source that directly measures the deployed camera
   input distribution. Collection is still required for all three labels.
+
+- **Consumed M8 clean development replay** — 80 exact-app clean crops from 16
+  previously blinded QR identities. r07 uses a fixed 12-identity train / 4-identity
+  validation split to repair the real V12 dense-screen gap. The source is permanently
+  non-promoting, its 160 attack crops are excluded, and it does not replace a fresh
+  blind device/display/session holdout.
 
 ### Admitted auxiliary sources
 
@@ -66,6 +72,28 @@ records.
   videos. Treat a complete video as one capture group and verify per-folder terms
   before use.
   <https://github.com/Dynamsoft/datasets-from-dynamsoft>
+
+### Acquisition/detector expansion candidates
+
+- **ZVZ-real / ZVZ-synth** - QR and one-dimensional barcode localization data
+  linked by ABBYY's benchmark repository. The repository code is Apache-2.0, but
+  the image archive needs its own licence check before use. Keep it quarantined
+  and use it only to improve or evaluate acquisition after that check.
+  <https://github.com/abbyy/barcode_detection_benchmark>
+- **Barcode-30k** - the paper describes 30,000 synthetic segmentation images for
+  QR/barcode localization under scale, occlusion, deformation and illumination.
+  It does not supply Structural manipulation labels, and no exact licensed local
+  archive is registered, so it is not currently admitted.
+  <https://arxiv.org/abs/1807.11886>
+- **EgoQR** - useful acquisition design evidence: multi-scale preprocessing,
+  uneven-light handling, and explicit closer/rescan feedback. Its 528-image,
+  697-code benchmark is described as internally collected; no licensed public
+  archive is registered, so it is a method reference rather than training data.
+  <https://arxiv.org/abs/2410.05497>
+
+These sources can broaden detection and decoding robustness. None can replace
+QRGuard's exact post-rectification Camera crops or verified physical Structural
+attacks, because localization/noise labels do not prove manipulation.
 
 ## Semantic Training
 

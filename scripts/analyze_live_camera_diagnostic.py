@@ -162,12 +162,17 @@ def _has_raw_payload_key(value: object) -> bool:
 
 def _coverage(corners: tuple[float, ...], width: float, height: float) -> float:
     points = list(zip(corners[::2], corners[1::2], strict=True))
-    area = abs(
-        sum(
-            x1 * y2 - x2 * y1
-            for (x1, y1), (x2, y2) in zip(points, points[1:] + points[:1], strict=True)
+    area = (
+        abs(
+            sum(
+                x1 * y2 - x2 * y1
+                for (x1, y1), (x2, y2) in zip(
+                    points, points[1:] + points[:1], strict=True
+                )
+            )
         )
-    ) / 2.0
+        / 2.0
+    )
     return area / (width * height)
 
 
@@ -190,7 +195,9 @@ def _validate_member_table(archive: zipfile.ZipFile) -> dict[str, zipfile.ZipInf
             raise ValueError(f"duplicate ZIP member: {name}")
         if ((info.external_attr >> 16) & 0o170000) == 0o120000:
             raise ValueError(f"symbolic link is not allowed: {name}")
-        limit = MAX_MANIFEST_BYTES if name == "archive_manifest.json" else MAX_MEMBER_BYTES
+        limit = (
+            MAX_MANIFEST_BYTES if name == "archive_manifest.json" else MAX_MEMBER_BYTES
+        )
         if info.file_size > limit:
             raise ValueError(f"ZIP member exceeds its size limit: {name}")
         total += info.file_size
@@ -258,8 +265,7 @@ def validate_archive(archive_path: Path, plan_path: Path) -> list[ValidatedFrame
             if repeat_index not in range(1, repeats + 1):
                 raise ValueError(f"invalid repeat index for {case_id}/{distance}")
             expected_base = (
-                f"sessions/{case_id}/{distance}/"
-                f"run_{repeat_index:02d}_{session_id}"
+                f"sessions/{case_id}/{distance}/run_{repeat_index:02d}_{session_id}"
             )
             if base != expected_base:
                 raise ValueError(f"unexpected base path for {case_id}/{distance}")
@@ -288,20 +294,44 @@ def validate_archive(archive_path: Path, plan_path: Path) -> list[ValidatedFrame
                 "raw_payload_stored": False,
                 "image_source": "camera",
                 "frames_per_session": frames_per_session,
-                "selection_policy": "automatic_temporal_burst_no_cherry_pick",
                 "analysis_pending": True,
             }
             for key, expected in expected_metadata.items():
                 if metadata.get(key) != expected:
                     raise ValueError(f"{base}: {key} mismatch")
+            selection_policy = metadata.get("selection_policy")
+            if selection_policy not in {
+                "automatic_temporal_burst_no_cherry_pick",
+                "automatic_post_exposure_quality_gated_temporal_burst",
+            }:
+                raise ValueError(f"{base}: unsupported selection policy")
+            quality_gated_capture = (
+                selection_policy
+                == "automatic_post_exposure_quality_gated_temporal_burst"
+            )
+            if quality_gated_capture:
+                acquisition_policy = metadata.get("acquisition_policy")
+                if not isinstance(acquisition_policy, dict) or {
+                    "policy_version": "qrguard-camera-acquisition-2026-09-r02",
+                    "exposure_adjustment_limit_per_session": 1,
+                    "unusable_structural_crops_saved": False,
+                    "label_based_frame_selection": False,
+                }.items() - acquisition_policy.items():
+                    raise ValueError(f"{base}: acquisition policy mismatch")
             _aware_timestamp(metadata.get("captured_at"), base)
             metadata_frames = metadata.get("frames")
-            if not isinstance(metadata_frames, list) or len(metadata_frames) != frames_per_session:
+            if (
+                not isinstance(metadata_frames, list)
+                or len(metadata_frames) != frames_per_session
+            ):
                 raise ValueError(f"metadata frame rows mismatch for {base}")
 
             session_hashes: set[str] = set()
             for frame_index, frame_row in enumerate(metadata_frames):
-                if not isinstance(frame_row, dict) or frame_row.get("frame_index") != frame_index:
+                if (
+                    not isinstance(frame_row, dict)
+                    or frame_row.get("frame_index") != frame_index
+                ):
                     raise ValueError(f"invalid frame index in {base}")
                 _aware_timestamp(frame_row.get("captured_at"), f"{base}/{frame_index}")
                 crop_name = f"{base}/crop_{frame_index:02d}.png"
@@ -324,15 +354,68 @@ def validate_archive(archive_path: Path, plan_path: Path) -> list[ValidatedFrame
                 crop_size = frame_row.get("crop_size")
                 if crop_size != [image.width, image.height]:
                     raise ValueError(f"crop dimensions mismatch: {crop_name}")
+                if quality_gated_capture:
+                    raw_quality = frame_row.get("raw_acquisition_quality")
+                    crop_quality = frame_row.get("structural_crop_quality")
+                    if not isinstance(raw_quality, dict) or raw_quality.get(
+                        "status"
+                    ) not in {"usable", "marginal", "unusable"}:
+                        raise ValueError(
+                            f"raw acquisition quality is invalid: {crop_name}"
+                        )
+                    if not isinstance(crop_quality, dict) or crop_quality.get(
+                        "status"
+                    ) not in {"usable", "marginal"}:
+                        raise ValueError(
+                            f"unusable structural crop was saved: {crop_name}"
+                        )
+                    supported = frame_row.get("exposure_compensation_supported")
+                    index = frame_row.get("exposure_compensation_index")
+                    ev = frame_row.get("exposure_compensation_ev")
+                    adjusted = frame_row.get("exposure_adjusted_during_session")
+                    if not isinstance(supported, bool) or not isinstance(
+                        adjusted, bool
+                    ):
+                        raise ValueError(f"invalid exposure telemetry: {crop_name}")
+                    if supported and (
+                        not isinstance(index, int)
+                        or not isinstance(ev, (int, float))
+                        or not math.isfinite(float(ev))
+                    ):
+                        raise ValueError(
+                            f"supported exposure telemetry is incomplete: {crop_name}"
+                        )
+                    version = cases[case_id].get("metadata", {}).get("qr_version")
+                    if isinstance(version, int):
+                        expected_modules = 17 + 4 * version
+                        pixels_per_module = frame_row.get(
+                            "observed_pixels_per_module"
+                        )
+                        if (
+                            frame_row.get("expected_module_count")
+                            != expected_modules
+                            or not isinstance(pixels_per_module, (int, float))
+                            or not math.isfinite(float(pixels_per_module))
+                            or pixels_per_module <= 0
+                        ):
+                            raise ValueError(
+                                f"invalid module-scale telemetry: {crop_name}"
+                            )
                 frame_size = frame_row.get("frame_size")
                 corners = frame_row.get("corner_coordinates")
                 if (
                     not isinstance(frame_size, list)
                     or len(frame_size) != 2
-                    or not all(isinstance(item, (int, float)) and item > 0 for item in frame_size)
+                    or not all(
+                        isinstance(item, (int, float)) and item > 0
+                        for item in frame_size
+                    )
                     or not isinstance(corners, list)
                     or len(corners) != 8
-                    or not all(isinstance(item, (int, float)) and math.isfinite(item) for item in corners)
+                    or not all(
+                        isinstance(item, (int, float)) and math.isfinite(item)
+                        for item in corners
+                    )
                 ):
                     raise ValueError(f"invalid frame geometry: {crop_name}")
                 coordinates = tuple(float(item) for item in corners)
@@ -371,11 +454,15 @@ def validate_archive(archive_path: Path, plan_path: Path) -> list[ValidatedFrame
             for distance in distances
             for repeat_index in range(1, repeats + 1)
         }
-        if set(matrix) != expected_matrix or any(count != 1 for count in matrix.values()):
+        if set(matrix) != expected_matrix or any(
+            count != 1 for count in matrix.values()
+        ):
             raise ValueError("archive does not contain the complete unique matrix")
         unused = set(members) - used
         if unused:
-            raise ValueError(f"archive contains unreferenced members: {sorted(unused)[:3]}")
+            raise ValueError(
+                f"archive contains unreferenced members: {sorted(unused)[:3]}"
+            )
         return validated
 
 
@@ -407,7 +494,8 @@ def replay_frames(frames: list[ValidatedFrame], artifacts: Path) -> list[FrameRe
                 frame_height=frame.frame_height,
                 qr_coverage=frame.qr_coverage,
                 payload_decode_status=scan.payload_source,
-                payload_hash_matches=bool(decoded) and decoded_hash == frame.payload_sha256,
+                payload_hash_matches=bool(decoded)
+                and decoded_hash == frame.payload_sha256,
                 quality_status=branch.structural_quality_status or "not_reported",
                 quality_conditions=";".join(branch.structural_quality_conditions),
                 p05_luminance=quality.p05_luminance,
@@ -459,7 +547,9 @@ def aggregate_sessions(frames: list[FrameResult]) -> list[SessionResult]:
             if row.p_structural_effective is not None
         ]
         median_score = statistics.median(row.risk_score for row in rows)
-        nonclean = sum(row.structural_type in {"adversarial", "tampered"} for row in rows)
+        nonclean = sum(
+            row.structural_type in {"adversarial", "tampered"} for row in rows
+        )
         clean = sum(row.structural_type == "clean" for row in rows)
         ground_truth = rows[0].ground_truth
         sessions.append(
@@ -481,14 +571,18 @@ def aggregate_sessions(frames: list[FrameResult]) -> list[SessionResult]:
                 majority_verdict=majority,
                 median_risk_verdict=_tier(median_score),
                 median_risk_score=float(median_score),
-                median_p_structural=float(statistics.median(scores)) if scores else None,
+                median_p_structural=float(statistics.median(scores))
+                if scores
+                else None,
                 p_structural_range=float(max(scores) - min(scores)) if scores else None,
                 majority_detects_ground_truth=(nonclean >= 3)
                 if ground_truth != "clean"
                 else (clean >= 3),
             )
         )
-    return sorted(sessions, key=lambda row: (row.case_id, row.distance, row.repeat_index))
+    return sorted(
+        sessions, key=lambda row: (row.case_id, row.distance, row.repeat_index)
+    )
 
 
 def _rate(numerator: int, denominator: int) -> float:
@@ -507,13 +601,18 @@ def build_summary(
     )
     global_hash_counts = Counter(frame.crop_sha256 for frame in frames)
     matrix: list[dict[str, Any]] = []
+    distances = sorted({row.distance for row in frames})
     for case_id in sorted({row.case_id for row in frames}):
-        for distance in ("near", "medium", "far"):
+        for distance in distances:
             selected_frames = [
-                row for row in frames if row.case_id == case_id and row.distance == distance
+                row
+                for row in frames
+                if row.case_id == case_id and row.distance == distance
             ]
             selected_sessions = [
-                row for row in sessions if row.case_id == case_id and row.distance == distance
+                row
+                for row in sessions
+                if row.case_id == case_id and row.distance == distance
             ]
             if not selected_frames:
                 continue
@@ -529,14 +628,20 @@ def build_summary(
                     "distance": distance,
                     "frames": len(selected_frames),
                     "sessions": len(selected_sessions),
-                    "decoded_hash_matches": sum(row.payload_hash_matches for row in selected_frames),
-                    "quality": dict(Counter(row.quality_status for row in selected_frames)),
+                    "decoded_hash_matches": sum(
+                        row.payload_hash_matches for row in selected_frames
+                    ),
+                    "quality": dict(
+                        Counter(row.quality_status for row in selected_frames)
+                    ),
                     "verdicts": dict(Counter(row.verdict for row in selected_frames)),
                     "structural_types": dict(
                         Counter(row.structural_type for row in selected_frames)
                     ),
                     "p_structural_min": min(scores) if scores else None,
-                    "p_structural_median": statistics.median(scores) if scores else None,
+                    "p_structural_median": statistics.median(scores)
+                    if scores
+                    else None,
                     "p_structural_max": max(scores) if scores else None,
                     "qr_coverage_median": statistics.median(
                         row.qr_coverage for row in selected_frames
@@ -572,9 +677,13 @@ def build_summary(
             "path": "training/artifacts/structural",
         },
         "integrity": {
-            "decoded_payload_hash_matches": sum(row.payload_hash_matches for row in frames),
+            "decoded_payload_hash_matches": sum(
+                row.payload_hash_matches for row in frames
+            ),
             "globally_unique_crops": len(global_hash_counts),
-            "duplicate_crop_instances": sum(count - 1 for count in global_hash_counts.values()),
+            "duplicate_crop_instances": sum(
+                count - 1 for count in global_hash_counts.values()
+            ),
         },
         "frame_metrics": {
             "clean_false_block_rate": _rate(
@@ -587,10 +696,12 @@ def build_summary(
                 sum(row.verdict == "safe" for row in attack_frames), len(attack_frames)
             ),
             "adversarial_block_rate": _rate(
-                sum(row.verdict == "blocked" for row in attack_frames), len(attack_frames)
+                sum(row.verdict == "blocked" for row in attack_frames),
+                len(attack_frames),
             ),
             "quality_abstention_rate": _rate(
-                sum(row.structural_status == "inconclusive" for row in frames), len(frames)
+                sum(row.structural_status == "inconclusive" for row in frames),
+                len(frames),
             ),
         },
         "session_metrics": {
@@ -619,7 +730,8 @@ def build_summary(
                 len(attack_sessions),
             ),
             "majority_structural_ground_truth_detection_rate": _rate(
-                sum(row.majority_detects_ground_truth for row in sessions), len(sessions)
+                sum(row.majority_detects_ground_truth for row in sessions),
+                len(sessions),
             ),
         },
         "matrix": matrix,
@@ -719,7 +831,7 @@ def _summary_markdown(summary: dict[str, Any]) -> str:
             "## Interpretation constraint",
             "",
             (
-                "These two QR references are exposed diagnostic cases, not an "
+                "These diagnostic QR references are exposed cases, not an "
                 "independent deployment test set. They can identify a live-camera "
                 "failure mode and compare aggregation behaviour, but no production "
                 "threshold may be promoted until the chosen rule also passes the "
@@ -760,7 +872,9 @@ def main() -> None:
     args = parse_args()
     archive = args.archive.resolve(strict=True)
     frames = validate_archive(archive, args.plan.resolve(strict=True))
-    print(f"validated {len(frames)} frames across {len({f.session_id for f in frames})} sessions")
+    print(
+        f"validated {len(frames)} frames across {len({f.session_id for f in frames})} sessions"
+    )
     replayed = replay_frames(frames, args.artifacts.resolve(strict=True))
     sessions = aggregate_sessions(replayed)
     archive_hash = _sha256(archive.read_bytes())

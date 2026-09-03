@@ -1,5 +1,10 @@
+from pathlib import Path
+
 from PIL import Image, ImageEnhance, ImageFilter
 from structural.image_quality import assess_image_quality, normalize_measured_range
+from structural.qr_decoder import estimate_qr_module_count
+
+from app import pipeline
 
 
 def _qr_like() -> Image.Image:
@@ -58,3 +63,61 @@ def test_dense_but_full_range_qr_is_not_called_underexposed():
     report = assess_image_quality(image)
 
     assert "underexposure" not in report.conditions
+
+
+def test_decoded_straight_grid_reports_exact_qr_module_count():
+    fixture = Path(__file__).parents[2] / "data" / "test_qrs" / "01_safe_google.png"
+
+    assert estimate_qr_module_count(Image.open(fixture)) == 29
+
+
+def test_flat_pixels_do_not_invent_a_qr_module_count():
+    assert estimate_qr_module_count(Image.new("RGB", (300, 300), "white")) is None
+
+
+def test_camera_module_scale_gate_is_version_aware(monkeypatch):
+    monkeypatch.setattr(pipeline, "estimate_qr_module_count", lambda _: 73)
+    frames = [Image.new("RGB", (400, 400), "white") for _ in range(3)]
+
+    result = pipeline._analyse_images(
+        frames,
+        "camera",
+        require_camera_consensus=True,
+    )
+
+    assert result.effective is None
+    assert result.module_count == 73
+    assert result.minimum_module_pixels is not None
+    assert result.minimum_module_pixels < 5
+    assert result.quality_conditions == ("insufficient_module_scale",)
+
+
+def test_camera_module_scale_above_physical_floor_reaches_consensus(monkeypatch):
+    monkeypatch.setattr(pipeline, "estimate_qr_module_count", lambda _: 73)
+    monkeypatch.setattr(
+        pipeline,
+        "_analyse_one_image",
+        lambda *_args, **_kwargs: pipeline.StructuralSignals(
+            effective=0.01,
+            raw_score=0.01,
+            predicted_type="clean",
+            manipulation_confidence=0.01,
+            quality_status="usable",
+            quality_conditions=("normal",),
+            frames_received=1,
+            frames_analyzed=1,
+            consensus="single_frame",
+        ),
+    )
+    frames = [Image.new("RGB", (480, 480), "white") for _ in range(3)]
+
+    result = pipeline._analyse_images(
+        frames,
+        "camera",
+        require_camera_consensus=True,
+    )
+
+    assert result.effective == 0.01
+    assert result.module_count == 73
+    assert result.minimum_module_pixels is not None
+    assert result.minimum_module_pixels >= 5

@@ -46,7 +46,12 @@ class BranchScores {
   final String? structuralRescanReason;
   final int structuralFramesReceived;
   final int structuralFramesAnalyzed;
+
+  /// single_frame | median_score_majority_class | insufficient_quality |
+  /// insufficient_confidence
   final String? structuralConsensus;
+  final int? structuralModuleCount;
+  final double? structuralMinModulePixels;
   final double? pUrl;
   final double? llmScore;
   final double? domainUnknown;
@@ -64,6 +69,8 @@ class BranchScores {
     this.structuralFramesReceived = 0,
     this.structuralFramesAnalyzed = 0,
     this.structuralConsensus,
+    this.structuralModuleCount,
+    this.structuralMinModulePixels,
     this.pUrl,
     this.llmScore,
     this.domainUnknown,
@@ -90,6 +97,10 @@ class BranchScores {
       structuralFramesAnalyzed:
           (json['structural_frames_analyzed'] as num?)?.round() ?? 0,
       structuralConsensus: json['structural_consensus'] as String?,
+      structuralModuleCount: (json['structural_module_count'] as num?)?.round(),
+      structuralMinModulePixels: _toDouble(
+        json['structural_min_module_pixels'],
+      ),
       pUrl: pUrl,
       llmScore: _toDouble(json['llm_score']),
       domainUnknown: _toDouble(json['domain_unknown']),

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "policy_id": "structural-coverage-2026.09-r01",
+  "applies_to": "next Structural candidate; the deployed r01 bundle remains historical evidence",
+  "required_classes": [
+    "clean",
+    "adversarial",
+    "tampered"
+  ],
+  "version_bands": [
+    {
+      "id": "low_v1_v3",
+      "minimum_version": 1,
+      "maximum_version": 3
+    },
+    {
+      "id": "medium_v4_v6",
+      "minimum_version": 4,
+      "maximum_version": 6
+    },
+    {
+      "id": "high_v7_plus",
+      "minimum_version": 7,
+      "maximum_version": 40
+    }
+  ],
+  "payload_length_bins": [
+    {
+      "id": "short_1_32",
+      "minimum_utf8_bytes": 1,
+      "maximum_utf8_bytes": 32
+    },
+    {
+      "id": "medium_33_96",
+      "minimum_utf8_bytes": 33,
+      "maximum_utf8_bytes": 96
+    },
+    {
+      "id": "long_97_plus",
+      "minimum_utf8_bytes": 97,
+      "maximum_utf8_bytes": 2953
+    }
+  ],
+  "minimum_independent_test_groups_per_class_version_band": 5,
+  "minimum_independent_test_groups_per_class_mask": 2,
+  "minimum_independent_test_groups_per_class_payload_length_bin": 5,
+  "minimum_verified_surviving_attacks_per_version_band": 5,
+  "maximum_clean_camera_false_block_rate_per_version_band": 0.05,
+  "minimum_adversarial_camera_block_recall_per_version_band": 0.8,
+  "minimum_tampered_camera_block_recall_per_version_band": 0.85,
+  "maximum_camera_rescan_rate_per_class_version_band": 0.2,
+  "maximum_clean_layout_probability_span": 0.15,
+  "maximum_masked_demo_branch_errors": 0,
+  "operator_selected_case_identity_is_development_evidence_only": true,
+  "promotion_requires_blinded_case_identity": true
+}

@@ -1,0 +1,89 @@
+{
+  "acquisition_gate_passed": true,
+  "audit": "qrguard_r02_acquisition_telemetry",
+  "gates": {
+    "complete_frame_matrix": true,
+    "complete_session_matrix": true,
+    "frames_below_5_pixels_per_module_max_0": true,
+    "unusable_structural_crops_saved_max_0": true
+  },
+  "model_replay_still_required": true,
+  "non_promotion_reason": "development acquisition matrix; r02 training and a fresh device/display/session blind holdout remain mandatory",
+  "policy": {
+    "minimum_observed_module_pixels": 5.0,
+    "model_or_attack_label_used_for_frame_selection": false,
+    "version": "qrguard-camera-acquisition-2026-09-r02"
+  },
+  "promotion_eligible": false,
+  "schema_version": 1,
+  "source": {
+    "filename": "QRGuard_Diagnostic_acquisition_quality_exposure_module_scale_2026.zip",
+    "frames": 120,
+    "sessions": 24,
+    "sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4"
+  },
+  "telemetry": {
+    "conditions": [
+      {
+        "adjusted_sessions": 1,
+        "condition_id": "screen-100-brightness-100",
+        "frames": 40,
+        "median_observed_pixels_per_module": 10.244897959183675,
+        "minimum_observed_pixels_per_module": 7.794520547945205,
+        "raw_quality_statuses": {
+          "marginal": 1,
+          "usable": 39
+        },
+        "sessions": 8,
+        "structural_quality_statuses": {
+          "marginal": 1,
+          "usable": 39
+        }
+      },
+      {
+        "adjusted_sessions": 1,
+        "condition_id": "screen-100-brightness-30",
+        "frames": 40,
+        "median_observed_pixels_per_module": 10.204081632653061,
+        "minimum_observed_pixels_per_module": 7.205479452054795,
+        "raw_quality_statuses": {
+          "marginal": 2,
+          "usable": 38
+        },
+        "sessions": 8,
+        "structural_quality_statuses": {
+          "marginal": 2,
+          "usable": 38
+        }
+      },
+      {
+        "adjusted_sessions": 1,
+        "condition_id": "screen-80-brightness-50",
+        "frames": 40,
+        "median_observed_pixels_per_module": 10.295918367346939,
+        "minimum_observed_pixels_per_module": 6.945205479452055,
+        "raw_quality_statuses": {
+          "marginal": 5,
+          "usable": 35
+        },
+        "sessions": 8,
+        "structural_quality_statuses": {
+          "marginal": 5,
+          "usable": 35
+        }
+      }
+    ],
+    "exposure_adjusted_sessions": 3,
+    "exposure_supported_sessions": 24,
+    "frames_below_minimum_module_scale": 0,
+    "minimum_observed_pixels_per_module": 6.945205479452055,
+    "raw_quality_statuses": {
+      "marginal": 8,
+      "usable": 112
+    },
+    "structural_quality_statuses": {
+      "marginal": 8,
+      "usable": 112
+    }
+  }
+}

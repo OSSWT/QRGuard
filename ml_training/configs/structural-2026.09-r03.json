@@ -1,0 +1,150 @@
+{
+  "display_name": "Structural source-family-balanced exposure candidate",
+  "experiment_version": "structural-2026.09-r03",
+  "status": "source_family_rebalanced_candidate_training_pending",
+  "seed": 42,
+  "classes": [
+    "clean",
+    "adversarial",
+    "tampered"
+  ],
+  "image_size": 224,
+  "architecture": "ImageNet-pretrained ResNet-18 initialised from accepted structural-2026.03-r01; unified Gallery/Camera artifact",
+  "semantic_policy": "freeze_semantic-2026.02_regression_only",
+  "split": {
+    "group_keys": [
+      "source_dataset",
+      "capture_session",
+      "paired_group",
+      "physical_qr",
+      "payload_hash",
+      "base_identity",
+      "device_model",
+      "display_id"
+    ],
+    "derive_after_split": true,
+    "parent_identity_locked": true,
+    "device_display_session_holdout_required": true
+  },
+  "m5_coverage_development": {
+    "campaign_id": "structural-coverage-development-2026-09-r01",
+    "archive_sha256": "f3267b92176414473f0e936059f0a4b45ff9164ad5be8b702041d63c7aaa0bfa",
+    "manifest": "data/structural_coverage_development/2026-09-r01/manifest.csv",
+    "frames": 240,
+    "sessions": 48,
+    "base_identities": 16,
+    "deployment_holdout_eligible": false,
+    "versions": [3, 5, 10],
+    "masks": [0, 1, 2, 3, 4, 5, 6, 7],
+    "payload_utf8_bytes": [24, 40, 112]
+  },
+  "physical_attack_development": {
+    "campaign_id": "structural-physical-attack-development-2026-09-r02",
+    "archive_sha256": "a69f83022e8af591e9d09f31cdbedb924ad41cf5e9d951feac24ef6577775d58",
+    "manifest": "data/structural_physical_attack_development/2026-09-r02/manifest.csv",
+    "manifest_sha256": "ed8bc9f8aebb81deee3554f3b60bb3d0f3442135f2bfaa1a3f52c74a7b9ab81f",
+    "observed_frames": 240,
+    "observed_clean_sessions": 16,
+    "observed_attack_sessions": 32,
+    "verified_surviving_attack_sessions": 10,
+    "quarantined_non_surviving_attack_sessions": 22,
+    "admitted_frames": 130,
+    "admitted_clean_frames": 80,
+    "admitted_adversarial_frames": 50,
+    "deployment_holdout_eligible": false,
+    "admission_rule": "clean sessions plus attacks with physical_attack_survival_verified=true only"
+  },
+  "candidate_manifest": {
+    "path": "ml_training/datasets/structural/processed/structural-2026.09-r02/manifest.csv",
+    "rows": 11500,
+    "sha256": "d4aab55564f269a07094a47f6d51c036c39beb4f72e4220490b53615aac54ebb"
+  },
+  "dataset_references": {
+    "processed_version": "structural-2026.09-r02",
+    "prepared_gallery_version": "structural-2026.03-r01",
+    "physical_attack_development_version": "2026-09-r02"
+  },
+  "development_replay_excluded_from_training": {
+    "archive_sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4",
+    "reason": "fixed development replay remains unseen for r03 diagnosis; it is not a promotion holdout"
+  },
+  "training": {
+    "batch_size": 32,
+    "head_epochs": 2,
+    "finetune_epochs": 7,
+    "initial_checkpoint": "ml_training/structural/runs/structural-2026.03-r01/best_model.pt",
+    "initial_checkpoint_sha256": "21e51084c2b1ac4ce49387c8aa47046220eb6b8ef06ddeada3a6ae32fbe97bc2",
+    "minimum_runtime_capture_draw_fraction": 0.4,
+    "sampling": {
+      "strategy": "class_source_family_balanced",
+      "source_family_draw_fractions": {
+        "clean": {
+          "procedural": 0.4,
+          "camera": 0.4,
+          "gallery": 0.15,
+          "public_clean": 0.05
+        },
+        "adversarial": {
+          "procedural": 0.4,
+          "camera": 0.4,
+          "gallery": 0.2
+        },
+        "tampered": {
+          "procedural": 0.4,
+          "camera": 0.4,
+          "gallery": 0.2
+        }
+      }
+    },
+    "calibration": {
+      "method": "scalar_temperature_weighted_nll",
+      "source_family_weighted": true
+    },
+    "exposure_invariance": {
+      "enabled": true,
+      "consistency_loss": "symmetric_kl",
+      "consistency_weight": 0.2,
+      "partner_key": [
+        "paired_group",
+        "class_id"
+      ],
+      "ev_range": [-0.75, 0.75],
+      "contrast_range": [0.8, 1.2],
+      "gamma_range": [0.8, 1.25],
+      "evaluation_ev": [-0.67, 0.0, 0.67],
+      "severe_or_unusable_samples_are_excluded": true
+    },
+    "checkpoint_selection_weights": {
+      "global_macro_f1": 0.35,
+      "deployment_domain_macro_f1": 0.3,
+      "non_test_paired_verdict_agreement": 0.2,
+      "exposure_verdict_agreement": 0.15
+    },
+    "checkpoint_every_epoch": true,
+    "copy_to_runtime_automatically": false
+  },
+  "deployment_gates": {
+    "coverage_gate_config": "ml_training/configs/structural-coverage-gates-2026.09-r01.json",
+    "real_clean_false_positive_rate_max": 0.05,
+    "real_tampered_recall_min": 0.85,
+    "real_adversarial_recall_min": 0.8,
+    "binary_ece_max": 0.05,
+    "paired_gallery_camera_verdict_agreement_min": 0.95,
+    "exposure_verdict_agreement_min": 0.95,
+    "clean_exposure_probability_span_p95_max": 0.15,
+    "sem05_style_masked_branch_errors_max": 0,
+    "fresh_blind_holdout_required": true,
+    "fresh_device_display_session_holdout_required": true
+  },
+  "runtime_policy": {
+    "camera_definitive_manipulation_floor": 0.7,
+    "below_floor_action": "inconclusive_rescan_never_safe",
+    "quality_gate_precedes_structural_inference": true,
+    "minimum_observed_module_pixels": 5.0
+  },
+  "promotion": {
+    "copy_to_runtime_automatically": false,
+    "push_automatically": false,
+    "deploy_automatically": false
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "audit": "structural_topology_counterfactual_clean",
+  "evidence_role": "development_counterfactual",
+  "promotion_eligible": false,
+  "manifest": "ml_training/datasets/structural/processed/structural-2026.09-r06/manifest.csv",
+  "manifest_sha256": "c553efd57c707d1f60457ade0ffa2d2675e225727b95d8cea17820ed56a96d16",
+  "split": "validation",
+  "model": {
+    "version": "structural-2026.09-r05",
+    "artifact_sha256": "a78084377b445510f73a8f5748fff04dd09fbc9f73aeb093bdad57f524049fa1",
+    "temperature": 0.5950954273140843
+  },
+  "rows": 1024,
+  "groups": 64,
+  "versions": [
+    3,
+    5,
+    7,
+    10,
+    12,
+    14,
+    16,
+    20
+  ],
+  "masks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "clean_false_positive_rate": 0.013671875,
+  "clean_structural_probability_span_p95": 0.5252934187650679,
+  "maximum_group_probability_span": 0.7295399308204651,
+  "per_version_clean_false_positive_rate": {
+    "10": 0.0,
+    "12": 0.0,
+    "14": 0.0,
+    "16": 0.0,
+    "20": 0.0,
+    "3": 0.046875,
+    "5": 0.03125,
+    "7": 0.03125
+  },
+  "per_mask_clean_false_positive_rate": {
+    "0": 0.015625,
+    "1": 0.0,
+    "2": 0.015625,
+    "3": 0.015625,
+    "4": 0.0234375,
+    "5": 0.0,
+    "6": 0.0234375,
+    "7": 0.015625
+  },
+  "per_condition_clean_false_positive_rate": {
+    "normal": 0.01171875,
+    "screen_moire_or_compression": 0.015625
+  },
+  "mask_probability_span_p95_within_condition": 0.47969386875629383,
+  "condition_probability_span_p95_within_mask": 0.0646142154932022,
+  "worst_group_probability_spans": [
+    {
+      "group_id": "synthetic_topology:v07-q-5",
+      "qr_version": 7,
+      "probability_min": 0.03789454698562622,
+      "probability_max": 0.7674344778060913,
+      "probability_span": 0.7295399308204651
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-5",
+      "qr_version": 3,
+      "probability_min": 0.05415886640548706,
+      "probability_max": 0.7226168513298035,
+      "probability_span": 0.6684579849243164
+    },
+    {
+      "group_id": "synthetic_topology:v05-h-5",
+      "qr_version": 5,
+      "probability_min": 0.11775624752044678,
+      "probability_max": 0.6582409143447876,
+      "probability_span": 0.5404846668243408
+    },
+    {
+      "group_id": "synthetic_topology:v05-h-4",
+      "qr_version": 5,
+      "probability_min": 0.06312930583953857,
+      "probability_max": 0.5928440690040588,
+      "probability_span": 0.5297147631645203
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-4",
+      "qr_version": 3,
+      "probability_min": 0.07925927639007568,
+      "probability_max": 0.5794984102249146,
+      "probability_span": 0.5002391338348389
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-4",
+      "qr_version": 3,
+      "probability_min": 0.10739445686340332,
+      "probability_max": 0.5705533027648926,
+      "probability_span": 0.46315884590148926
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-5",
+      "qr_version": 3,
+      "probability_min": 0.07712268829345703,
+      "probability_max": 0.5241395831108093,
+      "probability_span": 0.4470168948173523
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-4",
+      "qr_version": 5,
+      "probability_min": 0.1143905520439148,
+      "probability_max": 0.5302143096923828,
+      "probability_span": 0.415823757648468
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-5",
+      "qr_version": 3,
+      "probability_min": 0.043898940086364746,
+      "probability_max": 0.42302095890045166,
+      "probability_span": 0.3791220188140869
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-5",
+      "qr_version": 5,
+      "probability_min": 0.08949470520019531,
+      "probability_max": 0.43434464931488037,
+      "probability_span": 0.34484994411468506
+    }
+  ],
+  "failures": [
+    {
+      "group_id": "synthetic_topology:v03-m-4",
+      "qr_version": 3,
+      "mask_pattern": 3,
+      "quality_condition": "normal",
+      "p_structural": 0.5794984102249146,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-5",
+      "qr_version": 3,
+      "mask_pattern": 7,
+      "quality_condition": "normal",
+      "p_structural": 0.5241395831108093,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-4",
+      "qr_version": 3,
+      "mask_pattern": 6,
+      "quality_condition": "normal",
+      "p_structural": 0.5468767881393433,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-4",
+      "qr_version": 3,
+      "mask_pattern": 6,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5705533027648926,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-5",
+      "qr_version": 3,
+      "mask_pattern": 0,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.654108464717865,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-5",
+      "qr_version": 3,
+      "mask_pattern": 7,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.7226168513298035,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-4",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "normal",
+      "p_structural": 0.5302143096923828,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-h-4",
+      "qr_version": 5,
+      "mask_pattern": 2,
+      "quality_condition": "normal",
+      "p_structural": 0.5825909376144409,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-h-4",
+      "qr_version": 5,
+      "mask_pattern": 2,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5928440690040588,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-h-5",
+      "qr_version": 5,
+      "mask_pattern": 3,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6582409143447876,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-5",
+      "qr_version": 7,
+      "mask_pattern": 0,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6365045309066772,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-5",
+      "qr_version": 7,
+      "mask_pattern": 4,
+      "quality_condition": "normal",
+      "p_structural": 0.7674344778060913,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-5",
+      "qr_version": 7,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6456151008605957,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-5",
+      "qr_version": 7,
+      "mask_pattern": 6,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5945945978164673,
+      "predicted_type": "adversarial"
+    }
+  ]
+}

@@ -41,7 +41,21 @@ class BranchScores(BaseModel):
     structural_frames_analyzed: int = Field(0, ge=0, le=5)
     structural_consensus: Optional[str] = Field(
         None,
-        description="single_frame | median_score_majority_class | insufficient_quality",
+        description="single_frame | median_score_majority_class | "
+        "insufficient_quality | insufficient_confidence",
+    )
+    structural_module_count: int | None = Field(
+        None,
+        ge=21,
+        le=177,
+        description=(
+            "Observed QR grid side; null when the canonical grid was unavailable"
+        ),
+    )
+    structural_min_module_pixels: float | None = Field(
+        None,
+        ge=0,
+        description="Smallest camera-crop pixels per QR module in this burst",
     )
     p_url: Optional[float] = Field(
         None, description="phishing probability from Method 1; null if not a URL"

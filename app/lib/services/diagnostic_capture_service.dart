@@ -21,7 +21,12 @@ const bool diagnosticCaptureEnabled = bool.fromEnvironment(
   defaultValue: false,
 );
 
-const _planAsset = 'assets/capture/diagnostic_capture_plan.json';
+const _defaultDiagnosticCapturePlanAsset =
+    'assets/capture/diagnostic_capture_plan.json';
+const diagnosticCapturePlanAsset = String.fromEnvironment(
+  'QRGUARD_DIAGNOSTIC_PLAN_ASSET',
+  defaultValue: _defaultDiagnosticCapturePlanAsset,
+);
 const _collector = 'qrguard_android_diagnostic_capture';
 const _schemaVersion = 1;
 const _sha256Pattern = r'^[0-9a-f]{64}$';
@@ -42,6 +47,7 @@ class DiagnosticDistance {
     required this.id,
     required this.label,
     required this.instruction,
+    this.metadata = const {},
   });
 
   factory DiagnosticDistance.fromJson(Map<String, dynamic> json) =>
@@ -49,11 +55,15 @@ class DiagnosticDistance {
         id: json['id'] as String,
         label: json['label'] as String,
         instruction: json['instruction'] as String,
+        metadata: Map.unmodifiable(
+          Map<String, dynamic>.from(json['metadata'] as Map? ?? const {}),
+        ),
       );
 
   final String id;
   final String label;
   final String instruction;
+  final Map<String, dynamic> metadata;
 }
 
 class DiagnosticCase {
@@ -63,6 +73,7 @@ class DiagnosticCase {
     required this.groundTruth,
     required this.expectedPayloadSha256,
     required this.instruction,
+    this.metadata = const {},
   });
 
   factory DiagnosticCase.fromJson(Map<String, dynamic> json) => DiagnosticCase(
@@ -71,6 +82,9 @@ class DiagnosticCase {
     groundTruth: json['ground_truth'] as String,
     expectedPayloadSha256: json['expected_payload_sha256'] as String,
     instruction: json['instruction'] as String,
+    metadata: Map.unmodifiable(
+      Map<String, dynamic>.from(json['metadata'] as Map? ?? const {}),
+    ),
   );
 
   final String caseId;
@@ -78,6 +92,7 @@ class DiagnosticCase {
   final String groundTruth;
   final String expectedPayloadSha256;
   final String instruction;
+  final Map<String, dynamic> metadata;
 
   bool matchesExpectedPayload(String payload) =>
       sha256.convert(utf8.encode(payload.trim())).toString() ==
@@ -155,6 +170,12 @@ class DiagnosticFrameEvidence {
     required this.frameWidth,
     required this.frameHeight,
     required this.cornerCoordinates,
+    this.rawAcquisitionQuality,
+    this.structuralCropQuality,
+    this.exposureCompensationSupported = false,
+    this.exposureCompensationIndex,
+    this.exposureCompensationEv,
+    this.exposureAdjustedDuringSession = false,
   });
 
   final Uint8List cropPng;
@@ -162,6 +183,12 @@ class DiagnosticFrameEvidence {
   final double frameWidth;
   final double frameHeight;
   final List<double> cornerCoordinates;
+  final Map<String, Object>? rawAcquisitionQuality;
+  final Map<String, Object>? structuralCropQuality;
+  final bool exposureCompensationSupported;
+  final int? exposureCompensationIndex;
+  final double? exposureCompensationEv;
+  final bool exposureAdjustedDuringSession;
 }
 
 class DiagnosticProgress {
@@ -204,12 +231,12 @@ class DiagnosticCaptureService {
   final Database _database;
 
   static Future<DiagnosticCaptureService> open() async {
-    final raw = await rootBundle.loadString(_planAsset);
+    final raw = await rootBundle.loadString(diagnosticCapturePlanAsset);
     final plan = DiagnosticCapturePlan.fromJson(
       Map<String, dynamic>.from(jsonDecode(raw) as Map),
     );
     final database = await openDatabase(
-      'qrguard_live_diagnostic_r01.db',
+      diagnosticCaptureDatabaseName(plan.campaignId),
       version: 1,
       onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON'),
       onCreate: (db, _) async {
@@ -373,6 +400,12 @@ class DiagnosticCaptureService {
         'case_id': captureCase.caseId,
         'ground_truth': captureCase.groundTruth,
         'distance': distance.id,
+        'condition_id': distance.id,
+        'condition_metadata': distance.metadata,
+        'case_metadata': captureCase.metadata,
+        'case_identity_source':
+            captureCase.metadata['case_identity_source'] ??
+            'payload_hash_verified',
         'repeat_index': nextIndex,
         'captured_at': capturedAt.toIso8601String(),
         'payload_sha256': payloadHash,
@@ -380,7 +413,18 @@ class DiagnosticCaptureService {
         'raw_payload_stored': false,
         'image_source': 'camera',
         'frames_per_session': frames.length,
-        'selection_policy': 'automatic_temporal_burst_no_cherry_pick',
+        'selection_policy':
+            'automatic_post_exposure_quality_gated_temporal_burst',
+        'acquisition_policy': {
+          'policy_version': 'qrguard-camera-acquisition-2026-09-r02',
+          'exposure_feedback_source': 'raw_rectified_qr_roi',
+          'metering_policy': 'qr_centred_af_ae_awb_before_first_saved_frame',
+          'structural_quality_source':
+              'camera_colour_normalized_rectified_qr_crop',
+          'exposure_adjustment_limit_per_session': 1,
+          'unusable_structural_crops_saved': false,
+          'label_based_frame_selection': false,
+        },
         'analysis_pending': true,
         'frames': [
           for (var index = 0; index < frames.length; index++)
@@ -394,6 +438,26 @@ class DiagnosticCaptureService {
               'corner_coordinates': frames[index].cornerCoordinates,
               'crop_size': [decoded[index].width, decoded[index].height],
               'crop_sha256': hashes[index],
+              'raw_acquisition_quality': frames[index].rawAcquisitionQuality,
+              'structural_crop_quality': frames[index].structuralCropQuality,
+              'exposure_compensation_supported':
+                  frames[index].exposureCompensationSupported,
+              'exposure_compensation_index':
+                  frames[index].exposureCompensationIndex,
+              'exposure_compensation_ev': frames[index].exposureCompensationEv,
+              'exposure_adjusted_during_session':
+                  frames[index].exposureAdjustedDuringSession,
+              if (captureCase.metadata['qr_version'] is num) ...{
+                'expected_module_count':
+                    17 +
+                    4 * (captureCase.metadata['qr_version'] as num).round(),
+                'observed_pixels_per_module':
+                    min(decoded[index].width, decoded[index].height) /
+                    (17 +
+                        4 *
+                            (captureCase.metadata['qr_version'] as num)
+                                .round()),
+              },
             },
         ],
       };
@@ -505,6 +569,8 @@ class DiagnosticCaptureService {
       'diagnostic_archive_schema_version': _schemaVersion,
       'collector': _collector,
       'campaign_id': plan.campaignId,
+      'capture_plan_asset': diagnosticCapturePlanAsset,
+      'runtime_platform': defaultTargetPlatform.name,
       'exported_at': exportedAt.toIso8601String(),
       'session_count': sessions.length,
       'frame_count': totalFrames,
@@ -552,6 +618,20 @@ class DiagnosticCaptureService {
   }
 
   Future<void> close() => _database.close();
+}
+
+String diagnosticCaptureDatabaseName(
+  String campaignId, {
+  String planAsset = diagnosticCapturePlanAsset,
+}) {
+  if (planAsset == _defaultDiagnosticCapturePlanAsset) {
+    return 'qrguard_live_diagnostic_r01.db';
+  }
+  final campaignHash = sha256
+      .convert(utf8.encode(campaignId))
+      .toString()
+      .substring(0, 12);
+  return 'qrguard_diagnostic_$campaignHash.db';
 }
 
 String _secureSessionId() {

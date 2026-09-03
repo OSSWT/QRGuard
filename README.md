@@ -46,24 +46,36 @@ component, not a third analysis branch. An optional user-initiated Deep Check ad
 redirect and LLM evidence; its weights are not represented as trained in the
 automatic QRGuard-Mix-v2 model.
 
-## Approved runtime state
+## Active controlled runtime state
 
 | Component | Runtime version | Status |
 |---|---|---|
-| Structural - Gallery | `structural-2026.03-r01`, ImageNet-pretrained ResNet-18 | Unified source-neutral artifact; deployment gates passed |
-| Structural - Live Camera | `structural-2026.03-r01`, ImageNet-pretrained ResNet-18 | Unified source-neutral artifact; deployment gates passed |
+| Structural - Gallery | `structural-r07-corrective-v1`, ImageNet-pretrained ResNet-18 | User-authorized controlled release; development gate passed; fresh formal blind acceptance pending |
+| Structural - Live Camera | `structural-r07-corrective-v1`, ImageNet-pretrained ResNet-18 | Same artifact with quality/exposure selection, three-frame consensus and fail-closed Rescan |
 | Semantic | `semantic-2026.02`, hashed character 3–5 gram calibrated linear model | Gates passed |
 | Risk Decision Layer | `decision-2026.03-r05`, QRGuard-Mix-v2 Fusion | All 36 policy cells passed; Safe `<26`, Blocked `>=76` |
 
-Camera and Gallery now use the same calibrated Structural artifact. The candidate
-stack was evaluated through the production backend against the locked, group-
-disjoint exact-app holdout before local promotion. Historical split artifacts and
-the previous Decision model remain available only as rollback material under
-`ml_training/deployment/rollback/`.
+Camera and Gallery use the same calibrated Structural artifact. r07 is deliberately
+presented as a controlled release, not a formal promotion: its development
+screen-to-camera calibration passed, but a fresh candidate-bound independent blind
+acceptance remains pending. The runtime abstains to Rescan when image evidence is
+insufficient and never turns an inconclusive Structural result into Safe. The
+previous r01 artifact remains the immediate rollback boundary.
 
 ## Measured results
 
-### Structural `structural-2026.03-r01`
+### Structural `structural-r07-corrective-v1`
+
+- Controlled attack-calibration capture: 72 sessions and 360 validated frames.
+- Physical-channel survival: 25/48 planned attack cases; only verified survivors
+  contribute to attack-recall measurements.
+- Clean false-block rate: 0.00 in low, medium and high QR-version bands.
+- Independent surviving attack-base recall: 1.00 low, 1.00 medium and 0.8333 high.
+- One dense high-version base required Rescan; no analyzable surviving attack was
+  returned as Safe.
+- Formal promotion remains pending a new independent candidate-bound blind test.
+
+### Previous formal baseline `structural-2026.03-r01`
 
 - Exact-app locked test: 120 rows; Camera and Gallery each contain 20 samples per class.
 - Camera: clean false-block rate 0.00, adversarial blocked recall 0.95, tampered recall 1.00.
@@ -193,16 +205,13 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.1.4+8011`.
+The checked Android version is `1.2.0+8012`.
 
-Production `1.1.4+8011` is live at
-[qrguard-app-osswt.onrender.com](https://qrguard-app-osswt.onrender.com), backed by
-[qrguard-api-osswt.onrender.com](https://qrguard-api-osswt.onrender.com/health)
-from deployment commit `c82bb9e`. Online smoke tests confirmed three-frame clean
-Safe and adversarial Blocked consensus, duplicate-frame rejection, three
-consecutive canonical SEM-11 Safe results, timing telemetry, and an APK SHA-256
-matching the signed release:
-`09873FADAE5EC0E17C6ED8E047B72459D531C1CCCC67D2469F25FB7BF4BD0AAC`.
+Release `1.2.0+8012` is locally built and signed for the production endpoint. Its
+APK is 73,462,225 bytes with SHA-256
+`c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c`.
+The repository records external hosting separately so a local build is never
+mistaken for a completed live deployment.
 
 ## Verification
 
@@ -214,17 +223,17 @@ flutter test
 flutter build apk --release
 ```
 
-Current change verification: the independent 120-row candidate-stack gate passed,
-366 backend tests passed plus one optional skip, Flutter analysis reported no
-issues, and 86 Flutter tests passed. The canonical SEM-11 fixture also completed
-three consecutive declared three-frame consensus scans as Safe. The release
-workflow is documented separately from these source-level checks.
+Current change verification: 470 backend tests passed with three conditional
+skips, Flutter analysis reported no issues, and 104 Flutter tests passed. The
+production-endpoint Web build and signed Android release both completed; the APK
+identity and signer certificate were verified independently of the build step.
 
 ## Evidence boundary
 
-The Structural runtime audit now contains 300 accepted Camera sessions (100 per
-class), including 20 locked test sessions per class, plus paired Gallery evidence.
-No group leakage was found and the deployment gate passed. These measurements cover
-the defined campaign and devices; they are not a claim of universal performance on
-every camera, display, lighting condition, or unseen manipulation method. The exact
-promotion and deployment state is recorded in `ml_training/deployment/model_registry.json`.
+The Structural runtime audit contains 300 accepted Camera sessions (100 per class),
+including 20 locked test sessions per class, plus paired Gallery evidence. r07 adds
+controlled physical calibration across QR-version bands, but that evidence is
+development-only. These measurements cover the defined campaign and devices; they
+are not a claim of universal performance on every camera, display, print, lighting
+condition or unseen manipulation method. The exact controlled-release, formal-gate
+and deployment state is recorded in `ml_training/deployment/model_registry.json`.

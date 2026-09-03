@@ -7,7 +7,11 @@ import numpy as np
 from app.main import _structural_health_status, _structural_startup_loaders
 from app.pipeline import _analyse_images, run_scan
 from PIL import Image
-from structural.structural_service import StructuralResult
+from structural.structural_service import (
+    _UNIFIED_CANDIDATE_VERSION_PREFIXES,
+    StructuralResult,
+    load_unified_candidate_analyzer,
+)
 
 
 def _high_contrast_qr_like() -> Image.Image:
@@ -34,8 +38,7 @@ def test_health_reports_unified_candidate(monkeypatch, tmp_path: Path) -> None:
     )
 
     assert _structural_health_status() == (
-        "unified=structural-2026.03-r01/structural_fp32.onnx; "
-        "sources=gallery,camera"
+        "unified=structural-2026.03-r01/structural_fp32.onnx; sources=gallery,camera"
     )
 
 
@@ -53,6 +56,28 @@ def test_startup_loads_only_the_unified_candidate(monkeypatch) -> None:
     assert [name for name, _loader in loaders] == ["structural-unified"]
     loaders[0][1]()
     assert loaded_paths == ["candidate/artifacts"]
+
+
+def test_stable_r07_corrective_version_is_a_supported_unified_candidate() -> None:
+    assert "structural-r07-corrective-v1".startswith(
+        _UNIFIED_CANDIDATE_VERSION_PREFIXES
+    )
+
+
+def test_coverage_candidate_uses_the_existing_unified_contract(
+    monkeypatch, tmp_path: Path
+) -> None:
+    artifacts = tmp_path / "structural-2026.09-r01" / "artifacts"
+    artifacts.mkdir(parents=True)
+    (artifacts / "model_metadata.json").write_text(
+        json.dumps({"version": "structural-2026.09-r01"}), encoding="utf-8"
+    )
+    sentinel = object()
+    monkeypatch.setattr(
+        "structural.structural_service.load_analyzer", lambda _path: sentinel
+    )
+
+    assert load_unified_candidate_analyzer(str(artifacts)) is sentinel
 
 
 def test_opt_in_candidate_uses_one_analyzer_for_gallery_and_camera(monkeypatch) -> None:
@@ -120,6 +145,37 @@ def test_quality_abstention_is_warning_not_malicious_for_both_sources(
         assert result.partial_analysis is True
 
 
+def test_clean_image_with_undecodable_payload_requests_rescan(monkeypatch) -> None:
+    class CandidateAnalyzer:
+        def predict(self, _image):
+            return StructuralResult(
+                p_structural=0.01,
+                predicted_type="clean",
+                probs={"clean": 0.99, "adversarial": 0.005, "tampered": 0.005},
+            )
+
+    monkeypatch.setenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "candidate/artifacts")
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: CandidateAnalyzer(),
+    )
+    monkeypatch.setattr("structural.qr_decoder.decode_qr", lambda _image: None)
+
+    for source in ("gallery", "camera"):
+        result = run_scan(
+            images=[_high_contrast_qr_like()],
+            image_source=source,
+            image_expected=True,
+        )
+
+        assert result.payload_source == "undecodable"
+        assert result.branch_scores.structural_status == "completed"
+        assert result.branch_scores.structural_type == "clean"
+        assert result.verdict == "warning"
+        assert result.partial_analysis is True
+        assert any("could not be decoded" in reason for reason in result.reasons)
+
+
 def test_confirmed_candidate_manipulation_blocks_for_both_sources(monkeypatch) -> None:
     class CandidateAnalyzer:
         def predict(self, _image):
@@ -148,6 +204,94 @@ def test_confirmed_candidate_manipulation_blocks_for_both_sources(monkeypatch) -
         assert result.branch_scores.structural_status == "completed"
         assert result.branch_scores.structural_type == "tampered"
         assert "Structural model confirmed QR manipulation" in result.reasons
+
+
+def test_candidate_camera_boundary_prediction_requests_rescan(monkeypatch) -> None:
+    class CandidateAnalyzer:
+        camera_definitive_manipulation_floor = 0.70
+
+        def predict(self, _image):
+            return StructuralResult(
+                p_structural=0.62,
+                predicted_type="adversarial",
+                probs={"clean": 0.38, "adversarial": 0.60, "tampered": 0.02},
+            )
+
+    monkeypatch.setenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "candidate/artifacts")
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: CandidateAnalyzer(),
+    )
+    images = [_high_contrast_qr_like().resize((300, 300)) for _ in range(3)]
+
+    result = run_scan(
+        "plain text",
+        images=images,
+        image_source="camera",
+        image_expected=True,
+        require_camera_consensus=True,
+    )
+
+    branch = result.branch_scores
+    assert result.verdict == "warning"
+    assert result.partial_analysis is True
+    assert branch.structural_status == "inconclusive"
+    assert branch.p_structural is None
+    assert branch.p_structural_raw == 0.62
+    assert branch.structural_type is None
+    assert branch.structural_frames_analyzed == 3
+    assert branch.structural_consensus == "insufficient_confidence"
+    assert "uncertain_structural_prediction" in branch.structural_quality_conditions
+    assert branch.structural_rescan_reason
+
+
+def test_candidate_uncertainty_floor_does_not_weaken_gallery_or_clear_attack(
+    monkeypatch,
+) -> None:
+    class CandidateAnalyzer:
+        camera_definitive_manipulation_floor = 0.70
+
+        def __init__(self, score: float):
+            self.score = score
+
+        def predict(self, _image):
+            return StructuralResult(
+                p_structural=self.score,
+                predicted_type="tampered",
+                probs={
+                    "clean": 1 - self.score,
+                    "adversarial": 0.01,
+                    "tampered": self.score - 0.01,
+                },
+            )
+
+    monkeypatch.setenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "candidate/artifacts")
+    image = _high_contrast_qr_like().resize((300, 300))
+
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: CandidateAnalyzer(0.62),
+    )
+    gallery = run_scan(
+        "plain text", images=[image], image_source="gallery", image_expected=True
+    )
+    assert gallery.verdict == "blocked"
+    assert gallery.branch_scores.structural_type == "tampered"
+
+    monkeypatch.setattr(
+        "app.pipeline.load_unified_candidate_analyzer",
+        lambda _path=None: CandidateAnalyzer(0.71),
+    )
+    camera = run_scan(
+        "plain text",
+        images=[image.copy() for _ in range(3)],
+        image_source="camera",
+        image_expected=True,
+        require_camera_consensus=True,
+    )
+    assert camera.verdict == "blocked"
+    assert camera.branch_scores.structural_status == "completed"
+    assert camera.branch_scores.structural_type == "tampered"
 
 
 def test_camera_consensus_rejects_two_manipulated_outliers(monkeypatch) -> None:

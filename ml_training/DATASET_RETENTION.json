@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "policy": "retain canonical sources and evidence; remove reproducible duplicate expansions",
+  "retained": [
+    {
+      "path": "ml_training/datasets/structural/downloads",
+      "role": "canonical_third_party_archives",
+      "reason": "the two official archives passed the locked size and SHA-256 verifier"
+    },
+    {
+      "path": "ml_training/datasets/structural/processed/qrdn",
+      "role": "prepared_public_cache",
+      "reason": "small reusable manifest/crop cache derived from QR-DN"
+    },
+    {
+      "path": "ml_training/datasets/structural/processed/qr_surfaces",
+      "role": "prepared_public_cache",
+      "reason": "reusable manifest/crop cache derived from QR Codes in Surfaces"
+    },
+    {
+      "path": "data/runtime_captures",
+      "role": "canonical_exact_app_evidence",
+      "reason": "strict 361-session Gallery/Camera dataset used by Structural gates"
+    },
+    {
+      "path": "data/prepared_gallery_references/structural-2026.03-r01",
+      "role": "canonical_gallery_development",
+      "reason": "group-governed Gallery train/validation references"
+    },
+    {
+      "path": "data/structural_coverage_development/2026-09-r01",
+      "role": "development_evidence",
+      "reason": "Version, mask and payload-length coverage captures"
+    },
+    {
+      "path": "data/structural_physical_attack_development/2026-09-r02",
+      "role": "development_evidence",
+      "reason": "contains only clean and verified surviving physical attacks"
+    },
+    {
+      "path": "data/acquisition_quality_development/2026-09-r02",
+      "role": "development_hard_negatives",
+      "reason": "clean exposure, distance and module-scale captures"
+    },
+    {
+      "path": "data/structural_consumed_blind_development/2026-09-r01",
+      "role": "consumed_non_promoting_clean_development",
+      "reason": "SEM-11 and dense-screen clean hard negatives; never blind again"
+    },
+    {
+      "path": "data/structural_consumed_blind_attack_development/r07-corrective-v1",
+      "role": "consumed_non_promoting_attack_development",
+      "reason": "only two attacks with locked post-capture survival verification"
+    },
+    {
+      "path": "data/qrguard_mix_v2",
+      "role": "frozen_decision_training_data",
+      "reason": "current Decision/Fusion r05 training source"
+    },
+    {
+      "path": "data/test_qrs",
+      "role": "active_regression_fixtures",
+      "reason": "referenced directly by backend and Flutter tests"
+    },
+    {
+      "path": "../04_Datasets/01_Structural/R07_Fresh_Blind_Holdout",
+      "role": "consumed_candidate_bound_physical_holdout",
+      "reason": "48-case blind acceptance was scored once and rejected by the locked attack-survival coverage and clean-layout-span gates; it may support diagnosis but can never be blind promotion evidence again"
+    },
+    {
+      "path": "../04_Datasets/01_Structural/Attack_Calibration_v1",
+      "role": "canonical_development_attack_calibration",
+      "reason": "complete 72-session capture, locked references and audit metadata; 25 attacks survived the physical channel and the r07 development replay passed without promotion rights"
+    },
+    {
+      "path": "ml_training/structural/performance/structural-r07-corrective-v1",
+      "role": "canonical_corrective_candidate_evidence",
+      "reason": "complete performance bundle for the frozen r07 corrective candidate"
+    }
+  ],
+  "removed": [
+    {
+      "path": "ml_training/datasets/structural/raw",
+      "role": "duplicate_archive_expansion",
+      "files": 13276,
+      "bytes": 1519858176,
+      "recovery": "re-extract the retained verified official archives"
+    },
+    {
+      "path_pattern": "ml_training/datasets/structural/processed/structural-*",
+      "role": "versioned_combined_training_cache",
+      "removed_versions": [
+        "structural-2026.01",
+        "structural-2026.02",
+        "structural-2026.03-r01",
+        "structural-2026.09-r01",
+        "structural-2026.09-r02",
+        "structural-2026.09-r04",
+        "structural-2026.09-r05",
+        "structural-2026.09-r06",
+        "structural-2026.09-r07",
+        "structural-r07-corrective-v1"
+      ],
+      "recovery": "rebuild from canonical inputs or restore the locked Drive r07 base cache"
+    },
+    {
+      "path": "data/numbered_capture_pack",
+      "role": "generated_capture_pack",
+      "recovery": "regenerate with the retained capture-pack builder"
+    },
+    {
+      "path": "data/qrguard_mix",
+      "role": "superseded_decision_dataset",
+      "replacement": "data/qrguard_mix_v2"
+    },
+    {
+      "path": "data/photo_sheets",
+      "role": "unused_print_only_output",
+      "recovery": "regenerate from test QR fixtures"
+    },
+    {
+      "path_pattern": "dist/*Capture* and dist/SEM11_Root_Cause_Test_Pack",
+      "role": "consumed_expanded_capture_handoffs",
+      "details": "removed the expanded SEM-11, consumed blind holdout, coverage development and physical-attack packs after their canonical data imports were verified",
+      "recovery": "regenerate with the retained deterministic pack builders"
+    },
+    {
+      "path_pattern": "02_Active_Test_Packs/Structural_Attack_Calibration_v1 and its dedicated APK",
+      "role": "completed_attack_calibration_handoff",
+      "details": "removed after the collector ZIP, references and reports were copied into the canonical Structural dataset directory and hash-verified",
+      "recovery": "regenerate with the retained calibration pack builder and rebuild the diagnostic APK"
+    }
+  ],
+  "promotion_boundary": "development and consumed evidence can train or diagnose r07 but cannot replace a fresh independent device/display/session holdout"
+}

@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "audit": "structural_topology_counterfactual_clean",
+  "evidence_role": "development_counterfactual",
+  "promotion_eligible": false,
+  "manifest": "ml_training/datasets/structural/processed/structural-2026.09-r05/manifest.csv",
+  "manifest_sha256": "d079321d615db5d3faa3d95a643ed8348fed52647d13406cc3a55b81b67d61c6",
+  "split": "validation",
+  "model": {
+    "version": "structural-2026.09-r05",
+    "artifact_sha256": "a78084377b445510f73a8f5748fff04dd09fbc9f73aeb093bdad57f524049fa1",
+    "temperature": 0.5950954273140843
+  },
+  "rows": 512,
+  "groups": 32,
+  "versions": [
+    3,
+    5,
+    7,
+    10,
+    12,
+    14,
+    16,
+    20
+  ],
+  "masks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "clean_false_positive_rate": 0.017578125,
+  "clean_structural_probability_span_p95": 0.5201484560966492,
+  "maximum_group_probability_span": 0.5825068950653076,
+  "per_version_clean_false_positive_rate": {
+    "10": 0.0,
+    "12": 0.0,
+    "14": 0.0,
+    "16": 0.0,
+    "20": 0.0,
+    "3": 0.078125,
+    "5": 0.0625,
+    "7": 0.0
+  },
+  "per_mask_clean_false_positive_rate": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.03125,
+    "4": 0.078125,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.03125
+  },
+  "per_condition_clean_false_positive_rate": {
+    "normal": 0.015625,
+    "screen_moire_or_compression": 0.01953125
+  },
+  "mask_probability_span_p95_within_condition": 0.5034228980541229,
+  "condition_probability_span_p95_within_mask": 0.07798275351524353,
+  "worst_group_probability_spans": [
+    {
+      "group_id": "synthetic_topology:v05-q-2",
+      "qr_version": 5,
+      "probability_min": 0.11572253704071045,
+      "probability_max": 0.6982294321060181,
+      "probability_span": 0.5825068950653076
+    },
+    {
+      "group_id": "synthetic_topology:v05-m-2",
+      "qr_version": 5,
+      "probability_min": 0.1614670753479004,
+      "probability_max": 0.6968410611152649,
+      "probability_span": 0.5353739857673645
+    },
+    {
+      "group_id": "synthetic_topology:v03-l-2",
+      "qr_version": 3,
+      "probability_min": 0.21400386095046997,
+      "probability_max": 0.721695065498352,
+      "probability_span": 0.5076912045478821
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-2",
+      "qr_version": 3,
+      "probability_min": 0.11113691329956055,
+      "probability_max": 0.612683117389679,
+      "probability_span": 0.5015462040901184
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "probability_min": 0.012126624584197998,
+      "probability_max": 0.5015528798103333,
+      "probability_span": 0.48942625522613525
+    },
+    {
+      "group_id": "synthetic_topology:v05-h-2",
+      "qr_version": 5,
+      "probability_min": 0.07886165380477905,
+      "probability_max": 0.43054652214050293,
+      "probability_span": 0.3516848683357239
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-2",
+      "qr_version": 3,
+      "probability_min": 0.14343470335006714,
+      "probability_max": 0.4769580364227295,
+      "probability_span": 0.33352333307266235
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-2",
+      "qr_version": 5,
+      "probability_min": 0.05199617147445679,
+      "probability_max": 0.2560179829597473,
+      "probability_span": 0.20402181148529053
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "probability_min": 0.01002645492553711,
+      "probability_max": 0.09900873899459839,
+      "probability_span": 0.08898228406906128
+    },
+    {
+      "group_id": "synthetic_topology:v10-l-2",
+      "qr_version": 10,
+      "probability_min": 0.0012082457542419434,
+      "probability_max": 0.07085120677947998,
+      "probability_span": 0.06964296102523804
+    }
+  ],
+  "failures": [
+    {
+      "group_id": "synthetic_topology:v03-l-2",
+      "qr_version": 3,
+      "mask_pattern": 7,
+      "quality_condition": "normal",
+      "p_structural": 0.721695065498352,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-l-2",
+      "qr_version": 3,
+      "mask_pattern": 7,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.7177579402923584,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-2",
+      "qr_version": 3,
+      "mask_pattern": 3,
+      "quality_condition": "normal",
+      "p_structural": 0.612683117389679,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-2",
+      "qr_version": 3,
+      "mask_pattern": 3,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6032724380493164,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5015528798103333,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-m-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "normal",
+      "p_structural": 0.6968410611152649,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-m-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6313310861587524,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-q-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "normal",
+      "p_structural": 0.6982294321060181,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-q-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6519948840141296,
+      "predicted_type": "adversarial"
+    }
+  ]
+}

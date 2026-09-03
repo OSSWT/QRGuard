@@ -1,10 +1,10 @@
 """Evaluate the production multi-frame candidate on a validated diagnostic ZIP.
 
-This report is session-level on purpose. It can compare the five captured crops
-with the three strongest geometry-ranked crops that the phone can upload. A
-neutral non-URL payload is supplied so the result measures Structural acquisition
-and consensus without URL evidence. No archive member is extracted and no decoded
-payload text is persisted.
+This report is session-level on purpose. It compares the five captured crops
+with the three frames selected by the phone's geometry fallback pool, pixel
+quality and exposure-diversity policy. A neutral non-URL payload is supplied so
+the result measures Structural acquisition and consensus without URL evidence.
+No archive member is extracted and no decoded payload text is persisted.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ import csv
 import hashlib
 import io
 import json
+import math
 import os
 import statistics
 import sys
@@ -28,7 +29,10 @@ BACKEND = ROOT / "backend"
 if str(BACKEND) not in sys.path:
     sys.path.insert(0, str(BACKEND))
 
-from analyze_live_camera_diagnostic import ValidatedFrame, validate_archive
+try:
+    from scripts.analyze_live_camera_diagnostic import ValidatedFrame, validate_archive
+except ModuleNotFoundError:  # Direct execution puts scripts/ on sys.path.
+    from analyze_live_camera_diagnostic import ValidatedFrame, validate_archive
 
 
 @dataclass(frozen=True)
@@ -76,6 +80,51 @@ def _geometry_quality(frame: ValidatedFrame) -> float:
     return frame.qr_coverage * 4.0 + edge_balance
 
 
+def _capture_quality_score(report: object) -> float:
+    status_score = {
+        "usable": 4.0,
+        "marginal": 2.0,
+        "unusable": -10.0,
+    }[report.status]
+    contrast_score = min(max(report.dynamic_range / 255.0, 0.0), 1.0) * 1.5
+    focus_score = (
+        min(max(math.log1p(report.laplacian_variance) / math.log(2001.0), 0.0), 1.0)
+        * 1.25
+    )
+    return status_score + contrast_score + focus_score
+
+
+def _rank_capture_frames(frames: list[ValidatedFrame]) -> list[ValidatedFrame]:
+    """Mirror the app's post-rectification quality and exposure-diversity rank."""
+
+    from structural.image_quality import assess_image_quality
+
+    remaining = []
+    for original_index, frame in enumerate(frames):
+        image = Image.open(io.BytesIO(frame.crop_png)).convert("RGB")
+        report = assess_image_quality(image)
+        if report.usable:
+            remaining.append((original_index, frame, report))
+
+    selected = []
+    while remaining:
+        def score(candidate: tuple[int, ValidatedFrame, object]) -> tuple[float, int]:
+            original_index, _, report = candidate
+            diversity = 0.0
+            if selected:
+                nearest = min(
+                    abs(report.mean_luminance - chosen[2].mean_luminance)
+                    for chosen in selected
+                )
+                diversity = min(max(nearest / 32.0, 0.0), 1.0) * 0.20
+            return _capture_quality_score(report) + diversity, -original_index
+
+        chosen = max(remaining, key=score)
+        selected.append(chosen)
+        remaining.remove(chosen)
+    return [frame for _, frame, _ in selected]
+
+
 def _evaluate(
     frames: list[ValidatedFrame], artifacts: Path, maximum_frames: int
 ) -> list[CandidateSession]:
@@ -89,7 +138,7 @@ def _evaluate(
     results: list[CandidateSession] = []
     for session_id, captured_rows in grouped.items():
         captured_rows.sort(key=lambda item: item.frame_index)
-        ranked_rows = sorted(
+        geometry_ranked_rows = sorted(
             captured_rows,
             key=lambda item: (
                 _geometry_quality(item),
@@ -98,12 +147,11 @@ def _evaluate(
             ),
             reverse=True,
         )
+        ranked_rows = _rank_capture_frames(geometry_ranked_rows)
         rows = (
-            [
-                row
-                for row in ranked_rows
-                if min(row.crop_width, row.crop_height) >= 256
-            ][:maximum_frames]
+            [row for row in ranked_rows if min(row.crop_width, row.crop_height) >= 256][
+                :maximum_frames
+            ]
             if maximum_frames == 3
             else ranked_rows[:maximum_frames]
         )
@@ -120,11 +168,8 @@ def _evaluate(
         ground_truth = captured_rows[0].ground_truth
         if branch.structural_status in {"inconclusive", "unavailable"}:
             outcome = "rescan"
-        elif (
-            ground_truth == "clean" and structural_type == "clean"
-        ) or (
-            ground_truth != "clean"
-            and structural_type in {"adversarial", "tampered"}
+        elif (ground_truth == "clean" and structural_type == "clean") or (
+            ground_truth != "clean" and structural_type in {"adversarial", "tampered"}
         ):
             outcome = "correct"
         elif ground_truth == "clean":
@@ -169,11 +214,21 @@ def _summary(
     artifacts: Path,
     maximum_frames: int,
 ) -> dict[str, object]:
+    metadata_path = artifacts / "model_metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    deploy_choice = json.loads(
+        (artifacts / "deploy_choice.json").read_text(encoding="utf-8")
+    )
+    model_path = artifacts / str(deploy_choice["deploy_model"])
+    model_sha256 = _sha256(model_path)
+    if model_sha256 != metadata.get("artifact_sha256"):
+        raise ValueError("Structural model hash does not match model_metadata.json")
     clean = [row for row in sessions if row.ground_truth == "clean"]
     attack = [row for row in sessions if row.ground_truth != "clean"]
     matrix = []
+    distances = sorted({row.distance for row in sessions})
     for case_id in sorted({row.case_id for row in sessions}):
-        for distance in ("near", "medium", "far"):
+        for distance in distances:
             selected = [
                 row
                 for row in sessions
@@ -226,9 +281,13 @@ def _summary(
             "minimum_crop_side": 256,
             "minimum_analyzable_frames": 3,
             "maximum_frames": maximum_frames,
-            "selection": "best_geometry_before_rectification_proxy",
+            "selection": "geometry_fallback_pool_then_pixel_quality_and_exposure_diversity",
             "aggregation": "median_score_majority_class",
             "artifact_path": str(artifacts.relative_to(ROOT)).replace("\\", "/"),
+            "version": metadata.get("version"),
+            "model_sha256": model_sha256,
+            "model_metadata_sha256": _sha256(metadata_path),
+            "runtime_policy": metadata.get("runtime_policy", {}),
         },
         "metrics": {
             "correct_session_rate": sum(row.outcome == "correct" for row in sessions)
@@ -252,9 +311,7 @@ def _summary(
             "pipeline_elapsed_ms_mean": statistics.mean(elapsed),
             "pipeline_elapsed_ms_median": statistics.median(elapsed),
             "pipeline_elapsed_ms_p95": elapsed[p95_index],
-            "definitive_pipeline_elapsed_ms_mean": statistics.mean(
-                definitive_elapsed
-            ),
+            "definitive_pipeline_elapsed_ms_mean": statistics.mean(definitive_elapsed),
             "definitive_pipeline_elapsed_ms_median": statistics.median(
                 definitive_elapsed
             ),
@@ -306,7 +363,7 @@ def _markdown(summary: dict[str, object]) -> str:
             f"{metrics['definitive_pipeline_elapsed_ms_p95']} ms"
         ),
         "",
-        "## Case x distance",
+        "## Case x condition",
         "",
         "| Case | Distance | >=256 px frames | Analysed | Outcomes |",
         "|---|---|---:|---:|---|",

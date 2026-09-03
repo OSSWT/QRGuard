@@ -1,0 +1,180 @@
+{
+  "campaign_id": "structural-r07-fresh-blind-v1",
+  "candidate_binding_matches": true,
+  "candidate_model_sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
+  "clean_layout_probability_span": 0.21085882186889648,
+  "coverage": {
+    "adversarial": {
+      "independent_cases": 16,
+      "masks": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      },
+      "payload_length_bins": {
+        "long_97_plus": 6,
+        "medium_33_96": 5,
+        "short_1_32": 5
+      },
+      "version_bands": {
+        "high_v7_plus": 6,
+        "low_v1_v3": 5,
+        "medium_v4_v6": 5
+      }
+    },
+    "clean": {
+      "independent_cases": 16,
+      "masks": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      },
+      "payload_length_bins": {
+        "long_97_plus": 6,
+        "medium_33_96": 5,
+        "short_1_32": 5
+      },
+      "version_bands": {
+        "high_v7_plus": 6,
+        "low_v1_v3": 5,
+        "medium_v4_v6": 5
+      }
+    },
+    "tampered": {
+      "independent_cases": 16,
+      "masks": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      },
+      "payload_length_bins": {
+        "long_97_plus": 6,
+        "medium_33_96": 5,
+        "short_1_32": 5
+      },
+      "version_bands": {
+        "high_v7_plus": 6,
+        "low_v1_v3": 5,
+        "medium_v4_v6": 5
+      }
+    }
+  },
+  "demo_branch_audit": {
+    "gate_passed": true,
+    "masked_branch_errors": 0
+  },
+  "digital_sem11_gate_passed": true,
+  "evidence_role": "blind_holdout",
+  "gate_failures": [
+    "adversarial/low_v1_v3: 2 verified surviving physical attacks; require 5",
+    "adversarial/medium_v4_v6: 3 verified surviving physical attacks; require 5",
+    "adversarial/high_v7_plus: 1 verified surviving physical attacks; require 5",
+    "clean layout probability span 0.2109 exceeds 0.1500"
+  ],
+  "gate_passed": false,
+  "performance_by_class_version_band": {
+    "adversarial": {
+      "high_v7_plus": {
+        "block_recall": 1.0,
+        "blocked": 1,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 1
+      },
+      "low_v1_v3": {
+        "block_recall": 1.0,
+        "blocked": 2,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 2
+      },
+      "medium_v4_v6": {
+        "block_recall": 1.0,
+        "blocked": 3,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 3
+      }
+    },
+    "clean": {
+      "high_v7_plus": {
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 6
+      },
+      "low_v1_v3": {
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      },
+      "medium_v4_v6": {
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      }
+    },
+    "tampered": {
+      "high_v7_plus": {
+        "block_recall": 1.0,
+        "blocked": 6,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 6
+      },
+      "low_v1_v3": {
+        "block_recall": 1.0,
+        "blocked": 5,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      },
+      "medium_v4_v6": {
+        "block_recall": 1.0,
+        "blocked": 5,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      }
+    }
+  },
+  "physical_attack_survival": {
+    "candidate_scored_only_for_verified_survivors_in_recall_gate": true,
+    "gate_passed": false,
+    "planned_attacks": 16,
+    "verified_survival_rate": 0.375,
+    "verified_surviving_attacks": 6
+  },
+  "plan_candidate_model_sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
+  "policy_id": "structural-coverage-2026.09-r01",
+  "production_mutation_performed": false,
+  "promotion_blocked": true,
+  "promotion_eligible": false,
+  "schema_version": 1,
+  "source_archive": {
+    "filename": "QRGuard_Diagnostic_structural_r07_fresh_blind_v1_20260903T051130Z.zip",
+    "frames": 240,
+    "sessions": 48,
+    "sha256": "718b83f7032ca4e67d494105ed91bea5a14be1aa709c02cea046669a55958c08"
+  }
+}

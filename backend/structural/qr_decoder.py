@@ -21,6 +21,38 @@ def decode_qr(image) -> str | None:
     return detections[0][0] if detections else None
 
 
+def estimate_qr_module_count(image) -> int | None:
+    """Return the decoded QR grid side (21, 25, ..., 177) when observable.
+
+    OpenCV's ``straight_qrcode`` is a one-pixel-per-module canonical grid. This
+    gives acquisition scale a QR-version-aware denominator without guessing the
+    version from payload length. Failure is expected for severely manipulated
+    codes and must remain an unknown measurement, never a clean/attack label.
+    """
+    try:
+        import cv2
+    except ImportError:
+        return None
+    try:
+        rgb = np.array(image.convert("RGB"))
+    except (AttributeError, TypeError, ValueError):
+        return None
+
+    gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+    detector = cv2.QRCodeDetector()
+    for candidate, _ in _rescue_views(gray):
+        try:
+            data, _, straight = detector.detectAndDecode(candidate)
+        except cv2.error:
+            continue
+        if not data or straight is None or getattr(straight, "ndim", 0) < 2:
+            continue
+        height, width = straight.shape[:2]
+        if height == width and 21 <= width <= 177 and (width - 21) % 4 == 0:
+            return int(width)
+    return None
+
+
 def decode_and_crop_qrs(image) -> list[tuple[str, object]]:
     """Decode and rectify every readable QR in one selected image.
 
@@ -43,14 +75,10 @@ def decode_and_crop_qrs(image) -> list[tuple[str, object]]:
     gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
     detector = cv2.QRCodeDetector()
 
-    # Try the image as-is, then a couple of cheap rescues. Camera crops are often
-    # small or low-contrast, and upscaling alone recovers many of them.
-    rescue_views = (
-        (gray, 1.0),
-        (_upscale(gray, 2), 2.0),
-        (_binarise(gray), 1.0),
-    )
-    for candidate, scale in rescue_views:
+    # QR Reed-Solomon validation still decides whether a payload is valid. These
+    # views only recover detector contrast lost to low exposure, screen moire or
+    # a small camera crop; no guessed payload is ever returned.
+    for candidate, scale in _rescue_views(gray):
         multi = _decode_multi(detector, candidate)
         if multi:
             return [
@@ -129,3 +157,40 @@ def _binarise(gray: np.ndarray) -> np.ndarray:
 
     _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return binary
+
+
+def _local_contrast(gray: np.ndarray) -> np.ndarray:
+    import cv2
+
+    return cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(gray)
+
+
+def _adaptive_binarise(gray: np.ndarray) -> np.ndarray:
+    import cv2
+
+    side = min(gray.shape[:2])
+    block_size = min(51, max(15, (side // 12) | 1))
+    return cv2.adaptiveThreshold(
+        gray,
+        255,
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY,
+        block_size,
+        5,
+    )
+
+
+def _rescue_views(gray: np.ndarray) -> tuple[tuple[np.ndarray, float], ...]:
+    """Return bounded detector views with coordinates mapped to the source."""
+
+    contrast = _local_contrast(gray)
+    adaptive = _adaptive_binarise(gray)
+    return (
+        (gray, 1.0),
+        (_upscale(gray, 2), 2.0),
+        (contrast, 1.0),
+        (_upscale(contrast, 2), 2.0),
+        (_binarise(gray), 1.0),
+        (adaptive, 1.0),
+        (_upscale(adaptive, 2), 2.0),
+    )

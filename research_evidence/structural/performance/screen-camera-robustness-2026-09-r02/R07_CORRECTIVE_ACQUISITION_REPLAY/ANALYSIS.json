@@ -1,0 +1,455 @@
+{
+  "candidate": {
+    "aggregation": "median_score_majority_class",
+    "artifact_path": "ml_training/structural/runs/structural-r07-corrective-v1/artifacts",
+    "maximum_frames": 5,
+    "minimum_analyzable_frames": 3,
+    "minimum_crop_side": 256,
+    "model_metadata_sha256": "ab855992e6f8c1bc6d085134699fac41929091219fc625c96882f5738cfb4579",
+    "model_sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
+    "runtime_policy": {
+      "below_floor_action": "inconclusive_rescan_never_safe",
+      "camera_definitive_manipulation_floor": 0.7,
+      "minimum_observed_module_pixels": 5.0,
+      "quality_gate_precedes_structural_inference": true,
+      "undecodable_image_action": "warning_rescan_never_safe"
+    },
+    "selection": "best_geometry_before_rectification_proxy",
+    "version": "structural-r07-corrective-v1"
+  },
+  "evaluation": "production_multi_frame_candidate",
+  "matrix": [
+    {
+      "analyzed_frames": 5,
+      "case_id": "ACQ-CLN-V10-LONG",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "ACQ-CLN-V10-LONG",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "ACQ-CLN-V10-LONG",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "ACQ-CLN-V14-LONG",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "ACQ-CLN-V14-LONG",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "ACQ-CLN-V14-LONG",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "SEM-05-USERINFO",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "SEM-05-USERINFO",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "SEM-05-USERINFO",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-ADV-NORMAL",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-ADV-NORMAL",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-ADV-NORMAL",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-CLN-OVEREXP",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-CLN-OVEREXP",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-CLN-OVEREXP",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-CLN-UNDEREXP",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-CLN-UNDEREXP",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-CLN-UNDEREXP",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-TMP-NORMAL",
+      "distance": "screen-100-brightness-100",
+      "eligible_frames": 5,
+      "ground_truth": "tampered",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "tampered": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-TMP-NORMAL",
+      "distance": "screen-100-brightness-30",
+      "eligible_frames": 5,
+      "ground_truth": "tampered",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "tampered": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 5,
+      "case_id": "STR-TMP-NORMAL",
+      "distance": "screen-80-brightness-50",
+      "eligible_frames": 5,
+      "ground_truth": "tampered",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "tampered": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    }
+  ],
+  "metrics": {
+    "adversarial_false_safe_rate": 0.0,
+    "clean_false_block_rate": 0.0,
+    "correct_session_rate": 1.0,
+    "definitive_adversarial_correct_rate": 1.0,
+    "definitive_clean_correct_rate": 1.0,
+    "definitive_pipeline_elapsed_ms_mean": 985.125,
+    "definitive_pipeline_elapsed_ms_median": 1144.5,
+    "definitive_pipeline_elapsed_ms_p95": 1601,
+    "pipeline_elapsed_ms_mean": 985.125,
+    "pipeline_elapsed_ms_median": 1144.5,
+    "pipeline_elapsed_ms_p95": 1601,
+    "rescan_session_rate": 0.0
+  },
+  "payload_policy": "neutral_non_url_structural_only",
+  "schema_version": 1,
+  "source": {
+    "captured_frame_count": 120,
+    "evaluated_frame_count": 120,
+    "filename": "QRGuard_Diagnostic_acquisition_quality_exposure_module_scale_2026.zip",
+    "raw_payload_stored": false,
+    "session_count": 24,
+    "sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4"
+  }
+}

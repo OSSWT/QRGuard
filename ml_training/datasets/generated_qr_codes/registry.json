@@ -1,6 +1,8 @@
 {
   "schema_version": 1,
   "inventory_date": "2026-08-31",
+  "inventory_snapshot": true,
+  "current_retention_policy": "../../DATASET_RETENTION.json",
   "hash_contract": "sha256(path\\0size\\0file_sha256\\n) over sorted paths",
   "datasets": [
     {
@@ -35,7 +37,8 @@
         "train": 2700,
         "validation": 540
       },
-      "intended_use": "current Structural run; split membership is manifest-governed",
+      "intended_use": "historical generated-cache fingerprint; production artifacts and performance evidence are retained",
+      "retention_status": "removed_regenerable_cache",
       "exposure_states": [
         "training",
         "validation",

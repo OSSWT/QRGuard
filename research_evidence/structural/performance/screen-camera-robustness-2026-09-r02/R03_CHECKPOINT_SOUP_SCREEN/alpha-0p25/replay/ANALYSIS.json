@@ -1,0 +1,784 @@
+{
+  "frame_metrics": {
+    "adversarial_block_rate": 1.0,
+    "adversarial_false_safe_rate": 0.0,
+    "clean_false_block_rate": 0.255556,
+    "clean_non_safe_rate": 0.333333,
+    "quality_abstention_rate": 0.066667
+  },
+  "integrity": {
+    "decoded_payload_hash_matches": 38,
+    "duplicate_crop_instances": 0,
+    "globally_unique_crops": 120
+  },
+  "matrix": [
+    {
+      "case_id": "ACQ-CLN-V10-LONG",
+      "decoded_hash_matches": 5,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.022931039333343506,
+      "p_structural_median": 0.0167425274848938,
+      "p_structural_min": 0.008441686630249023,
+      "qr_coverage_median": 0.14116455078125,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "ACQ-CLN-V10-LONG",
+      "decoded_hash_matches": 5,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.04052901268005371,
+      "p_structural_median": 0.017539560794830322,
+      "p_structural_min": 0.01227039098739624,
+      "qr_coverage_median": 0.14560546875,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "ACQ-CLN-V10-LONG",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.02058124542236328,
+      "p_structural_median": 0.011844635009765625,
+      "p_structural_min": 0.008976221084594727,
+      "qr_coverage_median": 0.156494140625,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "ACQ-CLN-V14-LONG",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.12234622240066528,
+      "p_structural_median": 0.06293976306915283,
+      "p_structural_min": 0.0187300443649292,
+      "qr_coverage_median": 0.158460693359375,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "ACQ-CLN-V14-LONG",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.07620817422866821,
+      "p_structural_median": 0.048827171325683594,
+      "p_structural_min": 0.0342978835105896,
+      "qr_coverage_median": 0.1364990234375,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "ACQ-CLN-V14-LONG",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.05928677320480347,
+      "p_structural_median": 0.037685930728912354,
+      "p_structural_min": 0.02990245819091797,
+      "qr_coverage_median": 0.14031778971354167,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "SEM-05-USERINFO",
+      "decoded_hash_matches": 5,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.12303578853607178,
+      "p_structural_median": 0.11910611391067505,
+      "p_structural_min": 0.03406137228012085,
+      "qr_coverage_median": 0.124407958984375,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "SEM-05-USERINFO",
+      "decoded_hash_matches": 1,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.3677866458892822,
+      "p_structural_median": 0.2451482117176056,
+      "p_structural_min": 0.12873440980911255,
+      "qr_coverage_median": 0.1391357421875,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "abstained": 1,
+        "clean": 4
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 3,
+        "warning": 1
+      }
+    },
+    {
+      "case_id": "SEM-05-USERINFO",
+      "decoded_hash_matches": 3,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.3600006699562073,
+      "p_structural_median": 0.11229246854782104,
+      "p_structural_min": 0.032165348529815674,
+      "qr_coverage_median": 0.15879801432291665,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "abstained": 1,
+        "clean": 4
+      },
+      "verdicts": {
+        "blocked": 3,
+        "safe": 2
+      }
+    },
+    {
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "decoded_hash_matches": 5,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.2114272117614746,
+      "p_structural_median": 0.04901933670043945,
+      "p_structural_min": 0.013570308685302734,
+      "qr_coverage_median": 0.12109578450520833,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "decoded_hash_matches": 5,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.36351877450942993,
+      "p_structural_median": 0.31130707263946533,
+      "p_structural_min": 0.020729660987854004,
+      "qr_coverage_median": 0.13199747721354166,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.03013432025909424,
+      "p_structural_median": 0.017212271690368652,
+      "p_structural_min": 0.014957189559936523,
+      "qr_coverage_median": 0.115963134765625,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9969497919082642,
+      "p_structural_median": 0.9939770698547363,
+      "p_structural_min": 0.9851829409599304,
+      "qr_coverage_median": 0.11968790690104167,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9947760701179504,
+      "p_structural_median": 0.9931125044822693,
+      "p_structural_min": 0.9869431257247925,
+      "qr_coverage_median": 0.116729736328125,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9958713054656982,
+      "p_structural_median": 0.9936830401420593,
+      "p_structural_min": 0.9914771914482117,
+      "qr_coverage_median": 0.121337890625,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "STR-CLN-OVEREXP",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.8146182894706726,
+      "p_structural_median": 0.16306006908416748,
+      "p_structural_min": 0.057864487171173096,
+      "qr_coverage_median": 0.10856404622395834,
+      "quality": {
+        "marginal": 2,
+        "usable": 3
+      },
+      "session_first_verdicts": {
+        "warning": 1
+      },
+      "session_majority_verdicts": {
+        "warning": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "abstained": 2,
+        "adversarial": 1,
+        "clean": 2
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 2,
+        "warning": 2
+      }
+    },
+    {
+      "case_id": "STR-CLN-OVEREXP",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.9836556911468506,
+      "p_structural_median": 0.982010006904602,
+      "p_structural_min": 0.7985499501228333,
+      "qr_coverage_median": 0.095882568359375,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "STR-CLN-OVEREXP",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.8514207601547241,
+      "p_structural_median": 0.8066409230232239,
+      "p_structural_min": 0.7377154231071472,
+      "qr_coverage_median": 0.09490234375,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "abstained": 1,
+        "adversarial": 4
+      },
+      "verdicts": {
+        "blocked": 4,
+        "warning": 1
+      }
+    },
+    {
+      "case_id": "STR-CLN-UNDEREXP",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.9652398824691772,
+      "p_structural_median": 0.9454609155654907,
+      "p_structural_min": 0.024283766746520996,
+      "qr_coverage_median": 0.12939778645833333,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 3,
+        "clean": 2
+      },
+      "verdicts": {
+        "blocked": 3,
+        "safe": 2
+      }
+    },
+    {
+      "case_id": "STR-CLN-UNDEREXP",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.735467255115509,
+      "p_structural_median": 0.07661277055740356,
+      "p_structural_min": 0.06307011842727661,
+      "qr_coverage_median": 0.12345458984375,
+      "quality": {
+        "marginal": 4,
+        "usable": 1
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "warning": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "abstained": 2,
+        "adversarial": 1,
+        "clean": 2
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 2,
+        "warning": 2
+      }
+    },
+    {
+      "case_id": "STR-CLN-UNDEREXP",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.43429678678512573,
+      "p_structural_median": 0.3602865934371948,
+      "p_structural_min": 0.14409226179122925,
+      "qr_coverage_median": 0.12362060546875,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "abstained": 1,
+        "clean": 4
+      },
+      "verdicts": {
+        "safe": 4,
+        "warning": 1
+      }
+    },
+    {
+      "case_id": "STR-TMP-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-100",
+      "frames": 5,
+      "ground_truth": "tampered",
+      "p_structural_max": 0.9996326565742493,
+      "p_structural_median": 0.9993188977241516,
+      "p_structural_min": 0.9992353916168213,
+      "qr_coverage_median": 0.12797037760416666,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "tampered": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "STR-TMP-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "screen-100-brightness-30",
+      "frames": 5,
+      "ground_truth": "tampered",
+      "p_structural_max": 0.999433696269989,
+      "p_structural_median": 0.9992967247962952,
+      "p_structural_min": 0.9992088079452515,
+      "qr_coverage_median": 0.12489420572916667,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "tampered": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "STR-TMP-NORMAL",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80-brightness-50",
+      "frames": 5,
+      "ground_truth": "tampered",
+      "p_structural_max": 0.9994946718215942,
+      "p_structural_median": 0.9991351962089539,
+      "p_structural_min": 0.9988773465156555,
+      "qr_coverage_median": 0.1306005859375,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "tampered": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    }
+  ],
+  "model": {
+    "artifact_sha256": "ac8a5f43ff09a6627240a2e2e6afa5e7b29fc997ef3be11d4471925bcaba0c05",
+    "path": "training/artifacts/structural",
+    "version": "structural-2026.09-soup-alpha-0p25"
+  },
+  "schema_version": 1,
+  "session_metrics": {
+    "majority_adversarial_false_safe_rate": 0.0,
+    "majority_clean_false_block_rate": 0.277778,
+    "majority_structural_ground_truth_detection_rate": 0.791667,
+    "median_adversarial_false_safe_rate": 0.0,
+    "median_clean_false_block_rate": 0.277778,
+    "single_first_adversarial_false_safe_rate": 0.0,
+    "single_first_clean_false_block_rate": 0.333333
+  },
+  "source": {
+    "filename": "QRGuard_Diagnostic_acquisition_quality_exposure_module_scale_2026.zip",
+    "frame_count": 120,
+    "raw_payload_stored": false,
+    "session_count": 24,
+    "sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4"
+  }
+}

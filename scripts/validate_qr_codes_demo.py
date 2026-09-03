@@ -37,8 +37,8 @@ RESULT_FIELDS = (
 class LocalClient:
     """Small adapter so local TestClient and remote httpx share one interface."""
 
-    def __init__(self) -> None:
-        artifact_dir = (ROOT / "training/artifacts/structural").resolve()
+    def __init__(self, artifact_dir: Path) -> None:
+        artifact_dir = artifact_dir.resolve(strict=True)
         os.environ["QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS"] = str(artifact_dir)
         sys.path.insert(0, str(ROOT / "backend"))
         from app.main import app
@@ -184,14 +184,20 @@ def _save_actual_rows(rows: list[dict[str, str]]) -> None:
         writer.writerows(rows)
 
 
-def _validate(target: str, remote_url: str) -> None:
+def _validate(
+    target: str,
+    remote_url: str,
+    artifacts: Path,
+    output_path: Path | None = None,
+    update_pack_files: bool = True,
+) -> dict[str, Any]:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     cases = manifest["cases"]
     if target == "local":
-        client: Any = LocalClient()
+        artifacts = artifacts.resolve(strict=True)
+        client: Any = LocalClient(artifacts)
         target_label = (
-            "in-process locked production stack with "
-            "QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS=training/artifacts/structural"
+            f"in-process stack with QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS={artifacts}"
         )
     else:
         client = httpx.Client(base_url=remote_url.rstrip("/"), timeout=90.0)
@@ -251,35 +257,56 @@ def _validate(target: str, remote_url: str) -> None:
         },
         "results": results,
     }
-    output_path = PACK / f"AUTOMATED_RESULTS_{target.upper()}.json"
+    output_path = output_path or PACK / f"AUTOMATED_RESULTS_{target.upper()}.json"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
 
-    actual_rows = _load_actual_rows([case["case_id"] for case in cases])
-    row_by_id = {row["case_id"]: row for row in actual_rows}
-    for result in results:
-        row = row_by_id[result["case_id"]]
-        row[f"{target}_gallery"] = _display(result["gallery"])
-        row[f"{target}_camera_simulation"] = _display(result["camera_simulation"])
-    _save_actual_rows(actual_rows)
-    _write_hashes()
-    print(
-        f"Wrote {output_path.relative_to(ROOT)} and updated {ACTUAL_RESULTS.relative_to(ROOT)}"
-    )
+    if update_pack_files:
+        actual_rows = _load_actual_rows([case["case_id"] for case in cases])
+        row_by_id = {row["case_id"]: row for row in actual_rows}
+        for result in results:
+            row = row_by_id[result["case_id"]]
+            row[f"{target}_gallery"] = _display(result["gallery"])
+            row[f"{target}_camera_simulation"] = _display(result["camera_simulation"])
+        _save_actual_rows(actual_rows)
+        _write_hashes()
+        print(f"Wrote {output_path} and updated {ACTUAL_RESULTS.relative_to(ROOT)}")
+    else:
+        print(f"Wrote evidence only to {output_path}")
     if gallery_matches != len(results) or camera_matches != len(results):
         raise SystemExit(
             f"Intended-result mismatch: gallery {gallery_matches}/{len(results)}, "
             f"camera simulation {camera_matches}/{len(results)}"
         )
+    return output
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--target", choices=("local", "remote"), default="local")
     parser.add_argument("--remote-url", default=DEFAULT_REMOTE_URL)
+    parser.add_argument(
+        "--artifacts",
+        type=Path,
+        default=ROOT / "training/artifacts/structural",
+        help="local Structural artifacts; ignored for remote validation",
+    )
+    parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--evidence-only",
+        action="store_true",
+        help="write only the selected evidence JSON; preserve pack baselines and hashes",
+    )
     args = parser.parse_args()
-    _validate(args.target, args.remote_url)
+    _validate(
+        args.target,
+        args.remote_url,
+        args.artifacts,
+        args.output.resolve() if args.output else None,
+        update_pack_files=not args.evidence_only,
+    )
 
 
 if __name__ == "__main__":

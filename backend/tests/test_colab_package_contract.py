@@ -80,7 +80,8 @@ def test_colab_notebooks_have_complete_phases_and_performance_outputs():
         assert mode in structural_source
     assert "--checkpoint-dir" in structural_source
     assert "run_identity" in structural_source
-    assert "structural-2026.03-r01" in structural_source
+    assert "structural-r07-corrective-v1" in structural_source
+    assert "QRGUARD_STRUCTURAL_DATASET_VERSION" in structural_source
     assert "ml_training.semantic.src.train_local" not in semantic_source
     assert "semantic-2026.02" in semantic_source
     assert "decision-2026.03-r05" in decision_source
@@ -111,6 +112,9 @@ def test_colab_zip_is_readable_and_contains_the_manifest():
     archive_path = ROOT / "dist/QRGuard_ML_Colab.zip"
     with zipfile.ZipFile(archive_path) as archive:
         assert archive.testzip() is None
+        assert {
+            member.date_time for member in archive.infolist()
+        } == {(1980, 1, 1, 0, 0, 0)}
         assert not any(
             name.startswith("QRGuard_ML_Colab/QRGuard_ML_Colab/")
             for name in archive.namelist()
@@ -137,6 +141,44 @@ def test_structural_adversarial_wrapper_moves_buffers_to_training_device():
     assert "model = Normalized(victim).to(device).eval()" in source
 
 
+def test_r07_corrective_training_contract_is_packaged():
+    repository = PACKAGE / "QRGuard"
+    config = json.loads(
+        (
+            repository / "ml_training/configs/structural-r07-corrective-v1.json"
+        ).read_text(encoding="utf-8")
+    )
+    source = (
+        repository / "ml_training/structural/src/train_local.py"
+    ).read_text(encoding="utf-8")
+
+    assert config["training"]["head_epochs"] == 0
+    assert config["training"]["finetune_learning_rate"] == 0.000005
+    assert config["training"]["initial_checkpoint_sha256"] == (
+        "0decc53ea5aabb97f579a13ba1bb3bb012480b96c26c4551e8593f7a297e186f"
+    )
+    assert config["topology_counterfactuals"]["expected_rows"] == 2560
+    assert config["topology_counterfactuals"][
+        "train_identities_per_error_correction"
+    ] == 3
+    assert config["topology_counterfactuals"][
+        "validation_identities_per_error_correction"
+    ] == 2
+    assert config["topology_counterfactuals"]["mask_patterns"] == list(range(8))
+    assert config["training"]["sampling"]["source_family_draw_fractions"][
+        "clean"
+    ]["topology_counterfactual"] == 0.30
+    assert config["training"]["topology_consistency_multiplier"] == 2.0
+    assert config["deployment_gates"]["synthetic_clean_recall_min"] == 0.90
+    assert config["consumed_development_replay"]["clean_frames"] == 80
+    assert config["consumed_development_replay"]["verified_attack_frames"] == 10
+    assert config["training"]["checkpoint_selection_constraints"][
+        "consumed_blind_clean_false_positive_rate"
+    ]["maximum"] == 0.0
+    assert "HEAD_LEARNING_RATE" in source
+    assert "FINETUNE_LEARNING_RATE" in source
+
+
 def test_package_contains_locked_real_capture_campaign():
     schedule = (
         PACKAGE / "QRGuard/ml_training/structural/campaigns/"
@@ -149,3 +191,85 @@ def test_package_contains_locked_real_capture_campaign():
     assert {row["label"] for row in rows} == {"clean", "adversarial", "tampered"}
     assert all(row["gallery_required"] == "True" for row in rows)
     assert all(row["camera_required"] == "True" for row in rows)
+
+
+def test_package_contains_r07_initial_weights_and_development_data():
+    repository = PACKAGE / "QRGuard"
+    initial = (
+        repository
+        / "ml_training/structural/runs/structural-2026.09-r07/"
+        "colab-r07-dense-screen-clean-recovery-v1/checkpoints/best_model.pt"
+    )
+    physical = (
+        repository
+        / "data/structural_physical_attack_development/2026-09-r02/manifest.csv"
+    )
+    coverage = (
+        repository
+        / "data/structural_coverage_development/2026-09-r01/manifest.csv"
+    )
+    prepared_gallery = (
+        repository
+        / "data/prepared_gallery_references/structural-2026.03-r01/manifest.csv"
+    )
+    acquisition = (
+        repository
+        / "data/acquisition_quality_development/2026-09-r02/manifest.csv"
+    )
+    consumed = (
+        repository
+        / "data/structural_consumed_blind_development/2026-09-r01/manifest.csv"
+    )
+    consumed_attacks = (
+        repository
+        / "data/structural_consumed_blind_attack_development/"
+        "r07-corrective-v1/manifest.csv"
+    )
+    cache_rebase = repository / "scripts/build_structural_r07_corrective_cache.py"
+
+    assert initial.is_file()
+    assert cache_rebase.is_file()
+    assert hashlib.sha256(initial.read_bytes()).hexdigest() == (
+        "0decc53ea5aabb97f579a13ba1bb3bb012480b96c26c4551e8593f7a297e186f"
+    )
+    with physical.open(newline="", encoding="utf-8") as handle:
+        physical_rows = list(csv.DictReader(handle))
+    assert len(physical_rows) == 130
+    assert all(
+        row.get("physical_attack_survival_verified", "").lower() == "true"
+        for row in physical_rows
+        if row["label"] == "adversarial"
+    )
+    with coverage.open(newline="", encoding="utf-8") as handle:
+        assert len(list(csv.DictReader(handle))) == 240
+    with prepared_gallery.open(newline="", encoding="utf-8") as handle:
+        assert len(list(csv.DictReader(handle))) == 239
+    with acquisition.open(newline="", encoding="utf-8") as handle:
+        acquisition_rows = list(csv.DictReader(handle))
+    assert len(acquisition_rows) == 90
+    assert {row["label"] for row in acquisition_rows} == {"clean"}
+    assert {row["split"] for row in acquisition_rows} == {"train"}
+    assert all(
+        row["deployment_holdout_eligible"].lower() == "false"
+        for row in acquisition_rows
+    )
+    with consumed.open(newline="", encoding="utf-8") as handle:
+        consumed_rows = list(csv.DictReader(handle))
+    assert len(consumed_rows) == 80
+    assert {row["label"] for row in consumed_rows} == {"clean"}
+    assert {row["split"] for row in consumed_rows} == {"train", "validation"}
+    assert all(row["blind_holdout_consumed"].lower() == "true" for row in consumed_rows)
+    assert all(row["promotion_eligible"].lower() == "false" for row in consumed_rows)
+    with consumed_attacks.open(newline="", encoding="utf-8") as handle:
+        consumed_attack_rows = list(csv.DictReader(handle))
+    assert len(consumed_attack_rows) == 10
+    assert {row["label"] for row in consumed_attack_rows} == {"adversarial"}
+    assert {row["split"] for row in consumed_attack_rows} == {"train"}
+    assert all(
+        row["physical_attack_survival_verified"].lower() == "true"
+        for row in consumed_attack_rows
+    )
+    assert all(
+        row["promotion_eligible"].lower() == "false"
+        for row in consumed_attack_rows
+    )

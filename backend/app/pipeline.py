@@ -23,7 +23,7 @@ import os
 import time
 from collections import Counter
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from statistics import median
 from typing import Optional
 
@@ -35,6 +35,7 @@ from semantic.payload_router import PayloadInfo, route_payload
 from semantic.rule_engine import RuleFlag, check_url
 from semantic.semantic_service import load_analyzer as load_semantic
 from structural.image_quality import assess_image_quality, normalize_measured_range
+from structural.qr_decoder import estimate_qr_module_count
 from structural.structural_service import load_analyzer as load_structural
 from structural.structural_service import load_camera_analyzer as load_camera_structural
 from structural.structural_service import load_unified_candidate_analyzer
@@ -71,6 +72,9 @@ class StructuralSignals:
     frames_received: int = 0
     frames_analyzed: int = 0
     consensus: Optional[str] = None
+    camera_definitive_manipulation_floor: Optional[float] = None
+    module_count: int | None = None
+    minimum_module_pixels: float | None = None
 
 
 _CAMERA_BLOCK_CONFIDENCE = 0.95
@@ -81,6 +85,13 @@ _CAMERA_CONSENSUS_MIN_FRAMES = 3
 # the physical-phone repeatability study. New multi-frame camera callers must
 # therefore provide at least three crops inside the validated range.
 _CAMERA_MIN_CROP_SIDE = 256
+# The r02 physical-development capture contains 240 independently collected
+# frames across QR versions 1-14. Its observed acquisition range is
+# 5.15-17.44 px/module. Five pixels is therefore the first evidence-backed,
+# version-aware floor; it replaces neither the 256 px floor nor unknown-grid
+# fallback. A QR whose grid cannot be observed is never labelled from that fact.
+_CAMERA_MIN_MODULE_PIXELS = 5.0
+_CAMERA_CROP_QUIET_ZONE_SCALE = 1.30
 _RECOVERABLE_DYNAMIC_RANGE = 70.0
 _RECOVERABLE_FOCUS = 55.0
 
@@ -130,7 +141,9 @@ def _recover_unified_camera_quality(image, quality):
     return prepared
 
 
-def _analyse_one_image(image, source: str) -> StructuralSignals:
+def _analyse_one_image(
+    image, source: str, *, defer_camera_uncertainty: bool = False
+) -> StructuralSignals:
     """Score one crop using the currently selected Structural artifact."""
     unified_artifacts = os.getenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS")
     if unified_artifacts:
@@ -161,12 +174,43 @@ def _analyse_one_image(image, source: str) -> StructuralSignals:
             )
         else:
             prepared = normalize_measured_range(image, quality)
-        result = load_unified_candidate_analyzer(unified_artifacts).predict(prepared)
+        analyzer = load_unified_candidate_analyzer(unified_artifacts)
+        result = analyzer.predict(prepared)
         score = float(result.p_structural)
         manipulation_confidence = max(
             float(result.probs.get("adversarial", 0.0)),
             float(result.probs.get("tampered", 0.0)),
         )
+        definitive_floor = getattr(
+            analyzer, "camera_definitive_manipulation_floor", None
+        )
+        if (
+            source == "camera"
+            and result.predicted_type != "clean"
+            and definitive_floor is not None
+            and score < definitive_floor
+            and not defer_camera_uncertainty
+        ):
+            return StructuralSignals(
+                None,
+                score,
+                None,
+                manipulation_confidence,
+                quality_status="marginal",
+                quality_conditions=tuple(
+                    dict.fromkeys(
+                        (*quality_conditions, "uncertain_structural_prediction")
+                    )
+                ),
+                rescan_reason=(
+                    "Camera image evidence is too close to the Structural decision "
+                    "boundary; hold the QR code steady and scan again."
+                ),
+                frames_received=1,
+                frames_analyzed=1,
+                consensus="single_frame",
+                camera_definitive_manipulation_floor=definitive_floor,
+            )
         return StructuralSignals(
             score,
             score,
@@ -178,6 +222,7 @@ def _analyse_one_image(image, source: str) -> StructuralSignals:
             frames_received=1,
             frames_analyzed=1,
             consensus="single_frame",
+            camera_definitive_manipulation_floor=definitive_floor,
         )
 
     image = _normalize_camera_capture(image) if source == "camera" else image
@@ -244,6 +289,14 @@ def _consensus(signals: list[StructuralSignals], received: int) -> StructuralSig
     """Aggregate independent camera frames by median score and majority class."""
     valid = [signal for signal in signals if signal.effective is not None]
     if len(valid) < _CAMERA_CONSENSUS_MIN_FRAMES:
+        raw_scores = [
+            signal.raw_score for signal in signals if signal.raw_score is not None
+        ]
+        manipulation_confidences = [
+            signal.manipulation_confidence
+            for signal in signals
+            if signal.manipulation_confidence is not None
+        ]
         conditions = tuple(
             dict.fromkeys(
                 condition
@@ -253,18 +306,29 @@ def _consensus(signals: list[StructuralSignals], received: int) -> StructuralSig
         )
         return StructuralSignals(
             None,
+            float(median(raw_scores)) if raw_scores else None,
             None,
-            None,
-            None,
+            (
+                float(median(manipulation_confidences))
+                if manipulation_confidences
+                else None
+            ),
             quality_status="unusable",
             quality_conditions=conditions or ("insufficient_clear_frames",),
             rescan_reason=(
-                "QR image detail is insufficient; move closer and hold the code "
+                "Camera image evidence is too close to the Structural decision "
+                "boundary; hold the QR code steady and scan again."
+                if "uncertain_structural_prediction" in conditions
+                else "QR image detail is insufficient; move closer and hold the code "
                 "inside the guide before scanning again."
             ),
             frames_received=received,
-            frames_analyzed=len(valid),
-            consensus="insufficient_quality",
+            frames_analyzed=sum(signal.frames_analyzed for signal in signals),
+            consensus=(
+                "insufficient_confidence"
+                if "uncertain_structural_prediction" in conditions
+                else "insufficient_quality"
+            ),
         )
 
     nonclean = [
@@ -282,24 +346,53 @@ def _consensus(signals: list[StructuralSignals], received: int) -> StructuralSig
     statuses = {signal.quality_status for signal in valid}
     conditions = tuple(
         dict.fromkeys(
-            condition
-            for signal in valid
-            for condition in signal.quality_conditions
+            condition for signal in valid for condition in signal.quality_conditions
         )
     )
+    effective = float(median(signal.effective for signal in valid))
+    raw_score = float(median(signal.raw_score for signal in valid))
+    manipulation_confidence = float(
+        median(signal.manipulation_confidence for signal in valid)
+    )
+    definitive_floors = {
+        signal.camera_definitive_manipulation_floor
+        for signal in valid
+        if signal.camera_definitive_manipulation_floor is not None
+    }
+    if len(definitive_floors) > 1:
+        raise ValueError("Camera consensus mixed incompatible Structural policies")
+    definitive_floor = next(iter(definitive_floors), None)
+    if confirmed and definitive_floor is not None and effective < definitive_floor:
+        return StructuralSignals(
+            None,
+            raw_score,
+            None,
+            manipulation_confidence,
+            quality_status="unusable",
+            quality_conditions=tuple(
+                dict.fromkeys((*conditions, "uncertain_structural_prediction"))
+            ),
+            rescan_reason=(
+                "Camera image evidence is too close to the Structural decision "
+                "boundary; hold the QR code steady and scan again."
+            ),
+            frames_received=received,
+            frames_analyzed=len(valid),
+            consensus="insufficient_confidence",
+            camera_definitive_manipulation_floor=definitive_floor,
+        )
     return StructuralSignals(
-        effective=float(median(signal.effective for signal in valid)),
-        raw_score=float(median(signal.raw_score for signal in valid)),
+        effective=effective,
+        raw_score=raw_score,
         predicted_type=predicted_type,
-        manipulation_confidence=float(
-            median(signal.manipulation_confidence for signal in valid)
-        ),
+        manipulation_confidence=manipulation_confidence,
         confirmed_manipulation=confirmed,
         quality_status="marginal" if "marginal" in statuses else "usable",
         quality_conditions=conditions,
         frames_received=received,
         frames_analyzed=len(valid),
         consensus="median_score_majority_class",
+        camera_definitive_manipulation_floor=definitive_floor,
     )
 
 
@@ -318,55 +411,110 @@ def _analyse_images(
     in-range frames are required before a consensus can reach Fusion.
     """
     selected = list(images[:5])
-    if not selected and not (
-        source == "camera" and require_camera_consensus
-    ):
+    module_count = None
+    minimum_module_pixels = None
+    if source == "camera" and selected:
+        module_count = next(
+            (
+                observed
+                for candidate in selected
+                if (observed := estimate_qr_module_count(candidate)) is not None
+            ),
+            None,
+        )
+        if module_count is not None:
+            minimum_module_pixels = min(
+                min(image.width, image.height)
+                / (_CAMERA_CROP_QUIET_ZONE_SCALE * module_count)
+                for image in selected
+            )
+
+    def with_grid_measurements(signal: StructuralSignals) -> StructuralSignals:
+        return replace(
+            signal,
+            module_count=module_count,
+            minimum_module_pixels=minimum_module_pixels,
+        )
+
+    if not selected and not (source == "camera" and require_camera_consensus):
         return StructuralSignals(None, None, None, None)
     if source != "camera":
         return _analyse_one_image(selected[0], source)
     if len(selected) < _CAMERA_CONSENSUS_MIN_FRAMES:
         if not require_camera_consensus:
-            return _analyse_one_image(selected[0], source)
-        return StructuralSignals(
-            None,
-            None,
-            None,
-            None,
-            quality_status="unusable",
-            quality_conditions=("insufficient_camera_frames",),
-            rescan_reason=(
-                "Fewer than three distinct camera frames were available; hold "
-                "the QR code steady and scan again."
-            ),
-            frames_received=len(selected),
-            frames_analyzed=0,
-            consensus="insufficient_quality",
+            return with_grid_measurements(_analyse_one_image(selected[0], source))
+        return with_grid_measurements(
+            StructuralSignals(
+                None,
+                None,
+                None,
+                None,
+                quality_status="unusable",
+                quality_conditions=("insufficient_camera_frames",),
+                rescan_reason=(
+                    "Fewer than three distinct camera frames were available; hold "
+                    "the QR code steady and scan again."
+                ),
+                frames_received=len(selected),
+                frames_analyzed=0,
+                consensus="insufficient_quality",
+            )
         )
 
     in_range = [
         image
         for image in selected
         if min(image.width, image.height) >= _CAMERA_MIN_CROP_SIDE
+        and (
+            module_count is None
+            or min(image.width, image.height)
+            / (_CAMERA_CROP_QUIET_ZONE_SCALE * module_count)
+            >= _CAMERA_MIN_MODULE_PIXELS
+        )
     ]
     if len(in_range) < _CAMERA_CONSENSUS_MIN_FRAMES:
-        return StructuralSignals(
-            None,
-            None,
-            None,
-            None,
-            quality_status="unusable",
-            quality_conditions=("small_camera_crop",),
-            rescan_reason=(
-                "QR image detail is insufficient; move closer and hold the code "
-                "inside the guide before scanning again."
-            ),
-            frames_received=len(selected),
-            frames_analyzed=0,
-            consensus="insufficient_quality",
+        module_scale_failed = bool(
+            module_count is not None
+            and any(
+                min(image.width, image.height) >= _CAMERA_MIN_CROP_SIDE
+                and min(image.width, image.height)
+                / (_CAMERA_CROP_QUIET_ZONE_SCALE * module_count)
+                < _CAMERA_MIN_MODULE_PIXELS
+                for image in selected
+            )
         )
-    return _consensus(
-        [_analyse_one_image(image, source) for image in in_range],
-        received=len(selected),
+        return with_grid_measurements(
+            StructuralSignals(
+                None,
+                None,
+                None,
+                None,
+                quality_status="unusable",
+                quality_conditions=(
+                    "insufficient_module_scale"
+                    if module_scale_failed
+                    else "small_camera_crop",
+                ),
+                rescan_reason=(
+                    "QR modules are too small for reliable image-integrity analysis; "
+                    "move closer until the whole code fills more of the guide."
+                    if module_scale_failed
+                    else "QR image detail is insufficient; move closer and hold the "
+                    "code inside the guide before scanning again."
+                ),
+                frames_received=len(selected),
+                frames_analyzed=0,
+                consensus="insufficient_quality",
+            )
+        )
+    return with_grid_measurements(
+        _consensus(
+            [
+                _analyse_one_image(image, source, defer_camera_uncertainty=True)
+                for image in in_range
+            ],
+            received=len(selected),
+        )
     )
 
 
@@ -538,7 +686,7 @@ def run_scan(
         "completed"
         if structural.effective is not None
         else "inconclusive"
-        if structural.quality_status == "unusable"
+        if structural.quality_status == "unusable" or structural.rescan_reason
         else "unavailable"
         if source in {"camera", "gallery"} or image_expected
         else "not_applicable"
@@ -611,6 +759,25 @@ def run_scan(
         )
         if quality_reason not in reasons:
             reasons.append(quality_reason)
+
+    # When an image was supplied but its payload cannot be decoded, Semantic has
+    # not cleared the destination. A clean-looking QR surface is not evidence
+    # that the hidden/unknown payload is safe. Fail closed to a rescan Warning;
+    # confirmed Structural manipulation below can still raise this to Blocked.
+    if (
+        payload_source == "undecodable"
+        and semantic_status == "unavailable"
+        and (source in {"camera", "gallery"} or image_expected)
+        and verdict == "safe"
+    ):
+        verdict = "warning"
+        risk_score = engine.safe_max
+        decode_reason = (
+            "QR payload could not be decoded; capture a clearer image before "
+            "trusting the destination"
+        )
+        if decode_reason not in reasons:
+            reasons.append(decode_reason)
 
     # A completed Structural prediction whose winning class is adversarial or
     # tampered is confirmed manipulation evidence, not merely a continuous risk
@@ -697,6 +864,8 @@ def run_scan(
             structural_frames_received=structural.frames_received,
             structural_frames_analyzed=structural.frames_analyzed,
             structural_consensus=structural.consensus,
+            structural_module_count=structural.module_count,
+            structural_min_module_pixels=structural.minimum_module_pixels,
             p_url=sem.p_url,
             semantic_status=semantic_status,
             llm_score=None,

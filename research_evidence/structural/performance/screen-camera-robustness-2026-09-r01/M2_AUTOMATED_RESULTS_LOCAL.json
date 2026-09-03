@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "pack_id": "sem11-root-cause-2026-09-r01",
+  "mode": "digital baseline; camera simulation is not physical Live Camera evidence",
+  "summary": {
+    "case_count": 12,
+    "request_count": 24,
+    "branch_contract_matches": 22,
+    "gate_passed": false
+  },
+  "results": [
+    {
+      "case_id": "RC-LAYOUT-4470",
+      "actual_version": 3,
+      "actual_mask": 4,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 7,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.31695854663848877,
+        "p_structural_raw": 0.31695854663848877,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 7,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.31695854663848877,
+        "p_structural_raw": 0.31695854663848877,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-LAYOUT-4471",
+      "actual_version": 3,
+      "actual_mask": 4,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 7,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.3171618580818176,
+        "p_structural_raw": 0.3171618580818176,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 7,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.3171618580818176,
+        "p_structural_raw": 0.3171618580818176,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-LAYOUT-4472",
+      "actual_version": 3,
+      "actual_mask": 2,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 4,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.2373775839805603,
+        "p_structural_raw": 0.2373775839805603,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 4,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.2373775839805603,
+        "p_structural_raw": 0.2373775839805603,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-0",
+      "actual_version": 3,
+      "actual_mask": 0,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 16,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.44046521186828613,
+        "p_structural_raw": 0.44046521186828613,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 16,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.44046521186828613,
+        "p_structural_raw": 0.44046521186828613,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-1",
+      "actual_version": 3,
+      "actual_mask": 1,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 24,
+        "reasons": [
+          "QR image appears manipulated"
+        ],
+        "structural_type": "clean",
+        "p_structural": 0.5155595541000366,
+        "p_structural_raw": 0.5155595541000366,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 24,
+        "reasons": [
+          "QR image appears manipulated"
+        ],
+        "structural_type": "clean",
+        "p_structural": 0.5155595541000366,
+        "p_structural_raw": 0.5155595541000366,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-2",
+      "actual_version": 3,
+      "actual_mask": 2,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 2,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.13980674743652344,
+        "p_structural_raw": 0.13980674743652344,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 2,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.13980674743652344,
+        "p_structural_raw": 0.13980674743652344,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-3",
+      "actual_version": 3,
+      "actual_mask": 3,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 11,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.3786800503730774,
+        "p_structural_raw": 0.3786800503730774,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 11,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.3786800503730774,
+        "p_structural_raw": 0.3786800503730774,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-4",
+      "actual_version": 3,
+      "actual_mask": 4,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 7,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.3171618580818176,
+        "p_structural_raw": 0.3171618580818176,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 7,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.3171618580818176,
+        "p_structural_raw": 0.3171618580818176,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-5",
+      "actual_version": 3,
+      "actual_mask": 5,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 6,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.29664456844329834,
+        "p_structural_raw": 0.29664456844329834,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 6,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.29664456844329834,
+        "p_structural_raw": 0.29664456844329834,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-6",
+      "actual_version": 3,
+      "actual_mask": 6,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 4,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.2102261781692505,
+        "p_structural_raw": 0.2102261781692505,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 4,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.2102261781692505,
+        "p_structural_raw": 0.2102261781692505,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-MASK-7",
+      "actual_version": 3,
+      "actual_mask": 7,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "blocked",
+        "risk_score": 76,
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_type": "tampered",
+        "p_structural": 0.6454365253448486,
+        "p_structural_raw": 0.6454365253448486,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "blocked",
+        "risk_score": 76,
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_type": "tampered",
+        "p_structural": 0.6454365253448486,
+        "p_structural_raw": 0.6454365253448486,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    },
+    {
+      "case_id": "RC-VERSION-4",
+      "actual_version": 4,
+      "actual_mask": 6,
+      "gallery": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 4,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.2208290696144104,
+        "p_structural_raw": 0.2208290696144104,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 1
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "verdict": "safe",
+        "risk_score": 4,
+        "reasons": [],
+        "structural_type": "clean",
+        "p_structural": 0.22131270170211792,
+        "p_structural_raw": 0.22131270170211792,
+        "semantic_status": "not_applicable",
+        "structural_frames_analyzed": 3
+      }
+    }
+  ]
+}

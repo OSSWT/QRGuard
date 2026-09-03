@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "audit": "qrguard_acquisition_model_replay_gate",
+  "source": {
+    "archive_sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4",
+    "model_version": "structural-r07-corrective-v1",
+    "model_artifact_sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
+    "frames": 120,
+    "sessions": 24
+  },
+  "acquisition": {
+    "gate_passed": true,
+    "minimum_observed_pixels_per_module": 6.945205479452055,
+    "quality_statuses": {
+      "marginal": 8,
+      "usable": 112
+    }
+  },
+  "structural": {
+    "clean_frames": 90,
+    "clean_false_positive_frames": 0,
+    "clean_false_positive_rate": 0.0,
+    "definitive_clean_false_positive_frames_at_camera_floor": 0,
+    "definitive_clean_false_positive_rate_at_camera_floor": 0.0,
+    "attack_frames": 30,
+    "attack_detected_frames": 29,
+    "attack_recall": 0.966667,
+    "definitive_attack_recall_at_camera_floor": 0.966667,
+    "classes": {
+      "adversarial": {
+        "frames": 15,
+        "structural_recall": 0.933333,
+        "definitive_recall_at_camera_floor": 0.933333,
+        "final_safe_escapes": 0
+      },
+      "tampered": {
+        "frames": 15,
+        "structural_recall": 1.0,
+        "definitive_recall_at_camera_floor": 1.0,
+        "final_safe_escapes": 0
+      }
+    }
+  },
+  "final_verdict": {
+    "frame_intended_matches": 69,
+    "frame_intended_accuracy": 0.575,
+    "session_majority_intended_matches": 14,
+    "session_majority_intended_accuracy": 0.583333
+  },
+  "exposure": {
+    "agreeing_cases": 7,
+    "case_count": 8,
+    "verdict_agreement_rate": 0.875,
+    "correct_under_all_conditions_cases": 4,
+    "correct_under_all_conditions_rate": 0.5,
+    "safety_preserving_cases": 8,
+    "safety_preservation_rate": 1.0,
+    "clean_median_p_structural_spans": [
+      0.00014263391494750977,
+      0.0004559159278869629,
+      0.0004923343658447266,
+      0.004800617694854736,
+      0.0006819367408752441,
+      0.0013336539268493652
+    ],
+    "clean_median_p_structural_span_p95": 0.0039338767528533936
+  },
+  "sentinels": {
+    "sem11": {
+      "frames": 15,
+      "false_blocked_frames": 0,
+      "false_blocked_sessions": 0,
+      "sessions": 3
+    },
+    "sem05": {
+      "frames": 15,
+      "payload_hash_matched_frames": 10,
+      "semantic_misses_on_payload_matched_frames": 0,
+      "masked_structural_branch_errors": 0,
+      "intended_blocked_frames": 10,
+      "intended_blocked_sessions": 2,
+      "sessions": 3
+    }
+  },
+  "cases": [
+    {
+      "case_id": "ACQ-CLN-V10-LONG",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.00014263391494750977
+    },
+    {
+      "case_id": "ACQ-CLN-V14-LONG",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "warning": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": false,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.0004559159278869629
+    },
+    {
+      "case_id": "SEM-05-USERINFO",
+      "ground_truth": "clean",
+      "intended_app_verdict": "blocked",
+      "session_majority_verdicts": {
+        "blocked": 2,
+        "warning": 1
+      },
+      "exposure_verdict_agreement": false,
+      "correct_under_all_exposure_conditions": false,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.0004923343658447266
+    },
+    {
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.004800617694854736
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "ground_truth": "adversarial",
+      "intended_app_verdict": "blocked",
+      "session_majority_verdicts": {
+        "blocked": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.04470330476760864
+    },
+    {
+      "case_id": "STR-CLN-OVEREXP",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "warning": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": false,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.0006819367408752441
+    },
+    {
+      "case_id": "STR-CLN-UNDEREXP",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "warning": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": false,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.0013336539268493652
+    },
+    {
+      "case_id": "STR-TMP-NORMAL",
+      "ground_truth": "tampered",
+      "intended_app_verdict": "blocked",
+      "session_majority_verdicts": {
+        "blocked": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "safety_preserving_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.00022983551025390625
+    }
+  ],
+  "gates": {
+    "acquisition_gate": true,
+    "archive_identity_matches": true,
+    "real_clean_false_positive_rate": true,
+    "real_adversarial_recall": true,
+    "real_tampered_recall": true,
+    "exposure_safety_preservation": true,
+    "clean_exposure_probability_span_p95": true,
+    "sem05_style_masked_branch_errors": true
+  },
+  "failed_gates": [],
+  "model_replay_gate_passed": true,
+  "promotion_eligible": false,
+  "non_promotion_reasons": [
+    "this is development evidence, not an independent holdout",
+    "this acquisition campaign is development evidence and cannot promote a model",
+    "a fresh device/display/session blind holdout remains mandatory"
+  ]
+}

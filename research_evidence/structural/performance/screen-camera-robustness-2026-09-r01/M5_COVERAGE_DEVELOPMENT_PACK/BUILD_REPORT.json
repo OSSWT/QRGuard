@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-01T10:10:05Z",
+  "campaign_id": "structural-coverage-development-2026-09-r01",
+  "status": "ready_for_physical_development_capture",
+  "deployment_holdout_eligible": false,
+  "pack": {
+    "path": "dist/Structural_Coverage_Development_2026-09-r01",
+    "archive_path": "C:/Users/OSSW/Desktop/QRGuard/90_Rebuildable_Caches/Structural_Coverage_Development_2026-09-r01.zip",
+    "archive_bytes": 6198691,
+    "archive_sha256": "b86463c15926b0409e7d4542fa2d419e5a76a74bf077569c951bb320f0785335",
+    "disk_files": 116,
+    "zip_entries": 116,
+    "zip_hash_errors": 0
+  },
+  "diagnostic_apk": {
+    "path": "C:/Users/OSSW/Desktop/QRGuard/90_Rebuildable_Caches/QRGuard_Diagnostic_structural_coverage_development_2026-09-r01.apk",
+    "bytes": 189480187,
+    "sha256": "dc13ee5275cdfc1151272633d4358ce79a6d29d5309a474183343003a0db06fe",
+    "embedded_plan_sha256": "6b84489e3f5f5cd4fbaac0818c829360b210eb7ceb7b69407ce81e639b815673",
+    "signature_verification": "Android APK Signature Scheme v2 verified; Android Debug signer"
+  },
+  "coverage": {
+    "cases": 48,
+    "base_identities": 16,
+    "unique_qr_matrices": 16,
+    "labels": {
+      "clean": 16,
+      "adversarial": 16,
+      "tampered": 16
+    },
+    "versions": {
+      "3": 15,
+      "5": 15,
+      "10": 18
+    },
+    "payload_utf8_bytes": {
+      "24": 15,
+      "40": 15,
+      "112": 18
+    },
+    "development_split": {
+      "train": 36,
+      "validation": 12
+    },
+    "masks_per_class": {
+      "0": 2,
+      "1": 2,
+      "2": 2,
+      "3": 2,
+      "4": 2,
+      "5": 2,
+      "6": 2,
+      "7": 2
+    }
+  },
+  "adversarial_contract": {
+    "decoder_verified_cases": 16,
+    "minimum_eot_success_rate": 0.5,
+    "maximum_eot_success_rate": 1.0,
+    "linf_epsilon_pixels": {
+      "8": 14,
+      "12": 1,
+      "24": 1
+    },
+    "methods": {
+      "eot_fgsm_qr_function_projection": 15,
+      "eot_pgd_qr_function_projection": 1
+    },
+    "projections": {
+      "function_safe": 15,
+      "module_interiors": 1
+    }
+  },
+  "verification": {
+    "manifest_file_hash_errors": 0,
+    "zip_entry_set_matches_disk": true,
+    "app_plan_matches_pack_plan": true,
+    "flutter_tests": "87 passed before the added M5 plan test; M5 plan test suite 4 passed",
+    "flutter_analyze": "no issues",
+    "python_pack_tests": "2 passed",
+    "backend_full_tests": "388 passed, 1 skipped",
+    "ruff_changed_files": "passed",
+    "ruff_full_repository": "58 pre-existing findings outside the M5 changed-file scope"
+  }
+}

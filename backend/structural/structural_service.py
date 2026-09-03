@@ -1,10 +1,10 @@
 """Structural Analysis — calibrated three-class QR image inference.
 
-Production sets ``QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS`` and uses the promoted
-``structural-2026.03-r01`` artifact for both Gallery and Live Camera. If that
-explicit production selection is absent, the compatibility path uses the active
-``training/artifacts/structural`` directory for Gallery and the retained
-``structural-2026.02`` camera model. Both paths return the same contract:
+Production sets ``QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS`` and uses the active
+``training/artifacts/structural`` artifact for both Gallery and Live Camera. If
+that explicit selection is absent, the compatibility path uses the same active
+directory for Gallery and the retained ``structural-2026.02`` camera model.
+Both paths return the same contract:
 
     clean (0) / adversarial (1) / tampered (2)
     p_structural = 1 − P(clean)     -> the Fusion Engine signal
@@ -31,6 +31,11 @@ import numpy as np
 
 _ROOT = Path(__file__).resolve().parents[2]
 _DEFAULT_ARTIFACTS = _ROOT / "training" / "artifacts" / "structural"
+_UNIFIED_CANDIDATE_VERSION_PREFIXES = (
+    "structural-2026.03",
+    "structural-2026.09",
+    "structural-r07",
+)
 _CAMERA_ARTIFACTS = (
     _ROOT / "ml_training" / "structural" / "runs" / "structural-2026.02" / "artifacts"
 )
@@ -74,6 +79,24 @@ class StructuralAnalyzer:
                 f"Structural artifacts directory not found: {self.dir}\n"
                 "Download MyDrive/FYP2/structural/artifacts/ into it."
             )
+
+        self.version = ""
+        self.camera_definitive_manipulation_floor: float | None = None
+        metadata_path = self.dir / "model_metadata.json"
+        if metadata_path.is_file():
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            self.version = str(metadata.get("version", ""))
+            runtime_policy = metadata.get("runtime_policy", {})
+            if not isinstance(runtime_policy, dict):
+                raise ValueError("Structural runtime_policy metadata must be an object")
+            floor = runtime_policy.get("camera_definitive_manipulation_floor")
+            if floor is not None:
+                floor = float(floor)
+                if not 0.5 < floor < 1.0:
+                    raise ValueError(
+                        "camera_definitive_manipulation_floor must be between 0.5 and 1"
+                    )
+                self.camera_definitive_manipulation_floor = floor
 
         model_name = "structural_fp32.onnx"
         choice = self.dir / "deploy_choice.json"
@@ -153,16 +176,16 @@ def load_camera_analyzer() -> StructuralAnalyzer:
 
 @lru_cache(maxsize=2)
 def load_unified_candidate_analyzer(artifacts_dir: str) -> StructuralAnalyzer:
-    """Load an explicitly selected v3 candidate without changing defaults."""
+    """Load an explicitly selected unified candidate without changing defaults."""
     directory = Path(artifacts_dir)
     metadata_path = directory / "model_metadata.json"
     if not metadata_path.is_file():
         raise ArtifactsNotFound(f"Candidate metadata not found: {metadata_path}")
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     version = str(metadata.get("version", ""))
-    if not version.startswith("structural-2026.03"):
+    if not version.startswith(_UNIFIED_CANDIDATE_VERSION_PREFIXES):
         raise ValueError(
-            "Unified candidate must identify a Structural v3 artifact; "
+            "Unified candidate must identify a supported Structural artifact; "
             f"recorded version is {version!r}"
         )
     return load_analyzer(str(directory))

@@ -24,8 +24,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.build_numbered_capture_pack import _write_slideshow
-
 CAMPAIGN_ID = "structural-v3-real-2026.03-r01"
 PACK_NAME = f"{CAMPAIGN_ID}-50x3-r01"
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
@@ -105,8 +103,12 @@ def _load_victim(checkpoint: Path):
 def _normalise(tensor):
     import torch
 
-    mean = torch.tensor(IMAGENET_MEAN, dtype=tensor.dtype).view(1, 3, 1, 1)
-    std = torch.tensor(IMAGENET_STD, dtype=tensor.dtype).view(1, 3, 1, 1)
+    mean = torch.tensor(
+        IMAGENET_MEAN, dtype=tensor.dtype, device=tensor.device
+    ).view(1, 3, 1, 1)
+    std = torch.tensor(
+        IMAGENET_STD, dtype=tensor.dtype, device=tensor.device
+    ).view(1, 3, 1, 1)
     return (tensor - mean) / std
 
 
@@ -221,6 +223,8 @@ def _write_index_csv(path: Path, rows: list[dict[str, object]]) -> None:
 
 
 def prepare(pack: Path, selection_path: Path, archive: Path, checkpoint: Path) -> None:
+    from scripts.build_numbered_capture_pack import _write_slideshow
+
     index_path = pack / "capture_index.json"
     index = json.loads(index_path.read_text(encoding="utf-8"))
     selection = json.loads(selection_path.read_text(encoding="utf-8"))

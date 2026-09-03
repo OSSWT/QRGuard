@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "scope": "Branch-level contract for the canonical QR Codes Demo pack",
+  "structural_category_default": {
+    "payload_type": "url",
+    "semantic_status": "completed",
+    "rule_flags": []
+  },
+  "semantic_cases": {
+    "SEM-01-SAFE-HTTPS": {
+      "payload_type": "url",
+      "semantic_status": "completed",
+      "rule_flags": [],
+      "decision_driver": "none"
+    },
+    "SEM-02-BRAND-PHISH": {
+      "payload_type": "url",
+      "semantic_status": "completed",
+      "rule_flags": ["non_https", "brand_in_subdomain"],
+      "decision_driver": "semantic"
+    },
+    "SEM-03-RAW-IP": {
+      "payload_type": "url",
+      "semantic_status": "completed",
+      "rule_flags": ["ip_literal_host", "non_https"],
+      "decision_driver": "semantic"
+    },
+    "SEM-04-PUNYCODE": {
+      "payload_type": "url",
+      "semantic_status": "completed",
+      "rule_flags": ["punycode_host", "non_https"],
+      "decision_driver": "semantic"
+    },
+    "SEM-05-USERINFO": {
+      "payload_type": "url",
+      "semantic_status": "completed",
+      "rule_flags": ["non_https", "userinfo_in_url"],
+      "decision_driver": "semantic"
+    },
+    "SEM-06-DEEP-SUBDOMAINS": {
+      "payload_type": "url",
+      "semantic_status": "completed",
+      "rule_flags": ["non_https", "excessive_subdomains"],
+      "decision_driver": "semantic"
+    },
+    "SEM-07-SHORTENER": {
+      "payload_type": "url",
+      "semantic_status": "completed",
+      "rule_flags": ["shortened_url"],
+      "decision_driver": "semantic"
+    },
+    "SEM-08-JAVASCRIPT": {
+      "payload_type": "url",
+      "semantic_status": "not_applicable",
+      "rule_flags": ["js_or_data_uri"],
+      "decision_driver": "payload_rule"
+    },
+    "SEM-09-WIFI-OPEN": {
+      "payload_type": "wifi",
+      "semantic_status": "not_applicable",
+      "rule_flags": ["open_wifi_network"],
+      "decision_driver": "payload_rule"
+    },
+    "SEM-10-WIFI-SECURE": {
+      "payload_type": "wifi",
+      "semantic_status": "not_applicable",
+      "rule_flags": [],
+      "decision_driver": "none"
+    },
+    "SEM-11-PLAIN-TEXT": {
+      "payload_type": "text",
+      "semantic_status": "not_applicable",
+      "rule_flags": [],
+      "decision_driver": "none"
+    },
+    "SEM-12-DUITNOW-DUMMY": {
+      "payload_type": "payment",
+      "semantic_status": "not_applicable",
+      "rule_flags": [],
+      "decision_driver": "none"
+    }
+  }
+}

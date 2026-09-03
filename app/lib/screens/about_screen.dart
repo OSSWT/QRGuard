@@ -9,7 +9,7 @@ import 'settings_screen.dart';
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  static const _version = '1.1.2 (8009)';
+  static const _version = '1.2.0 (8012)';
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -32,6 +32,11 @@ class AboutScreen extends StatelessWidget {
                 const _AboutRow(label: 'Version', value: _version),
                 const Divider(height: 24),
                 const _AboutRow(
+                  label: 'Structural engine',
+                  value: 'r07 controlled release',
+                ),
+                const Divider(height: 24),
+                const _AboutRow(
                   label: 'Project',
                   value: 'FYP2 · UTAR · Ooi Sze Shou',
                 ),
@@ -42,6 +47,47 @@ class AboutScreen extends StatelessWidget {
                       'Structural CNN + Semantic URL analysis + trained '
                       'Fusion risk engine',
                   valueColor: context.qrColors.secondaryText,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Safety boundaries',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Safe is a risk assessment, not a guarantee. Blur, motion, '
+                  'glare, poor exposure or insufficient QR detail returns '
+                  'Rescan instead of Safe. Dense QR codes may require a closer '
+                  'view while the complete code and its clear border remain '
+                  'inside the guide.',
+                  style: TextStyle(
+                    color: context.qrColors.secondaryText,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'The r07 Structural engine has controlled screen-to-camera '
+                  'attack-calibration evidence. Results can still vary by '
+                  'phone, display, print quality, lighting and future attack '
+                  'types; a fresh independent blind promotion test remains '
+                  'pending.',
+                  style: TextStyle(
+                    color: context.qrColors.secondaryText,
+                    height: 1.5,
+                  ),
                 ),
               ],
             ),

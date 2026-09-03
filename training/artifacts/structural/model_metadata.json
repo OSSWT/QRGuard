@@ -1,9 +1,33 @@
 {
   "display_name": "Structural Training",
-  "version": "structural-2026.03-r01",
+  "version": "structural-r07-corrective-v1",
   "architecture": "ImageNet-pretrained ResNet-18; 3-class fine-tuning",
-  "artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+  "artifact_sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
   "research_gates_passed": true,
-  "deployment_gates_passed": true,
-  "deployment_gate_failures": []
+  "deployment_gates_passed": false,
+  "deployment_gate_failures": [
+    "fresh candidate-bound blind acceptance remains pending"
+  ],
+  "release_scope": "user_authorized_controlled_release_with_disclosed_limitations",
+  "formal_promotion_eligible": false,
+  "runtime_installed": true,
+  "runtime_policy": {
+    "camera_definitive_manipulation_floor": 0.7,
+    "below_floor_action": "inconclusive_rescan_never_safe",
+    "quality_gate_precedes_structural_inference": true,
+    "minimum_observed_module_pixels": 5.0,
+    "undecodable_image_action": "warning_rescan_never_safe"
+  },
+  "known_limitations": [
+    "fresh independent blind promotion evidence is pending",
+    "controlled screen-to-camera calibration does not cover every phone, display, print, lighting condition, or future attack",
+    "dense QR codes with insufficient observed pixels per module require a closer rescan"
+  ],
+  "evidence": {
+    "attack_calibration_capture_sha256": "c0a7ff155d7bcfc34cdcb84913b22cea569a6f7ace19efe48587a82cfa88cd67",
+    "attack_calibration_reference_sha256": "9778b5d3c3afa0243f4561302d72e9805eab1c5020cabaacd1d698850d8a2183",
+    "physical_survival_report_sha256": "a708747c28abc594846d132c7554cf911d36880c971cb27bd652448fbbd234e3",
+    "replay_report_sha256": "6218484d4912f33d42b4e38dfc93e64f41210a1355ca0e9de16d6637f3a3fc87"
+  },
+  "rollback_path": "ml_training/deployment/rollback/structural-before-r07-controlled-release"
 }

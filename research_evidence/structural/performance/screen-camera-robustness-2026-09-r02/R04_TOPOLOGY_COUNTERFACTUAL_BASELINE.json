@@ -1,0 +1,325 @@
+{
+  "schema_version": 1,
+  "audit": "structural_topology_counterfactual_clean",
+  "evidence_role": "development_counterfactual",
+  "promotion_eligible": false,
+  "manifest": "ml_training/datasets/structural/processed/structural-2026.09-r05/manifest.csv",
+  "manifest_sha256": "d079321d615db5d3faa3d95a643ed8348fed52647d13406cc3a55b81b67d61c6",
+  "split": "validation",
+  "model": {
+    "version": "structural-2026.09-r04",
+    "artifact_sha256": "240079d09f6c0ed35163d0e32edd735ee8e2315db8ca9e0e98d771d0da59b8f5",
+    "temperature": 0.5812048316417828
+  },
+  "rows": 512,
+  "groups": 32,
+  "versions": [
+    3,
+    5,
+    7,
+    10,
+    12,
+    14,
+    16,
+    20
+  ],
+  "masks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "clean_false_positive_rate": 0.064453125,
+  "clean_structural_probability_span_p95": 0.7997876971960067,
+  "maximum_group_probability_span": 0.8246344923973083,
+  "per_version_clean_false_positive_rate": {
+    "10": 0.078125,
+    "12": 0.0,
+    "14": 0.0,
+    "16": 0.0,
+    "20": 0.0,
+    "3": 0.1875,
+    "5": 0.125,
+    "7": 0.125
+  },
+  "per_mask_clean_false_positive_rate": {
+    "0": 0.046875,
+    "1": 0.046875,
+    "2": 0.046875,
+    "3": 0.078125,
+    "4": 0.109375,
+    "5": 0.046875,
+    "6": 0.046875,
+    "7": 0.09375
+  },
+  "failures": [
+    {
+      "group_id": "synthetic_topology:v03-l-2",
+      "qr_version": 3,
+      "mask_pattern": 3,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5426391363143921,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-l-2",
+      "qr_version": 3,
+      "mask_pattern": 7,
+      "quality_condition": "normal",
+      "p_structural": 0.6900187730789185,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-l-2",
+      "qr_version": 3,
+      "mask_pattern": 7,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.7776635885238647,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-2",
+      "qr_version": 3,
+      "mask_pattern": 3,
+      "quality_condition": "normal",
+      "p_structural": 0.5486395359039307,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-2",
+      "qr_version": 3,
+      "mask_pattern": 3,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6476640105247498,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 1,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.567642092704773,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 2,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6674326658248901,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 3,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6273046135902405,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.8064111471176147,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 5,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5900571942329407,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 6,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5461353063583374,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v03-h-2",
+      "qr_version": 3,
+      "mask_pattern": 7,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.7666473984718323,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-2",
+      "qr_version": 5,
+      "mask_pattern": 2,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5690259337425232,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5881718397140503,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-2",
+      "qr_version": 5,
+      "mask_pattern": 6,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5434240102767944,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-2",
+      "qr_version": 5,
+      "mask_pattern": 7,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6068694591522217,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-m-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "normal",
+      "p_structural": 0.5016378164291382,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-m-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5075085163116455,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-q-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "normal",
+      "p_structural": 0.5507621765136719,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v05-q-2",
+      "qr_version": 5,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6578947305679321,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 0,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.8379743099212646,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 1,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.7102148532867432,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 2,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.7280367612838745,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 3,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.7485755085945129,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 4,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.8117497563362122,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 5,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.6851972341537476,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 6,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.8622601628303528,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v07-q-2",
+      "qr_version": 7,
+      "mask_pattern": 7,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.788973867893219,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v10-l-2",
+      "qr_version": 10,
+      "mask_pattern": 0,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.593034029006958,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v10-l-2",
+      "qr_version": 10,
+      "mask_pattern": 5,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.5323495864868164,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v10-l-2",
+      "qr_version": 10,
+      "mask_pattern": 7,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.8254163861274719,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v10-h-2",
+      "qr_version": 10,
+      "mask_pattern": 0,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.533997654914856,
+      "predicted_type": "adversarial"
+    },
+    {
+      "group_id": "synthetic_topology:v10-h-2",
+      "qr_version": 10,
+      "mask_pattern": 1,
+      "quality_condition": "screen_moire_or_compression",
+      "p_structural": 0.687911868095398,
+      "predicted_type": "adversarial"
+    }
+  ]
+}

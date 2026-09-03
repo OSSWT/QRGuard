@@ -11,6 +11,8 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../app_controller.dart';
 import '../services/api_client.dart';
+import '../services/camera_exposure_policy.dart';
+import '../services/capture_quality.dart';
 import '../services/history_service.dart';
 import '../services/live_camera_frame.dart';
 import '../services/live_qr_stability.dart';
@@ -69,6 +71,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String? _scheduledPromptPayload;
   DateTime? _candidateLastSeen;
   bool _candidateReady = false;
+  String? _exposureCheckedPayload;
+  String? _exposureCheckingPayload;
+  int _exposureCheckToken = 0;
   String? _message;
   List<ScanRecord> _recent = const [];
 
@@ -138,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       _autoPromptTimer?.cancel();
       _scheduledPromptPayload = null;
       _stability.reset();
+      _resetExposureCheck();
       if (mounted) {
         setState(() {
           _candidate = null;
@@ -180,6 +186,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
     final observation = _stability.observe(payload, seenAt);
     final previous = _candidate;
+    if (observation.startedNewSequence && previous?.payload != payload) {
+      _resetExposureCheck();
+    }
     final candidate =
         !observation.startedNewSequence &&
             previous?.payload == payload &&
@@ -197,13 +206,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
     _candidateLastSeen = seenAt;
     final hasTemporalEvidence = _liveCandidates.length >= 3;
+    final exposureReady =
+        !_requiresExposureCheck || _exposureCheckedPayload == payload;
     setState(() {
       _message = null;
       _candidate = candidate;
-      _candidateReady = observation.ready && hasTemporalEvidence;
+      _candidateReady =
+          observation.ready &&
+          hasTemporalEvidence &&
+          exposureReady &&
+          _exposureCheckingPayload == null;
     });
     if (observation.startedNewSequence) {
       unawaited(_focusOnQr(barcode, capture.size));
+    }
+    if (observation.sightings >= 3 &&
+        _exposureCheckedPayload != payload &&
+        _exposureCheckingPayload != payload) {
+      unawaited(_checkAndAdjustExposure(nextCandidate));
     }
     _refreshCandidateExpiry(payload);
     if (_candidateReady) _scheduleAutoPrompt(payload);
@@ -256,6 +276,89 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
+  bool get _requiresExposureCheck =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
+  void _resetExposureCheck() {
+    _exposureCheckToken++;
+    _exposureCheckedPayload = null;
+    _exposureCheckingPayload = null;
+  }
+
+  Future<void> _checkAndAdjustExposure(_Candidate candidate) async {
+    final payload = candidate.payload;
+    if (!_requiresExposureCheck || !candidate.hasUsableImage) {
+      if (mounted && _candidate?.payload == payload) {
+        setState(() => _exposureCheckedPayload = payload);
+      }
+      return;
+    }
+    final token = _exposureCheckToken;
+    setState(() {
+      _exposureCheckingPayload = payload;
+      _candidateReady = false;
+      _message = 'QR detected · checking camera exposure';
+    });
+    var adjusted = false;
+    try {
+      final telemetry = await compute(
+        assessFrameCaptureQuality,
+        CaptureFrameQualityRequest(
+          frame: candidate.frame!,
+          cornerCoordinates: [
+            for (final corner in candidate.corners) ...[corner.dx, corner.dy],
+          ],
+          frameWidth: candidate.frameSize.width,
+          frameHeight: candidate.frameSize.height,
+        ),
+      );
+      if (!mounted || token != _exposureCheckToken) return;
+      final quality = telemetry == null
+          ? null
+          : CaptureQualityReport.fromTelemetry(telemetry);
+      if (quality != null) {
+        final exposure = await _scanner.getExposureCompensationState();
+        if (!mounted || token != _exposureCheckToken) return;
+        final plan = planCaptureExposureAdjustment(
+          quality: quality,
+          exposure: exposure,
+        );
+        if (plan != null) {
+          await _scanner.setExposureCompensationIndex(plan.targetIndex);
+          if (!mounted || token != _exposureCheckToken) return;
+          adjusted = true;
+        }
+      }
+    } catch (_) {
+      // Exposure compensation is a best-effort Android capability. The final
+      // crop quality gate still rejects unusable evidence on unsupported phones.
+    } finally {
+      if (mounted && token == _exposureCheckToken) {
+        _exposureCheckingPayload = null;
+        _exposureCheckedPayload = payload;
+        if (adjusted) {
+          _autoPromptTimer?.cancel();
+          _scheduledPromptPayload = null;
+          _liveCandidates.clear();
+          _stability.reset();
+          setState(() {
+            _candidateReady = false;
+            _message = 'Camera exposure adjusted · hold steady';
+          });
+        } else {
+          final ready =
+              _liveCandidates.length >= 3 &&
+              _stability.isReady(payload, DateTime.now());
+          setState(() {
+            _candidateReady = ready;
+            _message = null;
+          });
+          if (ready) _scheduleAutoPrompt(payload);
+        }
+      }
+    }
+  }
+
   void _scheduleAutoPrompt(String payload) {
     if (_dismissedPayload == payload ||
         (_scheduledPromptPayload == payload &&
@@ -295,6 +398,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         _dismissedPayload = null;
       });
       _stability.reset();
+      _resetExposureCheck();
     });
   }
 
@@ -552,6 +656,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       _candidateLastSeen = null;
     });
     _stability.reset();
+    _resetExposureCheck();
     await _loadHistory();
     await _safeStart();
   }

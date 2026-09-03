@@ -1,58 +1,51 @@
 # Latest ML versions
 
-Last updated: 2026-08-31.
-
-## Repository production set
+## Active controlled-release set
 
 | Component | Version | Status |
 |---|---|---|
-| Structural | **`structural-2026.03-r01`** | Deployed; one artifact for Gallery and Camera |
+| Structural | **`structural-r07-corrective-v1`** | User-authorized controlled release for Gallery and Camera; formal fresh blind acceptance pending |
 | Semantic | `semantic-2026.02` | Frozen accepted model |
-| Decision | **`decision-2026.03-r05`** | Deployed; Safe < 26, Blocked >= 76 |
-| Full stack | r01 + r05 | Local and remote production smoke passed |
+| Decision | **`decision-2026.03-r05`** | Accepted; Safe < 26, Blocked >= 76 |
+| Full stack | r07 + r05 | Local backend, Flutter tests and signed package verified; external update recorded separately |
 
-GitHub `main` contains commit `e942bbf`; Render API and Web are live from deploy
-commit `6f17d664e0d1f3f4e30d643c3592dceacabd32fa`.
+The r07 controlled attack-calibration set contains 72 sessions and 360 validated
+frames. Twenty-five of 48 planned attack cases survived the physical
+screen-to-camera channel. On independent surviving attack bases, recall was 1.00
+for low versions, 1.00 for medium versions and 0.8333 for high versions. Every
+clean calibration base remained Safe. One dense high-version base required
+Rescan because its observed module scale was below the fixed five-pixels-per-
+module evidence floor; no analyzable surviving attack was returned as Safe.
 
-The fresh Structural run recorded 0.9111 grouped-test accuracy, 0.9095 macro-F1,
-0.0000 QR-DN clean false-positive rate and 0.0278 ECE. On the locked exact-app
-holdout, Camera clean false-block was 0.0000, adversarial Blocked recall 0.9500,
-tampered Blocked recall 1.0000 and paired final verdict agreement 0.9833.
+This is development evidence, not a substitute for a new independent blind
+acceptance. QRGuard therefore discloses r07 as a controlled release and applies
+fail-closed runtime rules: inconclusive QR-image evidence requires Rescan, cannot
+invoke Deep Check as a bypass, and cannot expose a proceed action.
 
-Decision r05 recorded 0.9820 ROC-AUC, 0.9912 Blocked precision, 0.0194 Safe-tier
-false-negative rate and 0.9759 policy acceptance on the fixed 540-row holdout.
+Decision r05 remains unchanged. It recorded 0.9820 ROC-AUC, 0.9912 Blocked
+precision, 0.0194 Safe-tier false-negative rate and 0.9759 policy acceptance on
+the fixed 540-row holdout.
 
-## Rollback set
+## Verification
 
-- Gallery Structural RUN5.
-- Camera `structural-2026.02`.
-- Decision `decision-2026.02`.
-- Frozen Semantic remains `semantic-2026.02` in both sets.
+- Backend: 470 passed, 3 conditional skips.
+- Flutter analysis: no issues.
+- Flutter tests: 104 passed.
+- Android: signed `1.2.0+8012`, 73,462,225 bytes, SHA-256
+  `c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c`.
+- Local production-path health: unified r07 for Gallery and Camera.
 
-## Milestones
+## Rollback and evidence
 
-1. 361-session audit and zero-leakage manifest. **Completed.**
-2. Structural r01 real-data training and gates. **Completed.**
-3. Decision r05 calibration and all 36 cell gates. **Completed.**
-4. Full candidate and production-path stack gates. **Completed.**
-5. Local artifact promotion and production package smoke. **Completed.**
-6. GitHub push, Render build and remote smoke. **Completed.**
-7. Dataset, Colab, demo, release and local workspace organization.
-   **Completed and fast-forwarded to GitHub `main` in `7136c6a`.**
+- Immediate Structural rollback: `structural-2026.03-r01`, referenced by
+  `deployment/rollback/structural-before-r07-controlled-release/ROLLBACK.json`.
+- Frozen Semantic rollback boundary: `semantic-2026.02`.
+- Decision rollback: `decision-2026.02`.
+- r07 candidate evidence: `structural/performance/structural-r07-corrective-v1/`.
+- Controlled calibration evidence:
+  `../research_evidence/structural/performance/r07-corrective/`.
 
-## Supervisor QR demo
-
-The canonical pack is `ml_training/datasets/qr_codes_demo/` and contains 42
-cards: 30 Structural and 12 Semantic/payload cases. Expected outcomes matched
-42/42 Gallery and 42/42 Camera-request API checks both locally and against the
-deployed Render service. Physical phone `live_camera` scans and screenshots are
-manual evidence and remain `pending`; they are not represented as completed by
-the automated API checks.
-
-The public-repository organization is on
-`chore/project-organization-2026-08-31`, based on `880ce22`, and its initial
-commit `7136c6a` is now on GitHub `main`. The verified Render production package
-remains unchanged at `6f17d664`; no model or APK replacement was part of this
-organization pass.
-
-See `CURRENT_CHECKPOINT.md` for exact hashes and verification evidence.
+The canonical supervisor QR pack remains `datasets/qr_codes_demo/`. Physical
+phone results must continue to be reported separately from automated API checks.
+See `CURRENT_CHECKPOINT.md` and `deployment/model_registry.json` for the exact
+runtime, formal-gate and external-deployment boundaries.

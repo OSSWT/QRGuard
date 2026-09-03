@@ -1,0 +1,32 @@
+{
+  "overall": {
+    "n": 47,
+    "class_agreement": 1.0,
+    "verdict_agreement": 1.0,
+    "mean_absolute_probability_delta": 0.009633413715686828,
+    "p95_absolute_probability_delta": 0.05944179520010946
+  },
+  "per_class": {
+    "adversarial": {
+      "n": 15,
+      "class_agreement": 1.0,
+      "verdict_agreement": 1.0,
+      "mean_absolute_probability_delta": 0.02060641689070811,
+      "p95_absolute_probability_delta": 0.06856077248230574
+    },
+    "clean": {
+      "n": 16,
+      "class_agreement": 1.0,
+      "verdict_agreement": 1.0,
+      "mean_absolute_probability_delta": 0.007887657731771469,
+      "p95_absolute_probability_delta": 0.031031936407089233
+    },
+    "tampered": {
+      "n": 16,
+      "class_agreement": 1.0,
+      "verdict_agreement": 1.0,
+      "mean_absolute_probability_delta": 0.0010919792230197345,
+      "p95_absolute_probability_delta": 0.004251201215083711
+    }
+  }
+}

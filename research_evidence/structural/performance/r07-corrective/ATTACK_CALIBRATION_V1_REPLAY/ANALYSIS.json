@@ -1,0 +1,194 @@
+{
+  "advisories": [],
+  "attack_case_diagnostics_by_version_band": {
+    "high_v7_plus": {
+      "block_recall": 0.7777777777777778,
+      "blocked": 7,
+      "outcomes": {
+        "correct": 7,
+        "rescan": 2
+      },
+      "rescan_rate": 0.2222222222222222,
+      "rescans": 2,
+      "sessions": 9
+    },
+    "low_v1_v3": {
+      "block_recall": 1.0,
+      "blocked": 8,
+      "outcomes": {
+        "correct": 8
+      },
+      "rescan_rate": 0.0,
+      "rescans": 0,
+      "sessions": 8
+    },
+    "medium_v4_v6": {
+      "block_recall": 1.0,
+      "blocked": 8,
+      "outcomes": {
+        "correct": 8
+      },
+      "rescan_rate": 0.0,
+      "rescans": 0,
+      "sessions": 8
+    }
+  },
+  "campaign_id": "structural-attack-calibration-v1",
+  "candidate": {
+    "model_metadata_sha256": "ab855992e6f8c1bc6d085134699fac41929091219fc625c96882f5738cfb4579",
+    "model_sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
+    "runtime_policy": {
+      "below_floor_action": "inconclusive_rescan_never_safe",
+      "camera_definitive_manipulation_floor": 0.7,
+      "minimum_observed_module_pixels": 5.0,
+      "quality_gate_precedes_structural_inference": true,
+      "undecodable_image_action": "warning_rescan_never_safe"
+    },
+    "version": "structural-r07-corrective-v1"
+  },
+  "clean_layout_probability_span": 0.07560843229293823,
+  "development_gate_passed": true,
+  "evaluation": "structural_attack_calibration_development_replay",
+  "evidence_role": "development_only",
+  "functional_failures": [],
+  "functional_gate_passed": true,
+  "integrity_failures": [],
+  "integrity_gate_passed": true,
+  "next_action": "retain_candidate_and_build_new_blind_campaign",
+  "performance_by_class_version_band": {
+    "adversarial": {
+      "high_v7_plus": {
+        "attack_case_sessions": 9,
+        "block_recall": 0.8333333333333334,
+        "blocked": 5,
+        "case_outcomes": {
+          "correct": 7,
+          "rescan": 2
+        },
+        "case_verdicts": {
+          "blocked": 7,
+          "warning": 2
+        },
+        "group_outcomes": {
+          "correct": 5,
+          "rescan": 1
+        },
+        "independent_base_identities": 6,
+        "rescan_rate": 0.16666666666666666,
+        "rescans": 1
+      },
+      "low_v1_v3": {
+        "attack_case_sessions": 8,
+        "block_recall": 1.0,
+        "blocked": 5,
+        "case_outcomes": {
+          "correct": 8
+        },
+        "case_verdicts": {
+          "blocked": 8
+        },
+        "group_outcomes": {
+          "correct": 5
+        },
+        "independent_base_identities": 5,
+        "rescan_rate": 0.0,
+        "rescans": 0
+      },
+      "medium_v4_v6": {
+        "attack_case_sessions": 8,
+        "block_recall": 1.0,
+        "blocked": 5,
+        "case_outcomes": {
+          "correct": 8
+        },
+        "case_verdicts": {
+          "blocked": 8
+        },
+        "group_outcomes": {
+          "correct": 5
+        },
+        "independent_base_identities": 5,
+        "rescan_rate": 0.0,
+        "rescans": 0
+      }
+    },
+    "clean": {
+      "high_v7_plus": {
+        "attack_case_sessions": 8,
+        "case_outcomes": {
+          "correct": 8
+        },
+        "case_verdicts": {
+          "safe": 8
+        },
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "group_outcomes": {
+          "correct": 8
+        },
+        "independent_base_identities": 8,
+        "rescan_rate": 0.0,
+        "rescans": 0
+      },
+      "low_v1_v3": {
+        "attack_case_sessions": 8,
+        "case_outcomes": {
+          "correct": 8
+        },
+        "case_verdicts": {
+          "safe": 8
+        },
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "group_outcomes": {
+          "correct": 8
+        },
+        "independent_base_identities": 8,
+        "rescan_rate": 0.0,
+        "rescans": 0
+      },
+      "medium_v4_v6": {
+        "attack_case_sessions": 8,
+        "case_outcomes": {
+          "correct": 8
+        },
+        "case_verdicts": {
+          "safe": 8
+        },
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "group_outcomes": {
+          "correct": 8
+        },
+        "independent_base_identities": 8,
+        "rescan_rate": 0.0,
+        "rescans": 0
+      }
+    }
+  },
+  "production_mutation_performed": false,
+  "promotion_eligible": false,
+  "schema_version": 1,
+  "selection_contract": {
+    "adversarial_cases": "independent post-capture survivors only",
+    "candidate_scored_only_for_verified_survivors_in_recall_metrics": true,
+    "clean_cases": "all locked clean controls",
+    "excluded_non_surviving_attack_cases": 23,
+    "frame_selection": "production pixel quality and exposure diversity",
+    "functional_gate_unit": "independent base_identity",
+    "group_aggregation": "conservative: any false result is incorrect; otherwise any rescan is rescan; all remaining attack variants must block",
+    "maximum_geometry_ranked_frames": 3,
+    "planned_attack_cases": 48,
+    "verified_surviving_attack_cases": 25
+  },
+  "source": {
+    "filename": "SOURCE_CAPTURE.zip",
+    "raw_payload_stored": false,
+    "scored_frames_captured": 245,
+    "scored_sessions": 49,
+    "validated_frames": 360,
+    "validated_sessions": 72
+  },
+  "source_archive_sha256": "c0a7ff155d7bcfc34cdcb84913b22cea569a6f7ace19efe48587a82cfa88cd67",
+  "survival_report_sha256": "a708747c28abc594846d132c7554cf911d36880c971cb27bd652448fbbd234e3"
+}

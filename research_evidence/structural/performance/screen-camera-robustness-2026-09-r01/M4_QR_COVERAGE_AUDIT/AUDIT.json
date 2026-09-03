@@ -1,0 +1,329 @@
+{
+  "demo_branch_audit": {
+    "gate_passed": true,
+    "masked_branch_errors": 0,
+    "requests": 84
+  },
+  "gate_failures": [
+    "clean: version band low_v1_v3 has 0, requires 5",
+    "clean: version band medium_v4_v6 has 0, requires 5",
+    "clean: mask 0 has 0, requires 2",
+    "clean: mask 1 has 1, requires 2",
+    "clean: mask 5 has 0, requires 2",
+    "clean: mask 7 has 1, requires 2",
+    "clean: payload bin short_1_32 has 0, requires 5",
+    "clean: payload bin long_97_plus has 1, requires 5",
+    "adversarial: version band low_v1_v3 has 0, requires 5",
+    "adversarial: version band medium_v4_v6 has 0, requires 5",
+    "adversarial: mask 0 has 0, requires 2",
+    "adversarial: mask 1 has 0, requires 2",
+    "adversarial: mask 7 has 0, requires 2",
+    "adversarial: payload bin short_1_32 has 0, requires 5",
+    "adversarial: payload bin long_97_plus has 0, requires 5",
+    "tampered: version band low_v1_v3 has 0, requires 5",
+    "tampered: version band medium_v4_v6 has 0, requires 5",
+    "tampered: mask 0 has 0, requires 2",
+    "tampered: mask 1 has 0, requires 2",
+    "tampered: mask 5 has 1, requires 2",
+    "tampered: mask 7 has 1, requires 2",
+    "tampered: payload bin short_1_32 has 0, requires 5",
+    "tampered: payload bin long_97_plus has 0, requires 5",
+    "low-Version physical clean false-Blocked rate 0.6389 exceeds 0.0500",
+    "digital forced-mask probability span 0.5056 exceeds 0.1500",
+    "physical forced-mask probability span 0.3637 exceeds 0.1500"
+  ],
+  "gate_passed": false,
+  "interpretation": {
+    "consensus_limit": "temporal consensus cannot correct a systematic content/domain bias",
+    "not_payload_length_alone": "same-length layouts diverge and forced Version 4 also fails after physical screen capture",
+    "primary_root_cause": "exact-app holdout lacks low/medium QR Versions; the model also responds strongly to legal mask/layout changes"
+  },
+  "policy_id": "structural-coverage-2026.09-r01",
+  "promotion_blocked": true,
+  "runtime_exact_app_test_structure": {
+    "by_class": {
+      "adversarial": {
+        "independent_test_groups": 20,
+        "masks": {
+          "2": 5,
+          "3": 5,
+          "4": 3,
+          "5": 2,
+          "6": 5
+        },
+        "module_counts": {
+          "49": 20
+        },
+        "payload_length_bins": {
+          "medium_33_96": 20
+        },
+        "payload_utf8_bytes_max": 73,
+        "payload_utf8_bytes_min": 68,
+        "version_bands": {
+          "high_v7_plus": 20
+        },
+        "versions": {
+          "8": 20
+        }
+      },
+      "clean": {
+        "independent_test_groups": 20,
+        "masks": {
+          "1": 1,
+          "2": 8,
+          "3": 6,
+          "4": 2,
+          "6": 2,
+          "7": 1
+        },
+        "module_counts": {
+          "45": 1,
+          "49": 18,
+          "57": 1
+        },
+        "payload_length_bins": {
+          "long_97_plus": 1,
+          "medium_33_96": 19
+        },
+        "payload_utf8_bytes_max": 111,
+        "payload_utf8_bytes_min": 68,
+        "version_bands": {
+          "high_v7_plus": 20
+        },
+        "versions": {
+          "7": 1,
+          "8": 18,
+          "10": 1
+        }
+      },
+      "tampered": {
+        "independent_test_groups": 20,
+        "masks": {
+          "2": 5,
+          "3": 9,
+          "4": 2,
+          "5": 1,
+          "6": 2,
+          "7": 1
+        },
+        "module_counts": {
+          "49": 20
+        },
+        "payload_length_bins": {
+          "medium_33_96": 20
+        },
+        "payload_utf8_bytes_max": 73,
+        "payload_utf8_bytes_min": 68,
+        "version_bands": {
+          "high_v7_plus": 20
+        },
+        "versions": {
+          "8": 20
+        }
+      }
+    },
+    "capture_hash_verified_groups": 59,
+    "groups": 60
+  },
+  "schema_version": 1,
+  "sem11_digital_controls": {
+    "clean_false_blocks": 1,
+    "forced_mask_cases": 8,
+    "forced_mask_probability_span": 0.5056297779083252
+  },
+  "sem11_physical_screen_80": {
+    "by_case": [
+      {
+        "case_id": "RC-LAYOUT-4470",
+        "family": "same_length_payload_layout",
+        "frames": 15,
+        "mask_pattern": 4,
+        "module_count": 29,
+        "p_structural_max": 0.642175555229187,
+        "p_structural_median": 0.5114555358886719,
+        "p_structural_min": 0.3892807364463806,
+        "production_outcomes": {
+          "correct": 3
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-LAYOUT-4471",
+        "family": "same_length_payload_layout",
+        "frames": 15,
+        "mask_pattern": 4,
+        "module_count": 29,
+        "p_structural_max": 0.9800553917884827,
+        "p_structural_median": 0.9367738962173462,
+        "p_structural_min": 0.5970726013183594,
+        "production_outcomes": {
+          "false_block": 3
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-LAYOUT-4472",
+        "family": "same_length_payload_layout",
+        "frames": 15,
+        "mask_pattern": 2,
+        "module_count": 29,
+        "p_structural_max": 0.9758684039115906,
+        "p_structural_median": 0.7571056485176086,
+        "p_structural_min": 0.18245840072631836,
+        "production_outcomes": {
+          "false_block": 3
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-0",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 0,
+        "module_count": 29,
+        "p_structural_max": 0.8325792551040649,
+        "p_structural_median": 0.6820478439331055,
+        "p_structural_min": 0.10338568687438965,
+        "production_outcomes": {
+          "correct": 1,
+          "false_block": 2
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-1",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 1,
+        "module_count": 29,
+        "p_structural_max": 0.8993869423866272,
+        "p_structural_median": 0.7217551469802856,
+        "p_structural_min": 0.045517563819885254,
+        "production_outcomes": {
+          "false_block": 3
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-2",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 2,
+        "module_count": 29,
+        "p_structural_max": 0.7831129431724548,
+        "p_structural_median": 0.6747667789459229,
+        "p_structural_min": 0.17933619022369385,
+        "production_outcomes": {
+          "correct": 1,
+          "false_block": 2
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-3",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 3,
+        "module_count": 29,
+        "p_structural_max": 0.7754006385803223,
+        "p_structural_median": 0.5604468584060669,
+        "p_structural_min": 0.2408275604248047,
+        "production_outcomes": {
+          "correct": 2,
+          "false_block": 1
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-4",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 4,
+        "module_count": 29,
+        "p_structural_max": 0.9560490846633911,
+        "p_structural_median": 0.8494826555252075,
+        "p_structural_min": 0.5308374166488647,
+        "production_outcomes": {
+          "false_block": 3
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-5",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 5,
+        "module_count": 29,
+        "p_structural_max": 0.8202784061431885,
+        "p_structural_median": 0.6824805736541748,
+        "p_structural_min": 0.05353438854217529,
+        "production_outcomes": {
+          "rescan": 3
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-6",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 6,
+        "module_count": 29,
+        "p_structural_max": 0.8950141668319702,
+        "p_structural_median": 0.7987802028656006,
+        "p_structural_min": 0.21031248569488525,
+        "production_outcomes": {
+          "correct": 1,
+          "false_block": 2
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-MASK-7",
+        "family": "forced_mask",
+        "frames": 15,
+        "mask_pattern": 7,
+        "module_count": 29,
+        "p_structural_max": 0.687240481376648,
+        "p_structural_median": 0.4857565760612488,
+        "p_structural_min": 0.1444745659828186,
+        "production_outcomes": {
+          "correct": 2,
+          "false_block": 1
+        },
+        "qr_version": 3,
+        "sessions": 3
+      },
+      {
+        "case_id": "RC-VERSION-4",
+        "family": "forced_version",
+        "frames": 15,
+        "mask_pattern": 6,
+        "module_count": 33,
+        "p_structural_max": 0.9539047479629517,
+        "p_structural_median": 0.8588190674781799,
+        "p_structural_min": 0.48367083072662354,
+        "production_outcomes": {
+          "false_block": 3
+        },
+        "qr_version": 4,
+        "sessions": 3
+      }
+    ],
+    "campaign_id": "sem11-root-cause-screen-80-2026-09-r01",
+    "frames": 180,
+    "physical_forced_mask_probability_span": 0.36372607946395874,
+    "production_clean_false_block_rate": 0.6388888888888888,
+    "production_rescan_rate": 0.08333333333333333,
+    "sessions": 36
+  }
+}

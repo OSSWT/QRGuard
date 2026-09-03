@@ -1,0 +1,202 @@
+{
+  "display_name": "Structural topology-counterfactual recovery candidate",
+  "experiment_version": "structural-2026.09-r05",
+  "status": "development_topology_counterfactual_candidate_training_pending",
+  "seed": 42,
+  "classes": [
+    "clean",
+    "adversarial",
+    "tampered"
+  ],
+  "image_size": 224,
+  "architecture": "ResNet-18 initialised from the rejected r04 candidate checkpoint; r01 remains deployed; unified Gallery/Camera artifact",
+  "semantic_policy": "freeze_semantic-2026.02_regression_only",
+  "split": {
+    "group_keys": [
+      "source_dataset",
+      "capture_session",
+      "paired_group",
+      "physical_qr",
+      "payload_hash",
+      "base_identity",
+      "device_model",
+      "display_id"
+    ],
+    "derive_after_split": true,
+    "parent_identity_locked": true,
+    "device_display_session_holdout_required": true
+  },
+  "topology_counterfactuals": {
+    "enabled": true,
+    "campaign_id": "procedural-topology-counterfactual-2026-09-r01",
+    "evidence_role": "development_train_and_validation_only",
+    "deployment_holdout_eligible": false,
+    "versions": [
+      {"version": 3, "payload_utf8_bytes": 24},
+      {"version": 5, "payload_utf8_bytes": 40},
+      {"version": 7, "payload_utf8_bytes": 64},
+      {"version": 10, "payload_utf8_bytes": 112},
+      {"version": 12, "payload_utf8_bytes": 132},
+      {"version": 14, "payload_utf8_bytes": 180},
+      {"version": 16, "payload_utf8_bytes": 220},
+      {"version": 20, "payload_utf8_bytes": 300}
+    ],
+    "mask_patterns": [0, 1, 2, 3, 4, 5, 6, 7],
+    "error_corrections": ["L", "M", "Q", "H"],
+    "identities_per_error_correction": 2,
+    "split_contract": "one independent payload per Version/error-correction in train and one in validation; all masks remain grouped by payload",
+    "conditions": ["normal", "screen_moire_or_compression"],
+    "expected_rows": 1024,
+    "expected_groups": 64,
+    "purpose": "break the legal QR Version/payload/mask-topology shortcut exposed by the non-promoting r04 development replay"
+  },
+  "m5_coverage_development": {
+    "campaign_id": "structural-coverage-development-2026-09-r01",
+    "archive_sha256": "f3267b92176414473f0e936059f0a4b45ff9164ad5be8b702041d63c7aaa0bfa",
+    "manifest": "data/structural_coverage_development/2026-09-r01/manifest.csv",
+    "frames": 240,
+    "sessions": 48,
+    "base_identities": 16,
+    "deployment_holdout_eligible": false,
+    "versions": [3, 5, 10],
+    "masks": [0, 1, 2, 3, 4, 5, 6, 7],
+    "payload_utf8_bytes": [24, 40, 112]
+  },
+  "physical_attack_development": {
+    "campaign_id": "structural-physical-attack-development-2026-09-r02",
+    "archive_sha256": "a69f83022e8af591e9d09f31cdbedb924ad41cf5e9d951feac24ef6577775d58",
+    "manifest": "data/structural_physical_attack_development/2026-09-r02/manifest.csv",
+    "manifest_sha256": "ed8bc9f8aebb81deee3554f3b60bb3d0f3442135f2bfaa1a3f52c74a7b9ab81f",
+    "observed_frames": 240,
+    "observed_clean_sessions": 16,
+    "observed_attack_sessions": 32,
+    "verified_surviving_attack_sessions": 10,
+    "quarantined_non_surviving_attack_sessions": 22,
+    "admitted_frames": 130,
+    "admitted_clean_frames": 80,
+    "admitted_adversarial_frames": 50,
+    "deployment_holdout_eligible": false,
+    "admission_rule": "clean sessions plus attacks with physical_attack_survival_verified=true only"
+  },
+  "acquisition_quality_development": {
+    "campaign_id": "acquisition-quality-exposure-module-scale-2026-09-r02",
+    "archive_sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4",
+    "manifest": "data/acquisition_quality_development/2026-09-r02/manifest.csv",
+    "manifest_sha256": "3d757bcca135352583b55cd70a012158c6ce0061fbcc3c69391e770d8832074b",
+    "observed_frames": 120,
+    "admitted_clean_frames": 90,
+    "admitted_sessions": 18,
+    "deployment_holdout_eligible": false,
+    "admission_rule": "all validated clean frames only; attacks excluded; train-only hard negatives",
+    "future_evaluation_use": "prohibited after r03 diagnosis"
+  },
+  "consumed_development_replay": {
+    "archive_sha256": "d5930ffcaf1edc0702afd5ff2b2241584a95edd9f9f0de81fdc8a5a5a7921f6d",
+    "evidence_role": "development_replay",
+    "promotion_eligible": false,
+    "r04_clean_high_version_result": "3 false blocks and 1 rescan among 6 Version-12 clean identities",
+    "admission_to_r05_training": "prohibited; used only to define the procedural counterfactual coverage contract"
+  },
+  "candidate_manifest": {
+    "path": "ml_training/datasets/structural/processed/structural-2026.09-r05/manifest.csv",
+    "rows": 12614,
+    "sha256": "d079321d615db5d3faa3d95a643ed8348fed52647d13406cc3a55b81b67d61c6"
+  },
+  "dataset_references": {
+    "processed_version": "structural-2026.09-r05",
+    "prepared_gallery_version": "structural-2026.03-r01",
+    "physical_attack_development_version": "2026-09-r02",
+    "acquisition_quality_development_version": "2026-09-r02"
+  },
+  "training": {
+    "batch_size": 32,
+    "head_epochs": 0,
+    "finetune_epochs": 5,
+    "head_learning_rate": 0.0002,
+    "finetune_learning_rate": 0.00003,
+    "initial_checkpoint": "ml_training/structural/runs/structural-2026.09-r04/colab-r04-hard-negative-v1/checkpoints/best_model.pt",
+    "initial_checkpoint_sha256": "9496b466d6f1642e397dd5fcda26f2aec6347ba7183b9a48e2ebb411bc575fe1",
+    "minimum_runtime_capture_draw_fraction": 0.4,
+    "sampling": {
+      "strategy": "class_source_family_balanced_with_exposure_and_topology_priority",
+      "source_family_draw_fractions": {
+        "clean": {
+          "procedural": 0.4,
+          "camera": 0.4,
+          "gallery": 0.15,
+          "public_clean": 0.05
+        },
+        "adversarial": {
+          "procedural": 0.4,
+          "camera": 0.4,
+          "gallery": 0.2
+        },
+        "tampered": {
+          "procedural": 0.4,
+          "camera": 0.4,
+          "gallery": 0.2
+        }
+      },
+      "source_multipliers": {
+        "qrguard_acquisition_quality_2026_09_camera": 2.0,
+        "procedural_qrguard_topology_counterfactual": 2.0
+      }
+    },
+    "calibration": {
+      "method": "scalar_temperature_weighted_nll",
+      "source_family_weighted": true
+    },
+    "exposure_invariance": {
+      "enabled": true,
+      "consistency_loss": "symmetric_kl",
+      "consistency_weight": 0.5,
+      "partner_key": ["paired_group", "class_id"],
+      "partner_scope": "exposure variants plus grouped standards-valid mask counterfactuals",
+      "ev_range": [-1.0, 1.0],
+      "contrast_range": [0.7, 1.3],
+      "gamma_range": [0.7, 1.4],
+      "evaluation_ev": [-0.67, 0.0, 0.67],
+      "severe_or_unusable_samples_are_excluded": true
+    },
+    "checkpoint_selection_weights": {
+      "global_macro_f1": 0.3,
+      "deployment_domain_macro_f1": 0.3,
+      "non_test_paired_verdict_agreement": 0.2,
+      "exposure_verdict_agreement": 0.2
+    },
+    "checkpoint_selection_penalties": {
+      "camera_clean_false_positive_rate": {"maximum": 0.05, "weight": 4.0},
+      "clean_exposure_probability_span_p95": {"maximum": 0.15, "weight": 1.5},
+      "topology_counterfactual_clean_false_positive_rate": {"maximum": 0.01, "weight": 4.0},
+      "topology_counterfactual_probability_span_p95": {"maximum": 0.15, "weight": 1.5}
+    },
+    "checkpoint_every_epoch": true,
+    "copy_to_runtime_automatically": false
+  },
+  "deployment_gates": {
+    "coverage_gate_config": "ml_training/configs/structural-coverage-gates-2026.09-r01.json",
+    "real_clean_false_positive_rate_max": 0.05,
+    "real_tampered_recall_min": 0.85,
+    "real_adversarial_recall_min": 0.8,
+    "binary_ece_max": 0.05,
+    "paired_gallery_camera_verdict_agreement_min": 0.95,
+    "exposure_verdict_agreement_min": 0.95,
+    "clean_exposure_probability_span_p95_max": 0.15,
+    "topology_counterfactual_clean_false_positive_rate_max": 0.01,
+    "topology_counterfactual_probability_span_p95_max": 0.15,
+    "sem05_style_masked_branch_errors_max": 0,
+    "fresh_blind_holdout_required": true,
+    "fresh_device_display_session_holdout_required": true
+  },
+  "runtime_policy": {
+    "camera_definitive_manipulation_floor": 0.7,
+    "below_floor_action": "inconclusive_rescan_never_safe",
+    "quality_gate_precedes_structural_inference": true,
+    "minimum_observed_module_pixels": 5.0
+  },
+  "promotion": {
+    "copy_to_runtime_automatically": false,
+    "push_automatically": false,
+    "deploy_automatically": false
+  }
+}

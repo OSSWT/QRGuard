@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "campaign_id": "acquisition-quality-exposure-module-scale-2026-09-r02",
+  "frames_per_session": 5,
+  "repeats_per_distance": 1,
+  "distances": [
+    {
+      "id": "screen-80-brightness-50",
+      "label": "80% / B50",
+      "instruction": "Viewer zoom 80%; display brightness about 50%. Do not print.",
+      "metadata": {
+        "capture_medium": "screen",
+        "screen_scale_percent": 80,
+        "display_brightness_percent": 50,
+        "exposure_role": "baseline"
+      }
+    },
+    {
+      "id": "screen-100-brightness-100",
+      "label": "100% / B100",
+      "instruction": "Viewer zoom exactly 100%; display brightness 100%. Do not exceed 100%.",
+      "metadata": {
+        "capture_medium": "screen",
+        "screen_scale_percent": 100,
+        "display_brightness_percent": 100,
+        "exposure_role": "overexposure_stress"
+      }
+    },
+    {
+      "id": "screen-100-brightness-30",
+      "label": "100% / B30",
+      "instruction": "Viewer zoom exactly 100%; display brightness about 30%. Do not print.",
+      "metadata": {
+        "capture_medium": "screen",
+        "screen_scale_percent": 100,
+        "display_brightness_percent": 30,
+        "exposure_role": "underexposure_stress"
+      }
+    }
+  ],
+  "privacy": {
+    "raw_payload_stored": false,
+    "payload_identifier": "sha256 of on-device decoded text"
+  },
+  "cases": [
+    {
+      "case_id": "SEM-05-USERINFO",
+      "label": "SEM-05-USERINFO - V6",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "9f501ab35195109d222498a301ebfc10f17922283ce8f9207075883ee8aaa907",
+      "instruction": "Display only cards/SEM-05-USERINFO.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 41,
+        "qr_version": 6,
+        "payload_utf8_bytes": 45,
+        "source_case_id": "SEM-05-USERINFO",
+        "source_pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+        "source_image_sha256": "d349dd7637935c25d6c822e3462b66d42f3e532c4b8026da28cc83e720e23ca8",
+        "intended_app_verdict": "BLOCKED",
+        "semantic_regression_sentinel": true,
+        "sem11_regression_sentinel": false,
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    },
+    {
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "label": "SEM-11-PLAIN-TEXT - V3",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/SEM-11-PLAIN-TEXT.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 29,
+        "qr_version": 3,
+        "payload_utf8_bytes": 23,
+        "source_case_id": "SEM-11-PLAIN-TEXT",
+        "source_pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+        "source_image_sha256": "77c08242bc486c603a995108b1b7f2ac945f5b8acd01a3398abff030f568415e",
+        "intended_app_verdict": "SAFE",
+        "semantic_regression_sentinel": false,
+        "sem11_regression_sentinel": true,
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    },
+    {
+      "case_id": "STR-CLN-OVEREXP",
+      "label": "STR-CLN-OVEREXP - V8",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "93b70111aa7bbcddef5f354fca04150b0099fec396256e7846fa1e3e149f10ba",
+      "instruction": "Display only cards/STR-CLN-OVEREXP.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 49,
+        "qr_version": 8,
+        "payload_utf8_bytes": 72,
+        "source_case_id": "STR-CLN-OVEREXP",
+        "source_pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+        "source_image_sha256": "edfdd77e67b83af6a5514ae8894566d54206418511ad9f23cd20f4a649f1aa67",
+        "intended_app_verdict": "SAFE",
+        "semantic_regression_sentinel": false,
+        "sem11_regression_sentinel": false,
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    },
+    {
+      "case_id": "STR-CLN-UNDEREXP",
+      "label": "STR-CLN-UNDEREXP - V8",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "2a20e566d4c519deb3c7274ca7e999354fc1ee864fb7b55712d034c7164c96ff",
+      "instruction": "Display only cards/STR-CLN-UNDEREXP.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 49,
+        "qr_version": 8,
+        "payload_utf8_bytes": 73,
+        "source_case_id": "STR-CLN-UNDEREXP",
+        "source_pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+        "source_image_sha256": "682688c769618b1f4376448be2dd6d813c981a5ce3a2a718fe16532f787e0979",
+        "intended_app_verdict": "SAFE",
+        "semantic_regression_sentinel": false,
+        "sem11_regression_sentinel": false,
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "label": "STR-ADV-NORMAL - V8",
+      "ground_truth": "adversarial",
+      "expected_payload_sha256": "802a272718df6ab5b00a465af65a8233b51c513397108f8025bd965c0559b4fc",
+      "instruction": "Display only cards/STR-ADV-NORMAL.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 49,
+        "qr_version": 8,
+        "payload_utf8_bytes": 71,
+        "source_case_id": "STR-ADV-NORMAL",
+        "source_pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+        "source_image_sha256": "36ea0ca4243b7558d6ba30b79b4ee79af14bc5bffcb73bef72346a05b96409d4",
+        "intended_app_verdict": "BLOCKED",
+        "semantic_regression_sentinel": false,
+        "sem11_regression_sentinel": false,
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    },
+    {
+      "case_id": "STR-TMP-NORMAL",
+      "label": "STR-TMP-NORMAL - V8",
+      "ground_truth": "tampered",
+      "expected_payload_sha256": "7a2ad17a52e34ee4d9e5c7f494e9dbdb328d7bb42a4d6b11b1142cd913586513",
+      "instruction": "Display only cards/STR-TMP-NORMAL.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 49,
+        "qr_version": 8,
+        "payload_utf8_bytes": 71,
+        "source_case_id": "STR-TMP-NORMAL",
+        "source_pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+        "source_image_sha256": "084b9a03305622c311e3587d0a5cd386400de6ee9e605c6889fcbd78db365c33",
+        "intended_app_verdict": "BLOCKED",
+        "semantic_regression_sentinel": false,
+        "sem11_regression_sentinel": false,
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    },
+    {
+      "case_id": "ACQ-CLN-V10-LONG",
+      "label": "ACQ-CLN-V10-LONG - clean V10",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "c474223995ede2191ccdfb83768de47ee8497c9ae3f9d75197f8f78ded36b66a",
+      "instruction": "Display only cards/ACQ-CLN-V10-LONG.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 57,
+        "qr_version": 10,
+        "payload_utf8_bytes": 112,
+        "payload_length_bin": "long_97_plus",
+        "generated_for": "module_scale_and_long_payload_control",
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    },
+    {
+      "case_id": "ACQ-CLN-V14-LONG",
+      "label": "ACQ-CLN-V14-LONG - clean V14",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "065078be0f1e7120cdbb3d94ad9bb59702aa64fd655f8b10e2e16e6024b5b73e",
+      "instruction": "Display only cards/ACQ-CLN-V14-LONG.png under the selected screen condition.",
+      "metadata": {
+        "module_count": 73,
+        "qr_version": 14,
+        "payload_utf8_bytes": 180,
+        "payload_length_bin": "long_97_plus",
+        "generated_for": "module_scale_and_long_payload_control",
+        "development_only": true,
+        "deployment_holdout_eligible": false,
+        "case_identity_source": "operator_selection_plus_payload_hash"
+      }
+    }
+  ]
+}

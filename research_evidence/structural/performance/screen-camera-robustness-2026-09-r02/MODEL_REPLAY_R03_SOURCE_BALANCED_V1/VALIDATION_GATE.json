@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "audit": "qrguard_acquisition_model_replay_gate",
+  "source": {
+    "archive_sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4",
+    "model_version": "structural-2026.09-r03",
+    "model_artifact_sha256": "529107fb215f6ff08f9ca269084020f7efc80606996b7c29a10126cc954ddb1e",
+    "frames": 120,
+    "sessions": 24
+  },
+  "acquisition": {
+    "gate_passed": true,
+    "minimum_observed_pixels_per_module": 6.945205479452055,
+    "quality_statuses": {
+      "marginal": 8,
+      "usable": 112
+    }
+  },
+  "structural": {
+    "clean_frames": 90,
+    "clean_false_positive_frames": 29,
+    "clean_false_positive_rate": 0.322222,
+    "definitive_clean_false_positive_frames_at_camera_floor": 29,
+    "definitive_clean_false_positive_rate_at_camera_floor": 0.322222,
+    "attack_frames": 30,
+    "attack_detected_frames": 30,
+    "attack_recall": 1.0,
+    "definitive_attack_recall_at_camera_floor": 1.0,
+    "classes": {
+      "adversarial": {
+        "frames": 15,
+        "structural_recall": 1.0,
+        "definitive_recall_at_camera_floor": 1.0,
+        "final_safe_escapes": 0
+      },
+      "tampered": {
+        "frames": 15,
+        "structural_recall": 1.0,
+        "definitive_recall_at_camera_floor": 1.0,
+        "final_safe_escapes": 0
+      }
+    }
+  },
+  "final_verdict": {
+    "frame_intended_matches": 85,
+    "frame_intended_accuracy": 0.708333,
+    "session_majority_intended_matches": 16,
+    "session_majority_intended_accuracy": 0.666667
+  },
+  "exposure": {
+    "agreeing_cases": 6,
+    "case_count": 8,
+    "verdict_agreement_rate": 0.75,
+    "correct_under_all_conditions_cases": 4,
+    "correct_under_all_conditions_rate": 0.5,
+    "clean_median_p_structural_spans": [
+      0.004919946193695068,
+      0.005984663963317871,
+      0.18067651987075806,
+      0.8040197491645813,
+      0.07167398929595947,
+      0.028535842895507812
+    ],
+    "clean_median_p_structural_span_p95": 0.6481839418411255
+  },
+  "sentinels": {
+    "sem11": {
+      "frames": 15,
+      "false_blocked_frames": 4,
+      "false_blocked_sessions": 1,
+      "sessions": 3
+    },
+    "sem05": {
+      "frames": 15,
+      "payload_hash_matched_frames": 9,
+      "semantic_misses_on_payload_matched_frames": 0,
+      "masked_structural_branch_errors": 1,
+      "intended_blocked_frames": 9,
+      "intended_blocked_sessions": 2,
+      "sessions": 3
+    }
+  },
+  "cases": [
+    {
+      "case_id": "ACQ-CLN-V10-LONG",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.004919946193695068
+    },
+    {
+      "case_id": "ACQ-CLN-V14-LONG",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.005984663963317871
+    },
+    {
+      "case_id": "SEM-05-USERINFO",
+      "ground_truth": "clean",
+      "intended_app_verdict": "blocked",
+      "session_majority_verdicts": {
+        "blocked": 2,
+        "safe": 1
+      },
+      "exposure_verdict_agreement": false,
+      "correct_under_all_exposure_conditions": false,
+      "median_p_structural_span": 0.18067651987075806
+    },
+    {
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "blocked": 1,
+        "safe": 2
+      },
+      "exposure_verdict_agreement": false,
+      "correct_under_all_exposure_conditions": false,
+      "median_p_structural_span": 0.8040197491645813
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "ground_truth": "adversarial",
+      "intended_app_verdict": "blocked",
+      "session_majority_verdicts": {
+        "blocked": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "median_p_structural_span": 0.00013130903244018555
+    },
+    {
+      "case_id": "STR-CLN-OVEREXP",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "blocked": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": false,
+      "median_p_structural_span": 0.07167398929595947
+    },
+    {
+      "case_id": "STR-CLN-UNDEREXP",
+      "ground_truth": "clean",
+      "intended_app_verdict": "safe",
+      "session_majority_verdicts": {
+        "blocked": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": false,
+      "median_p_structural_span": 0.028535842895507812
+    },
+    {
+      "case_id": "STR-TMP-NORMAL",
+      "ground_truth": "tampered",
+      "intended_app_verdict": "blocked",
+      "session_majority_verdicts": {
+        "blocked": 3
+      },
+      "exposure_verdict_agreement": true,
+      "correct_under_all_exposure_conditions": true,
+      "median_p_structural_span": 1.996755599975586e-05
+    }
+  ],
+  "gates": {
+    "acquisition_gate": true,
+    "archive_identity_matches": true,
+    "real_clean_false_positive_rate": false,
+    "real_adversarial_recall": true,
+    "real_tampered_recall": true,
+    "exposure_verdict_agreement": false,
+    "clean_exposure_probability_span_p95": false,
+    "sem05_style_masked_branch_errors": false
+  },
+  "failed_gates": [
+    "real_clean_false_positive_rate",
+    "exposure_verdict_agreement",
+    "clean_exposure_probability_span_p95",
+    "sem05_style_masked_branch_errors"
+  ],
+  "model_replay_gate_passed": false,
+  "promotion_eligible": false,
+  "non_promotion_reasons": [
+    "structural-2026.09-r03 fails development model replay gates",
+    "this acquisition campaign is development evidence and cannot promote a model",
+    "a fresh device/display/session blind holdout remains mandatory"
+  ]
+}

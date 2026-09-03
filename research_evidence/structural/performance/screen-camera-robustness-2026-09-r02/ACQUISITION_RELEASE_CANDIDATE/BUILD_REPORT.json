@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "report_date": "2026-09-02",
+  "release_candidate": "qrguard-camera-acquisition-2026-09-r02",
+  "source_commit_before_working_tree_changes": "8deefe5a23cd30f225f9c6ebff575241c800c195",
+  "working_tree_state": "dirty_expected_milestone_changes_preserved",
+  "deployed_structural_model": "structural-2026.03-r01",
+  "candidate_training_version": "structural-2026.09-r02",
+  "candidate_training_status": "11500_row_v2_completed_evaluated_rejected_not_promoted",
+  "implemented_controls": [
+    "qr_centred_camerax_af_ae_awb_metering",
+    "one_bounded_exposure_adjustment_per_stable_qr_sequence",
+    "discard_all_pre_adjustment_frames",
+    "five_temporally_distinct_candidate_frames",
+    "pixel_quality_ranking_and_exactly_three_backend_consensus_crops",
+    "unusable_capture_rescan_never_safe",
+    "qr_version_aware_minimum_5_pixels_per_module",
+    "256_pixel_conservative_fallback_when_module_grid_is_unknown",
+    "diagnostic_zip_quality_exposure_and_module_scale_telemetry",
+    "physical_attack_survival_filter_before_training_admission",
+    "exposure_consistency_training_and_evaluation_contract"
+  ],
+  "artifacts": {
+    "normal_debug_apk": {
+      "path": "C:/Users/OSSW/Desktop/QRGuard/90_Rebuildable_Caches/QRGuard_CaptureQuality_Exposure_ModuleScale_1.1.4+8011_2026-09-02_r02-final.apk",
+      "bytes": 189505154,
+      "sha256": "4c98073dd46a546c83bdf4811b025824e3f7a99c451d506f0b7de4b57cb2215f"
+    },
+    "diagnostic_debug_apk": {
+      "path": "C:/Users/OSSW/Desktop/QRGuard/90_Rebuildable_Caches/QRGuard_Diagnostic_Acquisition_Validation_1.1.4+8011_2026-09-r02.apk",
+      "bytes": 189506206,
+      "sha256": "6f4ff4ea70ed5c425985f78facdf6f71d9132b2252c0c6c8d0eaa0ce46698210"
+    },
+    "screen_only_validation_pack": {
+      "path": "C:/Users/OSSW/Desktop/QRGuard/90_Rebuildable_Caches/Acquisition_Validation_2026-09-r02.zip",
+      "bytes": 1541643,
+      "sha256": "f184662f28f184295e43852b99f7817de42aa14db6c9e7ca5c22a24d7d0aa086",
+      "capture_plan_sha256": "4cc5358325fdfda061ca34571e3d8f94beaeac9da7114da6b042364861fe34ea",
+      "cases": 8,
+      "conditions": 3,
+      "sessions": 24,
+      "frames": 120,
+      "printing_required": false,
+      "maximum_viewer_scale_percent": 100
+    },
+    "colab_training_bundle": {
+      "path": "C:/Users/OSSW/Desktop/QRGuard/01_Main_Repository/dist/QRGuard_ML_Colab.zip",
+      "bytes": 131682070,
+      "sha256": "aad08e41d7fd0376246ca3fc02a781639ea7b7ccb77384d6d296917ba976676e",
+      "deterministic_rebuild_verified": true
+    }
+  },
+  "training_evidence": {
+    "candidate_manifest_rows": 11500,
+    "candidate_manifest_sha256": "d4aab55564f269a07094a47f6d51c036c39beb4f72e4220490b53615aac54ebb",
+    "physical_development_admitted_frames": 130,
+    "physical_clean_frames": 80,
+    "verified_surviving_physical_attack_frames": 50,
+    "quarantined_non_surviving_attack_frames": 110,
+    "group_split_leakage_detected": false
+  },
+  "verification": {
+    "flutter_analyze": "passed_no_issues",
+    "flutter_full_tests": {
+      "passed": 100,
+      "failed": 0
+    },
+    "flutter_final_diagnostic_plan_tests": {
+      "passed": 6,
+      "failed": 0
+    },
+    "backend_full_tests_after_full_manifest_contract_fix": {
+      "passed": 423,
+      "skipped": 1,
+      "failed": 0,
+      "warnings": 9,
+      "elapsed_seconds": 73.89
+    },
+    "full_manifest_colab_contract_tests": {
+      "passed": 19,
+      "failed": 0
+    },
+    "manifest_fresh_cache_order_regression_tests": {
+      "passed": 12,
+      "failed": 0
+    },
+    "colab_package_contract_tests": {
+      "passed": 7,
+      "failed": 0
+    },
+    "final_phase3_and_replay_targeted_suite": {
+      "passed": 20,
+      "failed": 0
+    },
+    "ruff": "passed",
+    "git_diff_check": "passed_with_line_ending_notices_only",
+    "normal_apk_build": "passed",
+    "diagnostic_apk_build": "passed"
+  },
+  "known_non_blocking_warning": "vendored mobile_scanner still applies the Kotlin Gradle Plugin and must migrate before a future Flutter release removes that compatibility path",
+  "physical_validation": {
+    "status": "acquisition_passed_locked_r01_model_replay_failed",
+    "handoff": "CAPTURE_HANDOFF_ZH.md",
+    "acquisition_auditor": "scripts/audit_acquisition_validation.py",
+    "model_replay": "scripts/analyze_live_camera_diagnostic.py",
+    "branch_aware_gate": "scripts/evaluate_acquisition_model_replay.py",
+    "archive_sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4",
+    "acquisition_gate_passed": true,
+    "model_replay_gate_passed": false,
+    "clean_structural_false_positive_rate": 0.211111,
+    "attack_structural_recall": 1.0,
+    "exposure_verdict_agreement": 0.75,
+    "clean_exposure_probability_span_p95": 0.768569,
+    "sem11_false_blocked_sessions": "3/3",
+    "sem05_intended_blocked_sessions": "2/3",
+    "sem05_payload_matched_semantic_misses": 0,
+    "sem05_masked_structural_branch_errors": 1
+  },
+  "colab_r02_attempt_11261": {
+    "status": "completed_audited_candidate_rejected_input_incomplete",
+    "run_id": "r02",
+    "manifest_rows": 11261,
+    "manifest_sha256": "3a67b27bb96ebae35163158d71d626700d4242dcd4ab19dda2aa1f12fe3eff0d",
+    "missing_source": "qrguard_prepared_gallery_reference",
+    "missing_rows": 239,
+    "artifact_sha256": "aa6028acd6a23e505ac18a025ac800437847d0973d2d8ab94688d1d0dcf48eec",
+    "colab_deployment_gates_passed": false,
+    "development_replay": {
+      "sem11_false_blocked_frames": "0/15",
+      "sem11_false_blocked_sessions": "0/3",
+      "clean_structural_false_positive_rate": 0.188889,
+      "attack_structural_recall": 1.0,
+      "exposure_verdict_agreement": 0.625,
+      "clean_exposure_probability_span_p95": 0.546513,
+      "sem05_masked_structural_branch_errors": 2
+    },
+    "preserved_for_research_evidence": true,
+    "promotion_eligible": false
+  },
+  "full_manifest_rerun": {
+    "run_id": "r02-full-11500-v2",
+    "status": "completed_evaluated_candidate_rejected_not_promoted",
+    "locked_manifest_rows": 11500,
+    "locked_manifest_sha256": "d4aab55564f269a07094a47f6d51c036c39beb4f72e4220490b53615aac54ebb",
+    "config_sha256": "9b28e46453147984cc4b46ae0a5c9fe754d6f31d10d6df708fb685be8b312376",
+    "best_checkpoint_sha256": "48f63fa981b5d7645bca25c352e47d90a2b01aabbb61025acfc929c2b3fd870e",
+    "artifact_sha256": "0f24cc8aaa7a36e3157d0b5ff6eb2d38c673316c779c04b22954f591e4ef2a03",
+    "epochs_completed": 7,
+    "best_epoch": 6,
+    "manifest_identity_gate_before_training": true,
+    "drive_local_files_sha256_matched": "31/31",
+    "colab_deployment_gates_passed": false,
+    "colab_gate_failures": [
+      "synthetic grouped macro-F1 0.8213 < 0.8500",
+      "synthetic test ECE 0.0781 > 0.0500",
+      "fresh blinded Structural coverage holdout is missing or does not match this candidate model"
+    ],
+    "colab_metrics": {
+      "synthetic_macro_f1": 0.821316,
+      "synthetic_ece": 0.078072,
+      "qrdn_clean_false_positive_rate": 0.0,
+      "exact_app_camera_clean_false_positive_rate": 0.0,
+      "paired_gallery_camera_verdict_agreement": 0.966667,
+      "exposure_verdict_agreement": 0.989362,
+      "clean_exposure_probability_span_p95": 0.064915
+    },
+    "development_replay": {
+      "model_replay_gate_passed": false,
+      "clean_structural_false_positive_rate": 0.111111,
+      "attack_structural_recall": 1.0,
+      "exposure_verdict_agreement": 0.625,
+      "clean_exposure_probability_span_p95": 0.65492,
+      "sem11_false_blocked_frames": "0/15",
+      "sem11_false_blocked_sessions": "0/3",
+      "sem05_masked_structural_branch_errors": 1
+    }
+  },
+  "promotion": {
+    "approved": false,
+    "production_mutation_performed": false,
+    "automatic_copy_push_or_deploy": false,
+    "remaining_requirements": [
+      "improve_grouped_clean_tampered_separation_and_calibration",
+      "pass_the_locked_development_camera_replay_gates",
+      "pass_all_r02_deployment_gates",
+      "pass_a_fresh_device_display_session_blind_holdout"
+    ]
+  }
+}

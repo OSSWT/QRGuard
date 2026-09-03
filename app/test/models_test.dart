@@ -99,6 +99,8 @@ void main() {
         'structural_status': 'completed',
         'structural_quality_status': 'marginal',
         'structural_quality_conditions': ['motion_blur'],
+        'structural_module_count': 73,
+        'structural_min_module_pixels': 5.42,
         'image_source': 'camera',
         // Extra fields from an older server are safely ignored.
         'camera_structural_uncertain': true,
@@ -111,6 +113,8 @@ void main() {
       expect(branch.structuralStatus, AnalysisStatus.completed);
       expect(branch.structuralQualityStatus, 'marginal');
       expect(branch.structuralQualityConditions, ['motion_blur']);
+      expect(branch.structuralModuleCount, 73);
+      expect(branch.structuralMinModulePixels, closeTo(5.42, 0.001));
     });
 
     test('distinguishes not-applicable from an unavailable branch', () {

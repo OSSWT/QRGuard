@@ -1,27 +1,19 @@
 {
-  "validated_at": "2026-08-30T18:46:35.483102+00:00",
+  "validated_at": "2026-09-02T20:56:48.542305+00:00",
   "all_reports_complete": true,
-  "all_deployment_approved": true,
+  "all_deployment_approved": false,
   "results": [
     {
       "branch": "structural",
-      "version": "structural-2026.03-r01",
-      "performance_directory": "ml_training/structural/performance/structural-2026.03-r01",
+      "version": "structural-r07-corrective-v1",
+      "performance_directory": "ml_training/structural/performance/structural-r07-corrective-v1",
       "report_complete": true,
       "missing_or_empty": [],
       "metrics_parse_error": null,
-      "deployment_approved": true,
-      "deployment_gate_failures": []
-    },
-    {
-      "branch": "semantic",
-      "version": "semantic-2026.02",
-      "performance_directory": "ml_training/semantic/performance/semantic-2026.02",
-      "report_complete": true,
-      "missing_or_empty": [],
-      "metrics_parse_error": null,
-      "deployment_approved": true,
-      "deployment_gate_failures": []
+      "deployment_approved": false,
+      "deployment_gate_failures": [
+        "fresh blinded Structural coverage holdout is missing or does not match this candidate model"
+      ]
     }
   ]
 }

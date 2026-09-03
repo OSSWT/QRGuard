@@ -107,6 +107,25 @@ void main() {
     );
   });
 
+  test('quality-ranked preparation rejects flat exposure evidence', () {
+    final flat = img.Image(width: 420, height: 420);
+    img.fill(flat, color: img.ColorRgb8(190, 190, 190));
+    final encoded = Uint8List.fromList(img.encodePng(flat));
+    final crops = prepareQualityRankedCropsInBackground([
+      for (var index = 0; index < 5; index++)
+        CropRequest(
+          frame: encoded,
+          cornerCoordinates: const [70, 70, 350, 70, 350, 350, 70, 350],
+          frameWidth: 420,
+          frameHeight: 420,
+          normalizeCameraColor: true,
+          minimumOutputSide: 256,
+        ),
+    ]);
+
+    expect(crops, isEmpty);
+  });
+
   testWidgets('camera scan without valid image asks for a rescan', (
     tester,
   ) async {
@@ -151,6 +170,20 @@ void main() {
     final api = _RecordingApi();
     final frame = img.Image(width: 420, height: 420);
     img.fill(frame, color: img.ColorRgb8(235, 235, 235));
+    for (var row = 0; row < 29; row++) {
+      for (var column = 0; column < 29; column++) {
+        if ((row * 7 + column * 11 + row * column) % 5 < 2) {
+          img.fillRect(
+            frame,
+            x1: 70 + column * 9,
+            y1: 70 + row * 9,
+            x2: 78 + column * 9,
+            y2: 78 + row * 9,
+            color: img.ColorRgb8(8, 8, 8),
+          );
+        }
+      }
+    }
     final encoded = Uint8List.fromList(img.encodeJpg(frame, quality: 90));
     final evidence = [
       for (var index = 0; index < 2; index++)

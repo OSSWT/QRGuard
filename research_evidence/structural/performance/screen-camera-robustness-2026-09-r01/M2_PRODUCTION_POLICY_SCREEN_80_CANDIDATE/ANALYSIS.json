@@ -1,0 +1,250 @@
+{
+  "candidate": {
+    "aggregation": "median_score_majority_class",
+    "artifact_path": "ml_training/structural/runs/structural-2026.09-r01/artifacts",
+    "maximum_frames": 3,
+    "minimum_analyzable_frames": 3,
+    "minimum_crop_side": 256,
+    "selection": "best_geometry_before_rectification_proxy"
+  },
+  "evaluation": "production_multi_frame_candidate",
+  "matrix": [
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-LAYOUT-4470",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-LAYOUT-4471",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 2,
+        "false_block": 1
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 1,
+        "clean": 2
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 2
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-LAYOUT-4472",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-MASK-0",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-MASK-1",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-MASK-2",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-MASK-3",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-MASK-4",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 2,
+        "false_block": 1
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 1,
+        "clean": 2
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 2
+      }
+    },
+    {
+      "analyzed_frames": 0,
+      "case_id": "RC-MASK-5",
+      "distance": "screen-80",
+      "eligible_frames": 0,
+      "ground_truth": "clean",
+      "outcomes": {
+        "rescan": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "abstained": 3
+      },
+      "verdicts": {
+        "warning": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-MASK-6",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-MASK-7",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 2,
+        "false_block": 1
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 1,
+        "clean": 2
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 2
+      }
+    },
+    {
+      "analyzed_frames": 9,
+      "case_id": "RC-VERSION-4",
+      "distance": "screen-80",
+      "eligible_frames": 9,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 3
+      },
+      "verdicts": {
+        "safe": 3
+      }
+    }
+  ],
+  "metrics": {
+    "adversarial_false_safe_rate": 0.0,
+    "clean_false_block_rate": 0.08333333333333333,
+    "correct_session_rate": 0.8333333333333334,
+    "definitive_adversarial_correct_rate": 0.0,
+    "definitive_clean_correct_rate": 0.9090909090909091,
+    "definitive_pipeline_elapsed_ms_mean": 141.21212121212122,
+    "definitive_pipeline_elapsed_ms_median": 121,
+    "definitive_pipeline_elapsed_ms_p95": 170,
+    "pipeline_elapsed_ms_mean": 129.44444444444446,
+    "pipeline_elapsed_ms_median": 121.0,
+    "pipeline_elapsed_ms_p95": 170,
+    "rescan_session_rate": 0.08333333333333333
+  },
+  "payload_policy": "neutral_non_url_structural_only",
+  "schema_version": 1,
+  "source": {
+    "captured_frame_count": 180,
+    "evaluated_frame_count": 99,
+    "filename": "QRGuard_Diagnostic_sem11_root_cause_screen_80_2026_09_r01_20260901T075434Z.zip",
+    "raw_payload_stored": false,
+    "session_count": 36,
+    "sha256": "4da992cfcb477526ed45843f5a70e702e23fb7d964dd7bb255ef23754e465153"
+  }
+}

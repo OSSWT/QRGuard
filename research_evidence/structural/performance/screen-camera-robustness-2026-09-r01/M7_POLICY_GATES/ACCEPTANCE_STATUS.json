@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "candidate_version": "structural-2026.09-r01",
+  "candidate_model_sha256": "200a5ff02dbe47623ca738902bdcfe16b97bfbc507398e91dce9845aa7581ac9",
+  "candidate_model_metadata_sha256": "a80908ee42898a8270411fc08f65b2460ee78b6f3735412307373c05ff6d1526",
+  "runtime_policy": {
+    "camera_definitive_manipulation_floor": 0.7,
+    "below_floor_action": "inconclusive_rescan_never_safe",
+    "application_point": "after three-frame temporal consensus"
+  },
+  "development_readiness": {
+    "gate_passed": true,
+    "sem11_digital": {
+      "requests": 24,
+      "branch_contract_matches": 24,
+      "evidence_sha256": "ec0adce7c828116174dc17c00dadee2205a0848fb3186264e5f44b986c5a3ea6"
+    },
+    "demo_branch_audit": {
+      "requests": 84,
+      "branch_contract_matches": 84,
+      "masked_branch_errors": 0,
+      "evidence_sha256": "aa97e5b1c8524d631e0bc6d193fb3235912c371f853a958c44101188caffe358"
+    },
+    "sem11_physical_root_cause": {
+      "sessions": 36,
+      "clean_false_block_rate": 0.0,
+      "rescan_rate": 0.16666666666666666,
+      "definitive_clean_correct_rate": 1.0,
+      "pipeline_p95_ms_observed": 879,
+      "source_archive_sha256": "4da992cfcb477526ed45843f5a70e702e23fb7d964dd7bb255ef23754e465153",
+      "evidence_sha256": "80166dfab2d92705adc9379a724210b2e149553e1327be00a975130ac9ac8586"
+    },
+    "coverage_development_replay": {
+      "sessions": 48,
+      "clean_false_block_rate": 0.0,
+      "attack_false_safe_rate": 0.0,
+      "definitive_attack_correct_rate": 1.0,
+      "rescan_rate": 0.0,
+      "pipeline_p95_ms_observed": 957,
+      "source_archive_sha256": "f3267b92176414473f0e936059f0a4b45ff9164ad5be8b702041d63c7aaa0bfa",
+      "evidence_sha256": "728f2b0f6b7aa6644dc42ec0846d1a028560736cee32a60ae10b76cb9a22e666"
+    }
+  },
+  "fresh_blind_holdout": {
+    "status": "evaluated_failed",
+    "campaign_id": "structural-coverage-blind-holdout-2026-09-r01",
+    "reference_pack_sha256": "bfdb049984b7a812f77a9b712b0ed9f34c245ea702e42cad1f84456192e4e335",
+    "diagnostic_apk_sha256": "8ad93ae9bc4aa10d26b9198b0d6e62124e972fb5cbcf54eb99e1fd6e94dcac7e",
+    "capture_archive_sha256": "d5930ffcaf1edc0702afd5ff2b2241584a95edd9f9f0de81fdc8a5a5a7921f6d",
+    "cases": 48,
+    "frames_expected": 240,
+    "frames_validated": 240,
+    "candidate_scored_before_physical_capture": false,
+    "tampered_block_recall": 1.0,
+    "clean_false_block_rate": 0.0625,
+    "clean_high_version_false_block_rate": 0.16666666666666666,
+    "clean_layout_probability_span": 0.8930705189704895,
+    "physical_adversarial_survival": {
+      "verified": 2,
+      "planned": 16,
+      "rate": 0.125,
+      "survival_evidence_sha256": "7cabf33531cecbfba6b87310c7a24f415ac42b54bee8cbd1fe62424472f2cc6d",
+      "non_surviving_attacks_excluded_from_candidate_recall_gate": true
+    },
+    "acceptance_gate_passed": false,
+    "acceptance_evidence_sha256": "42c1871478182c1cf76c079df6ebcfee86d0611ad1f76a03768303baf847a893"
+  },
+  "promotion": {
+    "approved": false,
+    "blocked_reason": "M8 failed clean layout gates and contained too few independently verified surviving physical adversarial attacks",
+    "production_mutation_performed": false,
+    "push_performed": false,
+    "deploy_performed": false
+  },
+  "known_non_promotion_warning": "r01 is not production-eligible; M8 exposed high-Version clean layout dependence and a post-capture adversarial-label survival gap"
+}

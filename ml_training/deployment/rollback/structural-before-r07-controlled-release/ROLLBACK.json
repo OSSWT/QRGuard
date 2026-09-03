@@ -1,0 +1,15 @@
+{
+  "version": "structural-2026.03-r01",
+  "role": "immediate_pre_r07_runtime",
+  "duplicate_binary_retained_here": false,
+  "canonical_local_artifacts": "ml_training/structural/runs/structural-2026.03-r01/artifacts",
+  "git_runtime_source_commit": "8deefe5",
+  "render_source_commit": "c82bb9e9ee429f95f62a06ffcc0942aeb7d41c00",
+  "files": {
+    "deploy_choice.json": "17c68276984e26b8e984dd0adc36ac36002e097b361f4bd90565733ae4da0559",
+    "model_metadata.json": "e23b45ceab0080b4ba1a03c35574074a79565e0f189702858b2444ea3e6828ab",
+    "structural_fp32.onnx": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+    "temperature.json": "b274e42538aa8e928512209f2175196f324f8b54d6e5668946c40f66d52c6f02"
+  },
+  "restore_contract": "copy the four hash-matched canonical files into training/artifacts/structural, then rerun backend tests, Flutter tests and the release build"
+}

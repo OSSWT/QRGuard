@@ -1,0 +1,1490 @@
+{
+  "frame_metrics": {
+    "adversarial_block_rate": 1.0,
+    "adversarial_false_safe_rate": 0.0,
+    "clean_false_block_rate": 0.0,
+    "clean_non_safe_rate": 0.0,
+    "quality_abstention_rate": 0.0
+  },
+  "integrity": {
+    "decoded_payload_hash_matches": 194,
+    "duplicate_crop_instances": 0,
+    "globally_unique_crops": 240
+  },
+  "matrix": [
+    {
+      "case_id": "PHY-ADV-F-01",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9904582500457764,
+      "p_structural_median": 0.9190802574157715,
+      "p_structural_min": 0.8478332757949829,
+      "qr_coverage_median": 0.09566243489583333,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-02",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9935862421989441,
+      "p_structural_median": 0.9786893129348755,
+      "p_structural_min": 0.9673959016799927,
+      "qr_coverage_median": 0.09401204427083333,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-03",
+      "decoded_hash_matches": 2,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9990118145942688,
+      "p_structural_median": 0.9916918873786926,
+      "p_structural_min": 0.9797960519790649,
+      "qr_coverage_median": 0.122763671875,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-04",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999726414680481,
+      "p_structural_median": 0.9998511672019958,
+      "p_structural_min": 0.9779865145683289,
+      "qr_coverage_median": 0.137459716796875,
+      "quality": {
+        "marginal": 2,
+        "usable": 3
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-05",
+      "decoded_hash_matches": 2,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9991461634635925,
+      "p_structural_median": 0.9974256157875061,
+      "p_structural_min": 0.925747275352478,
+      "qr_coverage_median": 0.09558308919270833,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-06",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.999815821647644,
+      "p_structural_median": 0.9993137121200562,
+      "p_structural_min": 0.9972681403160095,
+      "qr_coverage_median": 0.10635579427083333,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-07",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999005794525146,
+      "p_structural_median": 0.9997979998588562,
+      "p_structural_min": 0.9993922710418701,
+      "qr_coverage_median": 0.13404052734375,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-08",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9915047287940979,
+      "p_structural_median": 0.9812524318695068,
+      "p_structural_min": 0.9036400318145752,
+      "qr_coverage_median": 0.088895263671875,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-09",
+      "decoded_hash_matches": 2,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999983906745911,
+      "p_structural_median": 0.9999973177909851,
+      "p_structural_min": 0.9999964237213135,
+      "qr_coverage_median": 0.1326611328125,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-10",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9997615814208984,
+      "p_structural_median": 0.9993893504142761,
+      "p_structural_min": 0.9987990856170654,
+      "qr_coverage_median": 0.09132893880208333,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-11",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.999970018863678,
+      "p_structural_median": 0.9999555945396423,
+      "p_structural_min": 0.9999008774757385,
+      "qr_coverage_median": 0.13729451497395834,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-12",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999775290489197,
+      "p_structural_median": 0.9999322891235352,
+      "p_structural_min": 0.9998877644538879,
+      "qr_coverage_median": 0.09940592447916667,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-13",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999987483024597,
+      "p_structural_median": 0.9999974966049194,
+      "p_structural_min": 0.9999966025352478,
+      "qr_coverage_median": 0.11598876953125,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-14",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9998693466186523,
+      "p_structural_median": 0.9997360110282898,
+      "p_structural_min": 0.999690592288971,
+      "qr_coverage_median": 0.07582682291666666,
+      "quality": {
+        "marginal": 4,
+        "usable": 1
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-15",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999963045120239,
+      "p_structural_median": 0.9999943971633911,
+      "p_structural_min": 0.9999781847000122,
+      "qr_coverage_median": 0.12346110026041666,
+      "quality": {
+        "marginal": 2,
+        "usable": 3
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-F-16",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999698996543884,
+      "p_structural_median": 0.9999657273292542,
+      "p_structural_min": 0.9999365210533142,
+      "qr_coverage_median": 0.11690185546875,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-01",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9995279908180237,
+      "p_structural_median": 0.9991766810417175,
+      "p_structural_min": 0.9765149354934692,
+      "qr_coverage_median": 0.08846394856770834,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-02",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9998824596405029,
+      "p_structural_median": 0.9994684457778931,
+      "p_structural_min": 0.9972496032714844,
+      "qr_coverage_median": 0.10169921875,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-03",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9997819662094116,
+      "p_structural_median": 0.9996703863143921,
+      "p_structural_min": 0.9965687394142151,
+      "qr_coverage_median": 0.10871419270833334,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-04",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9991413950920105,
+      "p_structural_median": 0.9987308382987976,
+      "p_structural_min": 0.9981663823127747,
+      "qr_coverage_median": 0.116756591796875,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-05",
+      "decoded_hash_matches": 3,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9998032450675964,
+      "p_structural_median": 0.9997549057006836,
+      "p_structural_min": 0.9792842268943787,
+      "qr_coverage_median": 0.12112833658854166,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-06",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.999911904335022,
+      "p_structural_median": 0.9998853206634521,
+      "p_structural_min": 0.9984137415885925,
+      "qr_coverage_median": 0.107979736328125,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-07",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9998631477355957,
+      "p_structural_median": 0.9998095035552979,
+      "p_structural_min": 0.9996917843818665,
+      "qr_coverage_median": 0.07698404947916666,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-08",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9998644590377808,
+      "p_structural_median": 0.9994770288467407,
+      "p_structural_min": 0.9836389422416687,
+      "qr_coverage_median": 0.12873738606770832,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-09",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999892115592957,
+      "p_structural_median": 0.9999882578849792,
+      "p_structural_min": 0.9999849200248718,
+      "qr_coverage_median": 0.15183756510416666,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-10",
+      "decoded_hash_matches": 3,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999822974205017,
+      "p_structural_median": 0.9999671578407288,
+      "p_structural_min": 0.9996083378791809,
+      "qr_coverage_median": 0.13397135416666667,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-11",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9992741942405701,
+      "p_structural_median": 0.9983024597167969,
+      "p_structural_min": 0.9655245542526245,
+      "qr_coverage_median": 0.10342041015625,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-12",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999994039535522,
+      "p_structural_median": 0.9999990463256836,
+      "p_structural_min": 0.9999985694885254,
+      "qr_coverage_median": 0.1716259765625,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-13",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999968409538269,
+      "p_structural_median": 0.9999964237213135,
+      "p_structural_min": 0.9999411106109619,
+      "qr_coverage_median": 0.1159423828125,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-14",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999018907546997,
+      "p_structural_median": 0.9998849630355835,
+      "p_structural_min": 0.9997238516807556,
+      "qr_coverage_median": 0.08714192708333333,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-15",
+      "decoded_hash_matches": 3,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999927878379822,
+      "p_structural_median": 0.9999850392341614,
+      "p_structural_min": 0.9999687671661377,
+      "qr_coverage_median": 0.14908772786458332,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-ADV-X-16",
+      "decoded_hash_matches": 0,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "adversarial",
+      "p_structural_max": 0.9999973177909851,
+      "p_structural_median": 0.9999943971633911,
+      "p_structural_min": 0.9999918937683105,
+      "qr_coverage_median": 0.14205159505208334,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "blocked": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 5
+      },
+      "verdicts": {
+        "blocked": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-01",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.25430959463119507,
+      "p_structural_median": 0.09403038024902344,
+      "p_structural_min": 0.014351844787597656,
+      "qr_coverage_median": 0.09544189453125,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-02",
+      "decoded_hash_matches": 3,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.021949172019958496,
+      "p_structural_median": 0.00385969877243042,
+      "p_structural_min": 0.0028471946716308594,
+      "qr_coverage_median": 0.15735107421875,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-03",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.044380128383636475,
+      "p_structural_median": 0.002493917942047119,
+      "p_structural_min": 0.0019415020942687988,
+      "qr_coverage_median": 0.10428059895833333,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-04",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.0042771100997924805,
+      "p_structural_median": 0.0014564990997314453,
+      "p_structural_min": 0.0011930465698242188,
+      "qr_coverage_median": 0.10010172526041666,
+      "quality": {
+        "marginal": 1,
+        "usable": 4
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-05",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.015142560005187988,
+      "p_structural_median": 0.008256852626800537,
+      "p_structural_min": 0.004135727882385254,
+      "qr_coverage_median": 0.10083658854166666,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-06",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.0012773871421813965,
+      "p_structural_median": 0.0010949373245239258,
+      "p_structural_min": 0.0006080865859985352,
+      "qr_coverage_median": 0.11003621419270833,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-07",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.0019483566284179688,
+      "p_structural_median": 0.0017368197441101074,
+      "p_structural_min": 0.0010465383529663086,
+      "qr_coverage_median": 0.10619913736979167,
+      "quality": {
+        "marginal": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-08",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.004946768283843994,
+      "p_structural_median": 0.0031352639198303223,
+      "p_structural_min": 0.0012111067771911621,
+      "qr_coverage_median": 0.12631429036458333,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-09",
+      "decoded_hash_matches": 2,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.0029293298721313477,
+      "p_structural_median": 0.001877129077911377,
+      "p_structural_min": 0.0015551447868347168,
+      "qr_coverage_median": 0.11703287760416667,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-10",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.0022650957107543945,
+      "p_structural_median": 0.0013933777809143066,
+      "p_structural_min": 0.0011550188064575195,
+      "qr_coverage_median": 0.13349039713541666,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-11",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.004575073719024658,
+      "p_structural_median": 0.0018975138664245605,
+      "p_structural_min": 0.0014673471450805664,
+      "qr_coverage_median": 0.14420654296875,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-12",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.011991143226623535,
+      "p_structural_median": 0.0033097267150878906,
+      "p_structural_min": 0.0029132962226867676,
+      "qr_coverage_median": 0.11862223307291667,
+      "quality": {
+        "marginal": 4,
+        "usable": 1
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-13",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.0015596747398376465,
+      "p_structural_median": 0.001429438591003418,
+      "p_structural_min": 0.0010914802551269531,
+      "qr_coverage_median": 0.11889363606770834,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-14",
+      "decoded_hash_matches": 4,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.004099547863006592,
+      "p_structural_median": 0.0031790733337402344,
+      "p_structural_min": 0.0020189881324768066,
+      "qr_coverage_median": 0.11858805338541667,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-15",
+      "decoded_hash_matches": 5,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.002452671527862549,
+      "p_structural_median": 0.0021523237228393555,
+      "p_structural_min": 0.0018830299377441406,
+      "qr_coverage_median": 0.12283203125,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    },
+    {
+      "case_id": "PHY-CLN-16",
+      "decoded_hash_matches": 1,
+      "distance": "screen-80",
+      "frames": 5,
+      "ground_truth": "clean",
+      "p_structural_max": 0.003422677516937256,
+      "p_structural_median": 0.002798318862915039,
+      "p_structural_min": 0.0022630691528320312,
+      "qr_coverage_median": 0.13020751953125,
+      "quality": {
+        "usable": 5
+      },
+      "session_first_verdicts": {
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "safe": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 5
+      },
+      "verdicts": {
+        "safe": 5
+      }
+    }
+  ],
+  "model": {
+    "artifact_sha256": "200a5ff02dbe47623ca738902bdcfe16b97bfbc507398e91dce9845aa7581ac9",
+    "path": "training/artifacts/structural",
+    "version": "structural-2026.09-r01"
+  },
+  "schema_version": 1,
+  "session_metrics": {
+    "majority_adversarial_false_safe_rate": 0.0,
+    "majority_clean_false_block_rate": 0.0,
+    "majority_structural_ground_truth_detection_rate": 1.0,
+    "median_adversarial_false_safe_rate": 0.0,
+    "median_clean_false_block_rate": 0.0,
+    "single_first_adversarial_false_safe_rate": 0.0,
+    "single_first_clean_false_block_rate": 0.0
+  },
+  "source": {
+    "filename": "QRGuard_Diagnostic_structural_physical_attack_development_2026_09.zip",
+    "frame_count": 240,
+    "raw_payload_stored": false,
+    "session_count": 48,
+    "sha256": "a69f83022e8af591e9d09f31cdbedb924ad41cf5e9d951feac24ef6577775d58"
+  }
+}

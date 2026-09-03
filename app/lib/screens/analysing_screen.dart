@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/api_client.dart';
+import '../services/capture_quality.dart';
 import '../services/history_service.dart';
 import '../services/qr_cropper.dart';
 import '../theme.dart';
@@ -94,6 +95,16 @@ List<Uint8List> prepareBestThreeCropsInBackground(List<CropRequest> requests) {
   return crops;
 }
 
+/// Rectify the bounded fallback pool, reject unusable pixels, then select three
+/// frames by actual crop contrast/detail with a small exposure-diversity bonus.
+/// This runs in the existing isolate so camera callbacks and preview stay fluid.
+List<Uint8List> prepareQualityRankedCropsInBackground(
+  List<CropRequest> requests,
+) {
+  final crops = prepareUsableCropsInBackground(requests);
+  return [for (final ranked in rankCaptureCrops(crops)) ranked.bytes];
+}
+
 Uint8List? _prepareCrop(CropRequest request) {
   if (request.cornerCoordinates.length != 8) return null;
   final corners = <Offset>[
@@ -169,7 +180,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
 
   Future<List<Uint8List>> _prepareCrops(List<QrFrameEvidence> evidence) async {
     if (evidence.isEmpty) return const [];
-    return compute(prepareBestThreeCropsInBackground, [
+    return compute(prepareQualityRankedCropsInBackground, [
       for (final sample in evidence.take(5))
         CropRequest(
           frame: sample.frame,

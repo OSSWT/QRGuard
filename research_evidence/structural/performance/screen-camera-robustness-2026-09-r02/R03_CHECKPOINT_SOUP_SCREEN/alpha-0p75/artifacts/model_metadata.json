@@ -1,0 +1,17 @@
+{
+  "display_name": "Structural checkpoint interpolation screen",
+  "version": "structural-2026.09-soup-alpha-0p75",
+  "architecture": "ResNet-18 r02/r03 linear checkpoint interpolation",
+  "artifact_sha256": "a850e6b3cca59a0bbffbe63c81e656c072df366ed3cd64e2ed7c32ca70a8f0a9",
+  "research_gates_passed": false,
+  "deployment_gates_passed": false,
+  "deployment_gate_failures": [
+    "screening artifact only; calibration and full gates pending"
+  ],
+  "runtime_policy": {
+    "camera_definitive_manipulation_floor": 0.7,
+    "below_floor_action": "inconclusive_rescan_never_safe",
+    "quality_gate_precedes_structural_inference": true,
+    "minimum_observed_module_pixels": 5.0
+  }
+}

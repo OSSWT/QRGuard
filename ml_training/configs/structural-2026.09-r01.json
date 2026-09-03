@@ -1,0 +1,84 @@
+{
+  "display_name": "Structural coverage-balanced candidate",
+  "experiment_version": "structural-2026.09-r01",
+  "status": "m5_physical_development_imported_candidate_training_pending",
+  "seed": 42,
+  "classes": [
+    "clean",
+    "adversarial",
+    "tampered"
+  ],
+  "image_size": 224,
+  "architecture": "ImageNet-pretrained ResNet-18 initialised from accepted structural-2026.03-r01; unified Gallery/Camera artifact",
+  "semantic_policy": "freeze_semantic-2026.02_regression_only",
+  "split": {
+    "group_keys": [
+      "source_dataset",
+      "capture_session",
+      "paired_group",
+      "physical_qr",
+      "payload_hash",
+      "base_identity"
+    ],
+    "derive_after_split": true,
+    "m5_parent_identity_locked": true
+  },
+  "m5_coverage_development": {
+    "campaign_id": "structural-coverage-development-2026-09-r01",
+    "archive_sha256": "f3267b92176414473f0e936059f0a4b45ff9164ad5be8b702041d63c7aaa0bfa",
+    "manifest": "data/structural_coverage_development/2026-09-r01/manifest.csv",
+    "frames": 240,
+    "sessions": 48,
+    "base_identities": 16,
+    "train_base_identities": 12,
+    "validation_base_identities": 4,
+    "deployment_holdout_eligible": false,
+    "versions": [3, 5, 10],
+    "masks": [0, 1, 2, 3, 4, 5, 6, 7],
+    "payload_utf8_bytes": [24, 40, 112]
+  },
+  "training": {
+    "batch_size": 32,
+    "head_epochs": 2,
+    "finetune_epochs": 5,
+    "initial_checkpoint": "ml_training/structural/runs/structural-2026.03-r01/best_model.pt",
+    "initial_checkpoint_sha256": "21e51084c2b1ac4ce49387c8aa47046220eb6b8ef06ddeada3a6ae32fbe97bc2",
+    "minimum_runtime_capture_draw_fraction": 0.4,
+    "source_domain_draw_fractions": {
+      "camera": 0.4,
+      "prepared_gallery": 0.3,
+      "other": 0.3
+    },
+    "checkpoint_selection_weights": {
+      "global_macro_f1": 0.25,
+      "deployment_domain_macro_f1": 0.5,
+      "non_test_paired_verdict_agreement": 0.25
+    },
+    "checkpoint_every_epoch": true,
+    "copy_to_runtime_automatically": false
+  },
+  "deployment_gates": {
+    "coverage_gate_config": "ml_training/configs/structural-coverage-gates-2026.09-r01.json",
+    "real_clean_false_positive_rate_max": 0.05,
+    "real_tampered_recall_min": 0.85,
+    "real_adversarial_recall_min": 0.8,
+    "binary_ece_max": 0.05,
+    "paired_gallery_camera_verdict_agreement_min": 0.95,
+    "sem05_style_masked_branch_errors_max": 0,
+    "fresh_blind_holdout_required": true
+  },
+  "runtime_policy": {
+    "camera_definitive_manipulation_floor": 0.7,
+    "below_floor_action": "inconclusive_rescan_never_safe",
+    "calibration_evidence": {
+      "highest_sem11_clean_false_block_session_score": 0.62642,
+      "lowest_known_attack_score": 0.72840690612793,
+      "scope": "development policy only; fresh blinded promotion evidence required"
+    }
+  },
+  "promotion": {
+    "copy_to_runtime_automatically": false,
+    "push_automatically": false,
+    "deploy_automatically": false
+  }
+}

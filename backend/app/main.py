@@ -313,6 +313,8 @@ def _dump_if_requested(images, payload: str | None, image_source: str, result) -
             "structural_quality_status": branch.structural_quality_status,
             "structural_quality_conditions": branch.structural_quality_conditions,
             "structural_rescan_reason": branch.structural_rescan_reason,
+            "structural_module_count": branch.structural_module_count,
+            "structural_min_module_pixels": branch.structural_min_module_pixels,
             "payload_type": result.payload_type,
             "rule_flags": result.rule_flags,
             "verdict": result.verdict,

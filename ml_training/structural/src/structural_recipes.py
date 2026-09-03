@@ -8,6 +8,7 @@ import json
 import math
 import os
 import random
+from collections import Counter
 from pathlib import Path
 
 import cv2
@@ -18,7 +19,8 @@ from ml_training.structural.src.nuisance_recipes import CONDITIONS, apply_nuisan
 
 ROOT = Path(__file__).resolve().parents[3]
 VERSION = os.getenv("QRGUARD_STRUCTURAL_VERSION", "structural-2026.02")
-PROCESSED = ROOT / "ml_training/datasets/structural/processed" / VERSION
+DATASET_VERSION = os.getenv("QRGUARD_STRUCTURAL_DATASET_VERSION", VERSION)
+PROCESSED = ROOT / "ml_training/datasets/structural/processed" / DATASET_VERSION
 IMAGES = PROCESSED / "images"
 MANIFEST = PROCESSED / "manifest.csv"
 IMG_SIZE = 224
@@ -26,7 +28,9 @@ SEED = 42
 BASE_COUNTS = {"train": 900, "validation": 180, "test": 180}
 CAMERA_FRACTION = 0.70
 CLASS_NAMES = ("clean", "adversarial", "tampered")
-IS_V3 = VERSION.startswith("structural-2026.03")
+IS_V3 = VERSION.startswith(
+    ("structural-2026.03", "structural-2026.09", "structural-r07")
+)
 V3_CONDITION_CHOICES = ("normal", "normal", "normal", *CONDITIONS[1:])
 
 
@@ -91,6 +95,231 @@ def _content(index: int, rng: random.Random) -> str:
     if kind == 3:
         return f"mailto:{token}@example.test?subject=QRGuard"
     return f"QRGuard-{token}-{rng.randint(100000, 999999)}"
+
+
+def _candidate_config() -> dict:
+    path = ROOT / "ml_training/configs" / f"{VERSION}.json"
+    if not path.is_file():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _fixed_ascii_payload(identity: str, target_bytes: int) -> str:
+    prefix = f"QRG-TCF-{identity}-"
+    if len(prefix.encode("ascii")) > target_bytes:
+        raise ValueError(
+            f"topology counterfactual prefix exceeds {target_bytes} bytes: {identity}"
+        )
+    digest = hashlib.sha256(f"topology-counterfactual:{identity}".encode()).hexdigest()
+    required = target_bytes - len(prefix)
+    payload = prefix + (digest * math.ceil(required / len(digest)))[:required]
+    if len(payload.encode("utf-8")) != target_bytes:
+        raise AssertionError("topology counterfactual payload length drifted")
+    return payload
+
+
+def generate_topology_counterfactual_clean_rows(
+    config: dict | None = None,
+) -> list[dict]:
+    """Generate clean QR families that differ only by standards-valid mask layout.
+
+    Each logical payload is rendered with all configured mask patterns and two
+    controlled acquisition conditions. The whole family shares a leakage group
+    and consistency partner key, so the classifier is explicitly discouraged
+    from treating a legal QR mask/topology as evidence of manipulation.
+
+    This recipe is opt-in per candidate config. Frozen r01-r04 manifests remain
+    byte-identical when their configs do not contain ``topology_counterfactuals``.
+    """
+
+    import qrcode
+
+    recipe = config
+    if recipe is None:
+        recipe = _candidate_config().get("topology_counterfactuals", {})
+    if not recipe or not recipe.get("enabled", False):
+        return []
+
+    masks = tuple(int(value) for value in recipe.get("mask_patterns", range(8)))
+    if sorted(masks) != list(range(8)) or len(set(masks)) != 8:
+        raise ValueError("topology counterfactuals require each mask pattern 0-7 once")
+    versions = recipe.get("versions", [])
+    if not versions:
+        raise ValueError("topology counterfactual versions are required")
+    conditions = tuple(recipe.get("conditions", ("normal",)))
+    if not conditions or any(condition not in CONDITIONS for condition in conditions):
+        raise ValueError("topology counterfactual condition is unsupported")
+    explicit_train_identities = recipe.get("train_identities_per_error_correction")
+    explicit_validation_identities = recipe.get(
+        "validation_identities_per_error_correction"
+    )
+    if explicit_train_identities is None and explicit_validation_identities is None:
+        identities_per_error_correction = int(
+            recipe.get("identities_per_error_correction", 2)
+        )
+        if identities_per_error_correction != 2:
+            raise ValueError(
+                "legacy topology counterfactuals require two identities per error "
+                "correction (one train and one validation)"
+            )
+        train_identities = 1
+        validation_identities = 1
+    else:
+        if (
+            explicit_train_identities is None
+            or explicit_validation_identities is None
+            or "identities_per_error_correction" in recipe
+        ):
+            raise ValueError(
+                "topology counterfactual identity counts require separate positive "
+                "train and validation values without the legacy combined value"
+            )
+        train_identities = int(explicit_train_identities)
+        validation_identities = int(explicit_validation_identities)
+        if train_identities < 1 or validation_identities < 1:
+            raise ValueError(
+                "topology counterfactual train and validation identity counts must "
+                "both be positive"
+            )
+    identities_per_error_correction = train_identities + validation_identities
+    error_corrections = {
+        "L": qrcode.constants.ERROR_CORRECT_L,
+        "M": qrcode.constants.ERROR_CORRECT_M,
+        "Q": qrcode.constants.ERROR_CORRECT_Q,
+        "H": qrcode.constants.ERROR_CORRECT_H,
+    }
+    requested_corrections = tuple(
+        str(value) for value in recipe.get("error_corrections", error_corrections)
+    )
+    if set(requested_corrections) != set(error_corrections):
+        raise ValueError("topology counterfactuals require L/M/Q/H error correction")
+
+    counterfactual_dir = IMAGES / "topology_counterfactual_clean"
+    rows: list[dict] = []
+    for version_spec in versions:
+        version = int(version_spec["version"])
+        target_bytes = int(version_spec["payload_utf8_bytes"])
+        if version not in range(1, 41) or target_bytes < 1:
+            raise ValueError(f"invalid topology counterfactual spec: {version_spec}")
+        version_band = (
+            "low_v1_v3"
+            if version <= 3
+            else "medium_v4_v6"
+            if version <= 6
+            else "high_v7_plus"
+        )
+        payload_bin = (
+            "short_1_32"
+            if target_bytes <= 32
+            else "medium_33_96"
+            if target_bytes <= 96
+            else "long_97_plus"
+        )
+        for correction_name in requested_corrections:
+            for identity_index in range(identities_per_error_correction):
+                split = (
+                    "train"
+                    if identity_index < train_identities
+                    else "validation"
+                )
+                identity = (
+                    f"v{version:02d}-{correction_name.lower()}-{identity_index + 1}"
+                )
+                payload = _fixed_ascii_payload(identity, target_bytes)
+                payload_hash = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+                group_id = f"synthetic_topology:{identity}"
+                style_rng = random.Random(_seed(f"topology-style:{identity}"))
+                if style_rng.random() < 0.35:
+                    dark = tuple(style_rng.randint(0, 75) for _ in range(3))
+                    light = tuple(style_rng.randint(215, 255) for _ in range(3))
+                else:
+                    dark, light = (0, 0, 0), (255, 255, 255)
+                for mask in masks:
+                    qr = qrcode.QRCode(
+                        version=version,
+                        error_correction=error_corrections[correction_name],
+                        box_size=8,
+                        border=4,
+                        mask_pattern=mask,
+                    )
+                    qr.add_data(payload)
+                    try:
+                        qr.make(fit=False)
+                    except qrcode.exceptions.DataOverflowError as error:
+                        raise ValueError(
+                            "topology payload does not fit fixed QR version: "
+                            f"V{version}/{correction_name}/{target_bytes} bytes"
+                        ) from error
+                    if qr.version != version or qr.modules_count != 17 + 4 * version:
+                        raise AssertionError("fixed QR version/module contract drifted")
+                    matrix_bits = "".join(
+                        "1" if value else "0" for row in qr.modules for value in row
+                    )
+                    matrix_sha256 = hashlib.sha256(matrix_bits.encode()).hexdigest()
+                    pristine = qr.make_image(
+                        fill_color=dark, back_color=light
+                    ).convert("RGB")
+                    pristine = pristine.resize(
+                        (IMG_SIZE, IMG_SIZE), Image.Resampling.NEAREST
+                    )
+                    for condition in conditions:
+                        severity = "none" if condition == "normal" else "moderate"
+                        image = (
+                            pristine.copy()
+                            if condition == "normal"
+                            else apply_nuisance(
+                                pristine,
+                                condition,
+                                severity,
+                                seed=f"topology:{identity}:m{mask}:{condition}",
+                            )
+                        )
+                        destination = (
+                            counterfactual_dir
+                            / split
+                            / f"{identity}_m{mask}_{condition}.png"
+                        )
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        if not destination.is_file():
+                            image.save(destination)
+                        rows.append(
+                            {
+                                "path": destination.relative_to(ROOT).as_posix(),
+                                "label": "clean",
+                                "class_id": 0,
+                                "split": split,
+                                "group_id": group_id,
+                                "session_id": group_id,
+                                "source": "procedural_qrguard_topology_counterfactual",
+                                "capture_kind": "standards_valid_mask_counterfactual",
+                                "quality_condition": condition,
+                                "quality_severity": severity,
+                                "image_source": "not_annotated",
+                                "paired_group": group_id,
+                                "physical_qr": group_id,
+                                "payload_hash": payload_hash,
+                                "attack_recipe": "none",
+                                "is_exact_app_crop": False,
+                                "licence": "project_generated",
+                                "case_id": (
+                                    f"TCF-V{version:02d}-{correction_name}-"
+                                    f"{identity_index + 1}-M{mask}-{condition}"
+                                ),
+                                "qr_version": version,
+                                "module_count": qr.modules_count,
+                                "mask_pattern": mask,
+                                "version_band": version_band,
+                                "payload_length_bin": payload_bin,
+                                "payload_utf8_bytes": target_bytes,
+                                "qr_matrix_sha256": matrix_sha256,
+                                "development_campaign": (
+                                    "procedural-topology-counterfactual-2026-09-r01"
+                                ),
+                                "deployment_holdout_eligible": False,
+                                "development_only": True,
+                            }
+                        )
+    return rows
 
 
 def generate_base_qrs() -> list[dict]:
@@ -514,7 +743,18 @@ def _derive_adversarial(base_rows: list[dict]) -> list[dict]:
                 rows.append(_adversarial_row(base, destination, attack_name))
             completed = min(start + len(batch), len(records))
             print(f"prepared {attack} adversarial {completed}/{len(records)}")
-    return rows
+    # A fresh build appends generated rows attack-by-attack (FGSM, then PGD),
+    # while a cache hit used to append them in base-row order. That made the
+    # manifest byte identity depend on whether image files already existed.
+    # Canonicalise the rows so fresh and cached preparation are identical.
+    return _canonical_adversarial_rows(rows)
+
+
+def _canonical_adversarial_rows(rows: list[dict]) -> list[dict]:
+    return sorted(
+        rows,
+        key=lambda row: (row["group_id"], row["attack_recipe"], row["path"]),
+    )
 
 
 def _adversarial_row(base: dict, destination: Path, attack: str) -> dict:
@@ -660,11 +900,36 @@ def _runtime_capture_rows() -> list[dict]:
     return rows
 
 
+def _dataset_reference_version(key: str, default: str) -> str:
+    config_path = ROOT / "ml_training/configs" / f"{VERSION}.json"
+    if config_path.is_file():
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+        return str(config.get("dataset_references", {}).get(key, default))
+    return default
+
+
+def _optional_dataset_reference_version(key: str) -> str | None:
+    config_path = ROOT / "ml_training/configs" / f"{VERSION}.json"
+    if not config_path.is_file():
+        return None
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    value = config.get("dataset_references", {}).get(key)
+    return str(value) if value else None
+
+
 def _prepared_gallery_reference_rows() -> list[dict]:
     """Load verified non-test digital references paired with Camera captures."""
     if not IS_V3:
         return []
-    manifest = ROOT / "data/prepared_gallery_references" / VERSION / "manifest.csv"
+    reference_version = _dataset_reference_version(
+        "prepared_gallery_version", VERSION
+    )
+    manifest = (
+        ROOT
+        / "data/prepared_gallery_references"
+        / reference_version
+        / "manifest.csv"
+    )
     if not manifest.is_file():
         return []
     rows = []
@@ -711,6 +976,180 @@ def _prepared_gallery_reference_rows() -> list[dict]:
     return rows
 
 
+def _coverage_development_rows() -> list[dict]:
+    """Load the M5 low/medium/high-Version development frames for 2026.09."""
+    if not VERSION.startswith(("structural-2026.09", "structural-r07")):
+        return []
+    manifest = ROOT / "data/structural_coverage_development/2026-09-r01/manifest.csv"
+    if not manifest.is_file():
+        raise FileNotFoundError(f"M5 coverage development manifest missing: {manifest}")
+    rows = list(csv.DictReader(manifest.open(encoding="utf-8", newline="")))
+    if len(rows) != 240:
+        raise ValueError(
+            f"M5 coverage manifest must contain 240 frames, got {len(rows)}"
+        )
+    for row in rows:
+        if row.get("split") not in {"train", "validation"}:
+            raise ValueError(f"M5 row has invalid development split: {row.get('path')}")
+        if str(row.get("deployment_holdout_eligible", "")).lower() != "false":
+            raise ValueError(f"M5 row cannot be holdout eligible: {row.get('path')}")
+        path = ROOT / str(row.get("path", ""))
+        if not path.is_file():
+            raise FileNotFoundError(f"M5 development crop missing: {path}")
+    return rows
+
+
+def _physical_attack_development_rows() -> list[dict]:
+    """Load only clean and verified-surviving physical r02 development frames."""
+    if not VERSION.startswith(("structural-2026.09", "structural-r07")):
+        return []
+    reference_version = _dataset_reference_version(
+        "physical_attack_development_version", "2026-09-r02"
+    )
+    manifest = (
+        ROOT
+        / "data/structural_physical_attack_development"
+        / reference_version
+        / "manifest.csv"
+    )
+    if not manifest.is_file():
+        raise FileNotFoundError(
+            f"physical-attack development manifest missing: {manifest}"
+        )
+    rows = list(csv.DictReader(manifest.open(encoding="utf-8", newline="")))
+    if len(rows) != 130:
+        raise ValueError(
+            "physical-attack manifest must contain 130 admitted frames, got "
+            f"{len(rows)}"
+        )
+    attack_rows = [row for row in rows if row.get("label") == "adversarial"]
+    if len(attack_rows) != 50 or any(
+        str(row.get("physical_attack_survival_verified", "")).lower() != "true"
+        for row in attack_rows
+    ):
+        raise ValueError(
+            "physical-attack classifier rows must be exactly 50 "
+            "verified-surviving frames"
+        )
+    if any(
+        str(row.get("deployment_holdout_eligible", "")).lower() != "false"
+        or row.get("split") not in {"train", "validation"}
+        for row in rows
+    ):
+        raise ValueError("physical development rows cannot become deployment holdout")
+    for row in rows:
+        path = ROOT / str(row.get("path", ""))
+        if not path.is_file():
+            raise FileNotFoundError(f"physical development crop missing: {path}")
+    return rows
+
+
+def _acquisition_quality_development_rows() -> list[dict]:
+    """Load explicitly admitted clean hard negatives after r03 diagnosis."""
+    reference_version = _optional_dataset_reference_version(
+        "acquisition_quality_development_version"
+    )
+    if reference_version is None:
+        return []
+    root = ROOT / "data/acquisition_quality_development" / reference_version
+    manifest = root / "manifest.csv"
+    audit_path = root / "audit.json"
+    if not manifest.is_file() or not audit_path.is_file():
+        raise FileNotFoundError(
+            f"acquisition-quality development evidence missing: {root}"
+        )
+    audit = json.loads(audit_path.read_text(encoding="utf-8"))
+    rows = list(csv.DictReader(manifest.open(encoding="utf-8", newline="")))
+    if len(rows) != 90 or audit.get("admitted_clean_frames") != 90:
+        raise ValueError(
+            "acquisition-quality development evidence must contain 90 clean frames"
+        )
+    if audit.get("source_archive_sha256") != (
+        "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4"
+    ):
+        raise ValueError("acquisition-quality source archive identity mismatch")
+    if any(
+        row.get("label") != "clean"
+        or row.get("split") != "train"
+        or str(row.get("development_only", "")).lower() != "true"
+        or str(row.get("deployment_holdout_eligible", "")).lower() != "false"
+        for row in rows
+    ):
+        raise ValueError(
+            "acquisition-quality rows must remain clean, train-only development data"
+        )
+    for row in rows:
+        path = ROOT / str(row.get("path", ""))
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"acquisition-quality development crop missing: {path}"
+            )
+        if _sha256(path) != row.get("crop_sha256"):
+            raise ValueError(
+                f"acquisition-quality development crop hash mismatch: {path}"
+            )
+    return rows
+
+
+def _consumed_blind_clean_development_rows() -> list[dict]:
+    """Load clean hard negatives from the unblinded M8 development replay.
+
+    The source campaign is permanently ineligible for promotion.  Only its
+    clean crops are admitted; physical attack rows remain excluded because the
+    old capture did not provide enough verified surviving attacks.
+    """
+    reference_version = _optional_dataset_reference_version(
+        "consumed_blind_development_version"
+    )
+    if reference_version is None:
+        return []
+    root = ROOT / "data/structural_consumed_blind_development" / reference_version
+    manifest = root / "manifest.csv"
+    audit_path = root / "audit.json"
+    if not manifest.is_file() or not audit_path.is_file():
+        raise FileNotFoundError(f"consumed M8 development evidence missing: {root}")
+    audit = json.loads(audit_path.read_text(encoding="utf-8"))
+    rows = list(csv.DictReader(manifest.open(encoding="utf-8", newline="")))
+    if (
+        len(rows) != 80
+        or audit.get("admitted_clean_frames") != 80
+        or audit.get("source_archive_sha256")
+        != "d5930ffcaf1edc0702afd5ff2b2241584a95edd9f9f0de81fdc8a5a5a7921f6d"
+        or audit.get("source_holdout_consumed") is not True
+        or audit.get("promotion_eligible") is not False
+    ):
+        raise ValueError("consumed M8 clean development evidence contract mismatch")
+    if Counter(row.get("split") for row in rows) != {
+        "train": 60,
+        "validation": 20,
+    }:
+        raise ValueError("consumed M8 clean split must remain 60/20")
+    if any(
+        row.get("label") != "clean"
+        or row.get("source")
+        != "qrguard_consumed_blind_clean_2026_09_camera"
+        or str(row.get("blind_holdout_consumed", "")).lower() != "true"
+        or str(row.get("development_only", "")).lower() != "true"
+        or str(row.get("deployment_holdout_eligible", "")).lower() != "false"
+        or str(row.get("promotion_eligible", "")).lower() != "false"
+        for row in rows
+    ):
+        raise ValueError("consumed M8 rows escaped their non-promoting clean contract")
+    group_splits: dict[str, set[str]] = {}
+    for row in rows:
+        path = ROOT / str(row.get("path", ""))
+        if not path.is_file():
+            raise FileNotFoundError(f"consumed M8 development crop missing: {path}")
+        if _sha256(path) != row.get("crop_sha256"):
+            raise ValueError(f"consumed M8 crop hash mismatch: {path}")
+        group_splits.setdefault(str(row["group_id"]), set()).add(str(row["split"]))
+    if len(group_splits) != 16 or any(
+        len(splits) != 1 for splits in group_splits.values()
+    ):
+        raise ValueError("consumed M8 QR identities leak across development splits")
+    return rows
+
+
 def prepare_dataset() -> Path:
     required_manifests = {
         "QR-DN1.0": ROOT
@@ -729,14 +1168,26 @@ def prepare_dataset() -> Path:
     base = generate_base_qrs()
     print("Generating clean and physically tampered variants...", flush=True)
     rows = _derive_clean_and_tampered(base)
+    topology_rows = generate_topology_counterfactual_clean_rows()
+    if topology_rows:
+        print(
+            f"Generated {len(topology_rows):,} grouped clean mask counterfactuals.",
+            flush=True,
+        )
+        rows.extend(topology_rows)
     print("Generating FGSM/PGD adversarial variants...", flush=True)
     rows.extend(_derive_adversarial(base))
     rows.extend(_external_clean_rows())
     rows.extend(_runtime_capture_rows())
     rows.extend(_prepared_gallery_reference_rows())
+    rows.extend(_coverage_development_rows())
+    rows.extend(_physical_attack_development_rows())
+    rows.extend(_acquisition_quality_development_rows())
+    rows.extend(_consumed_blind_clean_development_rows())
     for row in rows:
         row.setdefault("session_id", row["group_id"])
         row.setdefault("device_model", "not_recorded")
+        row.setdefault("display_id", "not_recorded")
         row.setdefault("quality_condition", "not_annotated")
         row.setdefault("quality_severity", "not_annotated")
         row.setdefault("image_source", "not_annotated")
@@ -790,6 +1241,28 @@ def prepare_dataset() -> Path:
         ),
         "exact_app_crop_rows": sum(
             str(row["is_exact_app_crop"]).lower() == "true" for row in rows
+        ),
+        "acquisition_quality_development_rows": sum(
+            row.get("source") == "qrguard_acquisition_quality_2026_09_camera"
+            for row in rows
+        ),
+        "consumed_blind_clean_development_rows": sum(
+            row.get("source")
+            == "qrguard_consumed_blind_clean_2026_09_camera"
+            for row in rows
+        ),
+        "topology_counterfactual_clean_rows": sum(
+            row.get("source")
+            == "procedural_qrguard_topology_counterfactual"
+            for row in rows
+        ),
+        "topology_counterfactual_groups": len(
+            {
+                row["group_id"]
+                for row in rows
+                if row.get("source")
+                == "procedural_qrguard_topology_counterfactual"
+            }
         ),
         "deployment_note": (
             "External camera data improves domain coverage but exact QRGuard app crops "

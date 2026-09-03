@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "campaign_id": "sem11-root-cause-screen-80-2026-09-r01",
+  "frames_per_session": 5,
+  "repeats_per_distance": 3,
+  "distances": [
+    {
+      "id": "screen-80",
+      "label": "Screen 80%",
+      "instruction": "Keep the reference viewer at 80%. Use the same display, brightness, distance and angle throughout screening.",
+      "metadata": {
+        "capture_medium": "screen",
+        "screen_scale_percent": 80,
+        "controlled_variables": [
+          "display",
+          "brightness",
+          "camera_distance",
+          "camera_angle"
+        ]
+      }
+    }
+  ],
+  "privacy": {
+    "raw_payload_stored": false,
+    "payload_identifier": "sha256 of on-device decoded text"
+  },
+  "cases": [
+    {
+      "case_id": "RC-LAYOUT-4470",
+      "label": "RC-LAYOUT-4470 · V3 mask 4",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "f9c6dd631131ba2f90f1a8b0d9785ba321b211fbaa89125b1b3632f135d6cac4",
+      "instruction": "Display only cards/RC-LAYOUT-4470.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "same_length_payload_layout",
+        "qr_version": 3,
+        "mask_pattern": 4,
+        "module_count": 29,
+        "dark_module_ratio": 0.53151,
+        "qr_matrix_sha256": "8d76ba041d6dc9fc76c0723ef8eb9955ef760908b0410c097601e71a473e4273",
+        "reference_image_path": "cards/RC-LAYOUT-4470.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-LAYOUT-4471",
+      "label": "RC-LAYOUT-4471 · V3 mask 4",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-LAYOUT-4471.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "same_length_payload_layout",
+        "qr_version": 3,
+        "mask_pattern": 4,
+        "module_count": 29,
+        "dark_module_ratio": 0.536266,
+        "qr_matrix_sha256": "ae73ee9e4e8de28b6cfa4ba2e6e75748872291c94753edf144aa1146b36bd86f",
+        "reference_image_path": "cards/RC-LAYOUT-4471.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-LAYOUT-4472",
+      "label": "RC-LAYOUT-4472 · V3 mask 2",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "ed7b255eb553d9477b9ab7a355912a7ba4b2bb34d502c76f1f4e46df384780f3",
+      "instruction": "Display only cards/RC-LAYOUT-4472.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "same_length_payload_layout",
+        "qr_version": 3,
+        "mask_pattern": 2,
+        "module_count": 29,
+        "dark_module_ratio": 0.502973,
+        "qr_matrix_sha256": "d4d2fcbe817659a8cdef60df7557af0553cc646acfb756f61f4a5ca44d4758e4",
+        "reference_image_path": "cards/RC-LAYOUT-4472.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-0",
+      "label": "RC-MASK-0 · V3 mask 0",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-0.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 0,
+        "module_count": 29,
+        "dark_module_ratio": 0.487515,
+        "qr_matrix_sha256": "c0a51ae9bae2ed57ec7528b1786405314633de590dfe0bcebbe2a89717087ac0",
+        "reference_image_path": "cards/RC-MASK-0.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-1",
+      "label": "RC-MASK-1 · V3 mask 1",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-1.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 1,
+        "module_count": 29,
+        "dark_module_ratio": 0.504162,
+        "qr_matrix_sha256": "184d409329ca8f200fc0a023dc8f28515ce269943ee8636b42b27b7c9b02999f",
+        "reference_image_path": "cards/RC-MASK-1.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-2",
+      "label": "RC-MASK-2 · V3 mask 2",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-2.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 2,
+        "module_count": 29,
+        "dark_module_ratio": 0.500595,
+        "qr_matrix_sha256": "8c79b4668bc038d52dae790a3001e054a5cd3384fe29494a8ccb8259dc62fa4b",
+        "reference_image_path": "cards/RC-MASK-2.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-3",
+      "label": "RC-MASK-3 · V3 mask 3",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-3.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 3,
+        "module_count": 29,
+        "dark_module_ratio": 0.478002,
+        "qr_matrix_sha256": "68071e0d824b40a5900e1e1877118c88a1dc94ccb8a1b15327549a3071cf0284",
+        "reference_image_path": "cards/RC-MASK-3.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-4",
+      "label": "RC-MASK-4 · V3 mask 4",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-4.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 4,
+        "module_count": 29,
+        "dark_module_ratio": 0.536266,
+        "qr_matrix_sha256": "ae73ee9e4e8de28b6cfa4ba2e6e75748872291c94753edf144aa1146b36bd86f",
+        "reference_image_path": "cards/RC-MASK-4.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-5",
+      "label": "RC-MASK-5 · V3 mask 5",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-5.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 5,
+        "module_count": 29,
+        "dark_module_ratio": 0.514863,
+        "qr_matrix_sha256": "49b91bf2e6f6b89092b295741067e35533da276fdfdcac2d587a0822acfbabd8",
+        "reference_image_path": "cards/RC-MASK-5.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-6",
+      "label": "RC-MASK-6 · V3 mask 6",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-6.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 6,
+        "module_count": 29,
+        "dark_module_ratio": 0.51843,
+        "qr_matrix_sha256": "f93ac2d0cc7e0b749baf4761472500f0e28716ea3c668f12e8d16ed263987d22",
+        "reference_image_path": "cards/RC-MASK-6.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-MASK-7",
+      "label": "RC-MASK-7 · V3 mask 7",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-MASK-7.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_mask",
+        "qr_version": 3,
+        "mask_pattern": 7,
+        "module_count": 29,
+        "dark_module_ratio": 0.489893,
+        "qr_matrix_sha256": "12d3d6b099c690e985f9a247c6d89ab8956e49d7dd6fd0d3229ce0aca67c65cb",
+        "reference_image_path": "cards/RC-MASK-7.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    },
+    {
+      "case_id": "RC-VERSION-4",
+      "label": "RC-VERSION-4 · V4 mask 6",
+      "ground_truth": "clean",
+      "expected_payload_sha256": "4c8002e095d35a4062d9906eda5af166e701922470d46eddcf026e777d3db2cc",
+      "instruction": "Display only cards/RC-VERSION-4.png. Keep the viewer at 80%, brightness and camera pose fixed for the three repeats.",
+      "metadata": {
+        "family": "forced_version",
+        "qr_version": 4,
+        "mask_pattern": 6,
+        "module_count": 33,
+        "dark_module_ratio": 0.507805,
+        "qr_matrix_sha256": "d26e4cadd3ef1e115495c6efd6c82dbf343d8e43691785001a8dcbc609cf4f63",
+        "reference_image_path": "cards/RC-VERSION-4.png",
+        "case_identity_source": "operator_selection_plus_payload_hash; shared-payload mask/version controls require visual selection discipline"
+      }
+    }
+  ]
+}

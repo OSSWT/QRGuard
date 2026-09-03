@@ -1,0 +1,181 @@
+{
+  "campaign_id": "structural-coverage-blind-holdout-2026-09-r01",
+  "candidate_model_sha256": "a1d1a4f749032ac26a3abe0f3f7aafb83c9c146de7e193a9ca49bc6d05058fee",
+  "clean_layout_probability_span": 0.0030258893966674805,
+  "coverage": {
+    "adversarial": {
+      "independent_cases": 16,
+      "masks": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      },
+      "payload_length_bins": {
+        "long_97_plus": 6,
+        "medium_33_96": 5,
+        "short_1_32": 5
+      },
+      "version_bands": {
+        "high_v7_plus": 6,
+        "low_v1_v3": 5,
+        "medium_v4_v6": 5
+      }
+    },
+    "clean": {
+      "independent_cases": 16,
+      "masks": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      },
+      "payload_length_bins": {
+        "long_97_plus": 6,
+        "medium_33_96": 5,
+        "short_1_32": 5
+      },
+      "version_bands": {
+        "high_v7_plus": 6,
+        "low_v1_v3": 5,
+        "medium_v4_v6": 5
+      }
+    },
+    "tampered": {
+      "independent_cases": 16,
+      "masks": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      },
+      "payload_length_bins": {
+        "long_97_plus": 6,
+        "medium_33_96": 5,
+        "short_1_32": 5
+      },
+      "version_bands": {
+        "high_v7_plus": 6,
+        "low_v1_v3": 5,
+        "medium_v4_v6": 5
+      }
+    }
+  },
+  "demo_branch_audit": {
+    "gate_passed": true,
+    "masked_branch_errors": 0
+  },
+  "digital_sem11_gate_passed": true,
+  "evidence_role": "development_replay",
+  "gate_failures": [
+    "adversarial/low_v1_v3: 1 verified surviving physical attacks; require 5",
+    "adversarial/low_v1_v3: block recall 0.0000 below 0.8000",
+    "adversarial/medium_v4_v6: 0 verified surviving physical attacks; require 5",
+    "adversarial/medium_v4_v6: rescan rate 1.0000 exceeds 0.2000",
+    "adversarial/medium_v4_v6: block recall 0.0000 below 0.8000",
+    "adversarial/high_v7_plus: 1 verified surviving physical attacks; require 5",
+    "adversarial/high_v7_plus: block recall 0.0000 below 0.8000"
+  ],
+  "gate_passed": false,
+  "performance_by_class_version_band": {
+    "adversarial": {
+      "high_v7_plus": {
+        "block_recall": 0.0,
+        "blocked": 0,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 1
+      },
+      "low_v1_v3": {
+        "block_recall": 0.0,
+        "blocked": 0,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 1
+      },
+      "medium_v4_v6": {
+        "block_recall": 0.0,
+        "blocked": 0,
+        "rescan_rate": 1.0,
+        "rescans": 0,
+        "sessions": 0
+      }
+    },
+    "clean": {
+      "high_v7_plus": {
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "rescan_rate": 0.16666666666666666,
+        "rescans": 1,
+        "sessions": 6
+      },
+      "low_v1_v3": {
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      },
+      "medium_v4_v6": {
+        "false_block_rate": 0.0,
+        "false_blocks": 0,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      }
+    },
+    "tampered": {
+      "high_v7_plus": {
+        "block_recall": 1.0,
+        "blocked": 6,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 6
+      },
+      "low_v1_v3": {
+        "block_recall": 1.0,
+        "blocked": 5,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      },
+      "medium_v4_v6": {
+        "block_recall": 1.0,
+        "blocked": 5,
+        "rescan_rate": 0.0,
+        "rescans": 0,
+        "sessions": 5
+      }
+    }
+  },
+  "physical_attack_survival": {
+    "candidate_scored_only_for_verified_survivors_in_recall_gate": true,
+    "gate_passed": false,
+    "planned_attacks": 16,
+    "verified_survival_rate": 0.125,
+    "verified_surviving_attacks": 2
+  },
+  "policy_id": "structural-coverage-2026.09-r01",
+  "production_mutation_performed": false,
+  "promotion_blocked": true,
+  "promotion_eligible": false,
+  "schema_version": 1,
+  "source_archive": {
+    "filename": "QRGuard_Diagnostic_structural_coverage_blind_holdout_2026_09_r01.zip",
+    "frames": 240,
+    "sessions": 48,
+    "sha256": "d5930ffcaf1edc0702afd5ff2b2241584a95edd9f9f0de81fdc8a5a5a7921f6d"
+  }
+}

@@ -1,0 +1,427 @@
+{
+  "frame_metrics": {
+    "adversarial_block_rate": 0.0,
+    "adversarial_false_safe_rate": 0.0,
+    "clean_false_block_rate": 0.161111,
+    "clean_non_safe_rate": 0.161111,
+    "quality_abstention_rate": 0.0
+  },
+  "integrity": {
+    "decoded_payload_hash_matches": 178,
+    "duplicate_crop_instances": 0,
+    "globally_unique_crops": 180
+  },
+  "matrix": [
+    {
+      "case_id": "RC-LAYOUT-4470",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.4371720552444458,
+      "p_structural_median": 0.06513035297393799,
+      "p_structural_min": 0.02383178472518921,
+      "qr_coverage_median": 0.083204345703125,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 15
+      },
+      "verdicts": {
+        "safe": 15
+      }
+    },
+    {
+      "case_id": "RC-LAYOUT-4471",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.9691857695579529,
+      "p_structural_median": 0.5294447541236877,
+      "p_structural_min": 0.1430700421333313,
+      "qr_coverage_median": 0.03921875,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "blocked": 2,
+        "safe": 1
+      },
+      "session_majority_verdicts": {
+        "blocked": 2,
+        "safe": 1
+      },
+      "session_median_verdicts": {
+        "blocked": 2,
+        "safe": 1
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 8,
+        "clean": 7
+      },
+      "verdicts": {
+        "blocked": 8,
+        "safe": 7
+      }
+    },
+    {
+      "case_id": "RC-LAYOUT-4472",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.900461733341217,
+      "p_structural_median": 0.11167597770690918,
+      "p_structural_min": 0.011677443981170654,
+      "qr_coverage_median": 0.04102091471354167,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 1,
+        "clean": 14
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 14
+      }
+    },
+    {
+      "case_id": "RC-MASK-0",
+      "decoded_hash_matches": 14,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.6070812940597534,
+      "p_structural_median": 0.14162158966064453,
+      "p_structural_min": 0.007707476615905762,
+      "qr_coverage_median": 0.06075236002604167,
+      "quality": {
+        "marginal": 14,
+        "usable": 1
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 1,
+        "clean": 14
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 14
+      }
+    },
+    {
+      "case_id": "RC-MASK-1",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.6103570461273193,
+      "p_structural_median": 0.22723686695098877,
+      "p_structural_min": 0.003836512565612793,
+      "qr_coverage_median": 0.036226806640625,
+      "quality": {
+        "marginal": 14,
+        "usable": 1
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 2,
+        "clean": 13
+      },
+      "verdicts": {
+        "blocked": 2,
+        "safe": 13
+      }
+    },
+    {
+      "case_id": "RC-MASK-2",
+      "decoded_hash_matches": 14,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.6850027441978455,
+      "p_structural_median": 0.2550121545791626,
+      "p_structural_min": 0.030037760734558105,
+      "qr_coverage_median": 0.033705647786458334,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 1,
+        "clean": 14
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 14
+      }
+    },
+    {
+      "case_id": "RC-MASK-3",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.14332646131515503,
+      "p_structural_median": 0.04235053062438965,
+      "p_structural_min": 0.024415552616119385,
+      "qr_coverage_median": 0.034954427083333336,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 15
+      },
+      "verdicts": {
+        "safe": 15
+      }
+    },
+    {
+      "case_id": "RC-MASK-4",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.9889757037162781,
+      "p_structural_median": 0.31758683919906616,
+      "p_structural_min": 0.0920143723487854,
+      "qr_coverage_median": 0.03328857421875,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "blocked": 1,
+        "safe": 2
+      },
+      "session_majority_verdicts": {
+        "blocked": 1,
+        "safe": 2
+      },
+      "session_median_verdicts": {
+        "blocked": 1,
+        "safe": 2
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 4,
+        "clean": 11
+      },
+      "verdicts": {
+        "blocked": 4,
+        "safe": 11
+      }
+    },
+    {
+      "case_id": "RC-MASK-5",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.6597713232040405,
+      "p_structural_median": 0.3433811068534851,
+      "p_structural_min": 0.026993274688720703,
+      "qr_coverage_median": 0.02907470703125,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 1,
+        "clean": 14
+      },
+      "verdicts": {
+        "blocked": 1,
+        "safe": 14
+      }
+    },
+    {
+      "case_id": "RC-MASK-6",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.8162306547164917,
+      "p_structural_median": 0.35943764448165894,
+      "p_structural_min": 0.021804094314575195,
+      "qr_coverage_median": 0.03876261393229167,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 4,
+        "clean": 11
+      },
+      "verdicts": {
+        "blocked": 4,
+        "safe": 11
+      }
+    },
+    {
+      "case_id": "RC-MASK-7",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.8965158462524414,
+      "p_structural_median": 0.2863413095474243,
+      "p_structural_min": 0.019179701805114746,
+      "qr_coverage_median": 0.03478597005208333,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "blocked": 1,
+        "safe": 2
+      },
+      "session_majority_verdicts": {
+        "blocked": 1,
+        "safe": 2
+      },
+      "session_median_verdicts": {
+        "blocked": 1,
+        "safe": 2
+      },
+      "sessions": 3,
+      "structural_types": {
+        "adversarial": 7,
+        "clean": 8
+      },
+      "verdicts": {
+        "blocked": 7,
+        "safe": 8
+      }
+    },
+    {
+      "case_id": "RC-VERSION-4",
+      "decoded_hash_matches": 15,
+      "distance": "screen-80",
+      "frames": 15,
+      "ground_truth": "clean",
+      "p_structural_max": 0.14513617753982544,
+      "p_structural_median": 0.046527087688446045,
+      "p_structural_min": 0.004524052143096924,
+      "qr_coverage_median": 0.04046875,
+      "quality": {
+        "marginal": 15
+      },
+      "session_first_verdicts": {
+        "safe": 3
+      },
+      "session_majority_verdicts": {
+        "safe": 3
+      },
+      "session_median_verdicts": {
+        "safe": 3
+      },
+      "sessions": 3,
+      "structural_types": {
+        "clean": 15
+      },
+      "verdicts": {
+        "safe": 15
+      }
+    }
+  ],
+  "model": {
+    "artifact_sha256": "200a5ff02dbe47623ca738902bdcfe16b97bfbc507398e91dce9845aa7581ac9",
+    "path": "training/artifacts/structural",
+    "version": "structural-2026.09-r01"
+  },
+  "schema_version": 1,
+  "session_metrics": {
+    "majority_adversarial_false_safe_rate": 0.0,
+    "majority_clean_false_block_rate": 0.111111,
+    "majority_structural_ground_truth_detection_rate": 0.888889,
+    "median_adversarial_false_safe_rate": 0.0,
+    "median_clean_false_block_rate": 0.111111,
+    "single_first_adversarial_false_safe_rate": 0.0,
+    "single_first_clean_false_block_rate": 0.111111
+  },
+  "source": {
+    "filename": "QRGuard_Diagnostic_sem11_root_cause_screen_80_2026_09_r01_20260901T075434Z.zip",
+    "frame_count": 180,
+    "raw_payload_stored": false,
+    "session_count": 36,
+    "sha256": "4da992cfcb477526ed45843f5a70e702e23fb7d964dd7bb255ef23754e465153"
+  }
+}

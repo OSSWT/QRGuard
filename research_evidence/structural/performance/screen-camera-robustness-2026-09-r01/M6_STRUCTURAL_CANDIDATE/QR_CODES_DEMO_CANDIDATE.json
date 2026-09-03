@@ -1,0 +1,2479 @@
+{
+  "schema_version": 1,
+  "pack_id": "qr-codes-demo-2026-08-31-r01-r05",
+  "generated_at": "2026-09-01T12:12:08.758074+00:00",
+  "target": "local",
+  "target_label": "in-process stack with QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS=C:\\Users\\OSSW\\Desktop\\QRGuard\\01_Main_Repository\\ml_training\\structural\\runs\\structural-2026.09-r01\\artifacts",
+  "camera_mode": "API simulation using the manifest payload plus a locally decoded and perspective-corrected QR crop; not physical Live Camera evidence",
+  "case_count": 42,
+  "request_count": 84,
+  "summary": {
+    "gallery_matches_intended": 42,
+    "camera_simulation_matches_intended": 42,
+    "all_requests_http_200": true
+  },
+  "results": [
+    {
+      "case_id": "STR-CLN-NORMAL",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 665,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.002490520477294922,
+        "p_structural_raw": 0.002490520477294922,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.0538654330922923,
+        "server_elapsed_ms": 510
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.002490520477294922,
+        "p_structural_raw": 0.002490520477294922,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.0538654330922923,
+        "server_elapsed_ms": 41
+      }
+    },
+    {
+      "case_id": "STR-CLN-ANGLE",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 158,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.002736210823059082,
+        "p_structural_raw": 0.002736210823059082,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08313613407926877,
+        "server_elapsed_ms": 53
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 79,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.002736210823059082,
+        "p_structural_raw": 0.002736210823059082,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08313613407926877,
+        "server_elapsed_ms": 54
+      }
+    },
+    {
+      "case_id": "STR-CLN-DEFOCUS",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 146,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.001870572566986084,
+        "p_structural_raw": 0.001870572566986084,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.18703537862538436,
+        "server_elapsed_ms": 41
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 59,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.001870572566986084,
+        "p_structural_raw": 0.001870572566986084,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.18703537862538436,
+        "server_elapsed_ms": 43
+      }
+    },
+    {
+      "case_id": "STR-CLN-FAR",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 147,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.001699984073638916,
+        "p_structural_raw": 0.001699984073638916,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.16239045004188357,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 48,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.001699984073638916,
+        "p_structural_raw": 0.001699984073638916,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.16239045004188357,
+        "server_elapsed_ms": 41
+      }
+    },
+    {
+      "case_id": "STR-CLN-GLARE",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 174,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.004732847213745117,
+        "p_structural_raw": 0.004732847213745117,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11817598194979483,
+        "server_elapsed_ms": 56
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 79,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.004732847213745117,
+        "p_structural_raw": 0.004732847213745117,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11817598194979483,
+        "server_elapsed_ms": 53
+      }
+    },
+    {
+      "case_id": "STR-CLN-MOTION",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 165,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.04707425832748413,
+        "p_structural_raw": 0.04707425832748413,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.09780933580797214,
+        "server_elapsed_ms": 54
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 72,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.04707425832748413,
+        "p_structural_raw": 0.04707425832748413,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.09780933580797214,
+        "server_elapsed_ms": 57
+      }
+    },
+    {
+      "case_id": "STR-CLN-OVEREXP",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 166,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0029739737510681152,
+        "p_structural_raw": 0.0029739737510681152,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12244529796118052,
+        "server_elapsed_ms": 48
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 73,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0029739737510681152,
+        "p_structural_raw": 0.0029739737510681152,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12244529796118052,
+        "server_elapsed_ms": 44
+      }
+    },
+    {
+      "case_id": "STR-CLN-SCREEN",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 181,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0010355710983276367,
+        "p_structural_raw": 0.0010355710983276367,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11775148472338019,
+        "server_elapsed_ms": 57
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0010355710983276367,
+        "p_structural_raw": 0.0010355710983276367,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11775148472338019,
+        "server_elapsed_ms": 54
+      }
+    },
+    {
+      "case_id": "STR-CLN-SHADOW",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 174,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0023307204246520996,
+        "p_structural_raw": 0.0023307204246520996,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.1509021859989841,
+        "server_elapsed_ms": 58
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 79,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0023307204246520996,
+        "p_structural_raw": 0.0023307204246520996,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.1509021859989841,
+        "server_elapsed_ms": 56
+      }
+    },
+    {
+      "case_id": "STR-CLN-UNDEREXP",
+      "category": "structural",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 175,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0019769668579101562,
+        "p_structural_raw": 0.0019769668579101562,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08907189193596424,
+        "server_elapsed_ms": 56
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0019769668579101562,
+        "p_structural_raw": 0.0019769668579101562,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08907189193596424,
+        "server_elapsed_ms": 54
+      }
+    },
+    {
+      "case_id": "STR-ADV-NORMAL",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 238,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9990840554237366,
+        "p_structural_raw": 0.9990840554237366,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11641510291265666,
+        "server_elapsed_ms": 47
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9990840554237366,
+        "p_structural_raw": 0.9990840554237366,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11641510291265666,
+        "server_elapsed_ms": 42
+      }
+    },
+    {
+      "case_id": "STR-ADV-ANGLE",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9993376731872559,
+        "p_structural_raw": 0.9993376731872559,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13553339418086713,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 67,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9993376731872559,
+        "p_structural_raw": 0.9993376731872559,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13553339418086713,
+        "server_elapsed_ms": 44
+      }
+    },
+    {
+      "case_id": "STR-ADV-DEFOCUS",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 164,
+        "verdict": "blocked",
+        "risk_score": 88,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9970915913581848,
+        "p_structural_raw": 0.9970915913581848,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.09710336113272851,
+        "server_elapsed_ms": 45
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 47,
+        "verdict": "blocked",
+        "risk_score": 88,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9970915913581848,
+        "p_structural_raw": 0.9970915913581848,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.09710336113272851,
+        "server_elapsed_ms": 43
+      }
+    },
+    {
+      "case_id": "STR-ADV-FAR",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 175,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9937182664871216,
+        "p_structural_raw": 0.9937182664871216,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11765949184252748,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9937182664871216,
+        "p_structural_raw": 0.9937182664871216,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11765949184252748,
+        "server_elapsed_ms": 41
+      }
+    },
+    {
+      "case_id": "STR-ADV-GLARE",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 163,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9995543956756592,
+        "p_structural_raw": 0.9995543956756592,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12943447514356002,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 79,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9995543956756592,
+        "p_structural_raw": 0.9995543956756592,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12943447514356002,
+        "server_elapsed_ms": 50
+      }
+    },
+    {
+      "case_id": "STR-ADV-MOTION",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9993127584457397,
+        "p_structural_raw": 0.9993127584457397,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12127705676330743,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9993127584457397,
+        "p_structural_raw": 0.9993127584457397,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12127705676330743,
+        "server_elapsed_ms": 44
+      }
+    },
+    {
+      "case_id": "STR-ADV-OVEREXP",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 173,
+        "verdict": "blocked",
+        "risk_score": 76,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.7284069061279297,
+        "p_structural_raw": 0.7284069061279297,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08988192806584898,
+        "server_elapsed_ms": 47
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 52,
+        "verdict": "blocked",
+        "risk_score": 76,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.7284069061279297,
+        "p_structural_raw": 0.7284069061279297,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08988192806584898,
+        "server_elapsed_ms": 43
+      }
+    },
+    {
+      "case_id": "STR-ADV-SCREEN",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "blocked",
+        "risk_score": 87,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9948155283927917,
+        "p_structural_raw": 0.9948155283927917,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08213286390571632,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 55,
+        "verdict": "blocked",
+        "risk_score": 87,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9948155283927917,
+        "p_structural_raw": 0.9948155283927917,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08213286390571632,
+        "server_elapsed_ms": 40
+      }
+    },
+    {
+      "case_id": "STR-ADV-SHADOW",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 335,
+        "verdict": "blocked",
+        "risk_score": 88,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.999810516834259,
+        "p_structural_raw": 0.999810516834259,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.10419239650261383,
+        "server_elapsed_ms": 46
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "blocked",
+        "risk_score": 88,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.999810516834259,
+        "p_structural_raw": 0.999810516834259,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.10419239650261383,
+        "server_elapsed_ms": 43
+      }
+    },
+    {
+      "case_id": "STR-ADV-UNDEREXP",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 175,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9995726346969604,
+        "p_structural_raw": 0.9995726346969604,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13906969663037974,
+        "server_elapsed_ms": 45
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 79,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "adversarial",
+        "p_structural": 0.9995726346969604,
+        "p_structural_raw": 0.9995726346969604,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13906969663037974,
+        "server_elapsed_ms": 49
+      }
+    },
+    {
+      "case_id": "STR-TMP-NORMAL",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 158,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9994921684265137,
+        "p_structural_raw": 0.9994921684265137,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12995833674451543,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9994921684265137,
+        "p_structural_raw": 0.9994921684265137,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.12995833674451543,
+        "server_elapsed_ms": 44
+      }
+    },
+    {
+      "case_id": "STR-TMP-ANGLE",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 175,
+        "verdict": "blocked",
+        "risk_score": 93,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9986709952354431,
+        "p_structural_raw": 0.9986709952354431,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.2031272233000487,
+        "server_elapsed_ms": 51
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 79,
+        "verdict": "blocked",
+        "risk_score": 93,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9986709952354431,
+        "p_structural_raw": 0.9986709952354431,
+        "structural_quality_status": "marginal",
+        "structural_quality_conditions": [
+          "overexposure"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.2031272233000487,
+        "server_elapsed_ms": 54
+      }
+    },
+    {
+      "case_id": "STR-TMP-DEFOCUS",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 171,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9998363852500916,
+        "p_structural_raw": 0.9998363852500916,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13628834620422492,
+        "server_elapsed_ms": 45
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 47,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9998363852500916,
+        "p_structural_raw": 0.9998363852500916,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13628834620422492,
+        "server_elapsed_ms": 43
+      }
+    },
+    {
+      "case_id": "STR-TMP-FAR",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 153,
+        "verdict": "blocked",
+        "risk_score": 92,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9994997978210449,
+        "p_structural_raw": 0.9994997978210449,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.16241200119424556,
+        "server_elapsed_ms": 42
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "blocked",
+        "risk_score": 92,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9994997978210449,
+        "p_structural_raw": 0.9994997978210449,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.16241200119424556,
+        "server_elapsed_ms": 45
+      }
+    },
+    {
+      "case_id": "STR-TMP-GLARE",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 158,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9998210072517395,
+        "p_structural_raw": 0.9998210072517395,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11852802720614279,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 78,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9998210072517395,
+        "p_structural_raw": 0.9998210072517395,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11852802720614279,
+        "server_elapsed_ms": 48
+      }
+    },
+    {
+      "case_id": "STR-TMP-MOTION",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 158,
+        "verdict": "blocked",
+        "risk_score": 87,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9997403025627136,
+        "p_structural_raw": 0.9997403025627136,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08703628932597034,
+        "server_elapsed_ms": 43
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "blocked",
+        "risk_score": 87,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9997403025627136,
+        "p_structural_raw": 0.9997403025627136,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.08703628932597034,
+        "server_elapsed_ms": 47
+      }
+    },
+    {
+      "case_id": "STR-TMP-OVEREXP",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 149,
+        "verdict": "blocked",
+        "risk_score": 93,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9985401630401611,
+        "p_structural_raw": 0.9985401630401611,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.18972120842213772,
+        "server_elapsed_ms": 43
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "blocked",
+        "risk_score": 93,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9985401630401611,
+        "p_structural_raw": 0.9985401630401611,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.18972120842213772,
+        "server_elapsed_ms": 45
+      }
+    },
+    {
+      "case_id": "STR-TMP-SCREEN",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "blocked",
+        "risk_score": 86,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9989956617355347,
+        "p_structural_raw": 0.9989956617355347,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.07286054072685656,
+        "server_elapsed_ms": 45
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "blocked",
+        "risk_score": 86,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9989956617355347,
+        "p_structural_raw": 0.9989956617355347,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.07286054072685656,
+        "server_elapsed_ms": 45
+      }
+    },
+    {
+      "case_id": "STR-TMP-SHADOW",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 164,
+        "verdict": "blocked",
+        "risk_score": 93,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9997902512550354,
+        "p_structural_raw": 0.9997902512550354,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.19372842218403494,
+        "server_elapsed_ms": 46
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "blocked",
+        "risk_score": 93,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9997902512550354,
+        "p_structural_raw": 0.9997902512550354,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.19372842218403494,
+        "server_elapsed_ms": 47
+      }
+    },
+    {
+      "case_id": "STR-TMP-UNDEREXP",
+      "category": "structural",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 162,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9995052218437195,
+        "p_structural_raw": 0.9995052218437195,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13990786980436384,
+        "server_elapsed_ms": 42
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 73,
+        "verdict": "blocked",
+        "risk_score": 90,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [
+          "QR image appears manipulated",
+          "Structural model confirmed QR manipulation"
+        ],
+        "structural_status": "completed",
+        "structural_type": "tampered",
+        "p_structural": 0.9995052218437195,
+        "p_structural_raw": 0.9995052218437195,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.13990786980436384,
+        "server_elapsed_ms": 45
+      }
+    },
+    {
+      "case_id": "SEM-01-SAFE-HTTPS",
+      "category": "semantic_or_payload",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 149,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.006781041622161865,
+        "p_structural_raw": 0.006781041622161865,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11028046628354772,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.006781041622161865,
+        "p_structural_raw": 0.006781041622161865,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.11028046628354772,
+        "server_elapsed_ms": 43
+      }
+    },
+    {
+      "case_id": "SEM-02-BRAND-PHISH",
+      "category": "semantic_or_payload",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 231,
+        "verdict": "blocked",
+        "risk_score": 79,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [
+          "non_https",
+          "brand_in_subdomain"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Destination does not use HTTPS encryption",
+          "'maybank' appears in the subdomain but the actual domain is unknown"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.004997551441192627,
+        "p_structural_raw": 0.004997551441192627,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.974348619619489,
+        "server_elapsed_ms": 42
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 48,
+        "verdict": "blocked",
+        "risk_score": 79,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [
+          "non_https",
+          "brand_in_subdomain"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Destination does not use HTTPS encryption",
+          "'maybank' appears in the subdomain but the actual domain is unknown"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.004997551441192627,
+        "p_structural_raw": 0.004997551441192627,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.974348619619489,
+        "server_elapsed_ms": 42
+      }
+    },
+    {
+      "case_id": "SEM-03-RAW-IP",
+      "category": "semantic_or_payload",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 174,
+        "verdict": "blocked",
+        "risk_score": 97,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [
+          "ip_literal_host",
+          "non_https"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Link points to a raw IP address",
+          "Host is a raw IP address (203.0.113.7)",
+          "Destination does not use HTTPS encryption"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.2160833477973938,
+        "p_structural_raw": 0.2160833477973938,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.9961118880562588,
+        "server_elapsed_ms": 46
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 64,
+        "verdict": "blocked",
+        "risk_score": 97,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [
+          "ip_literal_host",
+          "non_https"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Link points to a raw IP address",
+          "Host is a raw IP address (203.0.113.7)",
+          "Destination does not use HTTPS encryption"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.2160833477973938,
+        "p_structural_raw": 0.2160833477973938,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.9961118880562588,
+        "server_elapsed_ms": 44
+      }
+    },
+    {
+      "case_id": "SEM-04-PUNYCODE",
+      "category": "semantic_or_payload",
+      "intended_verdict": "WARNING",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 190,
+        "verdict": "warning",
+        "risk_score": 28,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [
+          "punycode_host",
+          "non_https"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Host uses punycode (xn--pypal-4ve.invalid) — may imitate another domain's look",
+          "Destination does not use HTTPS encryption"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.01435232162475586,
+        "p_structural_raw": 0.01435232162475586,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.593562271510023,
+        "server_elapsed_ms": 53
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 47,
+        "verdict": "warning",
+        "risk_score": 28,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [
+          "punycode_host",
+          "non_https"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Host uses punycode (xn--pypal-4ve.invalid) — may imitate another domain's look",
+          "Destination does not use HTTPS encryption"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.01435232162475586,
+        "p_structural_raw": 0.01435232162475586,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.593562271510023,
+        "server_elapsed_ms": 44
+      }
+    },
+    {
+      "case_id": "SEM-05-USERINFO",
+      "category": "semantic_or_payload",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 169,
+        "verdict": "blocked",
+        "risk_score": 80,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [
+          "non_https",
+          "userinfo_in_url"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Destination does not use HTTPS encryption",
+          "URL contains '@' before the host — the part before it is a decoy"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.004625856876373291,
+        "p_structural_raw": 0.004625856876373291,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.9842895841469359,
+        "server_elapsed_ms": 47
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 46,
+        "verdict": "blocked",
+        "risk_score": 80,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [
+          "non_https",
+          "userinfo_in_url"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Destination does not use HTTPS encryption",
+          "URL contains '@' before the host — the part before it is a decoy"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.004625856876373291,
+        "p_structural_raw": 0.004625856876373291,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.9842895841469359,
+        "server_elapsed_ms": 46
+      }
+    },
+    {
+      "case_id": "SEM-06-DEEP-SUBDOMAINS",
+      "category": "semantic_or_payload",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 175,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [
+          "non_https",
+          "excessive_subdomains"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Unusually deep subdomain nesting",
+          "Destination does not use HTTPS encryption",
+          "Unusually deep subdomain nesting (login.secure.account.verify.demo.)"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.005797326564788818,
+        "p_structural_raw": 0.005797326564788818,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.9945618360677255,
+        "server_elapsed_ms": 46
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 60,
+        "verdict": "blocked",
+        "risk_score": 89,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [
+          "non_https",
+          "excessive_subdomains"
+        ],
+        "reasons": [
+          "Destination link matches phishing patterns",
+          "Destination is not a widely-recognised website",
+          "Unusually deep subdomain nesting",
+          "Destination does not use HTTPS encryption",
+          "Unusually deep subdomain nesting (login.secure.account.verify.demo.)"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.005797326564788818,
+        "p_structural_raw": 0.005797326564788818,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.9945618360677255,
+        "server_elapsed_ms": 46
+      }
+    },
+    {
+      "case_id": "SEM-07-SHORTENER",
+      "category": "semantic_or_payload",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "blocked",
+        "risk_score": 100,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [
+          "shortened_url"
+        ],
+        "reasons": [
+          "Shortened link hides the real destination",
+          "Destination link matches phishing patterns",
+          "Link uses URL shortener (bit.ly)"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.02547609806060791,
+        "p_structural_raw": 0.02547609806060791,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.7905565307133227,
+        "server_elapsed_ms": 42
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 73,
+        "verdict": "blocked",
+        "risk_score": 100,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [
+          "shortened_url"
+        ],
+        "reasons": [
+          "Shortened link hides the real destination",
+          "Destination link matches phishing patterns",
+          "Link uses URL shortener (bit.ly)"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.02547609806060791,
+        "p_structural_raw": 0.02547609806060791,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "completed",
+        "p_url": 0.7905565307133227,
+        "server_elapsed_ms": 50
+      }
+    },
+    {
+      "case_id": "SEM-08-JAVASCRIPT",
+      "category": "semantic_or_payload",
+      "intended_verdict": "BLOCKED",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 164,
+        "verdict": "blocked",
+        "risk_score": 94,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "url",
+        "rule_flags": [
+          "js_or_data_uri"
+        ],
+        "reasons": [
+          "Payload contains executable content",
+          "Payload uses executable 'javascript:' scheme instead of a web address"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.07289719581604004,
+        "p_structural_raw": 0.07289719581604004,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 45
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 47,
+        "verdict": "blocked",
+        "risk_score": 94,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "url",
+        "rule_flags": [
+          "js_or_data_uri"
+        ],
+        "reasons": [
+          "Payload contains executable content",
+          "Payload uses executable 'javascript:' scheme instead of a web address"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.07289719581604004,
+        "p_structural_raw": 0.07289719581604004,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 41
+      }
+    },
+    {
+      "case_id": "SEM-09-WIFI-OPEN",
+      "category": "semantic_or_payload",
+      "intended_verdict": "WARNING",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "warning",
+        "risk_score": 26,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "wifi",
+        "rule_flags": [
+          "open_wifi_network"
+        ],
+        "reasons": [
+          "Wi-Fi network is unencrypted",
+          "Wi-Fi network uses no password — traffic can be intercepted"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0051763057708740234,
+        "p_structural_raw": 0.0051763057708740234,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "warning",
+        "risk_score": 26,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "wifi",
+        "rule_flags": [
+          "open_wifi_network"
+        ],
+        "reasons": [
+          "Wi-Fi network is unencrypted",
+          "Wi-Fi network uses no password — traffic can be intercepted"
+        ],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.0051763057708740234,
+        "p_structural_raw": 0.0051763057708740234,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 47
+      }
+    },
+    {
+      "case_id": "SEM-10-WIFI-SECURE",
+      "category": "semantic_or_payload",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "wifi",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.003878772258758545,
+        "p_structural_raw": 0.003878772258758545,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 42
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 48,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "wifi",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.003878772258758545,
+        "p_structural_raw": 0.003878772258758545,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 45
+      }
+    },
+    {
+      "case_id": "SEM-11-PLAIN-TEXT",
+      "category": "semantic_or_payload",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 181,
+        "verdict": "safe",
+        "risk_score": 3,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "text",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.15645909309387207,
+        "p_structural_raw": 0.15645909309387207,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 42
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 63,
+        "verdict": "safe",
+        "risk_score": 3,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "text",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.15645909309387207,
+        "p_structural_raw": 0.15645909309387207,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 44
+      }
+    },
+    {
+      "case_id": "SEM-12-DUITNOW-DUMMY",
+      "category": "semantic_or_payload",
+      "intended_verdict": "SAFE",
+      "gallery_matches_intended": true,
+      "camera_simulation_matches_intended": true,
+      "gallery": {
+        "http_status": 200,
+        "request_elapsed_ms": 159,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "decoded",
+        "payload_type": "payment",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.008755266666412354,
+        "p_structural_raw": 0.008755266666412354,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 44
+      },
+      "camera_simulation": {
+        "http_status": 200,
+        "request_elapsed_ms": 50,
+        "verdict": "safe",
+        "risk_score": 1,
+        "partial_analysis": false,
+        "payload_source": "provided",
+        "payload_type": "payment",
+        "rule_flags": [],
+        "reasons": [],
+        "structural_status": "completed",
+        "structural_type": "clean",
+        "p_structural": 0.008755266666412354,
+        "p_structural_raw": 0.008755266666412354,
+        "structural_quality_status": "usable",
+        "structural_quality_conditions": [
+          "normal"
+        ],
+        "structural_rescan_reason": null,
+        "semantic_status": "not_applicable",
+        "p_url": null,
+        "server_elapsed_ms": 44
+      }
+    }
+  ]
+}

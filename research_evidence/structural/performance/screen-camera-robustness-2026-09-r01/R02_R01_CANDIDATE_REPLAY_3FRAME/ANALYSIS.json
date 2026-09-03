@@ -1,0 +1,865 @@
+{
+  "candidate": {
+    "aggregation": "median_score_majority_class",
+    "artifact_path": "ml_training/structural/runs/structural-2026.09-r01/artifacts",
+    "maximum_frames": 3,
+    "minimum_analyzable_frames": 3,
+    "minimum_crop_side": 256,
+    "model_metadata_sha256": "a80908ee42898a8270411fc08f65b2460ee78b6f3735412307373c05ff6d1526",
+    "model_sha256": "200a5ff02dbe47623ca738902bdcfe16b97bfbc507398e91dce9845aa7581ac9",
+    "runtime_policy": {
+      "below_floor_action": "inconclusive_rescan_never_safe",
+      "calibration_evidence": {
+        "highest_sem11_clean_false_block_session_score": 0.62642,
+        "lowest_known_attack_score": 0.72840690612793,
+        "scope": "development policy only; fresh blinded promotion evidence required"
+      },
+      "camera_definitive_manipulation_floor": 0.7
+    },
+    "selection": "best_geometry_before_rectification_proxy",
+    "version": "structural-2026.09-r01"
+  },
+  "evaluation": "production_multi_frame_candidate",
+  "matrix": [
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-01",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-02",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-03",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-04",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-05",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-06",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-07",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-08",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-09",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-10",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-11",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-12",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-13",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-14",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-15",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-F-16",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-01",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-02",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-03",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-04",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-05",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-06",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-07",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-08",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-09",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-10",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-11",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-12",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-13",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-14",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-15",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-ADV-X-16",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "adversarial",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "adversarial": 1
+      },
+      "verdicts": {
+        "blocked": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-01",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-02",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-03",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-04",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-05",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-06",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-07",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-08",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-09",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-10",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-11",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-12",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-13",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-14",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-15",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    },
+    {
+      "analyzed_frames": 3,
+      "case_id": "PHY-CLN-16",
+      "distance": "screen-80",
+      "eligible_frames": 3,
+      "ground_truth": "clean",
+      "outcomes": {
+        "correct": 1
+      },
+      "sessions": 1,
+      "structural_types": {
+        "clean": 1
+      },
+      "verdicts": {
+        "safe": 1
+      }
+    }
+  ],
+  "metrics": {
+    "adversarial_false_safe_rate": 0.0,
+    "clean_false_block_rate": 0.0,
+    "correct_session_rate": 1.0,
+    "definitive_adversarial_correct_rate": 1.0,
+    "definitive_clean_correct_rate": 1.0,
+    "definitive_pipeline_elapsed_ms_mean": 114.54166666666667,
+    "definitive_pipeline_elapsed_ms_median": 109.0,
+    "definitive_pipeline_elapsed_ms_p95": 123,
+    "pipeline_elapsed_ms_mean": 114.54166666666667,
+    "pipeline_elapsed_ms_median": 109.0,
+    "pipeline_elapsed_ms_p95": 123,
+    "rescan_session_rate": 0.0
+  },
+  "payload_policy": "neutral_non_url_structural_only",
+  "schema_version": 1,
+  "source": {
+    "captured_frame_count": 240,
+    "evaluated_frame_count": 144,
+    "filename": "QRGuard_Diagnostic_structural_physical_attack_development_2026_09.zip",
+    "raw_payload_stored": false,
+    "session_count": 48,
+    "sha256": "a69f83022e8af591e9d09f31cdbedb924ad41cf5e9d951feac24ef6577775d58"
+  }
+}

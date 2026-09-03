@@ -1,24 +1,30 @@
 {
   "schema_version": 2,
-  "status": "r01_r05_deployed_and_remote_smoke_verified",
+  "status": "r07_controlled_release_installed_locally_pending_external_update",
   "deployed": {
     "structural": {
       "display_name": "Structural Training",
-      "version": "structural-2026.03-r01",
+      "version": "structural-r07-corrective-v1",
       "scope": "one source-neutral artifact for Gallery and Live Camera",
+      "release_scope": "user_authorized_controlled_release_with_disclosed_limitations",
       "artifact": {
         "path": "training/artifacts/structural/structural_fp32.onnx",
         "bytes": 44702737,
-        "sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
-        "temperature": 0.4637561909457002
+        "sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
+        "temperature": 0.6445590340070313
       },
-      "branch_gates_passed": true,
+      "development_gate_passed": true,
+      "formal_deployment_gates_passed": false,
       "runtime_mitigation": [
-        "one authoritative rectified crop per scan",
-        "measured-pixel quality abstention and normalisation",
+        "quality and exposure-diverse camera-frame selection",
+        "quality gate before Structural inference",
+        "minimum 5.0 observed pixels per QR module",
+        "inconclusive evidence requires Rescan and is never Safe",
         "confirmed non-clean Structural class is at least Blocked"
       ],
-      "gate_failures": []
+      "gate_failures": [
+        "fresh candidate-bound independent blind acceptance remains pending"
+      ]
     },
     "semantic": {
       "display_name": "Semantic Training",
@@ -68,16 +74,26 @@
   "candidates": {
     "structural": {
       "display_name": "Structural Training",
-      "version": "structural-2026.03-r01",
-      "path": "ml_training/structural/runs/structural-2026.03-r01",
-      "artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
+      "version": "structural-r07-corrective-v1",
+      "path": "ml_training/structural/performance/structural-r07-corrective-v1",
+      "artifact_sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
       "research_gates_passed": true,
-      "runtime_scope": "unified_gallery_and_live_camera_candidate",
-      "deployment_gates_passed": true,
-      "deployment_gate_failures": [],
+      "runtime_scope": "user_authorized_controlled_gallery_and_live_camera_release",
+      "deployment_gates_passed": false,
+      "deployment_gate_failures": [
+        "fresh candidate-bound independent blind acceptance remains pending"
+      ],
       "promoted_to_local_runtime": true,
-      "external_deployment_pending": false,
-      "externally_deployed": true
+      "external_deployment_pending": true,
+      "externally_deployed": false,
+      "development_calibration": {
+        "clean_false_block_rate_by_version_band": 0.0,
+        "attack_base_recall_low_v1_v3": 1.0,
+        "attack_base_recall_medium_v4_v6": 1.0,
+        "attack_base_recall_high_v7_plus": 0.8333333333333334,
+        "high_version_rescan_rate": 0.16666666666666666,
+        "analyzable_attack_false_safe_count": 0
+      }
     },
     "decision_layer": {
       "display_name": "Risk Decision Layer",
@@ -96,6 +112,7 @@
     }
   },
   "rollback": {
+    "structural_before_r07_controlled_release": "ml_training/deployment/rollback/structural-before-r07-controlled-release",
     "structural_run5": "ml_training/deployment/rollback/structural-run5",
     "camera_structural_2026_02": "ml_training/structural/runs/structural-2026.02",
     "decision_2026_02": "ml_training/decision_layer/runs/decision-2026.02",
@@ -103,12 +120,15 @@
     "legacy_semantic": "training/artifacts/method1"
   },
   "verification": {
-    "backend_tests": "356 passed",
+    "r07_local_backend_targeted": "106 passed, 2 skipped",
+    "r07_flutter_targeted": "14 passed",
+    "backend_tests": "470 passed, 3 skipped",
     "flutter_analyze": "no issues",
-    "flutter_tests": "72 passed",
-    "flutter_release_apk": "production URL build 1.1.2+8009; 72810512 bytes; sha256 52c74130822e92dcb27b3e0f2043cd190419c29195a3b40b9dba8169cf5b638c; hosted APK hash matched",
-    "local_production_backend": "Uvicorn health ok with unified r01 and Decision r05",
+    "flutter_tests": "104 passed",
+    "flutter_release_apk": "production URL build 1.2.0+8012; 73462225 bytes; sha256 c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c; APK Signature Scheme v2 verified; release copy hash matched; external hosting pending",
+    "local_production_backend": "Uvicorn health ok with unified structural-r07-corrective-v1 and Decision r05",
     "smoke_matrix": {
+      "scope": "previous r01 remote baseline; r07 remote verification pending",
       "camera_clean_http": "Safe locally at risk 0; Safe remotely at risk 5",
       "camera_adversarial_http": "Blocked, risk 81",
       "gallery_clean_http": "Safe locally at risk 0; Safe remotely at risk 5",
@@ -135,6 +155,7 @@
       "deploy_id": "dep-daa8vopf2nfc739j8f4g",
       "url": "https://qrguard-api-osswt.onrender.com",
       "status": "live",
+      "structural_version": "structural-2026.03-r01",
       "health": "ok",
       "remote_smoke_passed": true
     },
@@ -152,6 +173,5 @@
       "signer_certificate_sha256": "ce47b65dab21523731dfd76a414068ad95dcce3e1ee02a54e80b04552191c1ec"
     }
   },
-  "remaining_promotion_requirement": "none; monitor production and retain the recorded rollback set",
-  "recorded_at": "2026-08-31T04:23:51+08:00"
+  "remaining_promotion_requirement": "fresh candidate-bound independent blind acceptance for formal promotion"
 }

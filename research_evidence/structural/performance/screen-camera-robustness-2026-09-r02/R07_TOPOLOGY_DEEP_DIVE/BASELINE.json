@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "audit": "structural_topology_counterfactual_clean",
+  "evidence_role": "development_counterfactual",
+  "promotion_eligible": false,
+  "manifest": "ml_training/datasets/structural/processed/structural-2026.09-r07/manifest.csv",
+  "manifest_sha256": "dbc595a4542dab8490caed4ee2bbd236743d307e849cb4c03d2955c81761ca5b",
+  "split": "validation",
+  "model": {
+    "version": "structural-2026.09-r07",
+    "artifact_sha256": "a1d1a4f749032ac26a3abe0f3f7aafb83c9c146de7e193a9ca49bc6d05058fee",
+    "temperature": 0.5922535311051907
+  },
+  "rows": 1024,
+  "groups": 64,
+  "versions": [
+    3,
+    5,
+    7,
+    10,
+    12,
+    14,
+    16,
+    20
+  ],
+  "masks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "clean_false_positive_rate": 0.0,
+  "clean_structural_probability_span_p95": 0.3150930792093276,
+  "maximum_group_probability_span": 0.4574000835418701,
+  "per_version_clean_false_positive_rate": {
+    "10": 0.0,
+    "12": 0.0,
+    "14": 0.0,
+    "16": 0.0,
+    "20": 0.0,
+    "3": 0.0,
+    "5": 0.0,
+    "7": 0.0
+  },
+  "per_mask_clean_false_positive_rate": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0
+  },
+  "per_condition_clean_false_positive_rate": {
+    "normal": 0.0,
+    "screen_moire_or_compression": 0.0
+  },
+  "mask_probability_span_p95_within_condition": 0.28094088137149775,
+  "condition_probability_span_p95_within_mask": 0.03627964258193969,
+  "worst_group_probability_spans": [
+    {
+      "group_id": "synthetic_topology:v07-q-5",
+      "qr_version": 7,
+      "probability_min": 0.002990126609802246,
+      "probability_max": 0.46039021015167236,
+      "probability_span": 0.4574000835418701
+    },
+    {
+      "group_id": "synthetic_topology:v05-h-4",
+      "qr_version": 5,
+      "probability_min": 0.04120093584060669,
+      "probability_max": 0.41573143005371094,
+      "probability_span": 0.37453049421310425
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-4",
+      "qr_version": 3,
+      "probability_min": 0.06554460525512695,
+      "probability_max": 0.39919954538345337,
+      "probability_span": 0.3336549401283264
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-5",
+      "qr_version": 3,
+      "probability_min": 0.025961339473724365,
+      "probability_max": 0.3439067602157593,
+      "probability_span": 0.3179454207420349
+    },
+    {
+      "group_id": "synthetic_topology:v03-m-4",
+      "qr_version": 3,
+      "probability_min": 0.022638559341430664,
+      "probability_max": 0.3215683698654175,
+      "probability_span": 0.2989298105239868
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-4",
+      "qr_version": 5,
+      "probability_min": 0.05572772026062012,
+      "probability_max": 0.3102468252182007,
+      "probability_span": 0.25451910495758057
+    },
+    {
+      "group_id": "synthetic_topology:v05-l-5",
+      "qr_version": 5,
+      "probability_min": 0.052055954933166504,
+      "probability_max": 0.27227282524108887,
+      "probability_span": 0.22021687030792236
+    },
+    {
+      "group_id": "synthetic_topology:v03-q-5",
+      "qr_version": 3,
+      "probability_min": 0.0034788846969604492,
+      "probability_max": 0.20417124032974243,
+      "probability_span": 0.20069235563278198
+    },
+    {
+      "group_id": "synthetic_topology:v05-q-4",
+      "qr_version": 5,
+      "probability_min": 0.001331329345703125,
+      "probability_max": 0.2008764147758484,
+      "probability_span": 0.19954508543014526
+    },
+    {
+      "group_id": "synthetic_topology:v03-l-4",
+      "qr_version": 3,
+      "probability_min": 0.039670467376708984,
+      "probability_max": 0.22835153341293335,
+      "probability_span": 0.18868106603622437
+    }
+  ],
+  "failures": []
+}

@@ -1,112 +1,70 @@
 # Current ML checkpoint
 
-Last updated: 2026-08-31.
-
 ## Outcome
 
-Structural r01 and Decision r05 are deployed. The rebuilt backend/static/APK
-package passed local smoke, GitHub `main` was updated, and both Render services
-passed remote health, scan, page and hosted-APK verification.
+`structural-r07-corrective-v1` is installed in the local production runtime as a
+user-authorized controlled release. Semantic `semantic-2026.02` and Decision
+`decision-2026.03-r05` remain unchanged. The Structural candidate is not recorded
+as formally promoted because a new candidate-bound independent blind acceptance
+is still pending.
 
-| Component | Production version | Status |
+| Component | Runtime version | Status |
 |---|---|---|
-| Structural | `structural-2026.03-r01` | Unified Gallery/Camera runtime; live |
+| Structural | `structural-r07-corrective-v1` | Controlled Gallery/Camera runtime; local package verified |
 | Semantic | `semantic-2026.02` | Frozen accepted runtime |
-| Decision | `decision-2026.03-r05` | All aggregate and 36 cell gates passed; live |
-| Full stack | r01 + r05 | Local and remote production smoke passed |
+| Decision | `decision-2026.03-r05` | Accepted runtime; Safe < 26 and Blocked >= 76 |
 
 ## Artifact identity
 
 - Structural ONNX: 44,702,737 bytes; SHA-256
-  `3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4`.
-- Decision weights: 12,694 bytes; SHA-256
-  `e0d49a92cc0926e3025b3d431590084ece7ba476ce8041294f68f1ffac3b8385`.
-- Canonical capture manifest SHA-256:
-  `dc7e220712f7604cc74a1c7cecabc0b73ee63733fd48338311b01b386c415b96`.
-- Locked prediction CSV SHA-256:
-  `657ced911160249dffba8d73648952a971cdbe6469d9d888f9e9ff19faa9f922`.
+  `71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033`.
+- Structural temperature: `0.6445590340070313`.
+- Signed Android release: `1.2.0+8012`, 73,462,225 bytes; SHA-256
+  `c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c`.
+- Android signer certificate SHA-256:
+  `ce47b65dab21523731dfd76a414068ad95dcce3e1ee02a54e80b04552191c1ec`.
 
-## Locked production-path measurements
+## Runtime safety policy
 
-| Metric | Result | Gate |
-|---|---:|---:|
-| Camera clean false-block rate | 0.0000 | <= 0.05 |
-| Camera adversarial Blocked recall | 0.9500 | >= 0.80 |
-| Camera tampered Blocked recall | 1.0000 | >= 0.85 |
-| Gallery clean false-block rate | 0.0000 | <= 0.05 |
-| Gallery adversarial/tampered Blocked recall | 1.0000 / 1.0000 | reported |
-| Final Camera/Gallery verdict agreement | 0.9833 (59/60) | >= 0.95 |
-| Structural ONNX P95 latency | 44.09 ms | <= 500 ms |
+- Camera uses quality-ranked, exposure-diverse temporal evidence and three-frame
+  Structural consensus.
+- Quality checks run before Structural inference.
+- Dense QR evidence requires at least 5.0 observed pixels per module.
+- Poor focus, motion, glare, exposure or insufficient detail returns Rescan
+  instead of Safe.
+- A Structural Rescan cannot be bypassed by Deep Check or a proceed action.
+- Confirmed non-clean Structural evidence remains at least Blocked.
 
-The one pair disagreement is a genuine Camera Structural miss on an adversarial
-sample. It remains in the evidence and was not hidden by a source override.
+## Controlled calibration result
 
-## Post-promotion verification
+- 72 sessions and 360 frames passed the capture contract.
+- 25/48 attack cases survived the independent physical-channel check.
+- Clean false-block rate was 0.00 in low, medium and high version bands.
+- Independent attack-base recall was 1.00 low, 1.00 medium and 0.8333 high.
+- One dense V14/73-module base required Rescan because the observed crop detail
+  was below the frozen evidence floor.
+- No analyzable surviving attack was returned as Safe.
 
-- Backend regression after project organization: 360 tests passed.
-- Production-path exact-app evaluator: all gates passed on 120 locked rows.
-- Actual Uvicorn health: unified r01, Semantic 2026.02, Safe < 26 and
-  Blocked >= 76.
-- HTTP smoke: Camera clean Safe, Camera adversarial Blocked, Gallery clean Safe,
-  Gallery tampered Blocked; all HTTP 200 and non-Partial.
-- Flutter analyzer: no issues; Flutter tests: 72 passed.
-- Render static package: home, download, privacy and APK endpoints all HTTP 200.
-- Hosted production APK `1.1.2+8009`: 72,810,512 bytes; SHA-256
-  `52c74130822e92dcb27b3e0f2043cd190419c29195a3b40b9dba8169cf5b638c`;
-  remote download hash matched and APK Signature Scheme v2 verification passed.
+These measurements are development-only. They do not claim universal coverage
+across every phone, display, printer, lighting condition or future attack.
 
-Docker CLI is not installed on this workstation. The Docker packaging contract
-passed locally and Render's actual Docker build completed successfully.
+## Verification
 
-## Dataset and project organization
+- Backend regression: 470 passed, 3 conditional skips.
+- r07 backend safety subset: 106 passed, 2 conditional skips.
+- Flutter analyzer: no issues.
+- Flutter tests: 104 passed.
+- Production Web and signed Android builds: passed.
+- Local Uvicorn health: `unified=structural-r07-corrective-v1`, sources Gallery
+  and Camera.
 
-The 2026-08-31 organization pass was recorded in commit `7136c6a` and
-fast-forwarded to GitHub `main`. It did not replace the deployed models or APK;
-the verified Render production package remains at source `6f17d664`.
+## Rollback
 
-- Public dataset contracts, citations, generated-QR inventory, and demo material
-  now share the canonical root `ml_training/datasets/`.
-- Structural and Semantic references are separated below
-  `ml_training/datasets/references/`.
-- Generated QR sets are recorded in
-  `ml_training/datasets/generated_qr_codes/registry.json`.
-- The supervisor pack is named `qr_codes_demo` in the repository and
-  `QR_Codes_Demo` in the local hand-off tree.
-- The tracked generated `QRGuard_ML_Colab/` mirror and root ZIP were replaced by
-  ignored, reproducible output under `dist/`; the current hand-off ZIP is stored
-  outside the repository.
-- One canonical notebook is retained per Structural, Semantic, and Decision
-  workflow. Superseded notebooks and legacy runtime runs were hash-preserved
-  outside the public repository.
+The exact pre-r07 runtime remains available from the canonical
+`structural-2026.03-r01` source artifacts and Git. The small rollback manifest at
+`deployment/rollback/structural-before-r07-controlled-release/ROLLBACK.json`
+records all four file hashes. No duplicate 44.7 MB rollback binary is stored.
 
-The QR Codes Demo contains 42 cards: 30 Structural cases and 12
-Semantic/payload cases. Local and deployed-Render API validation both matched
-the expected Gallery and Camera-request outcomes: 42/42 per mode, 84/84 HTTP
-200 in each environment. These automated Camera requests are not a substitute
-for physical phone camera evidence; the real `live_camera` result and supervisor
-screenshots remain deliberately marked `pending`.
-
-Organization regression evidence:
-
-- Backend: 360 passed.
-- Flutter: 72 passed; analyzer clean.
-- Demo contract and Colab contract: 10 passed.
-- Ruff on the new/modified organization scripts and tests: clean.
-- Git whitespace validation: clean.
-
-## External deployment identity
-
-- GitHub main commit: `e942bbf583d6be227007e5821b2c5c0dd01c239b`.
-- Render source commit: `6f17d664e0d1f3f4e30d643c3592dceacabd32fa`.
-- API deploy: `dep-daa8vopf2nfc739j8f4g` — live; `/health` reports unified r01.
-- Web deploy: `dep-daa8vthf2nfc739j8vbg` — live; pages, capture plan and APK HTTP 200.
-- Remote scans: Camera clean Safe 5, Camera adversarial Blocked 81, Gallery
-  clean Safe 5, Gallery tampered Blocked 81; all non-Partial HTTP 200.
-
-No promotion or repository-organization milestone remains. A Render redeploy is
-not required for this dataset/documentation organization because the deployed
-models, decision artifact, API package, and APK were not replaced.
-Continue normal monitoring and use the recorded RUN5/Structural
-2026.02/Decision 2026.02 rollback set if a regression appears.
-
-Evidence: `ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/`.
+External deployment status is recorded only in
+`deployment/model_registry.json`; a local build is not represented as live until
+remote health, Web and hosted-APK checks pass.

@@ -13,6 +13,7 @@ DIST = ROOT / "dist"
 OUTPUT = DIST / "QRGuard_ML_Colab"
 REPO = OUTPUT / "QRGuard"
 ZIP_PATH = DIST / "QRGuard_ML_Colab.zip"
+DETERMINISTIC_ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
 
 def _markdown(source: str) -> dict:
@@ -417,17 +418,26 @@ def structural_v3_notebook() -> dict:
     return _notebook(
         [
             _markdown(
-                "# QRGuard Structural v3 (LATEST)\n\n"
-                "One `structural-2026.03-r01` ResNet-18 artifact is evaluated on "
-                "both Gallery and Camera. Capture conditions are nuisance/quality "
-                "slices, not malicious labels. The notebook never promotes or deploys "
-                "the candidate automatically."
+                "# QRGuard Structural r07 corrective candidate\n\n"
+                "`structural-r07-corrective-v1` starts from the locked r07 best checkpoint "
+                "and trains one ResNet-18 artifact for Gallery and Camera. It retains the "
+                "exposure hard negatives and expands to 2,560 grouped clean counterfactuals "
+                "across Versions 3-20, all eight masks, four error-correction levels, "
+                "and controlled screen moire. Its consistency graph is one connected cycle "
+                "across every mask and condition. It retains 80 consumed clean M8 crops and "
+                "adds only the 10 attack crops whose screen/camera survival was independently "
+                "verified; all are permanently non-promoting development evidence. Weighted "
+                "calibration, exposure consistency and feasibility-first selection remain enabled. "
+                "Capture conditions remain "
+                "nuisance/quality slices, not malicious labels. The notebook never "
+                "promotes or deploys the candidate automatically."
             ),
             _markdown("## Phase 0 - Choose exactly one run mode"),
             _code(
                 r"""RUN_MODE = 'fresh'  # fresh | resume | evaluate_only | report_only
-RUN_ID = 'r01'        # choose a new ID for another fresh experiment
-VERSION = 'structural-2026.03-r01'
+RUN_ID = 'r07-corrective-v1'
+VERSION = 'structural-r07-corrective-v1'
+DATASET_VERSION = 'structural-r07-corrective-v1'  # locked 14,240-row evidence
 VALID_MODES = {'fresh', 'resume', 'evaluate_only', 'report_only'}
 if RUN_MODE not in VALID_MODES:
     raise ValueError(f'RUN_MODE must be one of {sorted(VALID_MODES)}')
@@ -442,11 +452,13 @@ DRIVE_RUN = DRIVE_ML / 'runs' / VERSION / RUN_ID
 CHECKPOINT_DIR = DRIVE_RUN / 'checkpoints'
 OUTPUT_DRIVE = DRIVE_RUN / 'outputs'
 CACHE_DRIVE = DRIVE_ML / 'cache' / VERSION
+BASE_CACHE_DRIVE = DRIVE_ML / 'cache' / 'structural-2026.09-r07'
 DATA_DRIVE = Path('/content/drive/MyDrive/QRGuard_ML_Data/structural')
 PERF = REPO / 'ml_training/structural/performance' / VERSION
 ARTIFACTS = REPO / 'ml_training/structural/runs' / VERSION / 'artifacts'
 PROCESSED_ROOT = REPO / 'ml_training/datasets/structural/processed'
 os.environ['QRGUARD_STRUCTURAL_VERSION'] = VERSION
+os.environ['QRGUARD_STRUCTURAL_DATASET_VERSION'] = DATASET_VERSION
 for directory in (DRIVE_RUN, CHECKPOINT_DIR, OUTPUT_DRIVE, CACHE_DRIVE):
     directory.mkdir(parents=True, exist_ok=True)
 print('Persistent run:', DRIVE_RUN)
@@ -473,40 +485,129 @@ print('Persistent run:', DRIVE_RUN)
     else:
         raise FileNotFoundError(f'No saved or bundled report at {saved_performance}')
 else:
+    print('Phase 3 started: validating Drive cache and required raw data.', flush=True)
     cached_processed = CACHE_DRIVE / 'processed'
-    if cached_processed.is_dir():
-        shutil.copytree(cached_processed, PROCESSED_ROOT, dirs_exist_ok=True)
-        print('Restored prepared Structural data from Drive cache')
+
+    def copy_tree_with_progress(source, destination, label):
+        files = sorted(path for path in source.rglob('*') if path.is_file())
+        print(f'{label}: {len(files):,} files', flush=True)
+        report_every = max(1, len(files) // 10)
+        for index, source_path in enumerate(files, start=1):
+            relative = source_path.relative_to(source)
+            destination_path = destination / relative
+            destination_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source_path, destination_path)
+            if index == len(files) or index % report_every == 0:
+                print(f'  {index:,}/{len(files):,} files', flush=True)
+
+    def copy_file_with_progress(source, destination, label):
+        total = source.stat().st_size
+        copied = 0
+        next_report = 0.1
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        print(f'{label}: {total / (1024 ** 3):.2f} GiB', flush=True)
+        with source.open('rb') as input_handle, destination.open('wb') as output_handle:
+            while True:
+                chunk = input_handle.read(16 * 1024 * 1024)
+                if not chunk:
+                    break
+                output_handle.write(chunk)
+                copied += len(chunk)
+                fraction = copied / total if total else 1.0
+                if fraction >= next_report or copied == total:
+                    print(f'  {fraction:.0%}', flush=True)
+                    next_report += 0.1
+        shutil.copystat(source, destination)
+
+    def extract_zip_with_progress(archive_path, destination, label):
+        destination.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(archive_path) as package:
+            members = package.infolist()
+            print(f'{label}: {len(members):,} ZIP members', flush=True)
+            report_every = max(1, len(members) // 10)
+            for index, member in enumerate(members, start=1):
+                package.extract(member, destination)
+                if index == len(members) or index % report_every == 0:
+                    print(f'  {index:,}/{len(members):,} members', flush=True)
+
+    # Public manifests and QR-surface crops are small enough to restore directly.
+    # The large combined version is restored only after its identity is verified.
+    for public_name in ('qrdn', 'qr_surfaces'):
+        primary_public_cache = cached_processed / public_name
+        fallback_public_cache = BASE_CACHE_DRIVE / 'processed' / public_name
+        public_cache = (
+            primary_public_cache
+            if primary_public_cache.is_dir()
+            else fallback_public_cache
+        )
+        if public_cache.is_dir():
+            copy_tree_with_progress(
+                public_cache,
+                PROCESSED_ROOT / public_name,
+                f'Phase 3: restoring cached {public_name} metadata/crops',
+            )
 
     downloads = REPO / 'ml_training/datasets/structural/downloads'
     archives = {
         DATA_DRIVE / 'QR-DN1.0.zip': downloads / 'qrdn/QR-DN1.0.zip',
         DATA_DRIVE / 'qr_codes_in_surfaces.zip': downloads / 'qr_surfaces/qr_codes_in_surfaces.zip',
     }
-    public_ready = all((PROCESSED_ROOT / name / 'manifest.csv').is_file()
-                       for name in ('qrdn', 'qr_surfaces'))
-    if not public_ready:
+    raw_sentinels = {
+        'qrdn': (
+            REPO / 'ml_training/datasets/structural/raw/qrdn/'
+            'extracted One/train/0.jpg'
+        ),
+        'qr_surfaces': (
+            REPO / 'ml_training/datasets/structural/raw/qr_surfaces/'
+            'flat/images/IMG_20191225_202803.jpg'
+        ),
+    }
+    public_manifests_ready = all(
+        (PROCESSED_ROOT / name / 'manifest.csv').is_file()
+        for name in ('qrdn', 'qr_surfaces')
+    )
+    raw_ready = all(path.is_file() for path in raw_sentinels.values())
+    if not raw_ready:
+        print('Phase 3: restoring official raw datasets from Drive ZIPs.', flush=True)
         for source, destination in archives.items():
             if not source.is_file():
                 raise FileNotFoundError(f'Missing official archive: {source}')
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, destination)
+            copy_file_with_progress(
+                source, destination, f'Copying {source.name} from Drive'
+            )
+        print('Phase 3: verifying official archive size and SHA-256.', flush=True)
         run_module('ml_training.scripts.verify_datasets')
         for archive, destination in (
             (archives[DATA_DRIVE / 'QR-DN1.0.zip'], REPO / 'ml_training/datasets/structural/raw/qrdn'),
             (archives[DATA_DRIVE / 'qr_codes_in_surfaces.zip'], REPO / 'ml_training/datasets/structural/raw/qr_surfaces'),
         ):
-            destination.mkdir(parents=True, exist_ok=True)
-            with zipfile.ZipFile(archive) as package:
-                package.extractall(destination)
+            extract_zip_with_progress(
+                archive, destination, f'Extracting {archive.name}'
+            )
+        missing_raw = [name for name, path in raw_sentinels.items() if not path.is_file()]
+        if missing_raw:
+            raise FileNotFoundError(
+                f'Official raw extraction incomplete; missing sentinels: {missing_raw}'
+            )
+    else:
+        print('Phase 3: official raw dataset sentinels are present.', flush=True)
+
+    if not public_manifests_ready:
+        print('Phase 3: preparing public dataset manifests/crops.', flush=True)
         run_module('ml_training.structural.src.prepare_qrdn')
         run_module('ml_training.structural.src.prepare_qr_surfaces')
+    else:
+        print('Phase 3: cached public manifests/crops are present.', flush=True)
 
     drive_captures = DATA_DRIVE / 'runtime_captures'
     local_captures = REPO / 'data/runtime_captures'
     local_captures.mkdir(parents=True, exist_ok=True)
     if drive_captures.is_dir():
-        shutil.copytree(drive_captures, local_captures, dirs_exist_ok=True)
+        copy_tree_with_progress(
+            drive_captures,
+            local_captures,
+            'Phase 3: restoring exact QRGuard app-camera captures',
+        )
     capture_audit = run_module(
         'ml_training.structural.src.prepare_structural_v3_captures',
         local_captures, '--strict', check=False,
@@ -519,32 +620,186 @@ else:
     cache_contract_path = CACHE_DRIVE / 'cache_contract.json'
     expected_contract = {
         'version': VERSION,
+        'dataset_version': DATASET_VERSION,
         'config_sha256': hashlib.sha256(config_path.read_bytes()).hexdigest(),
         'capture_manifest_sha256': hashlib.sha256(capture_manifest.read_bytes()).hexdigest(),
+        'coverage_development_sha256': hashlib.sha256(
+            (REPO / 'data/structural_coverage_development/2026-09-r01/manifest.csv').read_bytes()
+        ).hexdigest(),
+        'physical_attack_development_sha256': hashlib.sha256(
+            (REPO / 'data/structural_physical_attack_development/2026-09-r02/manifest.csv').read_bytes()
+        ).hexdigest(),
+        'prepared_gallery_reference_sha256': hashlib.sha256(
+            (REPO / 'data/prepared_gallery_references/structural-2026.03-r01/manifest.csv').read_bytes()
+        ).hexdigest(),
+        'acquisition_quality_development_sha256': hashlib.sha256(
+            (REPO / 'data/acquisition_quality_development/2026-09-r02/manifest.csv').read_bytes()
+        ).hexdigest(),
+        'consumed_blind_clean_development_sha256': hashlib.sha256(
+            (REPO / 'data/structural_consumed_blind_development/2026-09-r01/manifest.csv').read_bytes()
+        ).hexdigest(),
+        'consumed_blind_verified_attack_development_sha256': hashlib.sha256(
+            (REPO / 'data/structural_consumed_blind_attack_development/r07-corrective-v1/manifest.csv').read_bytes()
+        ).hexdigest(),
     }
     recorded_contract = (
         json.loads(cache_contract_path.read_text())
         if cache_contract_path.is_file() else None
     )
-    combined_manifest = PROCESSED_ROOT / VERSION / 'manifest.csv'
-    if not combined_manifest.is_file() or recorded_contract != expected_contract:
+    combined_manifest = PROCESSED_ROOT / DATASET_VERSION / 'manifest.csv'
+    combined_cache_archive = CACHE_DRIVE / f'processed-{DATASET_VERSION}.zip'
+    recorded_identity = (
+        {key: recorded_contract.get(key) for key in expected_contract}
+        if isinstance(recorded_contract, dict) else None
+    )
+    archive_sha256 = (
+        recorded_contract.get('prepared_archive_sha256')
+        if isinstance(recorded_contract, dict) else None
+    )
+    cache_matches = recorded_identity == expected_contract
+    if cache_matches and combined_cache_archive.is_file() and archive_sha256:
+        local_cache_archive = Path('/tmp') / combined_cache_archive.name
+        copy_file_with_progress(
+            combined_cache_archive,
+            local_cache_archive,
+            'Phase 3: restoring locked 14,240-row prepared cache',
+        )
+        actual_archive_sha256 = hashlib.sha256(local_cache_archive.read_bytes()).hexdigest()
+        if actual_archive_sha256 != archive_sha256:
+            raise ValueError(
+                'Prepared cache archive SHA-256 mismatch: '
+                f'{actual_archive_sha256} != {archive_sha256}'
+            )
+        extract_zip_with_progress(
+            local_cache_archive,
+            PROCESSED_ROOT,
+            'Extracting locked prepared cache',
+        )
         run_module(
             'ml_training.structural.src.train_local',
             '--mode', RUN_MODE,
-            '--prepare-only', '--rebuild-data',
+            '--prepare-only',
         )
-        shutil.copytree(PROCESSED_ROOT, cached_processed, dirs_exist_ok=True)
-        cache_contract_path.write_text(json.dumps(expected_contract, indent=2))
-        print('Prepared dataset and refreshed Drive cache')
+        print('Phase 3: locked cache identity and candidate manifest passed.', flush=True)
     else:
-        print('Dataset cache identity matched; expensive preparation skipped')
+        print(
+            'Phase 3: combined cache is absent/stale; rebuilding the locked dataset.',
+            flush=True,
+        )
+        base_contract_path = BASE_CACHE_DRIVE / 'cache_contract.json'
+        base_archive = (
+            BASE_CACHE_DRIVE / 'processed-structural-2026.09-r07.zip'
+        )
+        if not base_contract_path.is_file() or not base_archive.is_file():
+            raise FileNotFoundError(
+                'The locked r07 base cache is required for the corrective run.'
+            )
+        if base_contract_path.is_file() and base_archive.is_file():
+            base_contract = json.loads(base_contract_path.read_text())
+            base_archive_sha256 = base_contract.get('prepared_archive_sha256')
+            if (
+                base_contract.get('version') == 'structural-2026.09-r07'
+                and base_contract.get('dataset_version')
+                == 'structural-2026.09-r07'
+                and base_archive_sha256
+            ):
+                local_base_archive = Path('/tmp') / base_archive.name
+                copy_file_with_progress(
+                    base_archive,
+                    local_base_archive,
+                    'Phase 3: restoring verified r07 base image cache',
+                )
+                actual_base_sha256 = hashlib.sha256(
+                    local_base_archive.read_bytes()
+                ).hexdigest()
+                if actual_base_sha256 != base_archive_sha256:
+                    raise ValueError(
+                        'Base prepared cache SHA-256 mismatch: '
+                        f'{actual_base_sha256} != {base_archive_sha256}'
+                    )
+                extract_zip_with_progress(
+                    local_base_archive,
+                    PROCESSED_ROOT,
+                    'Extracting verified r07 base image cache',
+                )
+                base_prepared = PROCESSED_ROOT / 'structural-2026.09-r07'
+                if not base_prepared.is_dir():
+                    raise FileNotFoundError(base_prepared)
+                copied_candidate = PROCESSED_ROOT / DATASET_VERSION
+                run_module(
+                    'scripts.build_structural_r07_corrective_cache',
+                    '--base-root', base_prepared,
+                    '--target-root', copied_candidate,
+                )
+                print(
+                    'Phase 3: reused the verified r07 prepared cache and appended '
+                    'only verified surviving attack hard positives.',
+                    flush=True,
+                )
+            else:
+                raise ValueError('The r07 base cache contract is invalid.')
+        if not combined_manifest.is_file():
+            run_module(
+                'ml_training.structural.src.train_local',
+                '--mode', RUN_MODE,
+                '--prepare-only', '--rebuild-data',
+            )
+        else:
+            run_module(
+                'ml_training.structural.src.train_local',
+                '--mode', RUN_MODE,
+                '--prepare-only',
+            )
+        local_cache_archive = Path('/tmp') / combined_cache_archive.name
+        print('Phase 3: packing the validated prepared dataset as one cache file.', flush=True)
+        with zipfile.ZipFile(
+            local_cache_archive,
+            'w',
+            compression=zipfile.ZIP_STORED,
+            allowZip64=True,
+        ) as package:
+            prepared_version = PROCESSED_ROOT / DATASET_VERSION
+            prepared_files = sorted(
+                path for path in prepared_version.rglob('*') if path.is_file()
+            )
+            report_every = max(1, len(prepared_files) // 10)
+            for index, path in enumerate(prepared_files, start=1):
+                package.write(path, path.relative_to(PROCESSED_ROOT).as_posix())
+                if index == len(prepared_files) or index % report_every == 0:
+                    print(f'  packed {index:,}/{len(prepared_files):,} files', flush=True)
+        prepared_archive_sha256 = hashlib.sha256(
+            local_cache_archive.read_bytes()
+        ).hexdigest()
+        copy_file_with_progress(
+            local_cache_archive,
+            combined_cache_archive,
+            'Phase 3: saving validated prepared cache to Drive',
+        )
+        cache_contract_path.write_text(
+            json.dumps(
+                {
+                    **expected_contract,
+                    'prepared_archive_sha256': prepared_archive_sha256,
+                },
+                indent=2,
+            )
+        )
+        print('Phase 3: prepared dataset and Drive cache refreshed.', flush=True)
+
+    manifest_bytes = combined_manifest.read_bytes()
+    manifest_rows = max(0, manifest_bytes.count(b'\n') - 1)
+    manifest_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
+    print(
+        f'Phase 3 complete: rows={manifest_rows:,}; sha256={manifest_sha256}',
+        flush=True,
+    )
 """
             ),
             _markdown("## Phase 4 - Dataset composition and leakage audit"),
             _code(
                 r"""if RUN_MODE != 'report_only':
     import pandas as pd
-    manifest = pd.read_csv(PROCESSED_ROOT / VERSION / 'manifest.csv')
+    manifest = pd.read_csv(PROCESSED_ROOT / DATASET_VERSION / 'manifest.csv')
     display(pd.crosstab(manifest.split, [manifest.label, manifest.source]))
     groups = {name: set(part.group_id) for name, part in manifest.groupby('split')}
     overlaps = {
@@ -852,7 +1107,7 @@ notebook displays its frozen evidence without retraining.
 6. Open `03_Decision_Frozen_Report_Colab.ipynb` to display the saved Fusion
    metrics, per-cell table and ablation without retraining or promotion.
 7. Structural checkpoints and outputs are saved under
-   `MyDrive/QRGuard_ML/runs/structural-2026.03-r01/<RUN_ID>/`.
+   `MyDrive/QRGuard_ML/runs/structural-r07-corrective-v1/<RUN_ID>/`.
 
 Raw third-party datasets are not redistributed in this source package because
 they are large and governed by their source terms. Official URLs, DOI/licence,
@@ -864,9 +1119,12 @@ the reproducibility material; the notebooks fetch or verify the actual data.
 A QR can decode successfully while the image-integrity model cannot safely use
 the camera frames. Decoding and Structural classification are different tasks.
 Synthetic camera augmentation alone cannot prove performance on QRGuard's exact
-crop pipeline. The checked-in r01 candidate has now passed the labelled 100x3
-exact-app and paired gates and was later promoted into the local runtime. GitHub
-and external Render deployment remain separate, reviewed steps.
+crop pipeline. The deployed r01 model remains unchanged. The corrective notebook
+starts from the locked r07 best checkpoint, connects all legal masks in one
+consistency graph, retains 80 consumed clean hard negatives, and admits only 10
+consumed attack crops with verified physical survival. Every consumed row remains
+non-promoting. A new device/display/session blind holdout is still required before promotion.
+GitHub and external Render deployment remain separate, reviewed steps.
 
 ## Colour contract
 
@@ -1049,6 +1307,9 @@ def build() -> None:
         "ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/candidate_stack_metrics.json",
         "ml_training/CLEANUP_REVIEW_2026-08-30.md",
         "ml_training/WORKSPACE_AUDIT_2026-08-30.md",
+        "ml_training/CLEANUP_AUDIT.json",
+        "ml_training/DATASET_RETENTION.json",
+        "ml_training/R07_CORRECTIVE_HANDOFF.md",
         "ml_training/COLOR_PIPELINE.md",
         "ml_training/EXECUTION_PLAN.md",
         "ml_training/RESULTS_INDEX.md",
@@ -1076,6 +1337,7 @@ def build() -> None:
         "ml_training/structural/STRUCTURAL_V3_EXECUTION_PLAN.md",
         "ml_training/structural/STRUCTURAL_V3_LOCAL_RESULTS_2026-08-30.md",
         "ml_training/structural/STRUCTURAL_V3_REAL_100X3_RESULTS_2026-08-31.md",
+        "ml_training/structural/EXPOSURE_INVARIANT_TRAINING.md",
         "ml_training/semantic/README.md",
         "ml_training/decision_layer/README.md",
         "ml_training/decision_layer/DECISION_V3_LOCAL_RESULTS_2026-08-30.md",
@@ -1087,18 +1349,30 @@ def build() -> None:
         "backend/structural/structural_service.py",
         "scripts/evaluate_candidate_stack.py",
         "scripts/import_prepared_gallery_references.py",
+        "scripts/build_structural_r07_corrective_cache.py",
+        "scripts/import_consumed_blind_attack_development.py",
         "scripts/train_fusion.py",
+        "ml_training/structural/runs/structural-2026.09-r07/colab-r07-dense-screen-clean-recovery-v1/checkpoints/best_model.pt",
     ):
         _copy_file(relative)
     # Private exact-app captures are not published. Include their aggregate audit
     # when it is installed locally, but keep public-source bundle builds valid.
     if (ROOT / "data/runtime_captures/audit.json").is_file():
         _copy_file("data/runtime_captures/audit.json")
+    _copy_tree("data/structural_coverage_development/2026-09-r01")
+    _copy_tree("data/structural_physical_attack_development/2026-09-r02")
+    _copy_tree("data/acquisition_quality_development/2026-09-r02")
+    _copy_tree("data/structural_consumed_blind_development/2026-09-r01")
+    _copy_tree("data/structural_consumed_blind_attack_development/r07-corrective-v1")
+    _copy_tree("data/prepared_gallery_references/structural-2026.03-r01")
     _copy_tree(
         "ml_training/structural/performance/structural-2026.02",
     )
     _copy_tree(
         "ml_training/structural/performance/structural-2026.03-r01",
+    )
+    _copy_tree(
+        "ml_training/structural/performance/structural-2026.09-r07",
     )
     _copy_tree(
         "ml_training/semantic/performance/semantic-2026.02",
@@ -1142,9 +1416,23 @@ def build() -> None:
     (OUTPUT / "PACKAGE_MANIFEST.json").write_text(
         json.dumps(manifest, indent=2), encoding="utf-8"
     )
-    with zipfile.ZipFile(ZIP_PATH, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+    with zipfile.ZipFile(
+        ZIP_PATH,
+        "w",
+        compression=zipfile.ZIP_DEFLATED,
+        compresslevel=9,
+    ) as archive:
         for path in sorted(p for p in OUTPUT.rglob("*") if p.is_file()):
-            archive.write(path, Path(OUTPUT.name) / path.relative_to(OUTPUT))
+            archive_name = (Path(OUTPUT.name) / path.relative_to(OUTPUT)).as_posix()
+            info = zipfile.ZipInfo(archive_name, date_time=DETERMINISTIC_ZIP_TIMESTAMP)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.create_system = 3
+            info.external_attr = 0o100644 << 16
+            info.file_size = path.stat().st_size
+            with path.open("rb") as source, archive.open(
+                info, "w", force_zip64=True
+            ) as destination:
+                shutil.copyfileobj(source, destination, length=1024 * 1024)
     print(f"Built {OUTPUT}")
     print(f"Built {ZIP_PATH} ({ZIP_PATH.stat().st_size:,} bytes)")
 

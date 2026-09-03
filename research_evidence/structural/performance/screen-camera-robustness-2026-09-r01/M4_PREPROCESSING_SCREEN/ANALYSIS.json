@@ -1,0 +1,357 @@
+{
+  "candidates": {
+    "baseline": {
+      "locked_exact_app": {
+        "overall": {
+          "accuracy": 0.9916666666666667,
+          "adversarial_recall": 0.975,
+          "clean_false_positive_rate": 0.0,
+          "predicted_types": {
+            "adversarial": 39,
+            "clean": 41,
+            "tampered": 40
+          },
+          "rows": 120,
+          "tampered_recall": 1.0
+        },
+        "per_source": {
+          "camera": {
+            "accuracy": 0.9833333333333333,
+            "adversarial_recall": 0.95,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 19,
+              "clean": 21,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          },
+          "gallery": {
+            "accuracy": 1.0,
+            "adversarial_recall": 1.0,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 20,
+              "clean": 20,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          }
+        }
+      },
+      "passes_all_screening_gates": false,
+      "sem11_physical_clean": {
+        "false_positive_rate": 0.7555555555555555,
+        "forced_mask_case_median_span": 0.36372607946395874,
+        "frames": 180,
+        "p_structural_median": 0.7073651552200317,
+        "p_structural_p95": 0.9379336833953857
+      }
+    },
+    "gaussian_0_75": {
+      "locked_exact_app": {
+        "overall": {
+          "accuracy": 0.975,
+          "adversarial_recall": 0.975,
+          "clean_false_positive_rate": 0.05,
+          "predicted_types": {
+            "adversarial": 41,
+            "clean": 39,
+            "tampered": 40
+          },
+          "rows": 120,
+          "tampered_recall": 1.0
+        },
+        "per_source": {
+          "camera": {
+            "accuracy": 0.95,
+            "adversarial_recall": 0.95,
+            "clean_false_positive_rate": 0.1,
+            "predicted_types": {
+              "adversarial": 21,
+              "clean": 19,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          },
+          "gallery": {
+            "accuracy": 1.0,
+            "adversarial_recall": 1.0,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 20,
+              "clean": 20,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          }
+        }
+      },
+      "passes_all_screening_gates": false,
+      "sem11_physical_clean": {
+        "false_positive_rate": 0.14444444444444443,
+        "forced_mask_case_median_span": 0.42530059814453125,
+        "frames": 180,
+        "p_structural_median": 0.30196860432624817,
+        "p_structural_p95": 0.747629702091217
+      }
+    },
+    "gaussian_1_25": {
+      "locked_exact_app": {
+        "overall": {
+          "accuracy": 0.9666666666666667,
+          "adversarial_recall": 0.975,
+          "clean_false_positive_rate": 0.075,
+          "predicted_types": {
+            "adversarial": 42,
+            "clean": 38,
+            "tampered": 40
+          },
+          "rows": 120,
+          "tampered_recall": 1.0
+        },
+        "per_source": {
+          "camera": {
+            "accuracy": 0.9333333333333333,
+            "adversarial_recall": 0.95,
+            "clean_false_positive_rate": 0.15,
+            "predicted_types": {
+              "adversarial": 22,
+              "clean": 18,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          },
+          "gallery": {
+            "accuracy": 1.0,
+            "adversarial_recall": 1.0,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 20,
+              "clean": 20,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          }
+        }
+      },
+      "passes_all_screening_gates": false,
+      "sem11_physical_clean": {
+        "false_positive_rate": 0.011111111111111112,
+        "forced_mask_case_median_span": 0.0982014536857605,
+        "frames": 180,
+        "p_structural_median": 0.05685916543006897,
+        "p_structural_p95": 0.29650402069091797
+      }
+    },
+    "gray_gaussian_0_75": {
+      "locked_exact_app": {
+        "overall": {
+          "accuracy": 0.35,
+          "adversarial_recall": 0.05,
+          "clean_false_positive_rate": 0.0,
+          "predicted_types": {
+            "adversarial": 2,
+            "clean": 118
+          },
+          "rows": 120,
+          "tampered_recall": 0.0
+        },
+        "per_source": {
+          "camera": {
+            "accuracy": 0.36666666666666664,
+            "adversarial_recall": 0.1,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 2,
+              "clean": 58
+            },
+            "rows": 60,
+            "tampered_recall": 0.0
+          },
+          "gallery": {
+            "accuracy": 0.3333333333333333,
+            "adversarial_recall": 0.0,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "clean": 60
+            },
+            "rows": 60,
+            "tampered_recall": 0.0
+          }
+        }
+      },
+      "passes_all_screening_gates": false,
+      "sem11_physical_clean": {
+        "false_positive_rate": 0.15,
+        "forced_mask_case_median_span": 0.2510108947753906,
+        "frames": 180,
+        "p_structural_median": 0.16575071215629578,
+        "p_structural_p95": 0.6733995676040649
+      }
+    },
+    "grayscale": {
+      "locked_exact_app": {
+        "overall": {
+          "accuracy": 0.35,
+          "adversarial_recall": 0.05,
+          "clean_false_positive_rate": 0.0,
+          "predicted_types": {
+            "adversarial": 2,
+            "clean": 118
+          },
+          "rows": 120,
+          "tampered_recall": 0.0
+        },
+        "per_source": {
+          "camera": {
+            "accuracy": 0.36666666666666664,
+            "adversarial_recall": 0.1,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 2,
+              "clean": 58
+            },
+            "rows": 60,
+            "tampered_recall": 0.0
+          },
+          "gallery": {
+            "accuracy": 0.3333333333333333,
+            "adversarial_recall": 0.0,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "clean": 60
+            },
+            "rows": 60,
+            "tampered_recall": 0.0
+          }
+        }
+      },
+      "passes_all_screening_gates": false,
+      "sem11_physical_clean": {
+        "false_positive_rate": 0.13333333333333333,
+        "forced_mask_case_median_span": 0.57832932472229,
+        "frames": 180,
+        "p_structural_median": 0.2562207877635956,
+        "p_structural_p95": 0.6446102261543274
+      }
+    },
+    "lattice_box": {
+      "locked_exact_app": {
+        "overall": {
+          "accuracy": 0.8083333333333333,
+          "adversarial_recall": 0.7,
+          "clean_false_positive_rate": 0.25,
+          "predicted_types": {
+            "adversarial": 38,
+            "clean": 43,
+            "tampered": 39
+          },
+          "rows": 120,
+          "tampered_recall": 0.975
+        },
+        "per_source": {
+          "camera": {
+            "accuracy": 0.7666666666666667,
+            "adversarial_recall": 0.85,
+            "clean_false_positive_rate": 0.5,
+            "predicted_types": {
+              "adversarial": 27,
+              "clean": 14,
+              "tampered": 19
+            },
+            "rows": 60,
+            "tampered_recall": 0.95
+          },
+          "gallery": {
+            "accuracy": 0.85,
+            "adversarial_recall": 0.55,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 11,
+              "clean": 29,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          }
+        }
+      },
+      "passes_all_screening_gates": false,
+      "sem11_physical_clean": {
+        "false_positive_rate": 0.022222222222222223,
+        "forced_mask_case_median_span": 0.12262982130050659,
+        "frames": 180,
+        "p_structural_median": 0.09186339378356934,
+        "p_structural_p95": 0.45107948780059814
+      }
+    },
+    "median_3": {
+      "locked_exact_app": {
+        "overall": {
+          "accuracy": 0.9666666666666667,
+          "adversarial_recall": 0.975,
+          "clean_false_positive_rate": 0.075,
+          "predicted_types": {
+            "adversarial": 42,
+            "clean": 38,
+            "tampered": 40
+          },
+          "rows": 120,
+          "tampered_recall": 1.0
+        },
+        "per_source": {
+          "camera": {
+            "accuracy": 0.9333333333333333,
+            "adversarial_recall": 0.95,
+            "clean_false_positive_rate": 0.15,
+            "predicted_types": {
+              "adversarial": 22,
+              "clean": 18,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          },
+          "gallery": {
+            "accuracy": 1.0,
+            "adversarial_recall": 1.0,
+            "clean_false_positive_rate": 0.0,
+            "predicted_types": {
+              "adversarial": 20,
+              "clean": 20,
+              "tampered": 20
+            },
+            "rows": 60,
+            "tampered_recall": 1.0
+          }
+        }
+      },
+      "passes_all_screening_gates": false,
+      "sem11_physical_clean": {
+        "false_positive_rate": 0.5666666666666667,
+        "forced_mask_case_median_span": 0.47226595878601074,
+        "frames": 180,
+        "p_structural_median": 0.5685985088348389,
+        "p_structural_p95": 0.8563733696937561
+      }
+    }
+  },
+  "evaluation": "development_preprocessing_screen",
+  "passing_candidates": [],
+  "physical_clean_frames": 180,
+  "runtime_rows": 120,
+  "schema_version": 1,
+  "selection_gate": {
+    "camera_adversarial_recall_min": 0.8,
+    "camera_tampered_recall_min": 0.85,
+    "clean_false_positive_rate_max": 0.05,
+    "forced_mask_probability_span_max": 0.15
+  }
+}

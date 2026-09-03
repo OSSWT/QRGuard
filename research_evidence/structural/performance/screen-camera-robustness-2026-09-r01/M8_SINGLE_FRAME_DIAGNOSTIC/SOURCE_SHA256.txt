@@ -1,0 +1,1 @@
+d5930ffcaf1edc0702afd5ff2b2241584a95edd9f9f0de81fdc8a5a5a7921f6d  QRGuard_Diagnostic_structural_coverage_blind_holdout_2026_09_r01.zip

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.4+8011
+version: 1.2.0+8012
 
 environment:
   sdk: ^3.12.2
@@ -34,7 +34,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  mobile_scanner: ^7.4.0
+  # Vendored from mobile_scanner 7.4.0 so QRGuard can meter AF/AE/AWB on the
+  # detected QR and expose CameraX exposure compensation reproducibly.
+  mobile_scanner:
+    path: packages/mobile_scanner
   http: ^1.6.0
   url_launcher: ^6.3.2
   sqflite: ^2.4.3
@@ -102,6 +105,13 @@ flutter:
     - assets/icon/qrguard_icon_source.png
     - assets/capture/offline_capture_plan.json
     - assets/capture/diagnostic_capture_plan.json
+    - assets/capture/sem11_root_cause_capture_plan.json
+    - assets/capture/structural_coverage_development_plan.json
+    - assets/capture/structural_coverage_blind_holdout_plan.json
+    - assets/capture/structural_r07_fresh_blind_plan.json
+    - assets/capture/structural_physical_attack_development_plan.json
+    - assets/capture/acquisition_validation_plan.json
+    - assets/capture/structural_attack_calibration_plan.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:
