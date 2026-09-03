@@ -3,6 +3,7 @@ from __future__ import annotations
 from scripts.build_colab_bundle import (
     decision_frozen_notebook,
     semantic_frozen_notebook,
+    semantic_notebook,
     structural_v3_notebook,
 )
 
@@ -52,6 +53,22 @@ def test_semantic_notebook_is_frozen_report_only() -> None:
 
     assert "semantic-2026.02" in source
     assert "ml_training.semantic.src.train_local" not in source
+
+
+def test_semantic_training_notebook_compiles_and_is_candidate_only() -> None:
+    notebook = semantic_notebook()
+    for index, cell in enumerate(notebook["cells"]):
+        if cell["cell_type"] == "code":
+            compile("".join(cell["source"]), f"cell-{index}", "exec")
+
+    source = _code(notebook)
+    assert "ml_training.semantic.src.prepare_colab_data" in source
+    assert "ml_training.semantic.src.train_local" in source
+    assert "semantic-colab-candidate-v1" in source
+    assert "QRGUARD_SEMANTIC_VERSION" in source
+    assert "PERFORMANCE_VALIDATION.json" in source
+    assert "No runtime model, GitHub branch, or deployment was changed." in source
+    assert "--promote" not in source
 
 
 def test_decision_notebook_is_frozen_report_only() -> None:

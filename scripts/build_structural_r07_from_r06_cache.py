@@ -19,7 +19,7 @@ R06_MANIFEST_SHA256 = (
 DEFAULT_R06 = ROOT / "ml_training/datasets/structural/processed" / R06_VERSION
 DEFAULT_R07 = ROOT / "ml_training/datasets/structural/processed" / R07_VERSION
 DEFAULT_DEVELOPMENT = (
-    ROOT / "data/structural_consumed_blind_development/2026-09-r01/manifest.csv"
+    ROOT / "data/structural_consumed_blind_development/consumed_blind_clean_release_r01/manifest.csv"
 )
 
 

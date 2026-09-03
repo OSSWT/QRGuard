@@ -168,7 +168,7 @@ def test_acquisition_quality_loader_is_opt_in_and_train_only(
         ),
         encoding="utf-8",
     )
-    image = tmp_path / "data/acquisition_quality_development/2026-09-r02/crop.png"
+    image = tmp_path / "data/acquisition_quality_development/acquisition_quality_release_r02/crop.png"
     image.parent.mkdir(parents=True)
     image.write_bytes(b"clean-hard-negative")
     digest = hashlib.sha256(image.read_bytes()).hexdigest()

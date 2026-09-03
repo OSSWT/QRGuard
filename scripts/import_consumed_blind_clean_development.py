@@ -38,7 +38,7 @@ DEFAULT_PACK_MANIFEST = (
     ROOT / "dist/Structural_Coverage_Blind_Holdout_2026-09-r01/MANIFEST.json"
 )
 DEFAULT_DATA_ROOT = (
-    ROOT / "data/structural_consumed_blind_development/2026-09-r01"
+    ROOT / "data/structural_consumed_blind_development/consumed_blind_clean_release_r01"
 )
 
 # Fixed before r07 training.  The split covers every Version band and holds out

@@ -121,7 +121,7 @@ def discover(capture_root: Path, seed: int = 42) -> tuple[list[CaptureRow], Coun
     rows: list[CaptureRow] = []
     rejected: Counter = Counter()
 
-    for metadata_path in sorted(root.glob("*/scan_*/metadata.json")):
+    for metadata_path in sorted(root.glob("*/*/metadata.json")):
         session = metadata_path.parent
         folder_label = session.parent.name.lower()
         try:

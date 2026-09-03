@@ -26,7 +26,7 @@
   "m5_coverage_development": {
     "campaign_id": "structural-coverage-development-2026-09-r01",
     "archive_sha256": "f3267b92176414473f0e936059f0a4b45ff9164ad5be8b702041d63c7aaa0bfa",
-    "manifest": "data/structural_coverage_development/2026-09-r01/manifest.csv",
+    "manifest": "data/structural_coverage_development/coverage_development_release_r01/manifest.csv",
     "frames": 240,
     "sessions": 48,
     "base_identities": 16,

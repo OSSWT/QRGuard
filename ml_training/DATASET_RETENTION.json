@@ -28,22 +28,22 @@
       "reason": "group-governed Gallery train/validation references"
     },
     {
-      "path": "data/structural_coverage_development/2026-09-r01",
+      "path": "data/structural_coverage_development/coverage_development_release_r01",
       "role": "development_evidence",
       "reason": "Version, mask and payload-length coverage captures"
     },
     {
-      "path": "data/structural_physical_attack_development/2026-09-r02",
+      "path": "data/structural_physical_attack_development/physical_attack_release_r02",
       "role": "development_evidence",
       "reason": "contains only clean and verified surviving physical attacks"
     },
     {
-      "path": "data/acquisition_quality_development/2026-09-r02",
+      "path": "data/acquisition_quality_development/acquisition_quality_release_r02",
       "role": "development_hard_negatives",
       "reason": "clean exposure, distance and module-scale captures"
     },
     {
-      "path": "data/structural_consumed_blind_development/2026-09-r01",
+      "path": "data/structural_consumed_blind_development/consumed_blind_clean_release_r01",
       "role": "consumed_non_promoting_clean_development",
       "reason": "SEM-11 and dense-screen clean hard negatives; never blind again"
     },
@@ -63,12 +63,12 @@
       "reason": "referenced directly by backend and Flutter tests"
     },
     {
-      "path": "../04_Datasets/01_Structural/R07_Fresh_Blind_Holdout",
+      "path": "../03_Datasets/01_Structural/R07_Fresh_Blind_Holdout",
       "role": "consumed_candidate_bound_physical_holdout",
       "reason": "48-case blind acceptance was scored once and rejected by the locked attack-survival coverage and clean-layout-span gates; it may support diagnosis but can never be blind promotion evidence again"
     },
     {
-      "path": "../04_Datasets/01_Structural/Attack_Calibration_v1",
+      "path": "../03_Datasets/01_Structural/Attack_Calibration_v1",
       "role": "canonical_development_attack_calibration",
       "reason": "complete 72-session capture, locked references and audit metadata; 25 attacks survived the physical channel and the r07 development replay passed without promotion rights"
     },

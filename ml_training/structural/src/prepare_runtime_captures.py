@@ -2,8 +2,8 @@
 
 The backend writes one directory per scan when ``QRGUARD_DUMP_SCANS`` is set::
 
-    runtime_captures/<label>/scan_.../metadata.json
-    runtime_captures/<label>/scan_.../crop_00.png ... crop_04.png
+    runtime_captures/<label>/capture_<case>_<source>_<id>/metadata.json
+    runtime_captures/<label>/capture_<case>_<source>_<id>/crop_00.png ... crop_04.png
 
 This script validates those exact post-crop PNGs and builds a privacy-safe CSV.
 The split unit is ``payload_sha256``, never a frame: every angle of a QR and every
@@ -102,7 +102,7 @@ def discover(capture_root: Path, seed: int = 42) -> tuple[list[CaptureRow], Coun
     rows: list[CaptureRow] = []
     rejected: Counter = Counter()
 
-    for metadata_path in sorted(root.glob("*/scan_*/metadata.json")):
+    for metadata_path in sorted(root.glob("*/*/metadata.json")):
         session = metadata_path.parent
         folder_label = session.parent.name.lower()
         try:

@@ -17,7 +17,7 @@
     "accepted_gallery_sessions": 61,
     "rejected_sessions": 0,
     "split_leakage_groups": 0,
-    "manifest_sha256": "dc7e220712f7604cc74a1c7cecabc0b73ee63733fd48338311b01b386c415b96",
+    "manifest_sha256": "013e0ad7df831244a4a7518197f55cc52849ea7486f6f8b9a33f17e1e97559e0",
     "audit_sha256": "631f02fbc7bf1d470a21fa681d8c8b68d19c5fbb5f47eb286a2374006976fc51"
   },
   "deployment_counts": {

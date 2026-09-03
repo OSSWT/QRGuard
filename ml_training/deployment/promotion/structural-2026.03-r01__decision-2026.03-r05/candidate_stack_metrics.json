@@ -7,7 +7,7 @@
   "structural_artifact_sha256": "3529df95acaba3f5fe29f7369670de5c0c8c06d60f90e8a2e1959584967c5ad4",
   "decision_version": "decision-2026.03-r05",
   "fusion_weights_sha256": "e0d49a92cc0926e3025b3d431590084ece7ba476ce8041294f68f1ffac3b8385",
-  "manifest_sha256": "dc7e220712f7604cc74a1c7cecabc0b73ee63733fd48338311b01b386c415b96",
+  "manifest_sha256": "013e0ad7df831244a4a7518197f55cc52849ea7486f6f8b9a33f17e1e97559e0",
   "metrics": {
     "rows": 120,
     "per_source": {

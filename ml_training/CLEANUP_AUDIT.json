@@ -57,7 +57,7 @@
       "reason": "canonical runtime captures, controlled development evidence, verified source archives and manifests"
     },
     {
-      "path": "../04_Datasets",
+      "path": "../03_Datasets",
       "reason": "canonical private captures and locked reference packages"
     },
     {
@@ -72,7 +72,7 @@
   "removed_from_current_git_tree": [
     "unused structural-2026.02 Camera runtime artifact and compatibility fallback",
     "duplicate RUN5 rollback folder",
-    "unused DomURLs_BERT Method-1 runtime, tests, demos and serving dependency",
+    "unused DomURLs_BERT Method-1 runtime, tests, demos, serving dependency and early training notebook",
     "obsolete Structural baseline, 2026.01, 2026.02 and early coverage performance copies",
     "duplicate notebook, performance and combined-manifest research snapshots",
     "completed planning, handoff, dated cleanup and superseded model-guide documents",

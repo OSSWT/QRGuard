@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import random
+import re
 import sys
 import time
 from dataclasses import asdict
@@ -57,7 +58,12 @@ from ml_training.semantic.src.contract import (  # noqa: E402
 
 
 SEED = 42
-VERSION = "semantic-2026.02"
+VERSION = os.getenv("QRGUARD_SEMANTIC_VERSION", "semantic-2026.02").strip()
+if not re.fullmatch(r"semantic-[A-Za-z0-9._-]+", VERSION):
+    raise ValueError(
+        "QRGUARD_SEMANTIC_VERSION must start with 'semantic-' and contain only "
+        "letters, numbers, dots, underscores, or hyphens"
+    )
 DATA_DIR = ROOT / "data" / "method1"
 PROCESSED = ROOT / "ml_training" / "datasets" / "semantic" / "processed" / VERSION
 RUN_DIR = ROOT / "ml_training" / "semantic" / "runs" / VERSION

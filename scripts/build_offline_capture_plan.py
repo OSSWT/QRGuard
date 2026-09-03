@@ -42,7 +42,7 @@ def _valid_completed_sources(
     completed: dict[str, set[str]] = {case.case_id: set() for case in cases}
     duplicates: set[tuple[str, str]] = set()
 
-    for metadata_path in sorted(capture_root.glob("*/scan_*/metadata.json")):
+    for metadata_path in sorted(capture_root.glob("*/*/metadata.json")):
         try:
             metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError, TypeError):

@@ -452,7 +452,7 @@ def finalize(
 
     canonical_rows: list[dict[str, object]] = []
     canonical_files: list[tuple[str, bytes]] = []
-    for metadata_path in sorted(capture_root.glob("*/scan_*/metadata.json")):
+    for metadata_path in sorted(capture_root.glob("*/*/metadata.json")):
         metadata_raw = metadata_path.read_bytes()
         metadata = json.loads(metadata_raw)
         case_id = str(metadata.get("campaign_case_id", ""))

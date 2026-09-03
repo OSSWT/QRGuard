@@ -20,6 +20,7 @@ import json
 import logging
 import os
 import time
+import uuid
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -221,8 +222,14 @@ def _dump_if_requested(images, payload: str | None, image_source: str, result) -
         target = target / capture_label
         target.mkdir(parents=True, exist_ok=True)
         captured_at = datetime.now(timezone.utc)
-        stamp = captured_at.strftime("%Y%m%d_%H%M%S_%f")
-        session = target / f"scan_{stamp}"
+        capture_session_id = uuid.uuid4().hex
+        folder_case_id = (
+            _capture_identifier(context.get("campaign_case_id"))
+            or f"{capture_label}-unassigned"
+        )
+        session = target / (
+            f"capture_{folder_case_id}_{image_source}_{capture_session_id[:8]}"
+        ).lower()
         session.mkdir()
         for index, image in enumerate(images):
             image.convert("RGB").save(session / f"crop_{index:02d}.png")
@@ -273,6 +280,7 @@ def _dump_if_requested(images, payload: str | None, image_source: str, result) -
             manipulation_method = "none"
         metadata = {
             "captured_at": captured_at.isoformat(),
+            "capture_session_id": capture_session_id,
             "campaign_id": _capture_identifier(context.get("campaign_id")),
             "campaign_case_id": _capture_identifier(
                 context.get("campaign_case_id")

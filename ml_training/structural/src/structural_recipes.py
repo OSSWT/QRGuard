@@ -917,6 +917,22 @@ def _optional_dataset_reference_version(key: str) -> str | None:
     return str(value) if value else None
 
 
+def _development_release_directory(key: str, version: str) -> str:
+    """Map immutable dataset versions to readable local directory labels."""
+    labels = {
+        "physical_attack_development_version": {
+            "2026-09-r02": "physical_attack_release_r02",
+        },
+        "acquisition_quality_development_version": {
+            "2026-09-r02": "acquisition_quality_release_r02",
+        },
+        "consumed_blind_development_version": {
+            "2026-09-r01": "consumed_blind_clean_release_r01",
+        },
+    }
+    return labels.get(key, {}).get(version, version)
+
+
 def _prepared_gallery_reference_rows() -> list[dict]:
     """Load verified non-test digital references paired with Camera captures."""
     if not IS_V3:
@@ -980,7 +996,7 @@ def _coverage_development_rows() -> list[dict]:
     """Load the M5 low/medium/high-Version development frames for 2026.09."""
     if not VERSION.startswith(("structural-2026.09", "structural-r07")):
         return []
-    manifest = ROOT / "data/structural_coverage_development/2026-09-r01/manifest.csv"
+    manifest = ROOT / "data/structural_coverage_development/coverage_development_release_r01/manifest.csv"
     if not manifest.is_file():
         raise FileNotFoundError(f"M5 coverage development manifest missing: {manifest}")
     rows = list(csv.DictReader(manifest.open(encoding="utf-8", newline="")))
@@ -1009,7 +1025,9 @@ def _physical_attack_development_rows() -> list[dict]:
     manifest = (
         ROOT
         / "data/structural_physical_attack_development"
-        / reference_version
+        / _development_release_directory(
+            "physical_attack_development_version", reference_version
+        )
         / "manifest.csv"
     )
     if not manifest.is_file():
@@ -1051,7 +1069,13 @@ def _acquisition_quality_development_rows() -> list[dict]:
     )
     if reference_version is None:
         return []
-    root = ROOT / "data/acquisition_quality_development" / reference_version
+    root = (
+        ROOT
+        / "data/acquisition_quality_development"
+        / _development_release_directory(
+            "acquisition_quality_development_version", reference_version
+        )
+    )
     manifest = root / "manifest.csv"
     audit_path = root / "audit.json"
     if not manifest.is_file() or not audit_path.is_file():
@@ -1103,7 +1127,13 @@ def _consumed_blind_clean_development_rows() -> list[dict]:
     )
     if reference_version is None:
         return []
-    root = ROOT / "data/structural_consumed_blind_development" / reference_version
+    root = (
+        ROOT
+        / "data/structural_consumed_blind_development"
+        / _development_release_directory(
+            "consumed_blind_development_version", reference_version
+        )
+    )
     manifest = root / "manifest.csv"
     audit_path = root / "audit.json"
     if not manifest.is_file() or not audit_path.is_file():

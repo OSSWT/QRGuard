@@ -46,7 +46,7 @@ DEFAULT_BASE_MANIFEST = (
     / "manifest.csv"
 )
 DEFAULT_DATA_ROOT = (
-    ROOT / "data/structural_physical_attack_development/2026-09-r02"
+    ROOT / "data/structural_physical_attack_development/physical_attack_release_r02"
 )
 DEFAULT_CANDIDATE_MANIFEST = (
     ROOT

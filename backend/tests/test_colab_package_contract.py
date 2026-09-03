@@ -31,8 +31,9 @@ def _source(notebook: dict) -> str:
 def test_colab_code_cells_are_valid_python():
     for notebook_name in (
         "01_Structural_Training_Colab.ipynb",
-        "02_Semantic_Frozen_Report_Colab.ipynb",
-        "03_Decision_Frozen_Report_Colab.ipynb",
+        "02_Semantic_Training_Colab.ipynb",
+        "03_Semantic_Frozen_Report_Colab.ipynb",
+        "04_Decision_Frozen_Report_Colab.ipynb",
     ):
         notebook = json.loads((PACKAGE / notebook_name).read_text(encoding="utf-8"))
         for index, cell in enumerate(notebook["cells"]):
@@ -46,29 +47,34 @@ def test_colab_notebooks_have_complete_phases_and_performance_outputs():
     structural = json.loads(
         (PACKAGE / "01_Structural_Training_Colab.ipynb").read_text(encoding="utf-8")
     )
-    semantic = json.loads(
-        (PACKAGE / "02_Semantic_Frozen_Report_Colab.ipynb").read_text(encoding="utf-8")
+    semantic_training = json.loads(
+        (PACKAGE / "02_Semantic_Training_Colab.ipynb").read_text(encoding="utf-8")
+    )
+    semantic_frozen = json.loads(
+        (PACKAGE / "03_Semantic_Frozen_Report_Colab.ipynb").read_text(encoding="utf-8")
     )
     decision = json.loads(
-        (PACKAGE / "03_Decision_Frozen_Report_Colab.ipynb").read_text(encoding="utf-8")
+        (PACKAGE / "04_Decision_Frozen_Report_Colab.ipynb").read_text(encoding="utf-8")
     )
     structural_source = _source(structural)
-    semantic_source = _source(semantic)
+    semantic_training_source = _source(semantic_training)
+    semantic_frozen_source = _source(semantic_frozen)
     decision_source = _source(decision)
 
     for phase in range(8):
         assert f"Phase {phase}" in structural_source
+        assert f"Phase {phase}" in semantic_training_source
     for artifact in REQUIRED["structural"]:
         assert artifact in structural_source or artifact in {
             "metrics.json",
             "STRUCTURAL_PERFORMANCE.md",
         }
     for artifact in REQUIRED["semantic"]:
-        assert artifact in semantic_source or artifact in {
+        assert artifact in semantic_training_source or artifact in {
             "metrics.json",
             "SEMANTIC_PERFORMANCE.md",
         }
-    combined = structural_source + semantic_source
+    combined = structural_source + semantic_training_source
     assert "C:\\Users\\" not in combined
     assert "MyDrive/QRGuard_ML" in combined
     assert "'runs' / VERSION" in structural_source
@@ -82,8 +88,14 @@ def test_colab_notebooks_have_complete_phases_and_performance_outputs():
     assert "run_identity" in structural_source
     assert "structural-r07-corrective-v1" in structural_source
     assert "QRGUARD_STRUCTURAL_DATASET_VERSION" in structural_source
-    assert "ml_training.semantic.src.train_local" not in semantic_source
-    assert "semantic-2026.02" in semantic_source
+    assert "ml_training.semantic.src.train_local" in semantic_training_source
+    assert "QRGUARD_SEMANTIC_VERSION" in semantic_training_source
+    assert "semantic-colab-candidate-v1" in semantic_training_source
+    assert "No runtime model, GitHub branch, or deployment was changed." in (
+        semantic_training_source
+    )
+    assert "ml_training.semantic.src.train_local" not in semantic_frozen_source
+    assert "semantic-2026.02" in semantic_frozen_source
     assert "decision-2026.03-r05" in decision_source
     assert "promotion_requested" in decision_source
 
@@ -137,11 +149,15 @@ def test_colab_zip_is_readable_and_contains_the_manifest():
             "QRGuard_ML_Colab/01_Structural_Training_Colab.ipynb" in archive.namelist()
         )
         assert (
-            "QRGuard_ML_Colab/02_Semantic_Frozen_Report_Colab.ipynb"
+            "QRGuard_ML_Colab/02_Semantic_Training_Colab.ipynb"
             in archive.namelist()
         )
         assert (
-            "QRGuard_ML_Colab/03_Decision_Frozen_Report_Colab.ipynb"
+            "QRGuard_ML_Colab/03_Semantic_Frozen_Report_Colab.ipynb"
+            in archive.namelist()
+        )
+        assert (
+            "QRGuard_ML_Colab/04_Decision_Frozen_Report_Colab.ipynb"
             in archive.namelist()
         )
 
@@ -215,11 +231,11 @@ def test_package_contains_r07_initial_weights_and_development_data():
     )
     physical = (
         repository
-        / "data/structural_physical_attack_development/2026-09-r02/manifest.csv"
+        / "data/structural_physical_attack_development/physical_attack_release_r02/manifest.csv"
     )
     coverage = (
         repository
-        / "data/structural_coverage_development/2026-09-r01/manifest.csv"
+        / "data/structural_coverage_development/coverage_development_release_r01/manifest.csv"
     )
     prepared_gallery = (
         repository
@@ -227,11 +243,11 @@ def test_package_contains_r07_initial_weights_and_development_data():
     )
     acquisition = (
         repository
-        / "data/acquisition_quality_development/2026-09-r02/manifest.csv"
+        / "data/acquisition_quality_development/acquisition_quality_release_r02/manifest.csv"
     )
     consumed = (
         repository
-        / "data/structural_consumed_blind_development/2026-09-r01/manifest.csv"
+        / "data/structural_consumed_blind_development/consumed_blind_clean_release_r01/manifest.csv"
     )
     consumed_attacks = (
         repository

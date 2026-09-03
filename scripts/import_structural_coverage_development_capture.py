@@ -34,7 +34,7 @@ DEFAULT_BASE_MANIFEST = (
     ROOT
     / "ml_training/datasets/structural/processed/structural-2026.03-r01/manifest.csv"
 )
-DEFAULT_DATA_ROOT = ROOT / "data/structural_coverage_development/2026-09-r01"
+DEFAULT_DATA_ROOT = ROOT / "data/structural_coverage_development/coverage_development_release_r01"
 DEFAULT_CANDIDATE_MANIFEST = (
     ROOT
     / "ml_training/datasets/structural/processed"

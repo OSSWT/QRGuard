@@ -3,9 +3,17 @@
 Semantic Training consumes decoded URL/payload text. It does not consume camera
 pixels. URL rows are grouped by registrable domain to prevent train/test leakage.
 
-The deployed branch is frozen. Its canonical Colab entry point is the report-only
-`notebooks/semantic_frozen_report.ipynb`; earlier training notebooks are archived
-outside the public repository.
+The Semantic branch has two distinct canonical Colab entry points:
+
+- `notebooks/semantic_training.ipynb` prepares the source datasets, trains a new
+  serving-compatible candidate version, validates it and saves isolated run
+  evidence. It never overwrites or promotes the accepted model.
+- `notebooks/semantic_frozen_report.ipynb` is report-only evidence for the
+  deployed `semantic-2026.02` model.
+
+The early DomURLs BERT experiment was removed because it does not match the
+current sparse character n-gram serving pipeline and could be mistaken for the
+canonical training workflow.
 
 The source-labelled inspection catalog is generated at
 `ml_training/datasets/semantic/processed/semantic-2026.02/by_source/` by

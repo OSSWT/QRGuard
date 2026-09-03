@@ -1,9 +1,9 @@
 """Payload Router & URL Normalizer — Semantic Analysis module 1.
 
 First stage of the Semantic Analysis branch. Classifies the decoded QR
-payload into a type and, for URLs, produces the canonical form that
-Method 1 (DomURLs_BERT) will classify. Normalization matters because the
-model was fine-tuned on canonical URLs: feeding it a different surface
+payload into a type and, for URLs, produces the canonical form that the
+active Semantic URL classifier will classify. Normalization matters because the
+model is trained on canonical URLs: feeding it a different surface
 form at runtime (uppercase host, default port, fragment) would create a
 train-serve skew that silently costs accuracy.
 

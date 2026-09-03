@@ -365,19 +365,19 @@ else:
         'config_sha256': hashlib.sha256(config_path.read_bytes()).hexdigest(),
         'capture_manifest_sha256': hashlib.sha256(capture_manifest.read_bytes()).hexdigest(),
         'coverage_development_sha256': hashlib.sha256(
-            (REPO / 'data/structural_coverage_development/2026-09-r01/manifest.csv').read_bytes()
+            (REPO / 'data/structural_coverage_development/coverage_development_release_r01/manifest.csv').read_bytes()
         ).hexdigest(),
         'physical_attack_development_sha256': hashlib.sha256(
-            (REPO / 'data/structural_physical_attack_development/2026-09-r02/manifest.csv').read_bytes()
+            (REPO / 'data/structural_physical_attack_development/physical_attack_release_r02/manifest.csv').read_bytes()
         ).hexdigest(),
         'prepared_gallery_reference_sha256': hashlib.sha256(
             (REPO / 'data/prepared_gallery_references/structural-2026.03-r01/manifest.csv').read_bytes()
         ).hexdigest(),
         'acquisition_quality_development_sha256': hashlib.sha256(
-            (REPO / 'data/acquisition_quality_development/2026-09-r02/manifest.csv').read_bytes()
+            (REPO / 'data/acquisition_quality_development/acquisition_quality_release_r02/manifest.csv').read_bytes()
         ).hexdigest(),
         'consumed_blind_clean_development_sha256': hashlib.sha256(
-            (REPO / 'data/structural_consumed_blind_development/2026-09-r01/manifest.csv').read_bytes()
+            (REPO / 'data/structural_consumed_blind_development/consumed_blind_clean_release_r01/manifest.csv').read_bytes()
         ).hexdigest(),
         'consumed_blind_verified_attack_development_sha256': hashlib.sha256(
             (REPO / 'data/structural_consumed_blind_attack_development/r07-corrective-v1/manifest.csv').read_bytes()
@@ -713,14 +713,33 @@ def semantic_notebook() -> dict:
     return _notebook(
         [
             _markdown(
-                "# QRGuard Semantic Training — complete Google Colab run\n\n"
+                "# QRGuard Semantic Training — complete Google Colab candidate run\n\n"
                 "Acquires and freezes URL corpora, removes conflicts, creates a registrable-"
                 "domain-disjoint holdout, trains the serving-compatible calibrated character "
                 "3–5 gram model, runs behavioural gates, and exports every Semantic performance "
-                "artifact. A GPU is not required for this sparse linear model."
+                "artifact. A GPU is not required for this sparse linear model. The accepted "
+                "semantic-2026.02 runtime remains frozen; this notebook creates a separate "
+                "candidate and never promotes or deploys it."
             ),
             _markdown("## Phase 0 — Reproducible workspace and Drive mount"),
             _code(COMMON_SETUP),
+            _code(
+                r"""from datetime import datetime, timezone
+
+SEMANTIC_VERSION = os.environ.get(
+    'QRGUARD_SEMANTIC_VERSION', 'semantic-colab-candidate-v1'
+).strip()
+if not SEMANTIC_VERSION.startswith('semantic-'):
+    raise ValueError('Semantic candidate version must start with semantic-')
+RUN_ID = os.environ.get('QRGUARD_SEMANTIC_RUN_ID', '').strip() or datetime.now(
+    timezone.utc
+).strftime('%Y%m%dT%H%M%SZ')
+os.environ['QRGUARD_SEMANTIC_VERSION'] = SEMANTIC_VERSION
+print('Candidate version:', SEMANTIC_VERSION)
+print('Run ID:', RUN_ID)
+print('Accepted runtime semantic-2026.02 will not be overwritten or deployed.')
+"""
+            ),
             _markdown("## Phase 1 — Environment and dependency audit"),
             _code(INSTALL),
             _markdown(
@@ -762,14 +781,14 @@ assert set(heldout.label.unique()).issubset({0, 1})
                 "to train parameters."
             ),
             _code(
-                r"""training = run_module('ml_training.semantic.src.train_local', check=False)
+                r"""training = run_module('ml_training.semantic.src.train_local')
 print('Training return code:', training.returncode)
 """
             ),
             _markdown("## Phase 5 — Display every Semantic performance output"),
             _code(
                 r"""from IPython.display import Image as DisplayImage, Markdown, display
-PERF = REPO / 'ml_training/semantic/performance/semantic-2026.02'
+PERF = REPO / 'ml_training/semantic/performance' / SEMANTIC_VERSION
 metrics = json.loads((PERF / 'metrics.json').read_text())
 display(Markdown((PERF / 'SEMANTIC_PERFORMANCE.md').read_text()))
 display(metrics)
@@ -791,28 +810,31 @@ for name in ('metrics.csv', 'dataset_composition.csv', 'threshold_analysis.csv',
                 r"""validation = run_module(
     'ml_training.scripts.validate_performance_bundle',
     '--branch', 'semantic',
-    check=False,
+    '--semantic-version', SEMANTIC_VERSION,
+    '--output', PERF / 'PERFORMANCE_VALIDATION.json',
 )
-if validation.returncode:
-    raise RuntimeError('Semantic report bundle is incomplete; inspect the phase above.')
-summary = json.loads((REPO / 'ml_training/PERFORMANCE_VALIDATION.json').read_text())
+summary = json.loads((PERF / 'PERFORMANCE_VALIDATION.json').read_text())
 display(summary)
 """
             ),
-            _markdown("## Phase 7 — Save model and all performance outputs to Drive"),
+            _markdown("## Phase 7 — Save candidate and all performance outputs to Drive"),
             _code(
-                r"""destination = Path('/content/drive/MyDrive/QRGuard_ML_Results/semantic-2026.02')
+                r"""destination = (
+    Path('/content/drive/MyDrive/QRGuard_ML/runs/semantic')
+    / SEMANTIC_VERSION
+    / RUN_ID
+)
 destination.mkdir(parents=True, exist_ok=True)
 shutil.copytree(PERF, destination / 'performance', dirs_exist_ok=True)
 shutil.copytree(
-    REPO / 'ml_training/semantic/runs/semantic-2026.02/artifacts',
+    REPO / 'ml_training/semantic/runs' / SEMANTIC_VERSION / 'artifacts',
     destination / 'artifacts',
     dirs_exist_ok=True,
 )
-shutil.copy2(REPO / 'ml_training/PERFORMANCE_VALIDATION.json', destination)
 archive = shutil.make_archive(str(destination), 'zip', root_dir=destination)
 print('Saved:', destination)
 print('Archive:', archive)
+print('No runtime model, GitHub branch, or deployment was changed.')
 """
             ),
         ]
@@ -821,16 +843,15 @@ print('Archive:', archive)
 
 README = """# QRGuard complete Google Colab ML package
 
-This folder is the self-contained ML hand-off. Structural v3 is the current
-FYP2 candidate; Semantic `semantic-2026.02` is frozen and report-only. It
-contains the canonical source, dataset contracts, licences, references,
-check-pointable Structural notebook, frozen Semantic report notebook, and a
-frozen report of the latest Decision/Fusion candidate.
+This folder is the self-contained ML hand-off. It contains separate, complete
+Structural and Semantic training notebooks plus frozen Semantic and Decision
+reports. The accepted `semantic-2026.02` runtime stays frozen while the Semantic
+training notebook writes an isolated candidate run.
 
 The existing measured baseline/candidate numbers are summarised in
 `REFERENCE_RESULTS.md` and their original figures/JSON/CSV files are under
-`reference_performance/`. Structural can create a new Drive run; the Semantic
-notebook displays its frozen evidence without retraining.
+`reference_performance/`. Both training notebooks create new Drive runs and
+never promote, push, or deploy a model automatically.
 
 ## Start here
 
@@ -843,12 +864,17 @@ notebook displays its frozen evidence without retraining.
    `MyDrive/QRGuard_ML_Data/structural/runtime_captures/`.
 4. Open `01_Structural_Training_Colab.ipynb`, choose `fresh`, `resume`,
    `evaluate_only`, or `report_only`, select a T4 GPU when needed, and Run all.
-5. Open `02_Semantic_Frozen_Report_Colab.ipynb` to display the existing measured
-   Semantic evidence without retraining.
-6. Open `03_Decision_Frozen_Report_Colab.ipynb` to display the saved Fusion
+5. Open `02_Semantic_Training_Colab.ipynb` to acquire/cache the Semantic URL
+   datasets, train a serving-compatible candidate, validate every gate, and save
+   the candidate under a unique Drive run ID.
+6. Open `03_Semantic_Frozen_Report_Colab.ipynb` to display the accepted
+   `semantic-2026.02` evidence without retraining.
+7. Open `04_Decision_Frozen_Report_Colab.ipynb` to display the saved Fusion
    metrics, per-cell table and ablation without retraining or promotion.
-7. Structural checkpoints and outputs are saved under
+8. Structural checkpoints and outputs are saved under
    `MyDrive/QRGuard_ML/runs/structural-r07-corrective-v1/<RUN_ID>/`.
+   Semantic candidates are saved under
+   `MyDrive/QRGuard_ML/runs/semantic/<VERSION>/<RUN_ID>/`.
 
 Raw third-party datasets are not redistributed in this source package because
 they are large and governed by their source terms. Official URLs, DOI/licence,
@@ -951,6 +977,7 @@ MyDrive/
       QR-DN1.0.zip
       qr_codes_in_surfaces.zip
       runtime_captures/          # paired Gallery/Camera exact app crops
+    semantic/                     # prepared PhiUSIIL, Malicious URLs and Tranco cache
   QRGuard_ML/
     cache/                       # reusable prepared Structural data
     runs/                        # checkpoints, artifacts and performance
@@ -961,6 +988,11 @@ Structural archive hashes are verified against
 folders must follow `CAPTURE_GUIDE_V3.md`: 1–5 distinct exact PNG crops, one
 authoritative frame, Gallery/Camera pair metadata, measured quality condition,
 and anonymised identifiers. Raw QR payloads are never required or stored.
+
+Semantic Training downloads PhiUSIIL from UCI, Malicious URLs through
+KaggleHub, and Tranco through its client when the Drive cache is absent. The
+prepared cache includes `provenance.json`, hashes, source IDs, and the
+registrable-domain-disjoint holdout.
 """
 
 
@@ -1012,22 +1044,29 @@ def build() -> None:
     (OUTPUT / "DATA_REQUIREMENTS.md").write_text(DATA_REQUIREMENTS, encoding="utf-8")
     (OUTPUT / "REFERENCE_RESULTS.md").write_text(REFERENCE_RESULTS, encoding="utf-8")
     structural_json = json.dumps(structural_v3_notebook(), indent=1)
-    semantic_json = json.dumps(semantic_frozen_notebook(), indent=1)
+    semantic_training_json = json.dumps(semantic_notebook(), indent=1)
+    semantic_frozen_json = json.dumps(semantic_frozen_notebook(), indent=1)
     decision_json = json.dumps(decision_frozen_notebook(), indent=1)
     (OUTPUT / "01_Structural_Training_Colab.ipynb").write_text(
         structural_json, encoding="utf-8"
     )
-    (OUTPUT / "02_Semantic_Frozen_Report_Colab.ipynb").write_text(
-        semantic_json, encoding="utf-8"
+    (OUTPUT / "02_Semantic_Training_Colab.ipynb").write_text(
+        semantic_training_json, encoding="utf-8"
     )
-    (OUTPUT / "03_Decision_Frozen_Report_Colab.ipynb").write_text(
+    (OUTPUT / "03_Semantic_Frozen_Report_Colab.ipynb").write_text(
+        semantic_frozen_json, encoding="utf-8"
+    )
+    (OUTPUT / "04_Decision_Frozen_Report_Colab.ipynb").write_text(
         decision_json, encoding="utf-8"
     )
     (ROOT / "ml_training/structural/notebooks/structural_training_v3.ipynb").write_text(
         structural_json, encoding="utf-8"
     )
+    (ROOT / "ml_training/semantic/notebooks/semantic_training.ipynb").write_text(
+        semantic_training_json, encoding="utf-8"
+    )
     (ROOT / "ml_training/semantic/notebooks/semantic_frozen_report.ipynb").write_text(
-        semantic_json, encoding="utf-8"
+        semantic_frozen_json, encoding="utf-8"
     )
     decision_notebook = (
         ROOT / "ml_training/decision_layer/notebooks/decision_frozen_report.ipynb"
@@ -1095,10 +1134,10 @@ def build() -> None:
     # when it is installed locally, but keep public-source bundle builds valid.
     if (ROOT / "data/runtime_captures/audit.json").is_file():
         _copy_file("data/runtime_captures/audit.json")
-    _copy_tree("data/structural_coverage_development/2026-09-r01")
-    _copy_tree("data/structural_physical_attack_development/2026-09-r02")
-    _copy_tree("data/acquisition_quality_development/2026-09-r02")
-    _copy_tree("data/structural_consumed_blind_development/2026-09-r01")
+    _copy_tree("data/structural_coverage_development/coverage_development_release_r01")
+    _copy_tree("data/structural_physical_attack_development/physical_attack_release_r02")
+    _copy_tree("data/acquisition_quality_development/acquisition_quality_release_r02")
+    _copy_tree("data/structural_consumed_blind_development/consumed_blind_clean_release_r01")
     _copy_tree("data/structural_consumed_blind_attack_development/r07-corrective-v1")
     _copy_tree("data/prepared_gallery_references/structural-2026.03-r01")
     _copy_tree(

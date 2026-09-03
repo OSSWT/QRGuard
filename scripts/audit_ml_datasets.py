@@ -20,7 +20,7 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKSPACE_DATASETS = ROOT.parent / "04_Datasets"
+WORKSPACE_DATASETS = ROOT.parent / "03_Datasets"
 OUTPUT = ROOT / "ml_training/datasets/DATASET_INVENTORY.json"
 
 
@@ -76,7 +76,7 @@ DATASETS: tuple[dict[str, Any], ...] = (
         "source_url": "https://data.mendeley.com/datasets/m6mfwc52vk/1",
         "licence": "CC BY 4.0",
         "expected_rows": 67,
-        "expected_sha256": "df2891748615b082fb96b7e93dccc8d22d8062c2c70a1ce3d144e07bfedd0d11",
+        "expected_sha256": "98f1a2a02fda8f310acb0ba66875c44a4bba0d5fc3cb6e164e81402f522c27a2",
         "path_column": "path",
         "hash_column": "crop_sha256",
         "github_policy": "generated_cache_not_published",
@@ -107,7 +107,7 @@ DATASETS: tuple[dict[str, Any], ...] = (
         "source_url": "local://QRGuard/opt-in-app-capture",
         "licence": "project internal opt-in",
         "expected_rows": 361,
-        "expected_sha256": "dc7e220712f7604cc74a1c7cecabc0b73ee63733fd48338311b01b386c415b96",
+        "expected_sha256": "013e0ad7df831244a4a7518197f55cc52849ea7486f6f8b9a33f17e1e97559e0",
         "path_column": "sample_path",
         "hash_column": "sha256",
         "hash_mode": "rgb_pixels_with_dimensions",
@@ -133,13 +133,13 @@ DATASETS: tuple[dict[str, Any], ...] = (
     {
         "dataset_id": "qrguard_structural_coverage_development",
         "branch": "structural",
-        "path": "data/structural_coverage_development/2026-09-r01/manifest.csv",
+        "path": "data/structural_coverage_development/coverage_development_release_r01/manifest.csv",
         "kind": "manifest",
         "role": "version, mask and payload-length development coverage",
         "source_url": "local://QRGuard/diagnostic-capture",
         "licence": "project internal opt-in",
         "expected_rows": 240,
-        "expected_sha256": "e92af59aac3a5348005998c0f814ed487287fbf826a0ff123ed7fd861006ca38",
+        "expected_sha256": "601d824bd5e1910fe3458f6a59018c1333ccba73c8c8b607ec5aa6bd46bd1335",
         "path_column": "path",
         "hash_column": "crop_sha256",
         "github_policy": "metadata_only_private_captures",
@@ -148,13 +148,13 @@ DATASETS: tuple[dict[str, Any], ...] = (
     {
         "dataset_id": "qrguard_physical_attack_development",
         "branch": "structural",
-        "path": "data/structural_physical_attack_development/2026-09-r02/manifest.csv",
+        "path": "data/structural_physical_attack_development/physical_attack_release_r02/manifest.csv",
         "kind": "manifest",
         "role": "80 clean plus 50 verified-surviving attack development frames",
         "source_url": "local://QRGuard/physical-attack-capture",
         "licence": "project internal opt-in",
         "expected_rows": 130,
-        "expected_sha256": "ed8bc9f8aebb81deee3554f3b60bb3d0f3442135f2bfaa1a3f52c74a7b9ab81f",
+        "expected_sha256": "80a88611a8e717be11602497b2c5ffb263635f7954b75945e18d34963dd9ccce",
         "path_column": "path",
         "hash_column": "crop_sha256",
         "github_policy": "metadata_only_private_captures",
@@ -163,13 +163,13 @@ DATASETS: tuple[dict[str, Any], ...] = (
     {
         "dataset_id": "qrguard_acquisition_quality_development",
         "branch": "structural",
-        "path": "data/acquisition_quality_development/2026-09-r02/manifest.csv",
+        "path": "data/acquisition_quality_development/acquisition_quality_release_r02/manifest.csv",
         "kind": "manifest",
         "role": "clean exposure and module-scale train-only hard negatives",
         "source_url": "local://QRGuard/acquisition-quality-capture",
         "licence": "project internal opt-in",
         "expected_rows": 90,
-        "expected_sha256": "3d757bcca135352583b55cd70a012158c6ce0061fbcc3c69391e770d8832074b",
+        "expected_sha256": "4f6d1739b96eacf3b2b59b07a337c0b6970952584d7c5ceec81e3625ce69108e",
         "path_column": "path",
         "hash_column": "crop_sha256",
         "github_policy": "metadata_only_private_captures",
@@ -178,13 +178,13 @@ DATASETS: tuple[dict[str, Any], ...] = (
     {
         "dataset_id": "qrguard_consumed_blind_clean_development",
         "branch": "structural",
-        "path": "data/structural_consumed_blind_development/2026-09-r01/manifest.csv",
+        "path": "data/structural_consumed_blind_development/consumed_blind_clean_release_r01/manifest.csv",
         "kind": "manifest",
         "role": "80 clean dense-screen development rows; never blind again",
         "source_url": "local://QRGuard/consumed-blind-capture",
         "licence": "project internal opt-in",
         "expected_rows": 80,
-        "expected_sha256": "22e628c14fe04ca93960e04c667899d8212b302d53091abf181eddfd6ae71660",
+        "expected_sha256": "76358ef5201999221982ba0a701ddad985b5ac4288f874fc6f4a8429baec29cb",
         "path_column": "path",
         "hash_column": "crop_sha256",
         "github_policy": "metadata_only_private_captures",
@@ -455,7 +455,7 @@ def _inspect(spec: dict[str, Any]) -> dict[str, Any]:
 
 def _inspect_private(spec: dict[str, Any]) -> dict[str, Any]:
     path = WORKSPACE_DATASETS / spec["path"]
-    result = {**spec, "workspace_root": "04_Datasets", "exists": path.is_file()}
+    result = {**spec, "workspace_root": "03_Datasets", "exists": path.is_file()}
     if path.is_file():
         result["actual_bytes"] = path.stat().st_size
         result["actual_sha256"] = _sha256(path)

@@ -22,7 +22,7 @@ except ModuleNotFoundError:
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PLAN = ROOT / "app/assets/capture/acquisition_validation_plan.json"
-DEFAULT_OUTPUT = ROOT / "data/acquisition_quality_development/2026-09-r02"
+DEFAULT_OUTPUT = ROOT / "data/acquisition_quality_development/acquisition_quality_release_r02"
 EXPECTED_ARCHIVE_SHA256 = (
     "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4"
 )

@@ -40,7 +40,7 @@ not missing QR-standard mask coverage.
 - Consumed source archive SHA-256:
   `d5930ffcaf1edc0702afd5ff2b2241584a95edd9f9f0de81fdc8a5a5a7921f6d`
 - Consumed clean manifest SHA-256:
-  `22e628c14fe04ca93960e04c667899d8212b302d53091abf181eddfd6ae71660`
+  `76358ef5201999221982ba0a701ddad985b5ac4288f874fc6f4a8429baec29cb`
 - Candidate manifest: 14,230 rows, SHA-256
   `dbc595a4542dab8490caed4ee2bbd236743d307e849cb4c03d2955c81761ca5b`
 - r06 initial checkpoint SHA-256:

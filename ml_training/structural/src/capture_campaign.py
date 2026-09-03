@@ -361,7 +361,7 @@ def audit_campaign(schedule: Path, capture_root: Path) -> CampaignProgress:
     invalid_case_ids: set[str] = set()
     unplanned = 0
 
-    for metadata_path in sorted(capture_root.glob("*/scan_*/metadata.json")):
+    for metadata_path in sorted(capture_root.glob("*/*/metadata.json")):
         try:
             metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):

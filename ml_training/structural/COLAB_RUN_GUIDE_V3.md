@@ -95,5 +95,8 @@ holdout. The 90 acquisition-quality clean frames remain training only.
 - A deployment-gate failure still produces useful FYP evidence, but the output
   remains `CANDIDATE ONLY`.
 - The notebook never replaces runtime models, pushes GitHub, or deploys.
-- `02_Semantic_Frozen_Report_Colab.ipynb` displays `semantic-2026.02`; it does
-  not retrain Semantic.
+- `02_Semantic_Training_Colab.ipynb` trains a new isolated Semantic candidate;
+  it does not replace or deploy `semantic-2026.02`.
+- `03_Semantic_Frozen_Report_Colab.ipynb` displays the accepted
+  `semantic-2026.02` evidence without retraining it.
+- `04_Decision_Frozen_Report_Colab.ipynb` displays the frozen Decision evidence.

@@ -53,7 +53,7 @@
   "m5_coverage_development": {
     "campaign_id": "structural-coverage-development-2026-09-r01",
     "archive_sha256": "f3267b92176414473f0e936059f0a4b45ff9164ad5be8b702041d63c7aaa0bfa",
-    "manifest": "data/structural_coverage_development/2026-09-r01/manifest.csv",
+    "manifest": "data/structural_coverage_development/coverage_development_release_r01/manifest.csv",
     "frames": 240,
     "sessions": 48,
     "base_identities": 16,
@@ -65,8 +65,8 @@
   "physical_attack_development": {
     "campaign_id": "structural-physical-attack-development-2026-09-r02",
     "archive_sha256": "a69f83022e8af591e9d09f31cdbedb924ad41cf5e9d951feac24ef6577775d58",
-    "manifest": "data/structural_physical_attack_development/2026-09-r02/manifest.csv",
-    "manifest_sha256": "ed8bc9f8aebb81deee3554f3b60bb3d0f3442135f2bfaa1a3f52c74a7b9ab81f",
+    "manifest": "data/structural_physical_attack_development/physical_attack_release_r02/manifest.csv",
+    "manifest_sha256": "80a88611a8e717be11602497b2c5ffb263635f7954b75945e18d34963dd9ccce",
     "observed_frames": 240,
     "observed_clean_sessions": 16,
     "observed_attack_sessions": 32,
@@ -81,8 +81,8 @@
   "acquisition_quality_development": {
     "campaign_id": "acquisition-quality-exposure-module-scale-2026-09-r02",
     "archive_sha256": "02a8fcafbcaad9e6b1058f02efb0a5ab56faffa8ce268173c98db07e6a1e93e4",
-    "manifest": "data/acquisition_quality_development/2026-09-r02/manifest.csv",
-    "manifest_sha256": "3d757bcca135352583b55cd70a012158c6ce0061fbcc3c69391e770d8832074b",
+    "manifest": "data/acquisition_quality_development/acquisition_quality_release_r02/manifest.csv",
+    "manifest_sha256": "4f6d1739b96eacf3b2b59b07a337c0b6970952584d7c5ceec81e3625ce69108e",
     "observed_frames": 120,
     "admitted_clean_frames": 90,
     "admitted_sessions": 18,

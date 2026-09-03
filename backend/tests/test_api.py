@@ -909,7 +909,7 @@ class TestScan:
         )
 
         assert response.status_code == 200
-        sessions = list((tmp_path / "clean").glob("scan_*"))
+        sessions = list((tmp_path / "clean").glob("capture_*"))
         assert len(sessions) == 1
         metadata_path = sessions[0] / "metadata.json"
         metadata_text = metadata_path.read_text(encoding="utf-8")
@@ -968,7 +968,7 @@ class TestScan:
         )
 
         assert response.status_code == 200
-        session = next((tmp_path / "clean").glob("scan_*"))
+        session = next((tmp_path / "clean").glob("capture_*"))
         metadata_text = (session / "metadata.json").read_text(encoding="utf-8")
         metadata = json.loads(metadata_text)
         assert metadata["campaign_id"] == "structural-v3-real-2026.03-r01"

@@ -7,7 +7,8 @@ This folder retains the compact dataset catalogue, cleaning/source manifests and
 research references. Duplicate notebook and performance snapshots were removed;
 their canonical locations are:
 
-- Notebook: `ml_training/semantic/notebooks/semantic_frozen_report.ipynb`
+- Candidate training notebook: `ml_training/semantic/notebooks/semantic_training.ipynb`
+- Accepted-model report notebook: `ml_training/semantic/notebooks/semantic_frozen_report.ipynb`
 - Performance: `ml_training/semantic/performance/semantic-2026.02/`
 - Runtime artifact: `training/artifacts/semantic/`
 - Dataset: `ml_training/datasets/semantic/`

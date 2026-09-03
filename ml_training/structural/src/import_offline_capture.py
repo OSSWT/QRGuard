@@ -109,7 +109,7 @@ def _validate_member_names(archive: zipfile.ZipFile) -> dict[str, zipfile.ZipInf
 
 def _existing_sessions(capture_root: Path) -> dict[tuple[str, str], dict[str, object]]:
     existing: dict[tuple[str, str], dict[str, object]] = {}
-    for metadata_path in sorted(capture_root.glob("*/scan_*/metadata.json")):
+    for metadata_path in sorted(capture_root.glob("*/*/metadata.json")):
         try:
             metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError, TypeError):
@@ -423,13 +423,13 @@ def import_candidates(
         image = Image.open(io.BytesIO(candidate.crop_png)).convert("RGB")
         result = scan_runner(image, candidate.image_source)
         metadata = _canonical_metadata(candidate, result)
-        stamp = datetime.fromisoformat(candidate.captured_at).strftime(
-            "%Y%m%d_%H%M%S_%f"
-        )
         session = (
             capture_root
             / candidate.case.label
-            / f"scan_{stamp}_{candidate.session_id[:8]}"
+            / (
+                f"capture_{candidate.case.case_id}_{candidate.image_source}_"
+                f"{candidate.session_id[:8]}"
+            ).lower()
         )
         if session.exists():
             raise FileExistsError(f"import destination already exists: {session}")

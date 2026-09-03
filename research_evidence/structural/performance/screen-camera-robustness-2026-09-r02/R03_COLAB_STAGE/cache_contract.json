@@ -2,9 +2,9 @@
   "version": "structural-2026.09-r03",
   "dataset_version": "structural-2026.09-r02",
   "config_sha256": "111cf5d11e1a8fc3aa9921f0a4860d4aaf967e4a2195b49fcdc5212348b236d8",
-  "capture_manifest_sha256": "dc7e220712f7604cc74a1c7cecabc0b73ee63733fd48338311b01b386c415b96",
-  "coverage_development_sha256": "e92af59aac3a5348005998c0f814ed487287fbf826a0ff123ed7fd861006ca38",
-  "physical_attack_development_sha256": "ed8bc9f8aebb81deee3554f3b60bb3d0f3442135f2bfaa1a3f52c74a7b9ab81f",
+  "capture_manifest_sha256": "013e0ad7df831244a4a7518197f55cc52849ea7486f6f8b9a33f17e1e97559e0",
+  "coverage_development_sha256": "601d824bd5e1910fe3458f6a59018c1333ccba73c8c8b607ec5aa6bd46bd1335",
+  "physical_attack_development_sha256": "80a88611a8e717be11602497b2c5ffb263635f7954b75945e18d34963dd9ccce",
   "prepared_gallery_reference_sha256": "f2a8cfcd921834d7efe8b309c00ecb3ddf64aae34dea8c3b32b94dd962315573",
   "prepared_archive_sha256": "ac8cf5ad410355a34d44ef8d0e906cb22e3db9031b488ce0bc63bb2db76c3b12"
 }

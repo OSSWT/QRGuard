@@ -22,7 +22,7 @@
       "decoded_payload": "https://example.com/?qrguard_fyp2=structural-v3-real-2026.03-r01-cln-normal-02-1ba551e5d355013170c9deb95f614a93",
       "structural_ground_truth": "clean",
       "scan_condition": "normal",
-      "source_path": "data/runtime_captures/clean/scan_20260830_061330_585723/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-normal-02_camera_1bda9592/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -39,7 +39,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-angle-01-b074a720dd721158544b5efcec6f5875",
       "structural_ground_truth": "clean",
       "scan_condition": "angle",
-      "source_path": "data/runtime_captures/clean/scan_20260830_120205_239152_9692c27c/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-angle-01_camera_9692c27c/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -56,7 +56,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-defocus-01-2051db544dcfcefd4764c70c71c3d4ae",
       "structural_ground_truth": "clean",
       "scan_condition": "defocus",
-      "source_path": "data/runtime_captures/clean/scan_20260830_115748_148072_cfdac572/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-defocus-01_camera_cfdac572/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -73,7 +73,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-far-10-c7782c67be91937769e624c383eaa142",
       "structural_ground_truth": "clean",
       "scan_condition": "far",
-      "source_path": "data/runtime_captures/clean/scan_20260830_134925_170419_2cd8f474/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-far-10_camera_2cd8f474/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -90,7 +90,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-glare-01-6c29931f906e9219c416385b3fb3259c",
       "structural_ground_truth": "clean",
       "scan_condition": "glare",
-      "source_path": "data/runtime_captures/clean/scan_20260830_120222_501265_82b0c533/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-glare-01_camera_82b0c533/crop_00.png",
       "source_exposure": "exact_app_crop/validation; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -107,7 +107,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-motion-11-269916f573a3db9978989f2117ba3a77",
       "structural_ground_truth": "clean",
       "scan_condition": "motion",
-      "source_path": "data/runtime_captures/clean/scan_20260830_115744_363927_02bbc7ea/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-motion-11_camera_02bbc7ea/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -124,7 +124,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-overexp-01-c0dbaad3cc173e0d6e1546ac33fa6d0b",
       "structural_ground_truth": "clean",
       "scan_condition": "overexp",
-      "source_path": "data/runtime_captures/clean/scan_20260830_120627_617714_3fba83b3/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-overexp-01_camera_3fba83b3/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -141,7 +141,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-screen-07-b03d9c34e0d90dd724a59e8fc4800fba",
       "structural_ground_truth": "clean",
       "scan_condition": "screen",
-      "source_path": "data/runtime_captures/clean/scan_20260830_120545_556770_34a90b74/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-screen-07_camera_34a90b74/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -158,7 +158,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-shadow-14-df0663a3360785ad1a885becfdbaa5a7",
       "structural_ground_truth": "clean",
       "scan_condition": "shadow",
-      "source_path": "data/runtime_captures/clean/scan_20260830_142127_562920_29d92dda/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-shadow-14_camera_29d92dda/crop_00.png",
       "source_exposure": "exact_app_crop/validation; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -175,7 +175,7 @@
       "decoded_payload": "https://example.com/?qg3=cln-underexp-08-c6192b7b9dba01c94431b0c734f00d82",
       "structural_ground_truth": "clean",
       "scan_condition": "underexp",
-      "source_path": "data/runtime_captures/clean/scan_20260830_115703_589823_e6ef293d/crop_00.png",
+      "source_path": "data/runtime_captures/clean/capture_cln-underexp-08_camera_e6ef293d/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -192,7 +192,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-normal-01-e65bdd3727bd475c397547d323e7db14",
       "structural_ground_truth": "adversarial",
       "scan_condition": "normal",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_120633_217412_6a5fb614/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-normal-01_camera_6a5fb614/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -209,7 +209,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-angle-08-539f1681d39187f78756591960202019",
       "structural_ground_truth": "adversarial",
       "scan_condition": "angle",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_135340_942209_347d7752/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-angle-08_camera_347d7752/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -226,7 +226,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-defocus-10-aa8a0cc47a38ef9f1eac49cd0585cc66",
       "structural_ground_truth": "adversarial",
       "scan_condition": "defocus",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_135215_100173_55ca6da2/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-defocus-10_camera_55ca6da2/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -243,7 +243,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-far-02-b7a7fdc0eb55981ff44ecff76de1572a",
       "structural_ground_truth": "adversarial",
       "scan_condition": "far",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_120833_920193_96704d17/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-far-02_camera_96704d17/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -260,7 +260,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-glare-01-e49756dee315c5489a5e7f7ae72167f2",
       "structural_ground_truth": "adversarial",
       "scan_condition": "glare",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_121029_511250_71608f4e/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-glare-01_camera_71608f4e/crop_00.png",
       "source_exposure": "exact_app_crop/validation; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -277,7 +277,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-motion-07-c7610b8150a17fed49443336aeefd18d",
       "structural_ground_truth": "adversarial",
       "scan_condition": "motion",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_120807_806009_97323a0f/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-motion-07_camera_97323a0f/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -294,7 +294,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-overexp-12-4fefcf15603fd945266ec8fbd80a5a0f",
       "structural_ground_truth": "adversarial",
       "scan_condition": "overexp",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_135112_212824_3e64e24a/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-overexp-12_camera_3e64e24a/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -311,7 +311,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-screen-01-3a0a8be00c3ea13dea61af52869910d8",
       "structural_ground_truth": "adversarial",
       "scan_condition": "screen",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_121238_655536_7fe0d1ab/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-screen-01_camera_7fe0d1ab/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -328,7 +328,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-shadow-03-49037f54489d78013860f9938fcea70d",
       "structural_ground_truth": "adversarial",
       "scan_condition": "shadow",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_121224_851933_3307d7b1/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-shadow-03_camera_3307d7b1/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -345,7 +345,7 @@
       "decoded_payload": "https://example.com/?qg3=adv-underexp-03-421e9ad86a67f2baa317f3302cee5123",
       "structural_ground_truth": "adversarial",
       "scan_condition": "underexp",
-      "source_path": "data/runtime_captures/adversarial/scan_20260830_120724_650707_a2425348/crop_00.png",
+      "source_path": "data/runtime_captures/adversarial/capture_adv-underexp-03_camera_a2425348/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -362,7 +362,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-normal-05-8e70adc44d252e09ae0e56e3e6c70e10",
       "structural_ground_truth": "tampered",
       "scan_condition": "normal",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121302_400622_c1a28ab8/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-normal-05_camera_c1a28ab8/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -379,7 +379,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-angle-11-3b822735740e17a36ee70993cc96def9",
       "structural_ground_truth": "tampered",
       "scan_condition": "angle",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121434_910157_7edfc16f/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-angle-11_camera_7edfc16f/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -396,7 +396,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-defocus-06-a90a0adedfd4244aa7c221c392132d9d",
       "structural_ground_truth": "tampered",
       "scan_condition": "defocus",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121402_036235_323f5bc0/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-defocus-06_camera_323f5bc0/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -413,7 +413,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-far-02-d6fb0439ebda4c7dc05a72b612d75c82",
       "structural_ground_truth": "tampered",
       "scan_condition": "far",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121414_180132_167140df/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-far-02_camera_167140df/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -430,7 +430,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-glare-02-6fd0e31d4f274124c98fa8ce708a2c83",
       "structural_ground_truth": "tampered",
       "scan_condition": "glare",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121440_033987_c3223f6d/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-glare-02_camera_c3223f6d/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -447,7 +447,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-motion-01-4fa046e8b81e7390119e08e9837e1a3a",
       "structural_ground_truth": "tampered",
       "scan_condition": "motion",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121335_504158_efca5f30/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-motion-01_camera_efca5f30/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -464,7 +464,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-overexp-08-ae00cf8029bdacdeb327b6ac2409af41",
       "structural_ground_truth": "tampered",
       "scan_condition": "overexp",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_135430_753240_efee90ef/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-overexp-08_camera_efee90ef/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -481,7 +481,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-screen-02-85767652460749b7e366f0148ad896c7",
       "structural_ground_truth": "tampered",
       "scan_condition": "screen",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121506_085850_b459bfda/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-screen-02_camera_b459bfda/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -498,7 +498,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-shadow-02-905a333d7368ae5fc15f0f913cc2bb21",
       "structural_ground_truth": "tampered",
       "scan_condition": "shadow",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121449_987503_0d942741/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-shadow-02_camera_0d942741/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false
@@ -515,7 +515,7 @@
       "decoded_payload": "https://example.com/?qg3=tmp-underexp-07-425d093f79ab42c03d896263979c21fe",
       "structural_ground_truth": "tampered",
       "scan_condition": "underexp",
-      "source_path": "data/runtime_captures/tampered/scan_20260830_121328_252334_6231d335/crop_00.png",
+      "source_path": "data/runtime_captures/tampered/capture_tmp-underexp-07_camera_6231d335/crop_00.png",
       "source_exposure": "exact_app_crop/test; exposed production dataset; not independent",
       "demo_role": "demo_only",
       "independent_evaluation": false

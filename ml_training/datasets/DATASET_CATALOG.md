@@ -10,7 +10,7 @@ and post-training QR demo assets.
 
 The local audit verifies every required source, table, manifest, referenced
 image, row count, byte size, and locked SHA-256 value. It also verifies the five
-canonical private recovery/evidence archives under `04_Datasets`.
+canonical private recovery/evidence archives under `03_Datasets`.
 
 The active models are:
 
@@ -26,10 +26,10 @@ The active models are:
 | QR Codes on Different Surfaces v1 | `structural/downloads/qr_surfaces/qr_codes_in_surfaces.zip` plus `processed/qr_surfaces/` | Verified 384,232,282-byte archive; 67 accepted rectified real crops | Auxiliary clean training only. All photographs encode the same QR bitmap, so they provide no independent test identities. | Mendeley Data, DOI `10.17632/m6mfwc52vk.1`, CC BY 4.0 | Archive/cache ignored; provenance and hashes published |
 | QRGuard exact-app captures v3 | `data/runtime_captures/manifest_v3.csv` and its session folders | 361 authoritative sessions/frames; every referenced crop and pixel hash verified | Camera: 100 clean, 100 adversarial, 100 tampered. Gallery: 21/20/20. Sixty paired test groups and ten quality conditions per camera class. Primary deployment-domain data. | QRGuard opt-in capture campaign; project-internal data | Private pixels ignored; schema, audit, aggregate counts and hashes published |
 | Prepared Gallery references | `data/prepared_gallery_references/structural-2026.03-r01/` | 239 referenced images verified | Train/validation only: clean 59/20, adversarial 60/20, tampered 60/20. Fifty-nine locked-test references were excluded. | QRGuard capture campaign; project-internal data | Metadata only |
-| Structural coverage development | `data/structural_coverage_development/2026-09-r01/` | 240 referenced crops verified | Versions 3/5/10, masks 0-7 and payload lengths 24/40/112 bytes. Development train/validation only. | QRGuard diagnostic capture; project-internal opt-in | Metadata only |
-| Physical attack development | `data/structural_physical_attack_development/2026-09-r02/` | 130 admitted referenced crops verified | 80 clean plus 50 frames from ten attacks verified to survive the screen/camera channel. Twenty-two non-surviving attack sessions were quarantined. | QRGuard physical capture; project-internal opt-in | Metadata only |
-| Acquisition quality development | `data/acquisition_quality_development/2026-09-r02/` | 90 admitted referenced clean crops verified | Exposure/module-scale hard negatives; train only and never reused as independent evaluation. | QRGuard diagnostic capture; project-internal opt-in | Metadata only |
-| Consumed blind clean development | `data/structural_consumed_blind_development/2026-09-r01/` | 80 referenced crops verified | Dense-screen/SEM-11 hard negatives. The original holdout was opened; these rows can never be fresh blind evidence again. | QRGuard diagnostic capture; project-internal opt-in | Metadata only |
+| Structural coverage development | `data/structural_coverage_development/coverage_development_release_r01/` | 240 referenced crops verified | Versions 3/5/10, masks 0-7 and payload lengths 24/40/112 bytes. Development train/validation only. | QRGuard diagnostic capture; project-internal opt-in | Metadata only |
+| Physical attack development | `data/structural_physical_attack_development/physical_attack_release_r02/` | 130 admitted referenced crops verified | 80 clean plus 50 frames from ten attacks verified to survive the screen/camera channel. Twenty-two non-surviving attack sessions were quarantined. | QRGuard physical capture; project-internal opt-in | Metadata only |
+| Acquisition quality development | `data/acquisition_quality_development/acquisition_quality_release_r02/` | 90 admitted referenced clean crops verified | Exposure/module-scale hard negatives; train only and never reused as independent evaluation. | QRGuard diagnostic capture; project-internal opt-in | Metadata only |
+| Consumed blind clean development | `data/structural_consumed_blind_development/consumed_blind_clean_release_r01/` | 80 referenced crops verified | Dense-screen/SEM-11 hard negatives. The original holdout was opened; these rows can never be fresh blind evidence again. | QRGuard diagnostic capture; project-internal opt-in | Metadata only |
 | Consumed verified attacks | `data/structural_consumed_blind_attack_development/r07-corrective-v1/` | Ten referenced frames from two surviving attacks verified | Corrective train-only hard positives; never promotion evidence. | QRGuard diagnostic capture; project-internal opt-in | Metadata only |
 | Procedural topology and attacks | Rebuilt by `structural/src/structural_recipes.py` and `structural/src/train_local.py` | Not stored as another permanent image expansion | Includes standards-valid mask/version/error-correction topology counterfactuals plus grouped synthetic clean/tampered and FGSM/PGD samples. Parent identities stay in one split. | QRGuard deterministic generation | Code/config published; generated cache ignored |
 
@@ -44,8 +44,8 @@ recorded in `configs/structural-r07-corrective-v1.json` as SHA-256
 | Dataset | State | Allowed use | Reason excluded |
 |---|---|---|---|
 | Dynamsoft QR selection | 73 Git-blob-verified source files; 232 annotated image crops and one detected video crop prepared locally | Acquisition/detection inspection only | No repository-wide data licence was recorded for the acquired QR subsets, and the data have no QRGuard Structural class ground truth |
-| Consumed r07 fresh-blind pack | Source and locked reference ZIPs retained under `04_Datasets` and hash-verified | Diagnosis only | It has already been scored and cannot become blind again |
-| Attack Calibration v1 | Source and reference ZIPs retained under `04_Datasets` and hash-verified | Controlled-release development calibration | It is disclosed development evidence, not independent promotion evidence |
+| Consumed r07 fresh-blind pack | Source and locked reference ZIPs retained under `03_Datasets` and hash-verified | Diagnosis only | It has already been scored and cannot become blind again |
+| Attack Calibration v1 | Source and reference ZIPs retained under `03_Datasets` and hash-verified | Controlled-release development calibration | It is disclosed development evidence, not independent promotion evidence |
 | BarBeR / BoofCV / OQR / Sensors forged QR | Reference entries only unless separately acquired under verified terms | Future acquisition or holdout work as registered | Not silently added to the current training data |
 
 ## Semantic data admitted to semantic-2026.02
