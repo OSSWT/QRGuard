@@ -90,12 +90,18 @@
       "details": "duplicate dataset expansions and generated QR collections removed; FYP1 academic material retained"
     },
     "obsolete_model_and_checkpoint_copies": {
-      "logical_bytes": 1874756662,
-      "details": "legacy Structural/Transformer artifacts plus duplicate r01 checkpoints and history; active and rollback artifacts retained"
+      "logical_bytes": 1964164170,
+      "details": "legacy Structural/Transformer artifacts plus duplicate r01 and r07 artifacts/checkpoints; active deployment artifact and required training checkpoints retained"
+    },
+    "obsolete_processed_dataset_cache": {
+      "logical_bytes": 52468165,
+      "details": "superseded Semantic v1 processed cache removed; current Semantic v2 and canonical source data retained"
     },
     "generated_or_duplicate_views": [
       "dist/QRGuard_ML_Colab",
       "ml_training/datasets/pictures_by_source",
+      "base-r07 rejected output artifact copy",
+      "corrective-r07 run artifact copy (blind tooling now binds the active deployment artifact)",
       "expanded QR_Codes_Demo copy",
       "Flutter/Python/Gradle test and build caches"
     ]

@@ -30,9 +30,7 @@ DEFAULT_ARCHIVE = (
     ROOT.parent / "02_Active_Test_Packs/Structural_R07_Fresh_Blind_v1.zip"
 )
 DEFAULT_CANDIDATE = (
-    ROOT
-    / "ml_training/structural/runs/structural-r07-corrective-v1/"
-    "artifacts/structural_fp32.onnx"
+    ROOT / "training/artifacts/structural/structural_fp32.onnx"
 )
 DEFAULT_VICTIM = (
     Path.home()

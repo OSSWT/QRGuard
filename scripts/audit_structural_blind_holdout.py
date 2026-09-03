@@ -31,9 +31,7 @@ from scripts.evaluate_live_camera_candidate import (
 )
 
 DEFAULT_PLAN = ROOT / "app/assets/capture/structural_r07_fresh_blind_plan.json"
-DEFAULT_ARTIFACTS = (
-    ROOT / "ml_training/structural/runs/structural-r07-corrective-v1/artifacts"
-)
+DEFAULT_ARTIFACTS = ROOT / "training/artifacts/structural"
 DEFAULT_CONFIG = ROOT / "ml_training/configs/structural-coverage-gates-2026.09-r01.json"
 DEFAULT_DEMO_AUDIT = (
     ROOT / "research_evidence/structural/performance/"
