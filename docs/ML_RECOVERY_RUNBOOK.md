@@ -1,8 +1,6 @@
 # Live-camera and ML recovery runbook
 
-Status date: 2026-09-01
-
-> **2026-09-01 runtime correction:** Gallery remains a single-image path. Live
+Current runtime: Gallery remains a single-image path. Live
 > Camera now requires a deployment-range QR crop, retains five geometry-ranked
 > observations as fallback, and prepares/uploads the best three eligible crops
 > for median-score / majority-class consensus. Smaller or insufficient evidence asks

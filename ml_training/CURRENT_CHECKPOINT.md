@@ -51,7 +51,7 @@ across every phone, display, printer, lighting condition or future attack.
 
 ## Verification
 
-- Backend regression: 470 passed, 3 conditional skips.
+- Backend regression: 452 passed, 3 conditional skips.
 - r07 backend safety subset: 106 passed, 2 conditional skips.
 - Flutter analyzer: no issues.
 - Flutter tests: 104 passed.

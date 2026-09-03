@@ -1,93 +1,75 @@
-# ML results and report-material index
-
-This page is the entry point for the final report. New work is classified by the
-two report phases, followed by the Risk Decision Layer and deployment evidence.
+# ML results and evidence index
 
 ## Structural Training
 
-### Current local production replacement
+### Active controlled release
 
-- Run: `structural-2026.03-r01`
-- Training source: `structural/src/train_local.py`
-- Run artifacts: `structural/runs/structural-2026.03-r01/artifacts/`
-- Full report: `structural/performance/structural-2026.03-r01/STRUCTURAL_PERFORMANCE.md`
-- Machine-readable metrics: `structural/performance/structural-2026.03-r01/metrics.json`
-- Exact-app summary: `structural/STRUCTURAL_V3_REAL_100X3_RESULTS_2026-08-31.md`
-- Main figures: confusion matrix, calibration curve, training curves, score
-  distribution, and grouped-source results in the same performance folder.
+- Version: `structural-r07-corrective-v1`
+- Source: `structural/src/train_local.py`
+- Configuration: `configs/structural-r07-corrective-v1.json`
+- Performance: `structural/performance/structural-r07-corrective-v1/`
+- Runtime artifact: `../training/artifacts/structural/`
+- Product acceptance policy: `structural/R07_PRODUCT_ACCEPTANCE_POLICY.md`
 
-The artifact passed research, 100x3 exact-app, paired source-neutral, export,
-calibration and latency gates. It occupies the production path, passed post-copy
-evaluation and is live on Render after remote smoke. Earlier failed candidates
-remain negative evidence and are not active runtime choices.
+The development gates passed. Formal promotion remains pending a fresh,
+candidate-bound independent blind acceptance. Gallery and Camera use the same
+artifact; camera quality, module-scale and temporal-consensus policy may return
+Rescan when evidence is insufficient.
 
-### External optical evaluation
+### Immediate rollback
 
-- Baseline QR-DN result:
-  `structural/performance/deployed_baseline/qrdn/QRDN_EXTERNAL_CLEAN.md`
-- QR-DN prepared manifest:
-  `datasets/structural/processed/qrdn/manifest.csv`
-- QR surfaces preparation audit:
-  `datasets/structural/processed/qr_surfaces/preparation_audit.json`
-- Dynamsoft acquisition-only audit:
-  `datasets/holdout/processed/dynamsoft_qr/preparation_audit.json`
+- Version: `structural-2026.03-r01`
+- Performance: `structural/performance/structural-2026.03-r01/`
+- Rollback manifest:
+  `deployment/rollback/structural-before-r07-controlled-release/ROLLBACK.json`
+
+The rollback manifest records hashes instead of storing another copy of the
+44.7 MB model. The source artifact remains locally recoverable and in Git history.
+
+### r07 training lineage
+
+- Initialization evidence: `structural/performance/structural-2026.09-r06/`
+- Base r07 evidence: `structural/performance/structural-2026.09-r07/`
+- Corrective r07 evidence: `structural/performance/structural-r07-corrective-v1/`
+- Controlled physical calibration: `../research_evidence/structural/performance/r07-corrective/`
 
 ## Semantic Training
 
-- Deployed run: `semantic-2026.02`
-- Training source: `semantic/src/train_local.py`
-- Runtime feature contract: `../backend/semantic/semantic_features.py`
-- Run artifacts: `semantic/runs/semantic-2026.02/artifacts/`
-- Full report: `semantic/performance/semantic-2026.02/SEMANTIC_PERFORMANCE.md`
-- Machine-readable metrics: `semantic/performance/semantic-2026.02/metrics.json`
-- Report tables: dataset composition, per-source results, hard-benign results,
-  and behavioural acceptance CSV files in the same performance folder.
-- Figures: training, confusion, ROC/PR, and calibration plots.
+- Version: `semantic-2026.02`
+- Source: `semantic/src/train_local.py`
+- Performance: `semantic/performance/semantic-2026.02/`
+- Runtime artifact: `../training/artifacts/semantic/`
+- Rollback lineage: `semantic/runs/semantic-2026.01/`
 
-`semantic-2026.01` is retained to show the train–serve skew found after Fusion:
-scheme-less training URLs and router-normalised `http://` URLs did not share the
-same character n-grams. v2 canonicalises both paths identically.
+The active model uses the same canonicalization contract in training and serving.
+The removed Transformer/Method-1 runtime was obsolete and is not a rollback for
+the current hashed character n-gram model.
 
 ## Risk Decision Layer
 
-- Current local production: `decision-2026.03-r05` (`decision-2026.02` remains
-  rollback)
-- Training and report generator: `../scripts/train_fusion.py`
-- Frozen data: `../data/qrguard_mix_v2/manifest.csv` and 1,800 named images.
-- Run weights: `decision_layer/runs/decision-2026.03-r05/artifacts/fusion_weights.json`
-- Full report:
-  `decision_layer/performance/decision-2026.03-r05/DECISION_LAYER_PERFORMANCE.md`
-- Machine-readable metrics:
-  `decision_layer/performance/decision-2026.03-r05/metrics.json`
-- Per-cell table:
-  `decision_layer/performance/decision-2026.03-r05/per_cell_metrics.csv`
-- Figures: tier confusion matrix, risk-score distribution, and branch ablation.
+- Version: `decision-2026.03-r05`
+- Training/report generator: `../scripts/train_fusion.py`
+- Performance: `decision_layer/performance/decision-2026.03-r05/`
+- Runtime weights: `../backend/fusion/fusion_weights.json`
+- Frozen input: `../data/qrguard_mix_v2/`
+- Rollback: `decision_layer/runs/decision-2026.02/`
 
-QRGuard-Mix-v2 crosses six payload families with six image/evidence modes. Runtime
-policy is applied during evaluation, including open-Wi-Fi floors and camera
-abstention, so training metrics do not omit serving behaviour.
+## Datasets, licences and citations
 
-## Datasets, licences, and citations
-
-- Human-readable verified sources: `datasets/references/SOURCES.md`
+- Verified sources: `datasets/references/SOURCES.md`
 - Machine-readable registry: `datasets/references/dataset_registry.csv`
-- Licence/access decisions: `datasets/references/DATASET_LICENSES.md`
-- Report-ready BibTeX: `datasets/references/REFERENCES.bib`
+- Licence decisions: `datasets/references/DATASET_LICENSES.md`
+- Citations: `datasets/references/REFERENCES.bib`
 - Archive hashes: `datasets/download_verification.json`
+- Retention policy: `DATASET_RETENTION.json`
 
-Do not use or cite a quarantined dataset as training data. Dynamsoft crops are for
-acquisition-robustness inspection only. Public camera data does not replace exact
-QRGuard runtime crops.
+Public camera data does not replace exact QRGuard runtime captures. Consumed
+development evidence may support training or diagnosis but cannot be reused as
+fresh blind promotion evidence.
 
-## Deployment and rollback
+## Deployment
 
 - Authoritative registry: `deployment/model_registry.json`
-- Structural RUN5 rollback: `deployment/rollback/structural-run5/`
-- Deployed Semantic artifacts: `../training/artifacts/semantic/`
-- Deployed Decision weights: `../backend/fusion/fusion_weights.json`
-
-The 2026-08-21 device baseline recorded 247 backend tests, 58 Flutter tests,
-Flutter analysis with no issues, release APK `1.0.0+8003`, Gallery UTAR
-Safe/risk 2, and Gallery open Wi-Fi risk 45. Since 2026-08-23, `not_applicable`
-branches (including the URL model for Wi-Fi/text/payment payloads) are explicitly
-separate from unavailable evidence and no longer create a Partial result.
+- Current checkpoint: `CURRENT_CHECKPOINT.md`
+- Release summary: `LATEST.md`
+- Workspace cleanup record: `CLEANUP_AUDIT.json`

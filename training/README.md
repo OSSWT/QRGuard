@@ -25,19 +25,10 @@ promotion because a fresh candidate-bound independent blind acceptance test is
 still pending. The app discloses this scope and never converts inconclusive
 Structural evidence into a Safe result.
 
-## Compatibility-only local artifact
+## Rollback
 
-`artifacts/method1/` is an ignored legacy DomURLs_BERT rollback used by optional
-compatibility tests. It is not the automatic Semantic branch and is not published
-as a current model.
-
-Historical Structural RUN1–RUN5 directories and the old top-level artifact ZIP
-were moved to the local history area:
-
-`05_ML_Training_History_and_Colab/Legacy_Runtime_Artifacts/`
-
-They are not required by the current production stack. Canonical rollback records
-remain versioned under `ml_training/deployment/rollback/`.
-
-The immediate pre-r07 runtime is retained at
+The immediate pre-r07 Structural identity is recorded at
 `ml_training/deployment/rollback/structural-before-r07-controlled-release/`.
+Its four hashes point to the canonical r01 source artifact and Git history, so a
+second 44.7 MB model copy is unnecessary. Semantic v1 and Decision v2 retain
+their own versioned rollback lineage under `ml_training/`.

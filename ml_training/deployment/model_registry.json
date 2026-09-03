@@ -113,16 +113,13 @@
   },
   "rollback": {
     "structural_before_r07_controlled_release": "ml_training/deployment/rollback/structural-before-r07-controlled-release",
-    "structural_run5": "ml_training/deployment/rollback/structural-run5",
-    "camera_structural_2026_02": "ml_training/structural/runs/structural-2026.02",
     "decision_2026_02": "ml_training/decision_layer/runs/decision-2026.02",
-    "semantic_v1": "ml_training/semantic/runs/semantic-2026.01",
-    "legacy_semantic": "training/artifacts/method1"
+    "semantic_v1": "ml_training/semantic/runs/semantic-2026.01"
   },
   "verification": {
     "r07_local_backend_targeted": "106 passed, 2 skipped",
     "r07_flutter_targeted": "14 passed",
-    "backend_tests": "470 passed, 3 skipped",
+    "backend_tests": "452 passed, 3 skipped",
     "flutter_analyze": "no issues",
     "flutter_tests": "104 passed",
     "flutter_release_apk": "production URL build 1.2.0+8012; 73462225 bytes; sha256 c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c; APK Signature Scheme v2 verified; hosted copy hash matched",

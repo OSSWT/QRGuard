@@ -18,7 +18,7 @@ from PIL import Image, ImageDraw
 from ml_training.structural.src.nuisance_recipes import CONDITIONS, apply_nuisance
 
 ROOT = Path(__file__).resolve().parents[3]
-VERSION = os.getenv("QRGUARD_STRUCTURAL_VERSION", "structural-2026.02")
+VERSION = os.getenv("QRGUARD_STRUCTURAL_VERSION", "structural-r07-corrective-v1")
 DATASET_VERSION = os.getenv("QRGUARD_STRUCTURAL_DATASET_VERSION", VERSION)
 PROCESSED = ROOT / "ml_training/datasets/structural/processed" / DATASET_VERSION
 IMAGES = PROCESSED / "images"

@@ -14,8 +14,6 @@ MODULES = [
     "torch",
     "torchvision",
     "onnxruntime",
-    "transformers",
-    "datasets",
     "sklearn",
     "pandas",
     "PIL",

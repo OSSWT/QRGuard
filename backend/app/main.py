@@ -76,9 +76,6 @@ CAPTURE_MANIPULATION_METHODS = {
 def _structural_startup_loaders():
     """Select exactly the Structural analyzers used by the request pipeline."""
     from structural.structural_service import load_analyzer as load_structural
-    from structural.structural_service import (
-        load_camera_analyzer as load_camera_structural,
-    )
     from structural.structural_service import load_unified_candidate_analyzer
 
     unified_artifacts = os.getenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "").strip()
@@ -89,10 +86,9 @@ def _structural_startup_loaders():
                 lambda: load_unified_candidate_analyzer(unified_artifacts),
             ),
         )
-    return (
-        ("structural", load_structural),
-        ("structural-camera", load_camera_structural),
-    )
+    # Gallery and Camera share the active source-neutral artifact. Retain one
+    # startup load so local development cannot silently select a legacy model.
+    return (("structural-unified", load_structural),)
 
 
 def _capture_case_context(capture_root: Path) -> dict[str, object]:
@@ -337,9 +333,6 @@ def _llm_ready() -> bool:
 def _structural_health_status() -> str:
     """Report the analyzer selection that the scan pipeline will actually use."""
     from structural.structural_service import load_analyzer as load_structural
-    from structural.structural_service import (
-        load_camera_analyzer as load_camera_structural,
-    )
     from structural.structural_service import load_unified_candidate_analyzer
 
     unified_artifacts = os.getenv("QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS", "").strip()
@@ -353,11 +346,9 @@ def _structural_health_status() -> str:
             "sources=gallery,camera"
         )
 
-    return (
-        f"gallery=active/{load_structural().model_path.name}; "
-        "camera=structural-2026.02/"
-        f"{load_camera_structural().model_path.name}"
-    )
+    analyzer = load_structural()
+    version = analyzer.version or "active"
+    return f"unified={version}/{analyzer.model_path.name}; sources=gallery,camera"
 
 
 @app.get("/health", response_model=HealthResponse)

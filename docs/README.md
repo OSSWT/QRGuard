@@ -1,23 +1,13 @@
 # QRGuard Documentation
 
-This directory contains the public technical and academic documentation for the
-QRGuard Final Year Project.
+This directory contains current supporting documentation that is not duplicated
+by the repository README or the canonical ML evidence index.
 
-## Project and architecture
+- [Live-camera repeatability study](LIVE_CAMERA_REPEATABILITY_STUDY.md)
+- [Live-camera and ML recovery runbook](ML_RECOVERY_RUNBOOK.md)
+- [Reference verification log](REFERENCE_VERIFICATION.md)
 
-- [Project development plan](PROJECT_DEVELOPMENT_PLAN.md)
-- [Fusion design](FUSION_DESIGN.md)
-- [Machine-learning analysis pipeline](ML_ANALYSIS_PIPELINE.md)
-- [Reference verification](REFERENCE_VERIFICATION.md)
-
-## Training and reproducibility
-
-- [Structural notebook guide](STRUCTURAL_NOTEBOOK_GUIDE.md)
-- [Semantic model notebook guide](SEMANTIC_MODEL_NOTEBOOK_GUIDE.md)
-- [ML recovery runbook](ML_RECOVERY_RUNBOOK.md)
-- [Semantic model training specification](design/SEMANTIC_MODEL_TRAINING_SPECIFICATION.md)
-- [Semantic module specification](design/SEMANTIC_MODULE_SPECIFICATION.md)
-
-Setup and verification commands are maintained in the repository's main
-[README](../README.md). Machine-learning results and reproducibility manifests
-are indexed under [`research_evidence`](../research_evidence/README.md).
+Setup, build, deployment status and current metrics are maintained in the main
+[README](../README.md). ML versions, performance folders, datasets and rollback
+boundaries are indexed in
+[`ml_training/RESULTS_INDEX.md`](../ml_training/RESULTS_INDEX.md).

@@ -1,129 +1,118 @@
 {
-  "schema_version": 1,
-  "scope": [
-    "C:/Users/OSSW/Desktop/QRGuard/01_Main_Repository",
-    "G:/My Drive/QRGuard_ML"
-  ],
-  "removed_local": {
-    "app_build": {
-      "files": 9462,
-      "approximate_mib": 3320.26,
-      "recovery": "Gradle rebuild"
-    },
-    "obsolete_runs_and_duplicate_checkpoints": {
-      "bytes": 1504981447,
-      "details": "removed Structural 2026.01 and r01-r05 candidate runs; removed r06/r07 last checkpoints and duplicate performance output"
-    },
-    "combined_processed_caches": {
-      "bytes": 1321365274,
-      "details": "removed all version-specific combined caches while retaining prepared public caches"
-    },
-    "expanded_official_raw_data": {
-      "files": 13276,
-      "bytes": 1519858176,
-      "verification_before_removal": "qr_surfaces PASS; qrdn PASS"
-    },
-    "generated_data_outputs": {
-      "files": 3570,
-      "bytes": 75640924,
-      "details": "numbered capture pack, superseded qrguard_mix, print-only sheets and empty real-photo folder"
-    },
-    "regenerable_tool_caches_and_expanded_handoffs": {
-      "approximate_mib": 730.86,
-      "details": "removed Flutter .dart_tool, Ruff/Python/Matplotlib caches, UI automation logs, the expanded Colab bundle and four consumed capture-pack expansions",
-      "recovery": "run the normal dependency/build tools or the retained deterministic package builders"
-    },
-    "final_r07_packaging_pass": {
-      "rebuildable_bytes": 2188987383,
-      "details": "removed the verified APK build tree, Flutter dependency metadata, Python bytecode and isolated pytest work directories after copying the signed diagnostic APK; also removed the local Colab ZIP after verifying its exact Drive copy",
-      "recovery": "rebuild from the retained source or use the verified active APK and Drive Colab hand-off"
-    },
-    "attack_calibration_handoff": {
-      "details": "removed the local expanded hand-off and ZIP after exact SHA-256 verification against the two Drive copies",
-      "recovery": "rebuild with scripts/build_structural_attack_calibration_colab.py or use the verified Drive hand-off"
-    },
-    "attack_calibration_apk_build": {
-      "rebuildable_bytes": 2189079825,
-      "details": "removed Flutter build, dependency metadata and the Gradle report after the signed APK and embedded capture plan were verified",
-      "recovery": "run flutter pub get and rebuild from the retained source plan"
-    },
-    "completed_attack_calibration_capture": {
-      "removed_duplicate_bytes": 266972362,
-      "details": "removed the completed expanded 72-card pack, dedicated diagnostic APK and Telegram collector ZIP only after the canonical capture and reference hashes were verified",
-      "retained": "../04_Datasets/01_Structural/Attack_Calibration_v1"
-    }
+  "schema_version": 2,
+  "scope": {
+    "repository": "01_Main_Repository",
+    "deployment_worktree": "02_Deployment/Render_Worktree",
+    "workspace_root": "C:/Users/OSSW/Desktop/QRGuard"
   },
-  "removed_drive": {
-    "cache_versions": [
-      "structural-2026.09-r02",
-      "structural-2026.09-r03",
-      "structural-2026.09-r04",
-      "structural-2026.09-r05",
-      "structural-2026.09-r06"
-    ],
-    "run_versions": [
-      "structural-2026.09-r02",
-      "structural-2026.09-r03",
-      "structural-2026.09-r04",
-      "structural-2026.09-r05",
-      "structural-2026.09-r06"
-    ],
-    "approximate_mib": 1989.73,
-    "recovery": "Google Drive Trash may retain deletions according to the account retention policy",
-    "legacy_root_cleanup": {
-      "items": 13,
-      "bytes": 1646859136,
-      "details": "removed obsolete capture APK/tool directories, duplicated final 100x3 dataset hand-off, r02/r03 notebooks and failed/legacy Colab bundles after verifying the canonical datasets and local master archive",
-      "retained_roots": [
-        "QRGuard_ML_Data",
-        "QRGuard_ML_Results",
-        "QRGuard_ML",
-        "QRGuard_ML_Colab.zip",
-        "QRGuard_R07_Corrective_Colab.ipynb"
+  "active_runtime_preserved": {
+    "structural": {
+      "version": "structural-r07-corrective-v1",
+      "artifact": "training/artifacts/structural/structural_fp32.onnx",
+      "sha256": "71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033",
+      "sources": [
+        "gallery",
+        "camera"
       ]
-    }
-  },
-  "drive_handoff": {
-    "archive": {
-      "path": "G:/My Drive/QRGuard_ML_Colab.zip",
-      "integrity": "verified externally after the deterministic archive is built; the archive cannot embed its own SHA-256 without changing that SHA-256"
     },
-    "notebook": {
-      "path": "G:/My Drive/QRGuard_R07_Corrective_Colab.ipynb",
-      "sha256": "930d0ac8641ff94f634ea5f0709edaf1981b21d758da4fa6b2adb5eb89c985ef"
-    },
-    "attack_calibration_completed": {
-      "input_handoff_removed": true,
-      "retained_output_path": "G:/My Drive/QRGuard_Attack_Calibration_Output",
-      "canonical_dataset_path": "../04_Datasets/01_Structural/Attack_Calibration_v1",
-      "role": "completed development-only calibration evidence; no model promotion"
-    }
-  },
-  "administrator_cleanup_required": {
-    "reason": "one pytest cache directory has a deny ACL that the current non-administrator automation token cannot read, take ownership of or delete",
-    "paths": [
-      "C:/Users/OSSW/Desktop/QRGuard/01_Main_Repository/.pytest_cache"
-    ],
-    "role": "test cache only; no production, dataset or evidence role"
+    "semantic": "semantic-2026.02",
+    "decision": "decision-2026.03-r05",
+    "android": "1.2.0+8012"
   },
   "retained": [
-    "production Structural r01 source run and runtime artifact",
-    "Structural 2026.02 rollback",
-    "Semantic production artifact and legacy Method 1 rollback",
-    "Decision r05 evidence and runtime weights",
-    "r06 best checkpoint required by immutable r07 provenance",
-    "r07 best checkpoint, ONNX artifact and canonical performance evidence",
-    "Drive production r01, current r07 and Decision runs",
-    "Drive production r01 and current r07 caches",
-    "official source archives and all canonical exact-app/development manifests",
-    "consumed r07 fresh-blind source capture and sealed reference archive in the classified Structural dataset directory",
-    "completed attack-calibration capture, plan, reference pack and audit in the classified Structural dataset directory"
+    {
+      "path": "ml_training/structural/runs/structural-2026.09-r06",
+      "reason": "checkpoint required by the immutable r07 training lineage"
+    },
+    {
+      "path": "ml_training/structural/runs/structural-2026.09-r07",
+      "reason": "locked base-r07 checkpoint and artifact provenance"
+    },
+    {
+      "path": "ml_training/structural/runs/structural-r07-corrective-v1",
+      "reason": "active controlled-release source run"
+    },
+    {
+      "path": "ml_training/structural/runs/structural-2026.03-r01/artifacts",
+      "reason": "immediate pre-r07 Structural rollback artifact"
+    },
+    {
+      "path": "ml_training/structural/performance/structural-2026.03-r01",
+      "reason": "formal r01 rollback measurements"
+    },
+    {
+      "path": "ml_training/structural/performance/structural-2026.09-r06",
+      "reason": "r07 initialization evidence"
+    },
+    {
+      "path": "ml_training/structural/performance/structural-2026.09-r07",
+      "reason": "base-r07 evidence"
+    },
+    {
+      "path": "ml_training/structural/performance/structural-r07-corrective-v1",
+      "reason": "current r07 performance evidence"
+    },
+    {
+      "path": "data and ml_training/datasets",
+      "reason": "canonical runtime captures, controlled development evidence, verified source archives and manifests"
+    },
+    {
+      "path": "../04_Datasets",
+      "reason": "canonical private captures and locked reference packages"
+    },
+    {
+      "path": "../07_Legacy_FYP1",
+      "reason": "academic submission, demo, documents, notebooks and code only"
+    },
+    {
+      "path": "../09_Private_Secrets",
+      "reason": "private signing material was not inspected or modified"
+    }
   ],
-  "final_generated_handoff": "G:/My Drive/QRGuard_ML_Colab.zip",
-  "notes": [
-    "No production artifact was replaced or promoted.",
-    "No secret file content was inspected.",
-    "The local removals are permanent; every removed generated dataset has a retained source or generator.",
-    "One ACL-only pytest cache remains until an interactive Administrator PowerShell session removes it."
-  ]
+  "removed_from_current_git_tree": [
+    "unused structural-2026.02 Camera runtime artifact and compatibility fallback",
+    "duplicate RUN5 rollback folder",
+    "unused DomURLs_BERT Method-1 runtime, tests, demos and serving dependency",
+    "obsolete Structural baseline, 2026.01, 2026.02 and early coverage performance copies",
+    "duplicate notebook, performance and combined-manifest research snapshots",
+    "completed planning, handoff, dated cleanup and superseded model-guide documents",
+    "dead legacy Structural notebook generator and obsolete deep-model training source",
+    "generated environment audit"
+  ],
+  "removed_local_only": {
+    "workspace_retired_roots": {
+      "logical_bytes": 4134259905,
+      "details": "old releases, old Colab/training history, obsolete archives, migration inventory, rebuildable caches, downloaded deployment tool and restricted pytest quarantine"
+    },
+    "legacy_fyp1_duplicate_datasets": {
+      "files": 253970,
+      "logical_bytes": 6437392947,
+      "details": "duplicate dataset expansions and generated QR collections removed; FYP1 academic material retained"
+    },
+    "obsolete_model_and_checkpoint_copies": {
+      "logical_bytes": 1874756662,
+      "details": "legacy Structural/Transformer artifacts plus duplicate r01 checkpoints and history; active and rollback artifacts retained"
+    },
+    "generated_or_duplicate_views": [
+      "dist/QRGuard_ML_Colab",
+      "ml_training/datasets/pictures_by_source",
+      "expanded QR_Codes_Demo copy",
+      "Flutter/Python/Gradle test and build caches"
+    ]
+  },
+  "verification": {
+    "backend": "452 passed, 3 skipped",
+    "flutter_analyze": "no issues",
+    "flutter_tests": "104 passed",
+    "colab_package_contract": "passed within the full backend suite",
+    "default_runtime_health": "unified=structural-r07-corrective-v1/structural_fp32.onnx; sources=gallery,camera",
+    "gallery_camera_analyzer_identity": "shared analyzer confirmed"
+  },
+  "safety": {
+    "formal_r07_status": "controlled release; fresh candidate-bound independent blind acceptance remains pending",
+    "git_history": "current trees are cleaned; history was not rewritten",
+    "secrets": "not inspected or removed",
+    "dataset_policy": "canonical inputs and unique public provenance retained; only verified duplicates, obsolete expansions and reproducible views removed",
+    "local_residual": "the empty .pytest_cache directory has a deny ACL that the available administrator token cannot take over; it is ignored and has no runtime, dataset or GitHub role"
+  }
 }

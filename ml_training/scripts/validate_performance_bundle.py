@@ -50,7 +50,9 @@ REQUIRED = {
 def validate(branch: str, version: str) -> dict:
     performance = ROOT / "ml_training" / branch / "performance" / version
     required = list(REQUIRED[branch])
-    if branch == "structural" and version.startswith("structural-2026.03"):
+    if branch == "structural" and version.startswith(
+        ("structural-2026.03", "structural-2026.09", "structural-r07")
+    ):
         required.extend(
             [
                 "per_quality_condition_results.csv",
@@ -97,7 +99,9 @@ def main() -> None:
         choices=("structural", "semantic", "all"),
         default="all",
     )
-    parser.add_argument("--structural-version", default="structural-2026.02")
+    parser.add_argument(
+        "--structural-version", default="structural-r07-corrective-v1"
+    )
     parser.add_argument("--semantic-version", default="semantic-2026.02")
     parser.add_argument(
         "--output",

@@ -28,7 +28,7 @@ the fixed 540-row holdout.
 
 ## Verification
 
-- Backend: 470 passed, 3 conditional skips.
+- Backend: 452 passed, 3 conditional skips.
 - Flutter analysis: no issues.
 - Flutter tests: 104 passed.
 - Android: signed `1.2.0+8012`, 73,462,225 bytes, SHA-256

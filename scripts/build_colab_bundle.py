@@ -145,265 +145,6 @@ run_module('ml_training.scripts.audit_environment')
 """
 
 
-def structural_notebook() -> dict:
-    return _notebook(
-        [
-            _markdown(
-                "# QRGuard Structural Training — complete Google Colab run\n\n"
-                "Trains the RGB image branch (`clean`, `adversarial`, `tampered`), "
-                "calibrates it, evaluates grouped synthetic, public camera-derived "
-                "and exact QRGuard app-camera holdouts, exports ONNX, and produces "
-                "the full Structural performance bundle. Use **Runtime → Change "
-                "runtime type → T4 GPU**, then **Run all**."
-            ),
-            _markdown("## Phase 0 — Reproducible workspace and Drive mount"),
-            _code(COMMON_SETUP),
-            _markdown("## Phase 1 — Environment, GPU and dependency audit"),
-            _code(
-                INSTALL
-                + "\nimport torch\nprint('PyTorch:', torch.__version__)\nprint('CUDA:', torch.cuda.is_available())\nif not torch.cuda.is_available():\n    raise RuntimeError('Enable a T4 GPU for Structural Training.')\nprint('GPU:', torch.cuda.get_device_name(0))\n"
-            ),
-            _markdown(
-                "## Phase 2 — Verify and prepare public Structural sources\n\n"
-                "Place the two official archives in `MyDrive/QRGuard_ML_Data/structural/` "
-                "using the exact filenames below. SHA-256 and byte-size checks run before extraction."
-            ),
-            _code(
-                r"""DATA_DRIVE = Path('/content/drive/MyDrive/QRGuard_ML_Data/structural')
-downloads = REPO / 'ml_training/datasets/structural/downloads'
-archives = {
-    DATA_DRIVE / 'QR-DN1.0.zip': downloads / 'qrdn/QR-DN1.0.zip',
-    DATA_DRIVE / 'qr_codes_in_surfaces.zip': downloads / 'qr_surfaces/qr_codes_in_surfaces.zip',
-}
-for source, destination in archives.items():
-    if not source.is_file():
-        raise FileNotFoundError(f'Missing official archive: {source}')
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    if not destination.is_file() or destination.stat().st_size != source.stat().st_size:
-        shutil.copy2(source, destination)
-run_module('ml_training.scripts.verify_datasets')
-
-raw_qrdn = REPO / 'ml_training/datasets/structural/raw/qrdn'
-raw_surfaces = REPO / 'ml_training/datasets/structural/raw/qr_surfaces'
-for archive, destination in (
-    (archives[DATA_DRIVE / 'QR-DN1.0.zip'], raw_qrdn),
-    (archives[DATA_DRIVE / 'qr_codes_in_surfaces.zip'], raw_surfaces),
-):
-    if not destination.exists():
-        destination.mkdir(parents=True)
-        with zipfile.ZipFile(archive) as package:
-            package.extractall(destination)
-run_module('ml_training.structural.src.prepare_qrdn')
-run_module('ml_training.structural.src.prepare_qr_surfaces')
-"""
-            ),
-            _markdown(
-                "## Phase 3 — Audit exact QRGuard app-camera sessions\n\n"
-                "Optional files go in `MyDrive/QRGuard_ML_Data/structural/runtime_captures/`. "
-                "They are required for deployment approval: at least 100 sessions per class "
-                "and 20 independent test payload groups per class. Training may still produce "
-                "a research candidate when this gate is incomplete."
-            ),
-            _code(
-                r"""drive_captures = DATA_DRIVE / 'runtime_captures'
-local_captures = REPO / 'data/runtime_captures'
-if drive_captures.exists():
-    shutil.copytree(drive_captures, local_captures, dirs_exist_ok=True)
-capture_audit = run_module(
-    'ml_training.structural.src.prepare_runtime_captures',
-    local_captures,
-    '--strict',
-    check=False,
-)
-print('Exact camera gate:', 'READY' if capture_audit.returncode == 0 else 'NOT READY — candidate only')
-"""
-            ),
-            _markdown(
-                "## Phase 4 — Generate grouped RGB clean/adversarial/tampered data\n\n"
-                "This creates coloured and black/white QR identities, physical tampering, "
-                "FGSM/PGD digital attacks, camera augmentation, and exact app crops without "
-                "allowing a payload/physical identity to cross splits."
-            ),
-            _code(
-                r"""recipe_source = (
-    REPO / 'ml_training/structural/src/structural_recipes.py'
-).read_text(encoding='utf-8')
-cuda_device_fix = 'model = Normalized(victim).to(device).eval()'
-if cuda_device_fix not in recipe_source:
-    raise RuntimeError(
-        'Stale QRGuard_ML_Colab.zip detected: the Structural CUDA buffer fix is '
-        'missing. Delete the old exact-name ZIP in MyDrive, upload the latest '
-        'QRGuard_ML_Colab.zip, then rerun from Phase 0.'
-    )
-run_module(
-    'ml_training.structural.src.train_local',
-    '--prepare-only',
-    '--rebuild-data',
-)
-"""
-            ),
-            _markdown("## Phase 5 — Dataset composition, leakage and RGB audit"),
-            _code(
-                r"""import pandas as pd
-manifest = pd.read_csv(REPO / 'ml_training/datasets/structural/processed/structural-2026.02/manifest.csv')
-display(pd.crosstab(manifest.split, [manifest.label, manifest.source]))
-groups = {name: set(part.group_id) for name, part in manifest.groupby('split')}
-overlaps = {
-    f'{left}/{right}': len(groups[left] & groups[right])
-    for index, left in enumerate(groups)
-    for right in list(groups)[index + 1:]
-}
-assert not any(overlaps.values()), overlaps
-print('Rows:', len(manifest), 'Groups:', manifest.group_id.nunique())
-print('Exact app-crop rows:', int(manifest.is_exact_app_crop.astype(str).str.lower().eq('true').sum()))
-print('Colour contract: RGB 224x224, ImageNet mean/std; see ml_training/COLOR_PIPELINE.md')
-"""
-            ),
-            _markdown(
-                "## Phase 6 — Train, calibrate, evaluate and export\n\n"
-                "Head training and layer-4 fine-tuning use the T4. A non-zero return code "
-                "means a deployment gate failed; the performance report is still retained."
-            ),
-            _code(
-                r"""training = run_module('ml_training.structural.src.train_local', check=False)
-print('Training return code:', training.returncode)
-"""
-            ),
-            _markdown("## Phase 7 — Display every Structural performance output"),
-            _code(
-                r"""from IPython.display import Image as DisplayImage, Markdown, display
-import pandas as pd
-
-PERF = REPO / 'ml_training/structural/performance/structural-2026.02'
-metrics_path = PERF / 'metrics.json'
-if not metrics_path.is_file():
-    raise RuntimeError('Performance output is missing. Complete Phase 6 first.')
-metrics = json.loads(metrics_path.read_text(encoding='utf-8'))
-grouped = metrics['synthetic_grouped_test']
-external = metrics['qrdn_external_clean_holdout']
-onnx = metrics['onnx']
-
-def metric_row(name, value, target, passed, unit='score'):
-    if value is None:
-        displayed_value = 'not evaluated'
-    elif unit == 'ms':
-        displayed_value = f'{value:.2f} ms'
-    elif unit == 'count':
-        displayed_value = f'{int(value):,}'
-    else:
-        displayed_value = f'{value:.4f}'
-    return {
-        'Core metric': name,
-        'Result': displayed_value,
-        'Target': target,
-        'Status': 'INFO' if passed is None else ('PASS' if passed else 'FAIL'),
-    }
-
-core_metrics = pd.DataFrame([
-    metric_row('Grouped test accuracy', grouped['accuracy'], 'reported', None),
-    metric_row('Grouped test macro-F1', grouped['macro_f1'], '>= 0.85', grouped['macro_f1'] >= 0.85),
-    metric_row(
-        'Adversarial recall',
-        grouped['per_class']['adversarial']['recall'],
-        '>= 0.75',
-        grouped['per_class']['adversarial']['recall'] >= 0.75,
-    ),
-    metric_row(
-        'Tampered recall',
-        grouped['per_class']['tampered']['recall'],
-        '>= 0.90',
-        grouped['per_class']['tampered']['recall'] >= 0.90,
-    ),
-    metric_row('ECE', grouped['ece'], '<= 0.05', grouped['ece'] <= 0.05),
-    metric_row(
-        'QR-DN clean false-positive rate',
-        external['false_positive_rate_at_0_5'],
-        '<= 0.05',
-        external['false_positive_rate_at_0_5'] <= 0.05,
-    ),
-    metric_row(
-        'ONNX P95 latency',
-        onnx['latency_p95_ms'],
-        '<= 100 ms',
-        onnx['latency_p95_ms'] <= 100,
-        unit='ms',
-    ),
-    metric_row(
-        'Exact app-camera test frames',
-        metrics['exact_app_runtime_holdout']['n'],
-        'required for deployment',
-        None,
-        unit='count',
-    ),
-])
-display(Markdown('## Core performance metrics'))
-display(core_metrics)
-
-gate_summary = pd.DataFrame([
-    {
-        'Gate': 'Research gates',
-        'Status': 'PASS' if metrics['research_gates_passed'] else 'FAIL',
-        'Failures': '; '.join(metrics['research_gate_failures']) or 'none',
-    },
-    {
-        'Gate': 'Deployment gates',
-        'Status': 'PASS' if metrics['deployment_gates_passed'] else 'CANDIDATE ONLY',
-        'Failures': '; '.join(metrics['deployment_gate_failures']) or 'none',
-    },
-])
-display(Markdown('## Gate status'))
-display(gate_summary)
-display(Markdown((PERF / 'STRUCTURAL_PERFORMANCE.md').read_text(encoding='utf-8')))
-
-display(Markdown('## Performance charts'))
-for name in ('training_curves.png', 'confusion_matrix.png', 'roc_pr_curves.png',
-             'calibration_curve.png', 'qrdn_clean_distribution.png'):
-    chart = PERF / name
-    display(Markdown(f'### {name}'))
-    if chart.is_file():
-        display(DisplayImage(filename=str(chart)))
-    else:
-        print('Missing chart:', chart)
-
-display(Markdown('## Detailed performance tables'))
-for name in ('metrics.csv', 'dataset_composition.csv', 'per_source_results.csv',
-             'per_device_results.csv', 'gallery_camera_consistency.csv',
-             'misclassified_samples.csv', 'training_history.csv'):
-    table = PERF / name
-    display(Markdown(f'### {name}'))
-    if table.is_file():
-        display(pd.read_csv(table).head(30))
-    else:
-        print('Missing table:', table)
-"""
-            ),
-            _markdown("## Phase 8 — Validate completeness and save to Drive"),
-            _code(
-                r"""validation = run_module(
-    'ml_training.scripts.validate_performance_bundle',
-    '--branch', 'structural',
-    check=False,
-)
-if validation.returncode:
-    raise RuntimeError('Structural report bundle is incomplete; inspect the phase above.')
-destination = Path('/content/drive/MyDrive/QRGuard_ML_Results/structural-2026.02')
-destination.mkdir(parents=True, exist_ok=True)
-shutil.copytree(PERF, destination / 'performance', dirs_exist_ok=True)
-shutil.copytree(
-    REPO / 'ml_training/structural/runs/structural-2026.02/artifacts',
-    destination / 'artifacts',
-    dirs_exist_ok=True,
-)
-shutil.copy2(REPO / 'ml_training/PERFORMANCE_VALIDATION.json', destination)
-archive = shutil.make_archive(str(destination), 'zip', root_dir=destination)
-print('Saved:', destination)
-print('Archive:', archive)
-"""
-            ),
-        ]
-    )
-
-
 def structural_v3_notebook() -> dict:
     install_when_needed = (
         "if RUN_MODE == 'report_only':\n"
@@ -1305,13 +1046,9 @@ def build() -> None:
         "ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/README.md",
         "ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/PRODUCTION_SMOKE.json",
         "ml_training/deployment/promotion/structural-2026.03-r01__decision-2026.03-r05/candidate_stack_metrics.json",
-        "ml_training/CLEANUP_REVIEW_2026-08-30.md",
-        "ml_training/WORKSPACE_AUDIT_2026-08-30.md",
         "ml_training/CLEANUP_AUDIT.json",
         "ml_training/DATASET_RETENTION.json",
-        "ml_training/R07_CORRECTIVE_HANDOFF.md",
         "ml_training/COLOR_PIPELINE.md",
-        "ml_training/EXECUTION_PLAN.md",
         "ml_training/RESULTS_INDEX.md",
         "ml_training/requirements.txt",
     ):
@@ -1334,13 +1071,10 @@ def build() -> None:
         "ml_training/structural/CAPTURE_GUIDE_V3.md",
         "ml_training/structural/COLAB_RUN_GUIDE_V3.md",
         "ml_training/structural/OFFLINE_CAPTURE_AND_IMPORT.md",
-        "ml_training/structural/STRUCTURAL_V3_EXECUTION_PLAN.md",
-        "ml_training/structural/STRUCTURAL_V3_LOCAL_RESULTS_2026-08-30.md",
         "ml_training/structural/STRUCTURAL_V3_REAL_100X3_RESULTS_2026-08-31.md",
         "ml_training/structural/EXPOSURE_INVARIANT_TRAINING.md",
         "ml_training/semantic/README.md",
         "ml_training/decision_layer/README.md",
-        "ml_training/decision_layer/DECISION_V3_LOCAL_RESULTS_2026-08-30.md",
         "backend/semantic/__init__.py",
         "backend/semantic/semantic_features.py",
         "backend/semantic/semantic_service.py",
@@ -1366,13 +1100,13 @@ def build() -> None:
     _copy_tree("data/structural_consumed_blind_attack_development/r07-corrective-v1")
     _copy_tree("data/prepared_gallery_references/structural-2026.03-r01")
     _copy_tree(
-        "ml_training/structural/performance/structural-2026.02",
-    )
-    _copy_tree(
         "ml_training/structural/performance/structural-2026.03-r01",
     )
     _copy_tree(
         "ml_training/structural/performance/structural-2026.09-r07",
+    )
+    _copy_tree(
+        "ml_training/structural/performance/structural-r07-corrective-v1",
     )
     _copy_tree(
         "ml_training/semantic/performance/semantic-2026.02",
@@ -1387,8 +1121,8 @@ def build() -> None:
     # the canonical performance directories above and replace them phase by phase.
     reference = OUTPUT / "reference_performance"
     shutil.copytree(
-        ROOT / "ml_training/structural/performance/structural-2026.02",
-        reference / "structural-2026.02",
+        ROOT / "ml_training/structural/performance/structural-r07-corrective-v1",
+        reference / "structural-r07-corrective-v1",
         dirs_exist_ok=True,
     )
     shutil.copytree(

@@ -143,12 +143,13 @@ scripts/                server, QRGuard-Mix and evaluation utilities
 research_evidence/
   structural/           Structural notebooks, manifests and performance evidence
   semantic/             Semantic notebooks, manifests and performance evidence
-docs/                   Setup, testing, design and FYP documentation
+docs/                   Current recovery, repeatability and reference notes
 ```
 
-`ml_training/` is the source of truth for report material. Legacy names such as
-Method 1 and RUN numbers remain only in explicit rollback code or historical
-comparison evidence; old runtime folders are kept outside the active repository.
+`ml_training/` is the source of truth for report material. Historical run numbers
+remain only where they identify reproducible r07 lineage or an active rollback
+boundary. Obsolete runtime implementations and duplicate model copies are not
+kept in the active repository.
 
 ## Datasets and provenance
 

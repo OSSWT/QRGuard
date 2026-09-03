@@ -19,11 +19,7 @@ onnx>=1.16
 onnxscript>=0.7
 onnxruntime>=1.20
 
-# Semantic deep-model experiment / Colab notebook
-transformers>=4.45
-datasets>=3.0
-accelerate>=1.0
-optimum[onnxruntime]>=1.23
+# Semantic source acquisition
 ucimlrepo>=0.0.7
 tranco>=0.8
 kagglehub>=0.3

@@ -15,7 +15,6 @@ datasets/
     processed/   fixed evaluation inputs (not tracked)
   generated_qr_codes/  generator provenance and model-exposure registry
   qr_codes_demo/       post-training demonstration/evaluation QR pack
-  pictures_by_source/  source-prefixed hardlink catalog for inspection (not tracked)
   manifests/     schemas/templates; generated manifests are not tracked
 ```
 
@@ -28,12 +27,10 @@ including legacy, procedural and capture-reference datasets.
 It demonstrates the already deployed stack and must remain `demo_only` in every
 future manifest.
 
-For a human-readable folder of QR pictures, open
-[`pictures_by_source/`](pictures_by_source/README.md). It contains
-`QRDN1.0/`, `QR_SURFACES/`, and `DYNAMSOFT/`; every filename starts with its
-source name and `catalog_manifest.csv` maps each alias back to its authoritative
-path, hash, split, label, and official URL. The catalog is an inspection view;
-training must continue to use the branch manifests.
+Structural images are classified through their authoritative manifests. Do not
+materialize a second `pictures_by_source` hardlink catalog: it duplicates the
+visible workspace without adding training provenance and can be regenerated for
+temporary inspection when needed.
 
 For Semantic rows, open the generated `by_source/` catalog under the current
 Semantic processed run. It separates `PHIUSIIL_UCI`, `MALICIOUS_URLS_KAGGLE`,

@@ -4,7 +4,6 @@ httpx>=0.28
 
 # Model inference (no PyTorch at serving time — ONNX only, keeps the backend light)
 onnxruntime>=1.20
-tokenizers>=0.20        # Method 1 URL tokenization
 numpy>=1.26
 pillow>=10              # Structural image preprocessing
 opencv-python-headless==5.0.0.93  # Server-side QR decoding without GUI libraries

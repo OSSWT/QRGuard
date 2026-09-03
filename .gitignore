@@ -115,13 +115,6 @@ deploy/render/last_deployment.json
 /training/artifacts/semantic/*
 !/training/artifacts/semantic/model_metadata.json
 !/training/artifacts/semantic/semantic_model.joblib
-!/ml_training/structural/runs/
-/ml_training/structural/runs/*
-!/ml_training/structural/runs/structural-2026.02/
-/ml_training/structural/runs/structural-2026.02/*
-!/ml_training/structural/runs/structural-2026.02/artifacts/
-/ml_training/structural/runs/structural-2026.02/artifacts/*
-!/ml_training/structural/runs/structural-2026.02/artifacts/deploy_choice.json
-!/ml_training/structural/runs/structural-2026.02/artifacts/model_metadata.json
-!/ml_training/structural/runs/structural-2026.02/artifacts/structural_fp32.onnx
-!/ml_training/structural/runs/structural-2026.02/artifacts/temperature.json
+
+# Generated local environment audits are reproducible and not source material.
+/ml_training/environment_audit.json

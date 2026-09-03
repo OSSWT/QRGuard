@@ -1,10 +1,8 @@
 """Structural Analysis — calibrated three-class QR image inference.
 
-Production sets ``QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS`` and uses the active
-``training/artifacts/structural`` artifact for both Gallery and Live Camera. If
-that explicit selection is absent, the compatibility path uses the same active
-directory for Gallery and the retained ``structural-2026.02`` camera model.
-Both paths return the same contract:
+Gallery and Live Camera use the same active ``training/artifacts/structural``
+artifact. Production may set ``QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS`` to select
+an explicitly validated artifact directory. Both paths return the same contract:
 
     clean (0) / adversarial (1) / tampered (2)
     p_structural = 1 − P(clean)     -> the Fusion Engine signal
@@ -36,10 +34,6 @@ _UNIFIED_CANDIDATE_VERSION_PREFIXES = (
     "structural-2026.09",
     "structural-r07",
 )
-_CAMERA_ARTIFACTS = (
-    _ROOT / "ml_training" / "structural" / "runs" / "structural-2026.02" / "artifacts"
-)
-
 CLASS_NAMES = ("clean", "adversarial", "tampered")
 IMG_SIZE = 224
 IMAGENET_MEAN = np.array([0.485, 0.456, 0.406], dtype=np.float32)
@@ -170,8 +164,8 @@ def load_analyzer(artifacts_dir: str | None = None) -> StructuralAnalyzer:
 
 
 def load_camera_analyzer() -> StructuralAnalyzer:
-    """Return the camera-domain model without evicting the gallery analyzer."""
-    return load_analyzer(str(_CAMERA_ARTIFACTS))
+    """Return the same source-neutral analyzer used by Gallery."""
+    return load_analyzer()
 
 
 @lru_cache(maxsize=2)

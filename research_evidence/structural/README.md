@@ -1,27 +1,23 @@
-# Structural Analysis Evidence
+# Structural supporting evidence
 
-The Structural branch analyses the QR image itself and assigns one of three
-labels: `clean`, `adversarial`, or `tampered`.
+The Structural branch classifies a QR image as `clean`, `adversarial` or
+`tampered`. Its active controlled release is
+`structural-r07-corrective-v1`, shared by Gallery and Live Camera.
 
-## Current experiment
+This folder retains only diagnostic and physical-channel evidence that is not
+duplicated by the canonical performance bundle:
 
-- Experiment: `structural-2026.02`
-- Architecture: ImageNet-pretrained ResNet-18, three-class fine-tuning
-- Input contract: RGB, 224 x 224, ImageNet normalisation
-- Leakage control: group-disjoint split by source dataset, capture session,
-  physical QR identity, and payload hash
-- Candidate status: research gates passed; deployment gate remains blocked until
-  exact QRGuard app-crop sessions are collected for all three classes
+- `performance/r07-corrective/` — final controlled calibration replay.
+- `performance/live-camera-repeatability-*/` — temporal acquisition evidence.
+- `performance/screen-camera-robustness-*/` — root-cause and corrective
+  development evidence.
+- `dataset_documentation/manifests/` — the public QR-DN and QR-Surfaces
+  per-sample provenance that cannot be recovered from a clean Git checkout.
+- `references/` — research references.
 
-## Contents
+Canonical metrics are under
+`ml_training/structural/performance/structural-r07-corrective-v1/`. Canonical
+datasets remain under `ml_training/datasets/structural/` and `data/`.
 
-- `notebooks/01_Structural_Training_Colab.ipynb` — Colab training snapshot
-- `dataset_documentation/DATASET_CATALOG.md` — admitted, quarantined, and planned data
-- `dataset_documentation/manifests/` — reproducibility/audit snapshots
-- `references/REFERENCES.md` — official dataset and research links
-- `performance/structural-2026.02/` — current candidate metrics and figures
-- `performance/PERFORMANCE_SUMMARY.md` — interpretation and deployment status
-
-Do not redirect training code into this folder. Canonical data stays at
-`ml_training/datasets/structural/` and exact app captures stay at
-`data/runtime_captures/`.
+The retained diagnostic chain may explain and reproduce design decisions, but
+consumed development captures cannot be reused as fresh blind promotion evidence.

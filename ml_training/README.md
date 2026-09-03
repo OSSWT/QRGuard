@@ -11,9 +11,9 @@ two trained branches only:
 The **Risk Decision Layer** combines both branches with deterministic security
 rules. It is a calibrated decision component, not a third ML branch.
 
-Legacy names such as `Method 1`, `RUN 4`, and `RUN 6` are retained only in
-historical files and compatibility imports. New reports, artifacts, and commands
-use `structural` and `semantic` consistently.
+Current reports, artifacts and commands use `structural` and `semantic`
+consistently. Obsolete Method-1 Transformer runtime files are not part of the
+active or rollback stack.
 
 ## Directory contract
 
@@ -42,9 +42,8 @@ branch-specific acceptance gates, export parity checks, and the end-to-end
 Gallery/Live-camera matrix. Failed candidates remain in history; an accepted
 promotion preserves the previous deployed set as rollback evidence.
 
-The canonical execution order is documented in [EXECUTION_PLAN.md](EXECUTION_PLAN.md).
-The final run folders, report tables, figures, citations, deployment artifacts, and
-remaining evidence boundary are indexed in [RESULTS_INDEX.md](RESULTS_INDEX.md).
+Current run folders, report tables, figures, citations, deployment artifacts and
+the remaining evidence boundary are indexed in [RESULTS_INDEX.md](RESULTS_INDEX.md).
 The exact RGB preprocessing and coloured-QR coverage are documented in
 [COLOR_PIPELINE.md](COLOR_PIPELINE.md).
 

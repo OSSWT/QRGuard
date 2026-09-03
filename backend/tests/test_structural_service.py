@@ -82,34 +82,10 @@ class TestLoading:
     def test_load_analyzer_is_cached(self, analyzer):
         assert load_analyzer() is analyzer
 
-    def test_camera_model_is_separate_and_cached(self, analyzer, camera_analyzer):
+    def test_gallery_and_camera_share_the_active_model(self, analyzer, camera_analyzer):
         assert camera_analyzer is load_camera_analyzer()
-        assert camera_analyzer is not analyzer
-        assert "structural-2026.02" in camera_analyzer.dir.as_posix()
-
-    def test_camera_model_records_camera_clean_gate_result(self, camera_analyzer):
-        import json
-
-        metrics_path = (
-            camera_analyzer.dir.parents[1]
-            / "performance"
-            / "structural-2026.02"
-            / "metrics.json"
-        )
-        if not metrics_path.is_file():
-            metrics_path = (
-                camera_analyzer.dir.parents[2]
-                / "performance"
-                / "structural-2026.02"
-                / "metrics.json"
-            )
-        metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
-        camera_clean = metrics["qrdn_external_clean_holdout"]
-        assert camera_clean["false_positive_rate_at_0_5"] <= 0.05
-        assert (
-            metrics["synthetic_grouped_test"]["per_class"]["adversarial"]["recall"]
-            >= 0.80
-        )
+        assert camera_analyzer is analyzer
+        assert camera_analyzer.version == "structural-r07-corrective-v1"
 
 
 class TestPreprocessing:

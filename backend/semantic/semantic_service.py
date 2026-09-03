@@ -1,8 +1,8 @@
 """Calibrated lightweight Semantic Training inference service.
 
-The candidate model is a character n-gram linear classifier. It is intentionally
+The active model is a character n-gram linear classifier. It is intentionally
 CPU-friendly and keeps deterministic URL parsing identical between training and
-serving. The legacy DomURLs_BERT service remains available for rollback.
+serving. Its versioned linear-model predecessor is the Semantic rollback boundary.
 """
 
 from __future__ import annotations
