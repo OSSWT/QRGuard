@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "pack_id": "qrguard-presentation-demo-r07",
+  "pack_id": "qrguard-demo-r07",
   "model_lock": {
     "structural": "structural-r07-corrective-v1",
     "semantic": "semantic-2026.02",

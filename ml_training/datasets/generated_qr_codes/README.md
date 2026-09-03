@@ -9,7 +9,7 @@ The registry records the active generated sets:
 
 - QR references created for the exact-app Gallery/Camera capture campaign;
 - train/validation Gallery references with locked-test references excluded;
-- the post-lock presentation demonstration pack;
+- the post-training QR scan-card demo pack;
 - active backend/Flutter regression fixtures; and
 - active manual Gallery scanning QA cards.
 

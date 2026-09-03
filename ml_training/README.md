@@ -48,7 +48,7 @@ The complete human-readable dataset source, licence, split and retention record
 is [datasets/DATASET_CATALOG.md](datasets/DATASET_CATALOG.md). Its deterministic
 local presence/hash audit is
 [datasets/DATASET_INVENTORY.json](datasets/DATASET_INVENTORY.json), and the
-presentation-safe QR pack is under
+post-training QR scan-card pack is under
 [datasets/qr_codes_demo/](datasets/qr_codes_demo/README_%E4%B8%AD%E6%96%87_English.md).
 
 The complete Drive/Colab hand-off is generated with

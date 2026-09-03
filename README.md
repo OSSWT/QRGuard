@@ -167,7 +167,7 @@ See the complete
 [`DATASET_INVENTORY.json`](ml_training/datasets/DATASET_INVENTORY.json), and the
 supporting `references/SOURCES.md`, `dataset_registry.csv`,
 `DATASET_LICENSES.md`, and `REFERENCES.bib` before citing or redistributing data.
-The compact presentation flow and its QR cards are in
+The reusable post-training QR scan cards and result templates are in
 [`qr_codes_demo/`](ml_training/datasets/qr_codes_demo/README_%E4%B8%AD%E6%96%87_English.md).
 The organised evidence entry point is
 `research_evidence/README.md`; it deliberately does not duplicate

@@ -1,4 +1,4 @@
-"""Static contract for the published dataset audit and presentation boundary."""
+"""Static contract for the published dataset audit and demo boundary."""
 
 from __future__ import annotations
 
@@ -65,12 +65,12 @@ def test_known_provenance_gap_is_disclosed_instead_of_guessed():
     assert "permanent Tranco list ID was not recorded" in tranco["note"]
 
 
-def test_presentation_pack_is_post_training_and_covers_every_demo_type():
+def test_qr_demo_pack_is_post_training_and_has_no_presentation_ui():
     demo = DATASETS / "qr_codes_demo"
     manifest = json.loads((demo / "MANIFEST.json").read_text(encoding="utf-8"))
     quick = (demo / "QUICK_DEMO_ORDER.csv").read_text(encoding="utf-8")
 
-    assert manifest["pack_id"] == "qrguard-presentation-demo-r07"
+    assert manifest["pack_id"] == "qrguard-demo-r07"
     assert manifest["case_count"] == 42
     assert manifest["independent_performance_claim"] is False
     assert all(case["demo_role"] == "demo_only" for case in manifest["cases"])
@@ -79,11 +79,12 @@ def test_presentation_pack_is_post_training_and_covers_every_demo_type():
         "adversarial",
         "tampered",
     }
-    for number in range(1, 13):
-        assert f"SEM-{number:02d}-" in quick
-
-    assert (demo / "PRESENTATION_DEMO.html").is_file()
-    assert (demo / "PRESENTATION_GUIDE.md").is_file()
+    assert "STR-CLN-NORMAL" in quick
+    assert "STR-ADV-NORMAL" in quick
+    assert "STR-TMP-NORMAL" in quick
+    assert "SEM-01-SAFE-HTTPS" in quick
+    assert not (demo / "PRESENTATION_DEMO.html").exists()
+    assert not (demo / "PRESENTATION_GUIDE.md").exists()
     assert (DATASETS / "DATASET_CATALOG.md").is_file()
 
 
@@ -96,7 +97,7 @@ def test_generated_qr_registry_contains_only_active_or_evidence_sets():
     assert set(rows) == {
         "structural-v3-real-2026.03-r01-capture-references",
         "structural-2026.03-r01-prepared-gallery-references",
-        "qrguard-presentation-demo-r07",
+        "qrguard-demo-r07",
         "qrguard-api-regression-fixtures",
         "qrguard-gallery-test-cards",
     }

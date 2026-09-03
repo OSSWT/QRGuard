@@ -21,7 +21,7 @@ STRUCTURAL_MANIFEST = (
     ROOT / "data/runtime_captures/manifest_v3.csv"
 )
 STRUCTURAL_CAPTURE_ROOT = ROOT / "data/runtime_captures"
-PACK_ID = "qrguard-presentation-demo-r07"
+PACK_ID = "qrguard-demo-r07"
 WIDTH, HEIGHT = 1080, 1350
 QR_AREA = 760
 QR_SIDE_CANDIDATES = (760, 672, 560, 448, 336)
@@ -165,20 +165,17 @@ SEMANTIC_CASES = (
 
 QUICK_DEMO_ORDER = (
     "STR-CLN-NORMAL",
-    "STR-ADV-NORMAL",
-    "STR-TMP-NORMAL",
     "SEM-01-SAFE-HTTPS",
     "SEM-02-BRAND-PHISH",
+    "STR-ADV-NORMAL",
+    "STR-TMP-NORMAL",
     "SEM-03-RAW-IP",
     "SEM-04-PUNYCODE",
     "SEM-05-USERINFO",
-    "SEM-06-DEEP-SUBDOMAINS",
-    "SEM-07-SHORTENER",
-    "SEM-08-JAVASCRIPT",
     "SEM-09-WIFI-OPEN",
-    "SEM-10-WIFI-SECURE",
     "SEM-11-PLAIN-TEXT",
-    "SEM-12-DUITNOW-DUMMY",
+    "STR-CLN-GLARE",
+    "STR-CLN-ANGLE",
 )
 
 
@@ -423,101 +420,6 @@ def _write_csv(path: Path, rows: list[dict[str, object]], fields: list[str]) -> 
         writer.writerows(rows)
 
 
-def _write_presentation_files(cases: list[DemoCase]) -> None:
-    case_by_id = {case.case_id: case for case in cases}
-    presentation = [asdict(case_by_id[case_id]) for case_id in QUICK_DEMO_ORDER]
-    html = """<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>QRGuard Presentation Demo</title>
-  <style>
-    :root { color-scheme: dark; font-family: Inter, "Segoe UI", sans-serif; }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: #100d0b; color: #f8eee7; overflow: hidden; }
-    main { min-height: 100vh; display: grid; grid-template-columns: minmax(360px, 58vw) 1fr; gap: 4vw; padding: 4vh 5vw; align-items: center; }
-    .card { display: grid; place-items: center; height: 88vh; border: 2px solid #684934; border-radius: 28px; background: #1a1613; }
-    img { max-width: 100%; max-height: 84vh; object-fit: contain; }
-    .meta { align-self: center; }
-    .eyebrow { color: #e59a63; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; }
-    h1 { font-size: clamp(2rem, 4vw, 4.4rem); line-height: 1.03; margin: .4em 0; }
-    .verdict { display: inline-block; padding: .35em .7em; border-radius: 999px; color: #111; font-weight: 900; font-size: 1.3rem; }
-    .SAFE { background: #67d38a; } .WARNING { background: #f2c94c; } .BLOCKED { background: #ff6b6b; }
-    .note { font-size: clamp(1rem, 1.5vw, 1.45rem); line-height: 1.5; color: #d7c5b8; }
-    .controls { margin-top: 2rem; color: #9f897a; }
-    button { font: inherit; padding: .7em 1.1em; margin-right: .5em; border-radius: 12px; border: 1px solid #684934; background: #281f1a; color: #f8eee7; cursor: pointer; }
-    @media (max-width: 800px) { body { overflow: auto; } main { grid-template-columns: 1fr; } .card { height: auto; } img { max-height: 65vh; } }
-  </style>
-</head>
-<body>
-  <main>
-    <section class="card"><img id="qr" alt="QRGuard demonstration QR code"></section>
-    <section class="meta">
-      <div class="eyebrow" id="progress"></div>
-      <h1 id="title"></h1>
-      <p><span id="verdict" class="verdict"></span></p>
-      <p class="note" id="note"></p>
-      <p class="note" id="detail"></p>
-      <div class="controls">
-        <button id="previous">Previous</button><button id="next">Next</button>
-        <p>Use Left/Right arrow keys. Scan from this screen; do not open demo destinations.</p>
-      </div>
-    </section>
-  </main>
-  <script>
-    const cases = __CASES__;
-    let index = 0;
-    function render() {
-      const item = cases[index];
-      document.getElementById('qr').src = item.image_path;
-      document.getElementById('title').textContent = item.case_id + ' — ' + item.title;
-      const verdict = document.getElementById('verdict');
-      verdict.textContent = 'Expected: ' + item.intended_verdict;
-      verdict.className = 'verdict ' + item.intended_verdict;
-      document.getElementById('note').textContent = item.note;
-      document.getElementById('detail').textContent = item.category === 'structural'
-        ? 'Structural class: ' + item.structural_ground_truth + ' | condition: ' + item.scan_condition
-        : 'Semantic / payload type demonstration on a clean QR image';
-      document.getElementById('progress').textContent = 'QRGuard demo ' + (index + 1) + ' / ' + cases.length;
-    }
-    function move(delta) { index = (index + delta + cases.length) % cases.length; render(); }
-    document.getElementById('previous').onclick = () => move(-1);
-    document.getElementById('next').onclick = () => move(1);
-    document.addEventListener('keydown', event => {
-      if (event.key === 'ArrowLeft') move(-1);
-      if (event.key === 'ArrowRight' || event.key === ' ') move(1);
-    });
-    render();
-  </script>
-</body>
-</html>
-""".replace("__CASES__", json.dumps(presentation, ensure_ascii=False))
-    (OUTPUT / "PRESENTATION_DEMO.html").write_text(html, encoding="utf-8")
-
-    guide = """# Presentation quick demo
-
-Open `PRESENTATION_DEMO.html` in a browser and use the Left/Right keys. The 15
-slides cover all defined demonstration types without duplicating the 42 PNGs:
-
-- three Structural classes: clean, adversarial and tampered;
-- eight URL/Semantic patterns: safe HTTPS, brand impersonation, raw IP,
-  punycode, userinfo `@`, deep subdomains, shortener and executable URI;
-- four non-URL payloads: open Wi-Fi, secured Wi-Fi, plain text and dummy DuitNow.
-
-Use Gallery import first for a deterministic demonstration. Live Camera may be
-affected by focus, glare, distance and screen moire; if QRGuard requests a
-rescan, explain that low-quality evidence is not converted into a Safe result.
-Do not open any decoded demo destination. The DuitNow payload is a dummy fixture.
-
-中文：打开 `PRESENTATION_DEMO.html`，使用左右方向键切换。先用 Gallery 展示
-确定性结果，再用 Live Camera 展示真实采集。若曝光、反光、距离或屏幕摩尔纹导致
-Rescan，应说明 QRGuard 不会把证据不足的扫描误报为 Safe。不要打开任何 demo 链接；
-DuitNow 内容只是测试资料。
-"""
-    (OUTPUT / "PRESENTATION_GUIDE.md").write_text(guide, encoding="utf-8")
-
-
 def _write_docs(cases: list[DemoCase]) -> None:
     payload = {
         "schema_version": 1,
@@ -595,7 +497,6 @@ def _write_docs(cases: list[DemoCase]) -> None:
             "notes",
         ],
     )
-    _write_presentation_files(cases)
     readme = """# QRGuard QR Codes Demo
 
 This pack demonstrates the already deployed QRGuard stack:
@@ -608,10 +509,9 @@ It is post-training demonstration/evaluation material. It is not an independent
 training or deployment-accuracy dataset and must never be added to model fitting
 or threshold calibration.
 
-## Use with a supervisor
+## Manual demo use
 
-1. Open `PRESENTATION_DEMO.html`, or follow `QUICK_DEMO_ORDER.csv`, for the
-   15-case presentation sequence covering every defined demo type.
+1. Use `QUICK_DEMO_ORDER.csv` only as an optional compact scan order.
 2. For Live Camera, display one card on another screen or print it. Structural
    cards already embed a recorded app crop with the named condition, so scan them
    normally; adding another degradation would create a different test.
@@ -632,8 +532,7 @@ manifest and hashes are the public demonstration artefacts.
 ## 中文说明
 
 这个资料包用于向 supervisor 展示已经部署的 QRGuard，不是新的训练集。
-先打开 `PRESENTATION_DEMO.html`，或按照 `QUICK_DEMO_ORDER.csv` 扫描 15 个核心案例。
-Live Camera 情况下，把图片
+可选地按照 `QUICK_DEMO_ORDER.csv` 的顺序扫描。Live Camera 情况下，把图片
 显示在另一个屏幕或打印出来。Structural 图片已经包含当时记录的 angle、glare、far
 等情况，请正常扫描，不要再叠加一次环境变化。Gallery 可以使用同一张 PNG 做 parity
 check。扫描后把结果和 screenshot 文件名填写进 `ACTUAL_RESULTS.csv`。不要打开 QR

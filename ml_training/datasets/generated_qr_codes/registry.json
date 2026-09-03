@@ -71,7 +71,7 @@
       "source_manifest_sha256": "f2a8cfcd921834d7efe8b309c00ecb3ddf64aae34dea8c3b32b94dd962315573"
     },
     {
-      "dataset_id": "qrguard-presentation-demo-r07",
+      "dataset_id": "qrguard-demo-r07",
       "path": "ml_training/datasets/qr_codes_demo",
       "file_pattern": "**/*.png",
       "file_count": 42,
@@ -81,14 +81,14 @@
         "Semantic_and_Payload_Cases": 12,
         "Structural_Cases": 30
       },
-      "intended_use": "post-training supervisor demonstration; never training or independent performance evidence",
+      "intended_use": "post-training QR scanning demonstration; never training or independent performance evidence",
       "exposure_states": [
         "demo_only",
         "post_training_exposed"
       ],
       "generator": "scripts/build_qr_codes_demo.py",
       "source_manifest": "ml_training/datasets/qr_codes_demo/MANIFEST.json",
-      "source_manifest_sha256": "2f11cdde42d0435598b1ed2a3c77f311c41af8df43342b9e7b4e658fb6b116dd"
+      "source_manifest_sha256": "f100ea9ba8f6d2d36e25b8032d8fdcc5223d937f9cc784ce18f0231a04e506be"
     },
     {
       "dataset_id": "qrguard-api-regression-fixtures",

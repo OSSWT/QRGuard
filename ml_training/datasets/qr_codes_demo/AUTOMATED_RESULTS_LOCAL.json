@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "pack_id": "qrguard-presentation-demo-r07",
+  "pack_id": "qrguard-demo-r07",
   "generated_at": "2026-09-03T14:15:19.385019+00:00",
   "target": "local",
   "target_label": "in-process stack with QRGUARD_UNIFIED_STRUCTURAL_ARTIFACTS=training/artifacts/structural",

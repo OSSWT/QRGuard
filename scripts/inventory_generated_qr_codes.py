@@ -107,11 +107,11 @@ SETS = (
         group_from_path=lambda path: path.parts[0],
     ),
     GeneratedSet(
-        dataset_id="qrguard-presentation-demo-r07",
+        dataset_id="qrguard-demo-r07",
         relative_root="ml_training/datasets/qr_codes_demo",
         pattern="**/*.png",
         intended_use=(
-            "post-training supervisor demonstration; never training or independent "
+            "post-training QR scanning demonstration; never training or independent "
             "performance evidence"
         ),
         exposure_states=("demo_only", "post_training_exposed"),

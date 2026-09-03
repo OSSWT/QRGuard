@@ -4,7 +4,7 @@ This is the human-readable source of truth for the data behind the active
 QRGuard stack. `DATASET_INVENTORY.json` is the matching machine-readable local
 presence and hash audit. Large data are intentionally excluded from GitHub;
 GitHub stores the recipes, contracts, provenance, citations, expected hashes,
-and presentation-safe demo assets.
+and post-training QR demo assets.
 
 ## Verified state
 
@@ -107,7 +107,7 @@ older Structural fingerprint.
 | Manifest schemas and aggregate audits | Private exact-app captures and recovery ZIPs |
 | Exact expected sizes and SHA-256 values | Rebuildable combined training image caches |
 | Split/leakage policy and citations | Training checkpoints not needed by production |
-| Presentation QR cards, expected outcomes and checksums | Private live-camera evidence |
+| QR demo cards, expected outcomes and checksums | Private live-camera evidence |
 
 This is intentional: cloning GitHub gives a reviewable and reproducible data
 contract without publishing restricted/private rows or adding gigabytes of

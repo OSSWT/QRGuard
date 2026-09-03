@@ -21,7 +21,7 @@ datasets/
 `references/` is the single source for both branches. It contains the shared
 dataset registry, licences and BibTeX plus explicit Structural and Semantic
 indexes. `generated_qr_codes/` records QR images created by this project,
-including active test fixtures, capture references and presentation assets.
+including active test fixtures, capture references and post-training demo assets.
 
 `qr_codes_demo/` is deliberately separate from training and locked evaluation.
 It demonstrates the already deployed stack and must remain `demo_only` in every
