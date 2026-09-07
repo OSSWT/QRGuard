@@ -68,3 +68,20 @@ The original user photo returns HTTP 200, Safe, risk 1 through Gallery and
 three distinct brightness-varied Camera simulation frames using the production
 unified-model configuration. This is image replay, not a physical phone camera
 test. No phone was connected during verification.
+
+## Production release and cleanup
+
+Render serves deployment commit
+`a34a0436a3385bbdaa6fc19fbf02479ea2033813`. Both services report live, the web
+version endpoint reports build 8013, and the hosted APK hash matches the signed
+local artifact. Replaying the original photo against the deployed API returns
+Safe / 1 for Gallery and the three-frame Camera simulation.
+The post-deployment 42-case regression completed at 2026-09-07 10:26:51 UTC:
+42/42 intended Gallery outcomes, 42/42 intended Camera-simulation outcomes,
+and 84/84 HTTP 200 responses. Dataset baseline files were not rewritten.
+
+The source workspace retains code, tests and this policy record. The deployable
+web bundle and signed APK live under the existing deployment worktree. Four
+temporary test directories, the duplicate staging bundle and seven obsolete
+debug APKs were removed, reclaiming 774,791,792 bytes. These generated outputs
+can be rebuilt; datasets, trained models and research evidence were retained.

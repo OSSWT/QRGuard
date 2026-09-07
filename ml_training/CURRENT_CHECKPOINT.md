@@ -20,8 +20,8 @@ is still pending.
 - Structural ONNX: 44,702,737 bytes; SHA-256
   `71a86dec83c5c63dd3ac4b83705f403c183c9efe8822a424e072a7b95c555033`.
 - Structural temperature: `0.6445590340070313`.
-- Signed Android release: `1.2.0+8012`, 73,462,225 bytes; SHA-256
-  `c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c`.
+- Signed Android release: `1.2.0+8013`, 73,462,225 bytes; SHA-256
+  `df0810d0d9be018b41f15ce02e2c2be9856772bcd6441df24dd16e0961c62ce9`.
 - Android signer certificate SHA-256:
   `ce47b65dab21523731dfd76a414068ad95dcce3e1ee02a54e80b04552191c1ec`.
 
@@ -54,10 +54,10 @@ across every phone, display, printer, lighting condition or future attack.
 
 ## Verification
 
-- Backend regression: 452 passed, 3 conditional skips.
+- Backend regression: 489 passed, 3 conditional skips.
 - r07 backend safety subset: 106 passed, 2 conditional skips.
 - Flutter analyzer: no issues.
-- Flutter tests: 104 passed.
+- Flutter tests: 105 passed.
 - Production Web and signed Android builds: passed.
 - Local Uvicorn health: `unified=structural-r07-corrective-v1`, sources Gallery
   and Camera.
@@ -65,7 +65,7 @@ across every phone, display, printer, lighting condition or future attack.
   and Camera.
 - Production demo smoke: 42/42 Gallery and 42/42 Camera-simulation verdicts
   matched their intended outcomes across 84 HTTP 200 responses.
-- Production Web reports `1.2.0+8012`; the hosted APK is 73,462,225 bytes and its
+- Production Web reports `1.2.0+8013`; the hosted APK is 73,462,225 bytes and its
   SHA-256 matches the signed release artifact exactly.
 
 ## Rollback

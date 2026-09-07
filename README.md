@@ -33,7 +33,7 @@ Flutter camera/gallery
        |-- Structural Training: clean / adversarial / tampered image evidence
        |-- Semantic Training: calibrated URL risk + deterministic payload rules
        `-- Risk Decision Layer: monotonic Fusion + source-aware safety policy
-              Safe < 45 <= Warning < 55 <= Blocked
+              Safe < 26 <= Warning < 76 <= Blocked
 ```
 
 The project has two report-facing trained phases:
@@ -216,12 +216,12 @@ flutter run
 
 The checked Android version is `1.2.0+8013`.
 
-Release `1.2.0+8012` is built, signed and deployed to the production endpoint. Its
+Release `1.2.0+8013` is built, signed and deployed to the production endpoint. Its
 APK is 73,462,225 bytes with SHA-256
-`c415337eed98e7d87517cd25c5523d251a3547b5b60277b07940e64f8243e64c`.
+`df0810d0d9be018b41f15ce02e2c2be9856772bcd6441df24dd16e0961c62ce9`.
 The hosted APK matches that hash. The production API reports unified
 `structural-r07-corrective-v1`, and the production Web version endpoint reports
-`1.2.0+8012`.
+`1.2.0+8013`.
 
 ## Verification
 
@@ -233,8 +233,8 @@ flutter test
 flutter build apk --release
 ```
 
-Current change verification: 470 backend tests passed with three conditional
-skips, Flutter analysis reported no issues, and 104 Flutter tests passed. The
+Current change verification: 489 backend tests passed with three conditional
+skips, Flutter analysis reported no issues, and 105 Flutter tests passed. The
 production-endpoint Web build and signed Android release both completed; the APK
 identity and signer certificate were verified independently of the build step.
 The deployed API also completed the canonical 42-case remote demo smoke with
