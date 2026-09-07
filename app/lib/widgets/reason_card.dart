@@ -324,9 +324,8 @@ class BranchEvidence extends StatelessWidget {
         if (branch.structuralMethod == 'attendance_grid_v1') ...[
           const SizedBox(height: 10),
           Text(
-            'Raw image model: ${branch.structuralRawType ?? 'unknown'} '
-            '(${branch.pStructuralRaw?.toStringAsFixed(2) ?? '—'}). '
-            'The attendance grid check accounts for the central logo.',
+            'UTAR attendance QR structure verified. The central logo is a '
+            'recognized part of this QR design.',
             style: TextStyle(
               color: context.qrColors.secondaryText,
               fontSize: 12,
