@@ -122,6 +122,8 @@ Uint8List? _prepareCrop(CropRequest request) {
     frameSize: Size(request.frameWidth, request.frameHeight),
     normalizeCameraColor: request.normalizeCameraColor,
     minimumOutputSide: request.minimumOutputSide,
+    // Preview experiment: faster lossless encoding, identical decoded pixels.
+    pngCompressionLevel: diagnosticPreview ? 1 : 6,
   );
 }
 

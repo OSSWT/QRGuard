@@ -32,6 +32,23 @@ class AttendanceGridCheck:
     image_height: int | None = None
     sampling_method: str = "decoder_grid"
     decoder_outside_mismatches: int | None = None
+    decoder_format_uncertain: bool = False
+
+
+def _format_value(observed):
+    """Require both observed format copies to agree exactly; no guessed bits."""
+    n = len(observed)
+    vertical = sum(
+        int(observed[i if i < 6 else i + 1 if i < 8 else n - 15 + i, 8]) << i
+        for i in range(15)
+    )
+    horizontal = sum(
+        int(observed[8, n - i - 1 if i < 8 else 7 if i == 8 else 14 - i]) << i
+        for i in range(15)
+    )
+    formats = [value for value in range(32)
+               if BCH_type_info(value) == vertical == horizontal]
+    return formats[0] if len(formats) == 1 else None
 
 
 def check_attendance_grid(image, payload: str) -> AttendanceGridCheck:
@@ -73,10 +90,14 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     corners = np.asarray(points, dtype=np.float32).reshape(4, 2)
     edges = np.linalg.norm(corners - np.roll(corners, -1, axis=0), axis=1)
     pixels_per_module = float(np.min(edges) / n)
+    sampling_method = "decoder_grid"
+    decoder_format_uncertain = False
     def uncertain(reason, mismatches=None):
         return AttendanceGridCheck(
             reason=reason, module_count=n, pixels_per_module=pixels_per_module,
             outside_mismatches=mismatches,
+            sampling_method=sampling_method,
+            decoder_format_uncertain=decoder_format_uncertain,
         )
     if pixels_per_module < 5:
         return uncertain("insufficient_module_scale")
@@ -84,21 +105,22 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
 
     # Both redundant format strings must be intact. These positions mirror
     # qrcode.QRCode.setup_type_info; no guessed ECC/mask can authorize Safe.
-    vertical = sum(
-        int(observed[i if i < 6 else i + 1 if i < 8 else n - 15 + i, 8]) << i
-        for i in range(15)
-    )
-    horizontal = sum(
-        int(observed[8, n - i - 1 if i < 8 else 7 if i == 8 else 14 - i]) << i
-        for i in range(15)
-    )
-    formats = [
-        value for value in range(32)
-        if BCH_type_info(value) == vertical == horizontal
-    ]
-    if len(formats) != 1:
+    format_value = _format_value(observed)
+    decoder_format_uncertain = format_value is None
+    preview_registration = os.getenv("QRGUARD_ATTENDANCE_REGISTERED_SAMPLING") == "1"
+    if decoder_format_uncertain and preview_registration:
+        # Registration uses only standard fixed patterns, so it needs neither
+        # the format value nor the payload. Read BOTH format copies again from
+        # the physical image before proceeding to independent data comparison.
+        from structural.registered_sampling import sample_registered_grid
+        registered = sample_registered_grid(gray, corners, n)
+        if registered is not None:
+            observed = registered
+            sampling_method = "fixed_pattern_registration_preview_v2"
+            format_value = _format_value(observed)
+    if format_value is None:
         return uncertain("format_uncertain")
-    ecc, mask = formats[0] >> 3, formats[0] & 7
+    ecc, mask = format_value >> 3, format_value & 7
     qr = qrcode.QRCode(
         version=(n - 17) // 4, error_correction=ecc, border=0, mask_pattern=mask
     )
@@ -112,16 +134,15 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     outside = np.ones((n, n), dtype=bool)
     outside[lo:hi, lo:hi] = False
     mismatch_count = int(difference[outside].sum())
-    decoder_mismatches = mismatch_count
-    sampling_method = "decoder_grid"
+    decoder_mismatches = None if decoder_format_uncertain else mismatch_count
     # Preview-only experiment. Production defaults to the unchanged verifier.
-    if mismatch_count and os.getenv("QRGUARD_ATTENDANCE_REGISTERED_SAMPLING") == "1":
+    if mismatch_count and preview_registration and sampling_method == "decoder_grid":
         from structural.registered_sampling import sample_registered_grid
         registered = sample_registered_grid(gray, corners, n)
         if registered is not None:
             difference = registered != np.asarray(qr.get_matrix(), dtype=bool)
             mismatch_count = int(difference[outside].sum())
-            sampling_method = "fixed_pattern_registration_preview_v1"
+            sampling_method = "fixed_pattern_registration_preview_v2"
     if mismatch_count:
         # Sampling errors and unsupported encoder segmentation also cause this.
         # A mismatch is not, by itself, proof of an attack.
@@ -150,4 +171,5 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
         passed=True, central_logo=logo, reason="passed", module_count=n,
         pixels_per_module=pixels_per_module, outside_mismatches=0,
         sampling_method=sampling_method, decoder_outside_mismatches=decoder_mismatches,
+        decoder_format_uncertain=decoder_format_uncertain,
     )

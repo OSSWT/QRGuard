@@ -43,6 +43,22 @@ List<Offset> _corners({int left = 300, int top = 200, int side = 80}) => [
 
 void main() {
   group('cropToCode', () {
+    test('fast PNG compression preserves every decoded pixel', () {
+      final frame = _frame();
+      final normal = cropToCode(frame: frame, corners: _corners());
+      final fast = cropToCode(
+        frame: frame,
+        corners: _corners(),
+        pngCompressionLevel: 1,
+      );
+      expect(normal, isNotNull);
+      expect(fast, isNotNull);
+      final a = img.decodePng(normal!)!;
+      final b = img.decodePng(fast!)!;
+      expect(b.width, a.width);
+      expect(b.height, a.height);
+      expect(b.getBytes(), a.getBytes());
+    });
     test(
       'handles varied real QR payloads, positions and camera resolutions',
       () {

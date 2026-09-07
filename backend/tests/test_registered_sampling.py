@@ -5,6 +5,7 @@ import pytest
 import qrcode
 from PIL import ImageDraw
 from structural.attendance_grid import check_attendance_grid
+from structural.attendance_grid import _format_value
 from structural.registered_sampling import sample_registered_grid
 from test_attendance_grid import attendance_image
 
@@ -43,3 +44,33 @@ def test_registration_experiment_is_off_by_default(monkeypatch):
     monkeypatch.setattr('structural.registered_sampling.sample_registered_grid', forbidden)
     ImageDraw.Draw(image).rectangle((192, 192, 199, 199), fill='white')
     check_attendance_grid(image, payload)
+
+
+def test_format_copies_must_match_exactly():
+    payload, image = attendance_image()
+    gray = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2GRAY)
+    _, _, straight = cv2.QRCodeDetector().detectAndDecode(gray)
+    observed = straight < 128
+    assert _format_value(observed) is not None
+    observed[0, 8] = ~observed[0, 8]
+    assert _format_value(observed) is None
+
+
+def test_preview_can_reread_format_from_pixels_before_data_check(monkeypatch):
+    monkeypatch.setenv('QRGUARD_ATTENDANCE_REGISTERED_SAMPLING', '1')
+    payload, image = attendance_image()
+    original = cv2.QRCodeDetector
+    class MisSampledFormatDetector:
+        def __init__(self):
+            self.detector = original()
+        def detectAndDecode(self, candidate):
+            decoded, points, straight = self.detector.detectAndDecode(candidate)
+            if straight is not None:
+                straight = straight.copy()
+                straight[0, 8] = 255 - straight[0, 8]
+            return decoded, points, straight
+    monkeypatch.setattr(cv2, 'QRCodeDetector', MisSampledFormatDetector)
+    check = check_attendance_grid(image, payload)
+    assert check.passed
+    assert check.decoder_format_uncertain
+    assert check.sampling_method == 'fixed_pattern_registration_preview_v2'

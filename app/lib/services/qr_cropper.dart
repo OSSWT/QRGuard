@@ -45,6 +45,7 @@ Uint8List? cropToCode({
   Size frameSize = Size.zero,
   bool normalizeCameraColor = false,
   int minimumOutputSide = _minSide,
+  int pngCompressionLevel = 6,
 }) {
   if (corners.isEmpty) return null;
 
@@ -135,7 +136,9 @@ Uint8List? cropToCode({
     // GLOBAL cast estimated from bright paper/quiet-zone pixels. Local RGB
     // variation, stickers, occlusion and altered edges are deliberately kept.
     if (normalizeCameraColor) _correctGlobalCameraCast(rectified);
-    return Uint8List.fromList(img.encodePng(rectified));
+    return Uint8List.fromList(
+      img.encodePng(rectified, level: pngCompressionLevel),
+    );
   } catch (_) {
     return null;
   }

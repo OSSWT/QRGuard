@@ -31212,7 +31212,7 @@ bbn(a){var s,r,q=a.b
 if(q.length!==8)return null
 s=A.b([],t.yv)
 for(r=0;r<8;r+=2)s.push(new A.i(q[r],q[r+1]))
-return A.bcy(s,a.a,new A.u(a.c,a.d),a.f,a.e)},
+return A.bcy(s,a.a,new A.u(a.c,a.d),a.f,a.e,1)},
 r8:function r8(a,b,c,d,e,f){var _=this
 _.a=a
 _.b=b
@@ -31792,7 +31792,7 @@ q.push(A.aA(["file",k,"bytes",m,"sha256",A.aIJ(j.a.a)],s,p))}h=a.w
 d=new A.e2(Date.now(),0,!1).aIh().aIe()
 p=a.z
 p=p==null?e:A.aIJ(B.pX.cm(B.am.cm(p)).a)
-g=B.am.cm(A.aUR(A.aA(["schema","qrguard-attendance-preview-v1","build","8014-preview","created_at",d,"privacy","Images contain recoverable QR content. Share privately only.","image_kind","exact_http_inputs_not_server_intermediate_crops","payload_sha256",p,"payload_type",a.d,"image_source",h.cy,"verdict",a.a.b,"risk_score",a.b,"partial_analysis",a.x,"structural_status",h.CW.b,"structural_raw_type",h.d,"p_structural_raw",h.b,"structural_method",h.e,"module_count",h.as,"min_module_pixels",h.at,"attendance_checks",h.f,"timings_ms",a.at,"files",q],s,t.X),e,"  "))
+g=B.am.cm(A.aUR(A.aA(["schema","qrguard-attendance-preview-v1","build","8014-preview","capture_pipeline","lossless_png_level1_v2","created_at",d,"privacy","Images contain recoverable QR content. Share privately only.","image_kind","exact_http_inputs_not_server_intermediate_crops","payload_sha256",p,"payload_type",a.d,"image_source",h.cy,"verdict",a.a.b,"risk_score",a.b,"partial_analysis",a.x,"structural_status",h.CW.b,"structural_raw_type",h.d,"p_structural_raw",h.b,"structural_method",h.e,"module_count",h.as,"min_module_pixels",h.at,"attendance_checks",h.f,"timings_ms",a.at,"files",q],s,t.X),e,"  "))
 r.G(0,A.aPJ("diagnostics.json",g.length,g))
 s=$.aYy()
 f=A.aM9(B.bM,32768)
@@ -31807,7 +31807,7 @@ p.click()
 p.remove()
 A.cb(B.LP,new A.aJA(q))},
 aJA:function aJA(a){this.a=a},
-bcy(a2,a3,a4,a5,a6){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1=null
+bcy(a2,a3,a4,a5,a6,a7){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1=null
 if(a2.length===0)return a1
 s=null
 try{s=A.aWZ(a3)}catch(o){return a1}if(s==null)return a1
@@ -31847,7 +31847,7 @@ a=J.k(r,2)
 a0=J.k(r,2)
 p=A.bcm(n,new A.mW(J.k(r,3).a,J.k(r,3).b),new A.mW(a.a,a0.b),B.mU,A.d9(a1,a1,B.z,0,B.a7,q,a1,0,3,a1,B.z,q,!1),new A.mW(k.a,j.b),new A.mW(d.a,c.b))
 if(a6)A.baa(p)
-n=new Uint8Array(A.bi(new A.alz(B.a1b,6,a1).aBr(p,!1)))
+n=new Uint8Array(A.bi(new A.alz(B.a1b,a7,a1).aBr(p,!1)))
 return n}catch(o){return a1}},
 baa(a3){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c=null,b=0,a=0,a0=0,a1=0,a2=0
 for(;;){s=a3.a
@@ -114611,33 +114611,33 @@ break
 case 2:s=B.i3
 break
 default:s=null}return s},
-K(a){var s,r,q,p,o,n,m=this,l=null
-if(m.gpb()){s=t.V
-r=t.D
-q=new A.uT(r.a(A.q(a).c.h(0,A.a7(s))).ay,r.a(A.q(a).c.h(0,A.a7(s))).cx,B.rS,"Rescan needed","The captured image could not be verified reliably")}else if(m.glM()===B.p9){p=t.D.a(A.q(a).c.h(0,A.a7(t.V)))
-s=new A.uT(p.ay,p.cx,B.j9,"Partial analysis","One analysis branch was unavailable")
-q=s}else{s=A.aN7(a,m.gba().a)
-q=s}s=A.m6(l,!0,l,l,A.rL(l,l,l,B.mS,l,l,new A.aFf(a),l,l,l,"Close result"),l,B.aaw)
-r=t.p
-o=A.b([],r)
-n=J.nZ(m.a.c)
-if(n)o.push(A.akJ(B.Ob,B.aag,m.gajl(),l))
-o.push(new A.a4B(q,l))
-n=m.e
-if((n==null?l:n.x!==n.y)===!0)B.d.V(o,A.b([B.bj,new A.a4y(n.y,n.x,l)],r))
-o.push(B.cz)
-o.push(new A.Q4(m.gba(),l))
-o.push(B.bx)
-o.push(new A.WN(m.gatC(),q.a,m.gatD(),l))
-if(m.gpb())B.d.V(o,A.b([B.bx,new A.a3f(m.gba(),l)],r))
-o.push(B.bx)
-o.push(A.d7(A.aLw(A.b([new A.C6(m.gba(),l)],r),B.rc,B.d4,!1,l,!0,B.d4,B.Fc,B.Fd),l,l,l))
-if(m.gba().x)B.d.V(o,A.b([B.bx,new A.a0y(m.gba(),l)],r))
-n=m.e
-if(n!=null)B.d.V(o,A.b([B.bx,new A.YT(n,l)],r))
-o.push(B.a4m)
-B.d.V(o,m.aey(a,q))
-return A.ly(s,A.ui(!0,A.mM(o,B.dI,l,!1),B.aj,!0))},
+K(a){var s,r,q,p,o,n=this,m=null,l=n.gpb()
+if(l){l=t.V
+s=t.D
+r=new A.uT(s.a(A.q(a).c.h(0,A.a7(l))).ay,s.a(A.q(a).c.h(0,A.a7(l))).cx,B.rS,"Rescan needed","The captured image could not be verified reliably")}else if(n.glM()===B.p9){q=t.D.a(A.q(a).c.h(0,A.a7(t.V)))
+l=new A.uT(q.ay,q.cx,B.j9,"Partial analysis","One analysis branch was unavailable")
+r=l}else{l=A.aN7(a,n.gba().a)
+r=l}l=A.m6(m,!0,m,m,A.rL(m,m,m,B.mS,m,m,new A.aFf(a),m,m,m,"Close result"),m,B.aaw)
+s=t.p
+p=A.b([],s)
+o=J.nZ(n.a.c)
+if(o)p.push(A.akJ(B.Ob,B.aag,n.gajl(),m))
+p.push(new A.a4B(r,m))
+o=n.e
+if((o==null?m:o.x!==o.y)===!0)B.d.V(p,A.b([B.bj,new A.a4y(o.y,o.x,m)],s))
+p.push(B.cz)
+p.push(new A.Q4(n.gba(),m))
+p.push(B.bx)
+p.push(new A.WN(n.gatC(),r.a,n.gatD(),m))
+if(n.gpb())B.d.V(p,A.b([B.bx,new A.a3f(n.gba(),m)],s))
+p.push(B.bx)
+p.push(A.d7(A.aLw(A.b([new A.C6(n.gba(),m)],s),B.rc,B.d4,!1,m,!0,B.d4,B.Fc,B.Fd),m,m,m))
+if(n.gba().x)B.d.V(p,A.b([B.bx,new A.a0y(n.gba(),m)],s))
+o=n.e
+if(o!=null)B.d.V(p,A.b([B.bx,new A.YT(o,m)],s))
+p.push(B.a4m)
+B.d.V(p,n.aey(a,r))
+return A.ly(l,A.ui(!0,A.mM(p,B.dI,m,!1),B.aj,!0))},
 gait(){var s=A.aX_(this.gba().c)
 if(s.length!==0)return s
 if(this.glM()===B.FV)return B.UV

@@ -36,6 +36,7 @@ Uint8List buildPreviewDiagnostics(ScanResponse scan, List<Uint8List> frames) {
     const JsonEncoder.withIndent('  ').convert({
       'schema': 'qrguard-attendance-preview-v1',
       'build': '8014-preview',
+      'capture_pipeline': 'lossless_png_level1_v2',
       'created_at': DateTime.now().toUtc().toIso8601String(),
       'privacy': 'Images contain recoverable QR content. Share privately only.',
       'image_kind': 'exact_http_inputs_not_server_intermediate_crops',

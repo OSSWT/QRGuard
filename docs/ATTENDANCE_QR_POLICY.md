@@ -33,6 +33,27 @@ regression: 501 passed, 3 skipped. Preview-enabled attendance suite: 42 passed.
 Production service and deployment worktree were not changed. This iteration
 does not optimize the measured 15-second browser crop preparation cost.
 
+### Second private camera archive: mixed acquisition evidence
+
+The later archive returned format_uncertain / decode_unavailable /
+format_uncertain. Its second frame visibly includes a Telegram "Photo from..."
+tooltip over the lower QR, a pointer, and motion ghosting. The first and third
+frames do not have that tooltip; their format-sampling issue remains unresolved.
+Do not describe every failure as an overlay or force the entire archive to Safe.
+
+Preview v2 attempts fixed-pattern registration before rejecting unreadable
+format copies, but still requires two exactly matching physical format strings,
+independent image decoding and zero outer-module differences. This restores a
+synthetic format-mis-sampling case but does NOT clear the second private archive.
+The earlier three-frame archive must continue passing. No decoder fallback was
+enabled that trusts the caller's payload or silently discards a failed frame.
+
+Preview Web capture v2 uses PNG compression level 1 instead of 6, preserving
+decoded pixels exactly. This trades larger uploads for less compression CPU;
+phone end-to-end speed has not yet been measured. Ordinary builds retain level 6.
+The ZIP records `capture_pipeline=lossless_png_level1_v2`. Next phone acceptance
+must show only one unobstructed QR with the pointer and viewer overlays removed.
+
 ### Wireless browser diagnostic preview (2026-09-07)
 
 - Web: https://qrguard-attendance-test.onrender.com
