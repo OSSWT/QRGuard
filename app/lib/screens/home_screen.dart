@@ -16,6 +16,8 @@ import '../services/api_client.dart';
 import '../services/attendance_capture_policy.dart';
 import '../services/camera_exposure_policy.dart';
 import '../services/capture_quality.dart';
+import '../services/capture_retry.dart';
+import '../services/preview_download.dart';
 import '../services/history_service.dart';
 import '../services/live_camera_frame.dart';
 import '../services/live_qr_stability.dart';
@@ -66,6 +68,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   _Candidate? _candidate;
   final List<_Candidate> _liveCandidates = [];
   bool _capturingWebFrame = false;
+  final _captureRetryBudget = CaptureRetryBudget();
+  String? _automaticCapturePayload;
+  bool _capturePaused = false;
+  CaptureRetryRequest? _lastCaptureRetry;
+  Timer? _captureRetryTimer;
   bool _navigating = false;
   bool _confirming = false;
   String? _dismissedPayload;
@@ -123,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _captureRetryTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _autoPromptTimer?.cancel();
     _candidateExpiryTimer?.cancel();
@@ -203,7 +211,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (_liveCandidates.length > _maximumLiveCandidates) {
         _liveCandidates.removeAt(0);
       }
-    } else if (kIsWeb && nextCandidate.hasUsableGeometry) {
+    } else if (kIsWeb &&
+        !diagnosticPreview &&
+        nextCandidate.hasUsableGeometry) {
       unawaited(_retainWebFrame(nextCandidate));
     }
     _candidateLastSeen = seenAt;
@@ -211,7 +221,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final exposureReady =
         !_requiresExposureCheck || _exposureCheckedPayload == payload;
     setState(() {
-      _message = null;
+      if (!_capturePaused) {
+        _message = _automaticCapturePayload == null
+            ? null
+            : 'Collecting fresh, clear frames automatically. Hold the QR steady.';
+      }
       _candidate = candidate;
       _candidateReady =
           observation.ready &&
@@ -379,7 +393,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           _dismissedPayload == payload) {
         return;
       }
-      unawaited(_confirmDetectedQr(candidate!));
+      if (_automaticCapturePayload == payload) {
+        unawaited(_scanCandidate(automatic: true));
+      } else {
+        unawaited(_confirmDetectedQr(candidate!));
+      }
     });
   }
 
@@ -397,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         _liveCandidates.clear();
         _candidateReady = false;
         _candidateLastSeen = null;
-        _dismissedPayload = null;
+        if (!_capturePaused) _dismissedPayload = null;
       });
       _stability.reset();
       _resetExposureCheck();
@@ -433,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         title: const Text('Scan this QR code?'),
         content: const Text(
-          'One QR code remained clear across five camera frames. Continue to '
+          'One QR code was detected repeatedly. Continue to '
           'analyse its image integrity and encoded destination?',
         ),
         actions: [
@@ -452,6 +470,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (!mounted) return;
     setState(() => _confirming = false);
     if (proceed == true) {
+      _captureRetryTimer?.cancel();
+      _captureRetryBudget.begin(preparedCandidate.payload, DateTime.now());
+      _capturePaused = false;
+      _lastCaptureRetry = null;
       _dismissedPayload = null;
       final evidence = _evidenceForPayload(preparedCandidate.payload);
       await _openAnalysis(
@@ -464,8 +486,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     await _safeStart();
   }
 
-  Future<void> _scanCandidate() async {
+  Future<void> _scanCandidate({bool automatic = false}) async {
     final candidate = _candidate;
+    if (automatic &&
+        candidate != null &&
+        !_captureRetryBudget.canContinue(candidate.payload, DateTime.now())) {
+      _pauseAutomaticCapture(candidate.payload);
+      return;
+    }
+    if (!automatic && candidate != null) {
+      _captureRetryTimer?.cancel();
+      _captureRetryBudget.begin(candidate.payload, DateTime.now());
+      _capturePaused = false;
+      _automaticCapturePayload = null;
+      _lastCaptureRetry = null;
+    }
     final lastSeen = _candidateLastSeen;
     if (candidate == null ||
         lastSeen == null ||
@@ -516,6 +551,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   /// Native captures already contain JPEG bytes and return immediately.
   Future<_Candidate?> _withLiveCameraFrame(_Candidate candidate) async {
     if (candidate.hasUsableImage) return candidate;
+    if (kIsWeb && diagnosticPreview) return null;
     if (!kIsWeb ||
         candidate.corners.length != 4 ||
         candidate.frameSize.width <= 0 ||
@@ -615,6 +651,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }) async {
     final api = _api;
     if (api == null || _navigating) return;
+    _captureRetryTimer?.cancel();
     setState(() {
       _navigating = true;
       _confirming = false;
@@ -625,40 +662,75 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _scheduledPromptPayload = null;
     await _safeStop();
     if (!mounted) return;
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => AnalysingScreen(
-          api: api,
-          history: _history,
-          saveHistory: widget.appController.saveHistory,
-          payload: candidate.payload,
-          frame: candidate.frame,
-          corners: candidate.corners,
-          frameSize: candidate.frameSize,
-          imageSource: candidate.imageSource,
-          selectedImageBytes: selectedImageBytes,
-          evidence: [
-            for (final sample in evidence)
-              QrFrameEvidence(
-                frame: sample.frame!,
-                corners: sample.corners,
-                frameSize: sample.frameSize,
-              ),
-          ],
-        ),
-      ),
-    );
+    final captureOutcome = await Navigator.of(context)
+        .push<CaptureRetryRequest>(
+          MaterialPageRoute(
+            builder: (_) => AnalysingScreen(
+              api: api,
+              history: _history,
+              saveHistory: widget.appController.saveHistory,
+              payload: candidate.payload,
+              frame: candidate.frame,
+              corners: candidate.corners,
+              frameSize: candidate.frameSize,
+              imageSource: candidate.imageSource,
+              captureSessionStartedAt:
+                  diagnosticPreview && candidate.imageSource == 'camera'
+                  ? _captureRetryBudget.startedAt
+                  : null,
+              selectedImageBytes: selectedImageBytes,
+              evidence: [
+                for (final sample in evidence)
+                  QrFrameEvidence(
+                    frame: sample.frame!,
+                    corners: sample.corners,
+                    frameSize: sample.frameSize,
+                  ),
+              ],
+            ),
+          ),
+        );
     if (!mounted) return;
+    final retry =
+        captureOutcome != null &&
+        _captureRetryBudget.take(candidate.payload, DateTime.now());
     setState(() {
+      _automaticCapturePayload = retry ? candidate.payload : null;
+      _capturePaused = captureOutcome != null && !retry;
+      _lastCaptureRetry = captureOutcome == null
+          ? null
+          : captureOutcome.scan != null
+          ? captureOutcome
+          : _lastCaptureRetry;
       _navigating = false;
       _candidate = null;
       _liveCandidates.clear();
       _candidateReady = false;
-      _dismissedPayload = null;
+      _dismissedPayload = _capturePaused ? candidate.payload : null;
+      _message = captureOutcome == null
+          ? null
+          : retry
+          ? 'Collecting fresh, clear frames automatically. Hold the QR steady.'
+          : 'Capture paused: clear evidence was not collected. Keep one unobstructed QR steady, then tap Scan. No safety verdict was issued.';
       _candidateLastSeen = null;
     });
     _stability.reset();
     _resetExposureCheck();
+    if (retry) {
+      final remaining =
+          const Duration(seconds: 45) -
+          DateTime.now().difference(_captureRetryBudget.startedAt!);
+      _captureRetryTimer = Timer(
+        remaining.isNegative ? Duration.zero : remaining,
+        () {
+          if (mounted &&
+              !_navigating &&
+              _automaticCapturePayload == candidate.payload) {
+            _pauseAutomaticCapture(candidate.payload);
+          }
+        },
+      );
+    }
     await _loadHistory();
     await _safeStart();
   }
@@ -681,6 +753,48 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     await _loadApi();
     await _loadHistory();
     await _safeStart();
+  }
+
+  Future<void> _exportCaptureDiagnostics() async {
+    final capture = _lastCaptureRetry;
+    if (capture?.scan == null) return;
+    final consent = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Export private capture diagnostics?'),
+        content: const Text(
+          'The ZIP contains QR images with recoverable attendance tokens. Share privately only, never on public GitHub.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Download ZIP'),
+          ),
+        ],
+      ),
+    );
+    if (consent != true || !mounted) return;
+    try {
+      downloadPreview(buildPreviewDiagnostics(capture!.scan!, capture.frames));
+    } catch (_) {
+      _showMessage('Diagnostic download failed. Please try again.');
+    }
+  }
+
+  void _pauseAutomaticCapture(String payload) {
+    if (!mounted) return;
+    _autoPromptTimer?.cancel();
+    setState(() {
+      _automaticCapturePayload = null;
+      _capturePaused = true;
+      _dismissedPayload = payload;
+      _message =
+          'Automatic capture paused. Keep one clear QR steady, then tap Scan. No safety verdict was issued.';
+    });
   }
 
   Future<void> _openHistory() async {
@@ -802,6 +916,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         child: Column(
                           children: [
                             _buildHeader(context),
+                            if (_capturePaused &&
+                                _lastCaptureRetry?.scan != null)
+                              TextButton.icon(
+                                onPressed: _exportCaptureDiagnostics,
+                                icon: const Icon(Icons.download),
+                                label: const Text(
+                                  'Export capture diagnostics (ZIP)',
+                                ),
+                              ),
                             if (diagnosticPreview)
                               const Padding(
                                 padding: EdgeInsets.only(top: 12),

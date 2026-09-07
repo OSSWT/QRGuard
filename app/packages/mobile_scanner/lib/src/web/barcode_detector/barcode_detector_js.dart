@@ -1,7 +1,5 @@
 import 'dart:js_interop';
 
-import 'package:web/web.dart' as web;
-
 /// Checks whether the native BarcodeDetector API is available in this browser.
 ///
 /// Returns `true` when `BarcodeDetector` is defined on `globalThis` **and**
@@ -38,7 +36,7 @@ extension type NativeBarcodeDetector._(JSObject _) implements JSObject {
   /// Corner points are in the intrinsic coordinate space of the video
   /// frame (i.e. `[0, videoWidth] × [0, videoHeight]`).
   external JSPromise<JSArray<DetectedBarcode>> detect(
-    web.HTMLVideoElement videoElement,
+    JSObject videoElement,
   );
 }
 

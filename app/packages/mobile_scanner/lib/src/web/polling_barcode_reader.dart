@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:ui';
 
@@ -7,6 +8,7 @@ import 'package:mobile_scanner/src/objects/barcode.dart';
 import 'package:mobile_scanner/src/objects/barcode_capture.dart';
 import 'package:mobile_scanner/src/objects/start_options.dart';
 import 'package:mobile_scanner/src/web/barcode_reader.dart';
+import 'package:mobile_scanner/src/web/capture_motion.dart';
 import 'package:mobile_scanner/src/web/media_track_constraints_delegate.dart';
 import 'package:mobile_scanner/src/web/web_camera_utility.dart';
 import 'package:web/web.dart' as web;
@@ -44,6 +46,15 @@ abstract base class PollingBarcodeReader extends BarcodeReader {
   /// Guard against overlapping decode calls when a frame takes longer to
   /// process than the configured interval.
   bool _isDecoding = false;
+  int _generation = 0;
+  bool _returnSynchronizedImage = false;
+
+  /// QRGuard preview only: decoder and exported evidence share one canvas.
+  @protected
+  bool get returnSynchronizedImage => _returnSynchronizedImage;
+
+  @protected
+  web.HTMLCanvasElement? get decodedCanvas => null;
 
   @override
   bool get isScanning => _videoStream != null;
@@ -111,8 +122,12 @@ abstract base class PollingBarcodeReader extends BarcodeReader {
     required web.MediaStream videoStream,
   }) async {
     _videoElement = videoElement;
+    _generation++;
     _videoStream = videoStream;
     _timeBetweenScansMs = options.detectionTimeoutMs;
+    _returnSynchronizedImage =
+        options.returnImage &&
+        const bool.fromEnvironment('QRGUARD_DIAGNOSTIC_PREVIEW');
 
     await prepareDecoder(options);
 
@@ -149,6 +164,7 @@ abstract base class PollingBarcodeReader extends BarcodeReader {
 
   @override
   Future<void> stop() async {
+    _generation++;
     _stopDecodeLoop();
     _isDecoding = false;
     _onMediaTrackSettingsChanged = null;
@@ -193,9 +209,58 @@ abstract base class PollingBarcodeReader extends BarcodeReader {
     if (video == null || controller.isClosed || video.paused) return;
     if (video.videoWidth == 0 || video.videoHeight == 0) return;
 
+    final generation = _generation;
     final results = await decodeFrame(video);
+    if (generation != _generation) return;
 
     if (results.isEmpty || controller.isClosed) return;
+
+    final canvas = decodedCanvas;
+    final evidenceSize =
+        _returnSynchronizedImage && canvas != null
+            ? Size(canvas.width.toDouble(), canvas.height.toDouble())
+            : videoSize;
+    if (_returnSynchronizedImage && canvas == null) return;
+    if (_returnSynchronizedImage && canvas != null) {
+      for (final barcode in results) {
+        if (!(barcode.rawValue ?? '').startsWith('Q01:*:') ||
+            barcode.corners.length != 4) {
+          continue;
+        }
+        final xs = barcode.corners.map((p) => p.dx);
+        final ys = barcode.corners.map((p) => p.dy);
+        final left = xs
+            .reduce((a, b) => a < b ? a : b)
+            .floor()
+            .clamp(0, canvas.width - 1);
+        final top = ys
+            .reduce((a, b) => a < b ? a : b)
+            .floor()
+            .clamp(0, canvas.height - 1);
+        final right = xs
+            .reduce((a, b) => a > b ? a : b)
+            .ceil()
+            .clamp(left + 1, canvas.width);
+        final bottom = ys
+            .reduce((a, b) => a > b ? a : b)
+            .ceil()
+            .clamp(top + 1, canvas.height);
+        final pixels = canvas.context2D.getImageData(
+          left,
+          top,
+          right - left,
+          bottom - top,
+        );
+        if (directionalDetailRatio(
+              pixels.data.toDart,
+              right - left,
+              bottom - top,
+            ) <
+            .25) {
+          return;
+        }
+      }
+    }
 
     final barcodes = <Barcode>[];
 
@@ -203,13 +268,13 @@ abstract base class PollingBarcodeReader extends BarcodeReader {
       // Check the scan window using raw camera coordinates (before
       // mirroring), because the scan window percentages are also in raw
       // camera space.
-      if (!isInsideScanWindow(barcode, _scanWindow, videoSize)) {
+      if (!isInsideScanWindow(barcode, _scanWindow, evidenceSize)) {
         continue;
       }
 
       // Mirror corners for display after the scan window check.
       if (shouldMirrorStream(_videoStream)) {
-        barcode = mirrorBarcodeX(barcode, videoSize.width);
+        barcode = mirrorBarcodeX(barcode, evidenceSize.width);
       }
 
       barcodes.add(barcode);
@@ -217,6 +282,27 @@ abstract base class PollingBarcodeReader extends BarcodeReader {
 
     if (barcodes.isEmpty || controller.isClosed) return;
 
-    controller.add(BarcodeCapture(barcodes: barcodes, size: videoSize));
+    var evidenceCanvas = canvas;
+    if (_returnSynchronizedImage &&
+        canvas != null &&
+        shouldMirrorStream(_videoStream)) {
+      evidenceCanvas =
+          web.HTMLCanvasElement()
+            ..width = canvas.width
+            ..height = canvas.height;
+      evidenceCanvas.context2D
+        ..translate(canvas.width, 0)
+        ..scale(-1, 1)
+        ..drawImage(canvas, 0, 0);
+    }
+    final image =
+        !_returnSynchronizedImage || evidenceCanvas == null
+            ? null
+            : base64Decode(
+              evidenceCanvas.toDataURL('image/png').split(',').last,
+            );
+    controller.add(
+      BarcodeCapture(barcodes: barcodes, size: evidenceSize, image: image),
+    );
   }
 }

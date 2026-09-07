@@ -42,6 +42,8 @@ final class ZXingWasmBarcodeReader extends PollingBarcodeReader {
       '/dist/iife/reader/index.js';
 
   web.HTMLCanvasElement? _canvas;
+  @override
+  web.HTMLCanvasElement? get decodedCanvas => _canvas;
   web.CanvasRenderingContext2D? _ctx;
 
   List<BarcodeFormat> _formats = const [];

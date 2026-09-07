@@ -54,6 +54,42 @@ phone end-to-end speed has not yet been measured. Ordinary builds retain level 6
 The ZIP records `capture_pipeline=lossless_png_level1_v2`. Next phone acceptance
 must show only one unobstructed QR with the pointer and viewer overlays removed.
 
+### Preview Web capture v3: synchronize, screen, replenish
+
+The third archive had two verified logo frames and one severe horizontal-motion
+frame that could not independently decode. Code inspection found a temporal
+mismatch: Web decoder callbacks supplied no pixels, and Home took a NEW video
+snapshot after the asynchronous decode. A correct payload could therefore be
+paired with a later blurry image and older corner coordinates.
+
+The preview now snapshots before decoding and exports that SAME immutable canvas
+as lossless PNG with its actual dimensions (native BarcodeDetector and ZXing-WASM).
+Late callbacks after stop/restart are rejected. Home disables the second-snapshot
+fallback in the preview. A native-resolution directional-detail screen drops
+severe attendance motion streaks before retaining camera evidence; this is not a
+safety score and does not whitelist any logo.
+
+Incomplete attendance acquisition returns to the live scanner automatically,
+without a verdict page or history entry. At most two replacement rounds are
+started; after 45 seconds no further automatic round starts, and waiting in the
+scanner pauses. An in-flight request retains its existing timeout. Safe and
+Blocked responses are preserved. Each round still submits three actual images;
+failed frames are NOT replaced by scores, duplicated pixels or a two-of-three
+Safe vote. Exhaustion remains on the capture screen with manual Scan and private
+diagnostic export. Total visible timing includes automatic replacement rounds.
+
+Validation includes seven retained clear private frames, rejection of the latest
+motion frame, retry budget tests, actual page routing for Safe/incomplete/Blocked,
+and a headless browser test that changes video colour during an async decode and
+verifies exported pixels remain from the original frame. Flutter 3.44 Windows'
+test CanvasKit handler uses a slash check on a Windows path and returns 404;
+`scripts/dev/repair_windows_browser_test.mjs <test-debug-port>` supplies only local
+SDK CanvasKit assets to that owned test iframe without changing the SDK.
+
+ZIP revision: `synchronized_decoded_frame_motion_gate_v3`. Production and backend
+safety policy are unchanged by this acquisition patch. The saved blurred images
+remain invalid; only fresh synchronized captures can establish phone acceptance.
+
 ### Wireless browser diagnostic preview (2026-09-07)
 
 - Web: https://qrguard-attendance-test.onrender.com

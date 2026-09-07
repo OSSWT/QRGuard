@@ -12,3 +12,16 @@ QRGuard changes are intentionally narrow:
 
 The API reports unsupported capability on non-Android platforms. QRGuard keeps
 the upstream fallback behaviour there.
+
+Preview-only Web capture patch (`QRGUARD_DIAGNOSTIC_PREVIEW=true`):
+
+- Browser BarcodeDetector reads an immutable canvas, not the live video input.
+- BarcodeDetector and ZXing-WASM return PNG bytes from their exact decoded canvas
+  with matching dimensions. No second video snapshot is taken after decoding.
+- Stale decode completions after stop/restart are dropped; image mirroring and
+  barcode coordinates stay paired.
+- A conservative native-pixel directional-detail gate rejects severe attendance
+  motion streaks before emitting evidence. It is acquisition screening, not a
+  safety verdict. Unsupported legacy ZXing-JS must not use a late snapshot as a
+  fallback in the preview; supported auto readers are native and WASM.
+- Non-preview builds retain upstream Web behavior; Android patches are unchanged.

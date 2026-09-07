@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../services/api_client.dart';
 import '../services/attendance_capture_policy.dart';
 import '../services/capture_quality.dart';
+import '../services/capture_retry.dart';
 import '../services/history_service.dart';
 import '../services/qr_cropper.dart';
 import '../services/preview_diagnostics.dart';
@@ -142,6 +143,7 @@ class AnalysingScreen extends StatefulWidget {
     this.selectedImageBytes,
     this.cropTimeout = const Duration(seconds: 8),
     this.analysisTimeout = const Duration(seconds: 30),
+    this.captureSessionStartedAt,
   });
 
   final ApiClient api;
@@ -160,6 +162,7 @@ class AnalysingScreen extends StatefulWidget {
   final Uint8List? selectedImageBytes;
   final Duration cropTimeout;
   final Duration analysisTimeout;
+  final DateTime? captureSessionStartedAt;
 
   @override
   State<AnalysingScreen> createState() => _AnalysingScreenState();
@@ -298,11 +301,24 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
       final scan = response.withTimings({
         'client_crop_png_encode': cropTimer.elapsedMilliseconds,
         'client_http_round_trip': requestTimer.elapsedMilliseconds,
-        'client_visible_total': visibleTimer.elapsedMilliseconds,
+        'client_analysis_attempt_total': visibleTimer.elapsedMilliseconds,
+        'client_visible_total': widget.captureSessionStartedAt == null
+            ? visibleTimer.elapsedMilliseconds
+            : DateTime.now()
+                  .difference(widget.captureSessionStartedAt!)
+                  .inMilliseconds,
       });
       _requestWatchdog?.cancel();
       _slowTimer?.cancel();
       if (!mounted || runId != _runId) return;
+      if (diagnosticPreview &&
+          widget.imageSource == 'camera' &&
+          needsAttendanceCapture(scan)) {
+        Navigator.of(
+          context,
+        ).pop(CaptureRetryRequest(scan: scan, frames: imageFrames));
+        return;
+      }
       setState(() {
         _stage = 2;
         _takingLonger = false;
@@ -327,6 +343,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
         setState(() => _error = error.message);
       }
     } on _CropPreparationTimeout {
+      if (_requestFreshCapture()) return;
       if (mounted && runId == _runId) {
         setState(() {
           _error =
@@ -335,6 +352,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
         });
       }
     } on _ImageEvidenceUnavailable {
+      if (_requestFreshCapture()) return;
       if (mounted && runId == _runId) {
         setState(() {
           _error =
@@ -343,6 +361,7 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
         });
       }
     } on _InsufficientCameraFrames {
+      if (_requestFreshCapture()) return;
       if (mounted && runId == _runId) {
         setState(() {
           _error =
@@ -372,6 +391,17 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
   String get _serverTimeoutMessage =>
       'The analysis service did not respond in time. It may be waking after an '
       'idle period. Wait a moment, then try again.';
+
+  bool _requestFreshCapture() {
+    if (!mounted ||
+        !diagnosticPreview ||
+        widget.imageSource != 'camera' ||
+        !(widget.payload ?? '').startsWith('Q01:*:')) {
+      return false;
+    }
+    Navigator.of(context).pop(const CaptureRetryRequest());
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) => PopScope(

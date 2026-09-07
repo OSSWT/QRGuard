@@ -26,6 +26,9 @@ final class BarcodeDetectorReader extends PollingBarcodeReader {
   static Future<bool> isSupported() => isBarcodeDetectorSupported();
 
   NativeBarcodeDetector? _detector;
+  web.HTMLCanvasElement? _canvas;
+  @override
+  web.HTMLCanvasElement? get decodedCanvas => _canvas;
 
   /// BarcodeDetector is a native browser API, no external script to load.
   @override
@@ -49,7 +52,18 @@ final class BarcodeDetectorReader extends PollingBarcodeReader {
       return const [];
     }
 
-    final jsResults = await detector.detect(video).toDart;
+    final JSObject input;
+    if (returnSynchronizedImage) {
+      final canvas = _canvas ??= web.HTMLCanvasElement();
+      canvas
+        ..width = video.videoWidth
+        ..height = video.videoHeight;
+      canvas.context2D.drawImage(video, 0, 0);
+      input = canvas;
+    } else {
+      input = video;
+    }
+    final jsResults = await detector.detect(input).toDart;
 
     return [for (final result in jsResults.toDart) _resultToBarcode(result)];
   }
@@ -57,6 +71,7 @@ final class BarcodeDetectorReader extends PollingBarcodeReader {
   @override
   void disposeDecoder() {
     _detector = null;
+    _canvas = null;
   }
 
   NativeBarcodeDetector _buildDetector(List<BarcodeFormat> formats) {
@@ -79,9 +94,7 @@ final class BarcodeDetectorReader extends PollingBarcodeReader {
     }
 
     return NativeBarcodeDetector.withOptions(
-      BarcodeDetectorInit(
-        formats: strs.map((s) => s.toJS).toList().toJS,
-      ),
+      BarcodeDetectorInit(formats: strs.map((s) => s.toJS).toList().toJS),
     );
   }
 
