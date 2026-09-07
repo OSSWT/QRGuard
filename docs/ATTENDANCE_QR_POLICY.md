@@ -2,6 +2,34 @@
 
 ## 8014 candidate — physical acceptance pending
 
+### Wireless browser diagnostic preview (2026-09-07)
+
+- Web: https://qrguard-attendance-test.onrender.com
+- API: https://qrguard-attendance-test-api.onrender.com
+- Dedicated free API `srv-daf9s5tbedkc738c75g0` and static site
+  `srv-daf9sku7bikc73fnf1e0`; automatic deploy disabled. Production unchanged.
+- Deployment branch: `attendance-camera-test` on QRGuard-Deploy.
+- Build with `QRGUARD_DIAGNOSTIC_PREVIEW=true` and the test API URL via
+  `QRGUARD_BACKEND_URL`. Ordinary builds have no diagnostic export.
+- On the phone, open the Web URL in Chrome, allow camera access, scan the
+  original QR, then choose **Export diagnostics (ZIP)** on the result screen.
+  Consent is required before a download starts. Repeat at normal and closer
+  distances, and optionally compare Gallery with the original image.
+- Archives contain exact submitted image bytes, hashes and analysis measurements.
+  JSON omits plaintext payloads, but **the images still reveal QR tokens**.
+  Share privately only, never commit archives or images to GitHub. Images are
+  retained in the active result route, not added to scan history. Server scan
+  dumping is not enabled for this preview.
+- If acquisition cannot reach a result, send the screen message and try a closer
+  view; export is available only after a successful API response.
+- Validation: 112 Flutter tests passed; Flutter analyze clean; release Web build
+  successful. Live test API replay of the supplied original: Safe, risk 1,
+  61 modules, 7.28 pixels/module, zero outer mismatches, center logo accepted.
+  This is a Gallery replay, **not physical-camera acceptance**. Browser camera
+  evidence helps diagnose the issue; Android APK acceptance is still required.
+
+### Candidate policy and optional USB workflow
+
 The 8013 physical-phone follow-up exposed two failures: 61-module crops reported
 3.8 pixels/module, and logo-sensitive CNN results became Blocked whenever the
 strict grid check abstained. The 8013 image replays below were not physical
