@@ -26,6 +26,13 @@ and was not deployed. A bounded bilinear fit also handles a reproduced OpenCV
 bottom-right corner error of about one module. Single-module-flip negatives
 include the four persistent mismatch locations from the camera archive.
 
+Deployed preview API commit `4236d25` (2026-09-07): online replay of the private
+three-frame camera archive returned Safe/risk 1, partial_analysis=false, all
+three outer mismatch counts zero; server elapsed 5601ms. Default-mode backend
+regression: 501 passed, 3 skipped. Preview-enabled attendance suite: 42 passed.
+Production service and deployment worktree were not changed. This iteration
+does not optimize the measured 15-second browser crop preparation cost.
+
 ### Wireless browser diagnostic preview (2026-09-07)
 
 - Web: https://qrguard-attendance-test.onrender.com
