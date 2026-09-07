@@ -1,6 +1,8 @@
 /// Home scanner, explicit Scan/Gallery actions and privacy-preserving history.
 library;
 
+import '../services/preview_diagnostics.dart';
+
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -800,6 +802,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         child: Column(
                           children: [
                             _buildHeader(context),
+                            if (diagnosticPreview)
+                              const Padding(
+                                padding: EdgeInsets.only(top: 12),
+                                child: Text(
+                                  'Attendance camera test · 8014 preview\n'
+                                  'Scan the original QR, then export diagnostics on the result screen. '
+                                  'Share the ZIP privately. This is not the production release.',
+                                ),
+                              ),
                             const SizedBox(height: 20),
                             if (wide)
                               Row(

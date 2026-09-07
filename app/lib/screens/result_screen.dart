@@ -1,18 +1,29 @@
 /// Safe, Warning, Blocked and fail-closed Partial result presentations.
 library;
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/scan_response.dart';
 import '../services/api_client.dart';
+import '../services/preview_diagnostics.dart';
+import '../services/preview_download.dart';
 import '../services/duitnow_qr.dart';
 import '../services/official_app_launcher.dart';
 import '../theme.dart';
 import '../widgets/reason_card.dart';
 
 class ResultScreen extends StatefulWidget {
-  const ResultScreen({super.key, required this.scan, required this.api});
+  const ResultScreen({
+    super.key,
+    required this.scan,
+    required this.api,
+    this.diagnosticFrames = const [],
+  });
+
+  final List<Uint8List> diagnosticFrames;
 
   final ScanResponse scan;
   final ApiClient api;
@@ -22,6 +33,41 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  Future<void> _exportDiagnostics() async {
+    final consent = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Export private diagnostic images?'),
+        content: const Text(
+          'This ZIP contains the submitted QR images and analysis measurements. '
+          'The attendance token can be recovered from these images. '
+          'Download it to your device and share privately only; do not post it on GitHub.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Download ZIP'),
+          ),
+        ],
+      ),
+    );
+    if (consent != true || !mounted) return;
+    try {
+      downloadPreview(buildPreviewDiagnostics(_scan, widget.diagnosticFrames));
+    } catch (_) {
+      if (mounted)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Export failed. Please try again in Chrome.'),
+          ),
+        );
+    }
+  }
+
   late ScanResponse _scan = widget.scan;
   DeepCheckResponse? _deep;
   bool _checking = false;
@@ -85,6 +131,12 @@ class _ResultScreenState extends State<ResultScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
+            if (diagnosticPreview && widget.diagnosticFrames.isNotEmpty)
+              OutlinedButton.icon(
+                onPressed: _exportDiagnostics,
+                icon: const Icon(Icons.download_rounded),
+                label: const Text('Test build · Export diagnostics (ZIP)'),
+              ),
             _VerdictHeader(style: style),
             if (_deep?.changedScore == true) ...[
               const SizedBox(height: 10),

@@ -11,6 +11,7 @@ import '../services/attendance_capture_policy.dart';
 import '../services/capture_quality.dart';
 import '../services/history_service.dart';
 import '../services/qr_cropper.dart';
+import '../services/preview_diagnostics.dart';
 import '../theme.dart';
 import '../widgets/pulse_lens.dart';
 import 'result_screen.dart';
@@ -311,7 +312,11 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
       }
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => ResultScreen(scan: scan, api: widget.api),
+          builder: (_) => ResultScreen(
+            scan: scan,
+            api: widget.api,
+            diagnosticFrames: diagnosticPreview ? imageFrames : const [],
+          ),
         ),
       );
       if (mounted) Navigator.of(context).pop();
