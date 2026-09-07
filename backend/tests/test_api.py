@@ -486,7 +486,7 @@ class TestScan:
         assert observed["extrema"][1] >= 240
         assert body["verdict"] == "safe"
 
-    def test_hihive_camera_token_is_warning_not_blocked(
+    def test_hihive_token_cannot_clear_an_unrelated_tampered_image(
         self, client, qr_png, monkeypatch
     ):
         class ProjectorLogoAnalyzer:
@@ -500,6 +500,9 @@ class TestScan:
         monkeypatch.setattr(
             "app.pipeline.load_camera_structural", lambda: ProjectorLogoAnalyzer()
         )
+        monkeypatch.setattr(
+            "app.pipeline.load_structural", lambda: ProjectorLogoAnalyzer()
+        )
         token = (
             "Q01:*:PACkNWVoPGvQQJ0Htc32cjZdTi+na5wHs0CB9rCOeg34g41pKQdYzMgrwZOV"
             "qjZeYyQ4SLPlONzsyH+m6fku+yLQK1V/jFB4cQJp85G0JgI="
@@ -512,8 +515,8 @@ class TestScan:
         ).json()
 
         assert body["payload_type"] == "attendance"
-        assert body["verdict"] == "warning"
-        assert body["risk_score"] == load_engine().safe_max
+        assert body["verdict"] == "blocked"
+        assert body["risk_score"] >= load_engine().blocked_min
         assert body["partial_analysis"] is False
         assert any("official app" in reason for reason in body["reasons"])
 

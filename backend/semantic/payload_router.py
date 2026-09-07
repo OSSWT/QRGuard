@@ -120,7 +120,7 @@ def route_payload(payload: str) -> PayloadInfo:
 
     lowered = raw.lower()
 
-    if _HIHIVE_ATTENDANCE.fullmatch(raw):
+    if not truncated and _HIHIVE_ATTENDANCE.fullmatch(raw):
         return PayloadInfo(payload_type="attendance", raw=raw, truncated=truncated)
 
     # Merchant-presented DuitNow uses the EMV TLV format rather than a

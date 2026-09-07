@@ -16,7 +16,7 @@ opencv-python-headless==5.0.0.93  # Server-side QR decoding without GUI librarie
 # Dev / test
 pytest>=8
 respx>=0.22
-qrcode>=7               # generates QR images in structural tests
+qrcode>=7,<9            # attendance grid verification and structural test QRs
 scikit-learn>=1.5           # fusion meta-classifier
 pandas>=2.0                 # dataset scripts
 

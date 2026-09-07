@@ -722,6 +722,40 @@ def run_scan(
     )
     semantic_ms = int((time.perf_counter() - semantic_started) * 1000)
 
+    structural_method = "cnn"
+    structural_raw_type = structural.predicted_type
+    attendance_checked = False
+    attendance_check_started = time.perf_counter()
+    if (
+        sem.info.payload_type == "attendance"
+        and structural_status == "completed"
+        and not structural.rescan_reason
+        and structural.predicted_type in {"clean", "tampered"}
+        and image_list
+    ):
+        from structural.attendance_grid import check_attendance_grid
+
+        selected = image_list[:1] if source != "camera" else image_list[:5]
+        checks = [check_attendance_grid(frame, sem.info.raw) for frame in selected]
+        attendance_checked = all(check.passed for check in checks) and (
+            structural.predicted_type == "clean"
+            or all(check.central_logo for check in checks)
+        )
+        if attendance_checked:
+            # This zero is a deterministic absence of module mismatch outside
+            # the allowed logo, NOT a recalibrated CNN probability. Preserve
+            # the actual CNN score and class explicitly in the response.
+            structural_method = "attendance_grid_v1"
+            structural = replace(
+                structural,
+                effective=0.0,
+                predicted_type="clean",
+                confirmed_manipulation=False,
+            )
+            p_structural = 0.0
+            structural_type = "clean"
+    attendance_check_ms = int((time.perf_counter() - attendance_check_started) * 1000)
+
     fusion_started = time.perf_counter()
     engine = load_engine()
     fusion = engine.predict(
@@ -829,18 +863,22 @@ def run_scan(
         if payment_reason not in reasons:
             reasons.append(payment_reason)
 
-    # hi-hive attendance QR values are opaque app tokens, not web destinations.
-    # QRGuard can recognise the envelope but cannot authenticate or redeem it.
-    # Never claim Safe, and never let projector/logo artefacts prevent the user
-    # from handing control to the official hi-hive app for a fresh scan.
+    # Recognising a token prefix alone cannot clear its image. The independent
+    # attendance grid check may clear normal central branding; inconclusive or
+    # mismatched evidence retains caution and confirmed attacks retain Blocked.
+    # Token authenticity, expiry and attendance submission belong to hi-hive.
     if sem.info.payload_type == "attendance":
-        verdict = "warning"
-        risk_score = engine.safe_max
+        if not attendance_checked and verdict == "safe":
+            verdict = "warning"
+            risk_score = max(risk_score, engine.safe_max)
         attendance_reason = (
-            "Recognised hi-hive attendance format; verify it in the official app"
+            "Attendance QR image matches its decoded content outside the allowed central logo"
+            if attendance_checked
+            else "Attendance image checks did not pass; verify the original QR in the official app"
         )
         if attendance_reason not in reasons:
             reasons.append(attendance_reason)
+        reasons.append("Use the official hi-hive app to verify validity and complete attendance")
 
     policy_ms = int((time.perf_counter() - policy_started) * 1000)
     total_ms = int((time.perf_counter() - started) * 1000)
@@ -858,6 +896,8 @@ def run_scan(
             structural_status=structural_status,
             p_structural_raw=p_structural_raw,
             structural_type=structural_type,
+            structural_raw_type=structural_raw_type,
+            structural_method=structural_method,
             structural_quality_status=structural.quality_status,
             structural_quality_conditions=list(structural.quality_conditions),
             structural_rescan_reason=structural.rescan_reason,
@@ -890,6 +930,7 @@ def run_scan(
             "structural_inference": structural_ms,
             "payload_decode": payload_decode_ms,
             "semantic_inference": semantic_ms,
+            "attendance_grid_check": attendance_check_ms,
             "fusion": fusion_ms,
             "policy": policy_ms,
             "pipeline_total": total_ms,

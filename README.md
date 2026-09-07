@@ -122,8 +122,11 @@ are under `ml_training/*/performance/`.
   fails, ask the user to rescan instead of silently degrading to URL-only Partial.
 - An open or WEP Wi-Fi payload always has a Warning floor. It is not labelled fraud
   merely because the network is open.
-- Recognise the narrow `Q01:*:` hi-hive attendance envelope as an opaque token,
-  report Warning, and open only the official app for the user to scan again.
+- Recognise the narrow `Q01:*:` hi-hive attendance envelope as an opaque token.
+  Return Safe only after payload-bound QR grid checks clear the image and its
+  central branding; preserve uncertain/failed checks and original CNN evidence.
+  The official app validates the token and completes attendance. See
+  [attendance policy](docs/ATTENDANCE_QR_POLICY.md).
 
 ## Canonical project layout
 
@@ -211,7 +214,7 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.2.0+8012`.
+The checked Android version is `1.2.0+8013`.
 
 Release `1.2.0+8012` is built, signed and deployed to the production endpoint. Its
 APK is 73,462,225 bytes with SHA-256

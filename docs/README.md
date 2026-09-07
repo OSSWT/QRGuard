@@ -4,6 +4,7 @@ This directory contains current supporting documentation that is not duplicated
 by the repository README or the canonical ML evidence index.
 
 - [Live-camera repeatability study](LIVE_CAMERA_REPEATABILITY_STUDY.md)
+- [Attendance QR design checks](ATTENDANCE_QR_POLICY.md)
 - [Live-camera and ML recovery runbook](ML_RECOVERY_RUNBOOK.md)
 - [Reference verification log](REFERENCE_VERIFICATION.md)
 

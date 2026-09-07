@@ -32,6 +32,10 @@ class BranchScores(BaseModel):
     structural_type: Optional[str] = Field(
         None, description="clean | adversarial | tampered"
     )
+    structural_raw_type: Optional[str] = Field(
+        None, description="CNN class before attendance design handling"
+    )
+    structural_method: Literal["cnn", "attendance_grid_v1"] = "cnn"
     structural_quality_status: Optional[str] = Field(
         None, description="usable | marginal | unusable for the unified candidate"
     )

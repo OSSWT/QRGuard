@@ -136,6 +136,8 @@ class HistoryService {
         'p_structural': branch.pStructural,
         'p_structural_raw': branch.pStructuralRaw,
         'structural_type': branch.structuralType,
+        'structural_raw_type': branch.structuralRawType,
+        'structural_method': branch.structuralMethod,
         'structural_quality_status': branch.structuralQualityStatus,
         'structural_quality_conditions': branch.structuralQualityConditions,
         'structural_rescan_reason': branch.structuralRescanReason,
@@ -254,6 +256,9 @@ class HistoryService {
 List<String> _privacySafeReasons(ScanResponse scan) {
   final reasons = <String>[];
   final branch = scan.branchScores;
+  if (branch.structuralMethod == 'attendance_grid_v1') {
+    reasons.add('Attendance QR grid checked; central logo allowed');
+  }
   if (branch.structuralType == 'adversarial') {
     reasons.add('QR image appears adversarial');
   } else if (branch.structuralType == 'tampered') {

@@ -56,6 +56,7 @@ app/build/
 app/.dart_tool/
 app/.gradle/
 app/android/.gradle/
+app/android/.kotlin/
 app/*.iml
 app/android/local.properties
 app/android/key.properties

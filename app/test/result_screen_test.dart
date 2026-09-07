@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:qrguard/models/scan_response.dart';
 import 'package:qrguard/screens/result_screen.dart';
 import 'package:qrguard/services/api_client.dart';
+import 'package:qrguard/services/history_service.dart';
 import 'package:qrguard/theme.dart';
 
 void main() {
@@ -301,6 +302,59 @@ void main() {
     expect(find.text('hi-hive attendance QR'), findsOneWidget);
     expect(find.text('Open hi-hive to scan again'), findsOneWidget);
     expect(find.textContaining('PACkNWVo'), findsNothing);
+    expect(find.textContaining('domain and full URL'), findsNothing);
+  });
+
+  testWidgets('Safe attendance shows grid evidence and preserves history', (
+    tester,
+  ) async {
+    final scan = ScanResponse.fromJson({
+      'verdict': 'safe',
+      'risk_score': 1,
+      'payload_type': 'attendance',
+      'payload': 'Q01:*:${'A' * 128}',
+      'partial_analysis': false,
+      'elapsed_ms': 100,
+      'branch_scores': {
+        'p_structural': 0.0,
+        'p_structural_raw': 0.9994,
+        'structural_type': 'clean',
+        'structural_raw_type': 'tampered',
+        'structural_method': 'attendance_grid_v1',
+        'structural_status': 'completed',
+        'semantic_status': 'not_applicable',
+      },
+    });
+    await pumpResult(tester, scan);
+    expect(find.text('Safe'), findsOneWidget);
+    expect(find.text('Open hi-hive'), findsOneWidget);
+    expect(
+      find.textContaining('verify validity and complete attendance'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('domain and full URL'), findsNothing);
+    await tester.tap(find.text('Details'));
+    await tester.pumpAndSettle();
+    expect(find.text('Passed'), findsOneWidget);
+    expect(find.text('QR grid checked · Central logo allowed'), findsOneWidget);
+    expect(
+      find.textContaining('Raw image model: tampered (1.00)'),
+      findsOneWidget,
+    );
+    final snapshot = HistoryService.snapshotForStorage(scan);
+    expect(snapshot, isNot(contains('Q01:*:')));
+    final stored = ScanRecord(
+      payloadHash: 'test',
+      verdict: 'safe',
+      riskScore: 1,
+      scannedAt: DateTime(2026, 9, 7),
+      analysisSnapshot: snapshot,
+    ).storedAnalysis!;
+    expect(stored.verdict, Verdict.safe);
+    expect(stored.branchScores.structuralMethod, 'attendance_grid_v1');
+    expect(stored.branchScores.structuralRawType, 'tampered');
+    expect(stored.branchScores.pStructuralRaw, 0.9994);
+    expect(stored.reasons, isNot(contains('QR image appears manipulated')));
   });
 
   testWidgets('Wi-Fi QR is a complete non-URL result, not Partial', (

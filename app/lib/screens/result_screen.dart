@@ -162,6 +162,24 @@ class _ResultScreenState extends State<ResultScreen> {
           'before opening or using the payload.';
     }
     final evidence = _summaryEvidence;
+    if (_isHiHive) {
+      return switch (_kind) {
+        _ResultKind.safe =>
+          'QRGuard recognised the hi-hive attendance format and the QR image '
+              'passed its content and central-logo checks. Open the official '
+              'hi-hive app to verify validity and complete attendance.',
+        _ResultKind.warning =>
+          'QRGuard recognised the hi-hive attendance format, but could not '
+              'clear the QR image. $evidence Verify the original attendance '
+              'QR with the organiser and the official hi-hive app.',
+        _ResultKind.blocked =>
+          'The attendance QR image shows strong manipulation indicators. '
+              '$evidence Ask the organiser for the original attendance QR.',
+        _ResultKind.partial =>
+          'QRGuard could not complete the attendance QR checks. $evidence '
+              'Capture a clearer image of the original QR and scan again.',
+      };
+    }
     return switch (_kind) {
       _ResultKind.safe =>
         _scan.isUrl

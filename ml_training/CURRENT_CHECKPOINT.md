@@ -34,7 +34,10 @@ is still pending.
 - Poor focus, motion, glare, exposure or insufficient detail returns Rescan
   instead of Safe.
 - A Structural Rescan cannot be bypassed by Deep Check or a proceed action.
-- Confirmed non-clean Structural evidence remains at least Blocked.
+- Confirmed non-clean Structural evidence normally remains Blocked. Explicit
+  payload policies apply: verified DuitNow hand-off retains Warning, while the
+  [attendance design check](../docs/ATTENDANCE_QR_POLICY.md) can resolve a central
+  logo false positive without changing the CNN artifact or its recorded output.
 
 ## Controlled calibration result
 

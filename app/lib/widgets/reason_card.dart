@@ -289,7 +289,9 @@ class BranchEvidence extends StatelessWidget {
                 _MetricTile(
                   width: width,
                   label: 'Structural',
-                  value: branch.pStructural?.toStringAsFixed(2) ?? '—',
+                  value: branch.structuralMethod == 'attendance_grid_v1'
+                      ? 'Passed'
+                      : branch.pStructural?.toStringAsFixed(2) ?? '—',
                   detail: _structuralDetail(branch),
                 ),
                 _MetricTile(
@@ -308,6 +310,18 @@ class BranchEvidence extends StatelessWidget {
             );
           },
         ),
+        if (branch.structuralMethod == 'attendance_grid_v1') ...[
+          const SizedBox(height: 10),
+          Text(
+            'Raw image model: ${branch.structuralRawType ?? 'unknown'} '
+            '(${branch.pStructuralRaw?.toStringAsFixed(2) ?? '—'}). '
+            'The attendance grid check accounts for the central logo.',
+            style: TextStyle(
+              color: context.qrColors.secondaryText,
+              fontSize: 12,
+            ),
+          ),
+        ],
         if (branch.llmScore != null) ...[
           const SizedBox(height: 10),
           _EvidenceRow(
@@ -376,17 +390,19 @@ class BranchEvidence extends StatelessWidget {
   }
 
   String _structuralDetail(BranchScores branch) =>
-      switch (branch.structuralStatus) {
-        AnalysisStatus.completed =>
-          branch.structuralFramesAnalyzed >= 3
-              ? '${branch.structuralType ?? 'Analysed'} · '
-                    '${branch.structuralFramesAnalyzed}-frame consensus'
-              : branch.structuralType ?? 'Analysed',
-        AnalysisStatus.notApplicable => 'Not applicable',
-        AnalysisStatus.unavailable => 'Unavailable',
-        AnalysisStatus.inconclusive =>
-          branch.structuralRescanReason ?? 'Rescan required',
-      };
+      branch.structuralMethod == 'attendance_grid_v1'
+      ? 'QR grid checked · Central logo allowed'
+      : switch (branch.structuralStatus) {
+          AnalysisStatus.completed =>
+            branch.structuralFramesAnalyzed >= 3
+                ? '${branch.structuralType ?? 'Analysed'} · '
+                      '${branch.structuralFramesAnalyzed}-frame consensus'
+                : branch.structuralType ?? 'Analysed',
+          AnalysisStatus.notApplicable => 'Not applicable',
+          AnalysisStatus.unavailable => 'Unavailable',
+          AnalysisStatus.inconclusive =>
+            branch.structuralRescanReason ?? 'Rescan required',
+        };
 
   String _semanticDetail(BranchScores branch, String payloadType) =>
       switch (branch.semanticStatus) {

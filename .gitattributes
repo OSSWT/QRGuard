@@ -1,3 +1,6 @@
 # Preserve the vendored upstream package byte-for-byte; its historical files
 # contain whitespace that is unrelated to QRGuard's local patch.
 app/packages/mobile_scanner/** -whitespace
+
+# The demo manifest is hashed byte-for-byte; Windows checkout must preserve LF.
+ml_training/datasets/qr_codes_demo/MANIFEST.json text eol=lf

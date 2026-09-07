@@ -26,7 +26,8 @@ def test_container_uses_production_only_dependencies():
 
     assert "requirements-prod.txt" in dockerfile
     assert "opencv-python-headless" in requirements.lower()
-    for development_package in ("pytest", "respx", "qrcode", "pandas"):
+    assert "qrcode>=7,<9" in requirements  # attendance grid reconstruction
+    for development_package in ("pytest", "respx", "pandas"):
         assert development_package not in requirements.lower()
 
 
