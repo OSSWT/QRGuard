@@ -59,12 +59,13 @@ class _ResultScreenState extends State<ResultScreen> {
     try {
       downloadPreview(buildPreviewDiagnostics(_scan, widget.diagnosticFrames));
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Export failed. Please try again in Chrome.'),
           ),
         );
+      }
     }
   }
 
