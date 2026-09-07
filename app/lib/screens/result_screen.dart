@@ -104,7 +104,8 @@ class _ResultScreenState extends State<ResultScreen> {
     };
   }
 
-  VerdictStyle _style(BuildContext context) => _requiresStructuralRescan
+  VerdictStyle _style(BuildContext context) =>
+      diagnosticPreview && _requiresStructuralRescan
       ? VerdictStyle(
           color: context.qrColors.warning,
           surface: context.qrColors.warningSurface,

@@ -7,6 +7,7 @@ unreadable captures abstain. No reference image or attendance token is stored.
 """
 
 from dataclasses import dataclass, replace
+import os
 
 import cv2
 import numpy as np
@@ -29,6 +30,8 @@ class AttendanceGridCheck:
     outside_mismatches: int | None = None
     image_width: int | None = None
     image_height: int | None = None
+    sampling_method: str = "decoder_grid"
+    decoder_outside_mismatches: int | None = None
 
 
 def check_attendance_grid(image, payload: str) -> AttendanceGridCheck:
@@ -109,10 +112,21 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     outside = np.ones((n, n), dtype=bool)
     outside[lo:hi, lo:hi] = False
     mismatch_count = int(difference[outside].sum())
+    decoder_mismatches = mismatch_count
+    sampling_method = "decoder_grid"
+    # Preview-only experiment. Production defaults to the unchanged verifier.
+    if mismatch_count and os.getenv("QRGUARD_ATTENDANCE_REGISTERED_SAMPLING") == "1":
+        from structural.registered_sampling import sample_registered_grid
+        registered = sample_registered_grid(gray, corners, n)
+        if registered is not None:
+            difference = registered != np.asarray(qr.get_matrix(), dtype=bool)
+            mismatch_count = int(difference[outside].sum())
+            sampling_method = "fixed_pattern_registration_preview_v1"
     if mismatch_count:
         # Sampling errors and unsupported encoder segmentation also cause this.
         # A mismatch is not, by itself, proof of an attack.
-        return uncertain("outer_grid_difference", mismatch_count)
+        return replace(uncertain("outer_grid_difference", mismatch_count),
+            sampling_method=sampling_method, decoder_outside_mismatches=decoder_mismatches)
 
     # Retain colour evidence: binarising a coloured overlay alone would hide it.
     side = n * 6
@@ -135,4 +149,5 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     return AttendanceGridCheck(
         passed=True, central_logo=logo, reason="passed", module_count=n,
         pixels_per_module=pixels_per_module, outside_mismatches=0,
+        sampling_method=sampling_method, decoder_outside_mismatches=decoder_mismatches,
     )

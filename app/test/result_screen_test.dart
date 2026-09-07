@@ -334,7 +334,9 @@ void main() {
         },
       });
       await pumpResult(tester, scan);
-      expect(find.text('Rescan needed'), findsOneWidget);
+      // Rescan needed is a diagnostic-preview label, never a release label.
+      expect(find.text('Rescan needed'), findsNothing);
+      expect(find.text('Partial analysis'), findsWidgets);
       expect(find.text('Blocked'), findsNothing);
       expect(find.text('Override blocked URL'), findsNothing);
       await tester.tap(find.text('Details'));

@@ -2,6 +2,30 @@
 
 ## 8014 candidate — physical acceptance pending
 
+Release constraint from user (2026-09-07): **Rescan needed is testing-only**.
+Do not promote the current preview state/presentation to production. Removing
+this testing presentation must not turn unavailable evidence into Safe. Final
+production handling requires resolution and acceptance of the camera issue.
+
+Private camera archive follow-up: three 707/708px inputs passed payload binding
+and reported about 8.8px/module but failed exact outer-grid comparison at
+7/18/10 modules. Client preparation was 15080ms of 18124ms total. Investigate
+sampling/geometry and capture performance; do not simply permit N mismatches.
+
+Preview sampling follow-up: `QRGUARD_ATTENDANCE_REGISTERED_SAMPLING=1` enables
+bounded geometric registration fitted only to standard finder/alignment/timing
+patterns, never the payload's data modules. It is OFF by default. Reconstructed
+outer data still requires zero differences; payload binding, quality, colour,
+logo bounds and adversarial policy remain. Diagnostics retain the original
+decoder mismatch count plus the sampling method. The private three-frame replay
+passes with zero outer differences after registration. This is replay evidence,
+not new physical-camera acceptance. The user must rescan on the test site.
+
+The first global/affine prototype did not generalize to clean synthetic inputs
+and was not deployed. A bounded bilinear fit also handles a reproduced OpenCV
+bottom-right corner error of about one module. Single-module-flip negatives
+include the four persistent mismatch locations from the camera archive.
+
 ### Wireless browser diagnostic preview (2026-09-07)
 
 - Web: https://qrguard-attendance-test.onrender.com
