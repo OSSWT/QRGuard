@@ -23,7 +23,7 @@ import os
 import time
 from collections import Counter
 from collections.abc import Sequence
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 from statistics import median
 from typing import Optional
 
@@ -725,6 +725,8 @@ def run_scan(
     structural_method = "cnn"
     structural_raw_type = structural.predicted_type
     attendance_checked = False
+    attendance_checks = []
+    attendance_payload_mismatch = False
     attendance_check_started = time.perf_counter()
     if (
         sem.info.payload_type == "attendance"
@@ -737,6 +739,8 @@ def run_scan(
 
         selected = image_list[:1] if source != "camera" else image_list[:5]
         checks = [check_attendance_grid(frame, sem.info.raw) for frame in selected]
+        attendance_checks = [asdict(check) for check in checks]
+        attendance_payload_mismatch = any(check.payload_mismatch for check in checks)
         attendance_checked = all(check.passed for check in checks) and (
             structural.predicted_type == "clean"
             or all(check.central_logo for check in checks)
@@ -754,6 +758,21 @@ def run_scan(
             )
             p_structural = 0.0
             structural_type = "clean"
+        elif not attendance_payload_mismatch:
+            # A logo-sensitive CNN plus an inconclusive design check does not
+            # establish tampering. Keep the raw model evidence, abstain, and
+            # ask for another capture rather than inventing either Safe or Blocked.
+            structural_status = "inconclusive"
+            p_structural = None
+            structural_type = None
+            structural = replace(
+                structural, effective=None, predicted_type=None,
+                confirmed_manipulation=False,
+                rescan_reason=(
+                    "The attendance image could not be verified reliably. "
+                    "Move closer, reduce glare and scan the original QR again."
+                ),
+            )
     attendance_check_ms = int((time.perf_counter() - attendance_check_started) * 1000)
 
     fusion_started = time.perf_counter()
@@ -868,6 +887,10 @@ def run_scan(
     # mismatched evidence retains caution and confirmed attacks retain Blocked.
     # Token authenticity, expiry and attendance submission belong to hi-hive.
     if sem.info.payload_type == "attendance":
+        if attendance_payload_mismatch:
+            verdict = "blocked"
+            risk_score = max(risk_score, engine.blocked_min)
+            reasons = ["The QR image contains different content from the submitted attendance token"]
         if not attendance_checked and verdict == "safe":
             verdict = "warning"
             risk_score = max(risk_score, engine.safe_max)
@@ -898,6 +921,7 @@ def run_scan(
             structural_type=structural_type,
             structural_raw_type=structural_raw_type,
             structural_method=structural_method,
+            attendance_checks=attendance_checks,
             structural_quality_status=structural.quality_status,
             structural_quality_conditions=list(structural.quality_conditions),
             structural_rescan_reason=structural.rescan_reason,

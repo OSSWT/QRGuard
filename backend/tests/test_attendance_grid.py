@@ -139,6 +139,44 @@ def test_clean_unbranded_attendance_passes(monkeypatch):
     assert run_scan(payload, image=image, image_source="gallery").verdict == "safe"
 
 
+def test_outer_sampling_difference_is_inconclusive_not_confirmed_attack(monkeypatch):
+    fake_model(monkeypatch, "tampered")
+    payload, image = attendance_image()
+    x = y = (4 + 20) * 8
+    colour = "white" if image.getpixel((x + 4, y + 4))[0] < 128 else "black"
+    ImageDraw.Draw(image).rectangle((x, y, x + 7, y + 7), fill=colour)
+    result = run_scan(payload, image=image, image_source="gallery")
+    assert result.verdict == "warning"
+    assert result.partial_analysis
+    assert result.branch_scores.structural_status == "inconclusive"
+    assert result.branch_scores.p_structural is None
+    assert result.branch_scores.p_structural_raw == 0.999
+    assert result.branch_scores.structural_raw_type == "tampered"
+    diagnostic = result.branch_scores.attendance_checks[0]
+    assert diagnostic["reason"] == "outer_grid_difference"
+    assert diagnostic["outside_mismatches"] == 1
+    assert diagnostic["image_width"] == 552
+    assert not any("confirmed QR manipulation" in reason for reason in result.reasons)
+
+
+def test_unreadable_frame_abstains_with_specific_reason(monkeypatch):
+    fake_model(monkeypatch, "tampered")
+    payload, image = attendance_image()
+    image = Image.new("RGB", image.size, "white")
+    result = run_scan(payload, image=image, image_source="gallery")
+    assert result.verdict == "warning"
+    assert result.branch_scores.attendance_checks[0]["reason"] == "image_quality"
+
+
+def test_content_mismatch_blocks_even_when_cnn_says_clean(monkeypatch):
+    fake_model(monkeypatch, "clean")
+    payload, _ = attendance_image(5)
+    _, image = attendance_image(6)
+    result = run_scan(payload, image=image, image_source="gallery")
+    assert result.verdict == "blocked"
+    assert result.branch_scores.attendance_checks[0]["reason"] == "payload_mismatch"
+
+
 @pytest.mark.parametrize("source", ["gallery", "camera"])
 def test_real_api_decodes_and_checks_attendance(monkeypatch, source):
     from io import BytesIO

@@ -11,6 +11,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../app_controller.dart';
 import '../services/api_client.dart';
+import '../services/attendance_capture_policy.dart';
 import '../services/camera_exposure_policy.dart';
 import '../services/capture_quality.dart';
 import '../services/history_service.dart';
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     // work on older phones. A successful QR decode already includes checksum/
     // error-correction validation, so Home does not need three more sightings.
     detectionTimeoutMs: 100,
-    cameraResolution: const Size(1280, 720),
+    cameraResolution: const Size(1920, 1080),
     // Emulator webcams are commonly exposed as an external lens. `normal`
     // filters them out and makes mobile_scanner report "No cameras available".
     // `any` still starts the back camera on phones while keeping webcam-backed
@@ -83,7 +84,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   // prepares and uploads the first three geometry-ranked crops that actually
   // meet the 256 px deployment boundary, then the backend forms consensus.
   static const _maximumLiveCandidates = 5;
-  static const _minimumStructuralCropSide = 256.0;
 
   @override
   void initState() {
@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       imageSource: 'camera',
     );
     if (nextCandidate.hasUsableGeometry &&
-        nextCandidate.estimatedCropSide < _minimumStructuralCropSide) {
+        nextCandidate.estimatedCropSide < minimumCameraCropSide(payload)) {
       _autoPromptTimer?.cancel();
       _scheduledPromptPayload = null;
       _stability.reset();
@@ -1148,7 +1148,12 @@ class _Candidate {
         ),
       );
     }
-    return edges.reduce((left, right) => left + right) / edges.length * 1.30;
+    // Match the cropper's frame-size ceiling and reject severely foreshortened
+    // QR edges before analysis; digital rectification cannot create detail.
+    return math.min(
+      edges.reduce(math.min) * 1.30,
+      math.min(frameSize.width, frameSize.height),
+    );
   }
 
   double get quality {

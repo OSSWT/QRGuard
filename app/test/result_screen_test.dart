@@ -305,6 +305,71 @@ void main() {
     expect(find.textContaining('domain and full URL'), findsNothing);
   });
 
+  testWidgets(
+    'inconclusive attendance explains the failed frame without Blocked',
+    (tester) async {
+      final scan = ScanResponse.fromJson({
+        'verdict': 'warning',
+        'risk_score': 26,
+        'payload_type': 'attendance',
+        'payload': 'Q01:*:${'A' * 128}',
+        'partial_analysis': true,
+        'elapsed_ms': 100,
+        'branch_scores': {
+          'structural_status': 'inconclusive',
+          'semantic_status': 'not_applicable',
+          'p_structural_raw': 0.999,
+          'structural_raw_type': 'tampered',
+          'structural_rescan_reason':
+              'The attendance image could not be verified reliably.',
+          'attendance_checks': [
+            {
+              'reason': 'outer_grid_difference',
+              'outside_mismatches': 1,
+              'image_width': 552,
+              'image_height': 552,
+              'pixels_per_module': 7.8,
+            },
+          ],
+        },
+      });
+      await pumpResult(tester, scan);
+      expect(find.text('Rescan needed'), findsOneWidget);
+      expect(find.text('Blocked'), findsNothing);
+      expect(find.text('Override blocked URL'), findsNothing);
+      await tester.tap(find.text('Details'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('1 differing outer modules'), findsOneWidget);
+      final snapshot = HistoryService.snapshotForStorage(scan);
+      expect(snapshot, contains('outer_grid_difference'));
+      expect(snapshot, isNot(contains('Q01:*:')));
+    },
+  );
+
+  testWidgets(
+    'blocked attendance opens an official-app confirmation, not a URL override',
+    (tester) async {
+      await pumpResult(
+        tester,
+        _scan(
+          verdict: Verdict.blocked,
+          risk: 90,
+          payloadType: 'attendance',
+          payload: 'Q01:*:${'A' * 128}',
+        ),
+      );
+      expect(find.text('Override blocked URL'), findsNothing);
+      await tester.ensureVisible(find.text('Open official hi-hive app'));
+      await tester.tap(find.text('Open official hi-hive app'));
+      await tester.pumpAndSettle();
+      expect(find.text('Open the official hi-hive app?'), findsOneWidget);
+      expect(
+        find.textContaining('Opening it may expose you to phishing'),
+        findsNothing,
+      );
+    },
+  );
+
   testWidgets('Safe attendance shows grid evidence and preserves history', (
     tester,
   ) async {

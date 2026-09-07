@@ -57,7 +57,15 @@ class _ResultScreenState extends State<ResultScreen> {
     };
   }
 
-  VerdictStyle _style(BuildContext context) => _kind == _ResultKind.partial
+  VerdictStyle _style(BuildContext context) => _requiresStructuralRescan
+      ? VerdictStyle(
+          color: context.qrColors.warning,
+          surface: context.qrColors.warningSurface,
+          icon: Icons.center_focus_strong_rounded,
+          label: 'Rescan needed',
+          headline: 'The captured image could not be verified reliably',
+        )
+      : _kind == _ResultKind.partial
       ? VerdictStyle.partial(context)
       : VerdictStyle.of(context, _scan.verdict);
 
@@ -404,10 +412,14 @@ class _ResultScreenState extends State<ResultScreen> {
       widgets.add(
         TextButton.icon(
           key: const ValueKey('blocked_override'),
-          onPressed: _confirmBlockedOverride,
+          onPressed: _isHiHive
+              ? _confirmWarningProceed
+              : _confirmBlockedOverride,
           icon: Icon(Icons.warning_amber_rounded, color: style.color, size: 18),
           label: Text(
-            _duitNow == null
+            _isHiHive
+                ? 'Open official hi-hive app'
+                : _duitNow == null
                 ? 'Override blocked URL'
                 : 'Override blocked payment QR',
             style: TextStyle(color: style.color),

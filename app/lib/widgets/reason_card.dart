@@ -310,6 +310,17 @@ class BranchEvidence extends StatelessWidget {
             );
           },
         ),
+        if (branch.attendanceChecks.isNotEmpty) ...[
+          const SizedBox(height: 10),
+          for (var index = 0; index < branch.attendanceChecks.length; index++)
+            Text(
+              'Frame ${index + 1}: ${_attendanceCheckDetail(branch.attendanceChecks[index])}',
+              style: TextStyle(
+                color: context.qrColors.secondaryText,
+                fontSize: 12,
+              ),
+            ),
+        ],
         if (branch.structuralMethod == 'attendance_grid_v1') ...[
           const SizedBox(height: 10),
           Text(
@@ -386,6 +397,30 @@ class BranchEvidence extends StatelessWidget {
       'Server $server ms',
       if (crop != null) 'Crop/PNG $crop ms',
       if (total != null) 'Total $total ms',
+    ].join(' · ');
+  }
+
+  String _attendanceCheckDetail(Map<String, dynamic> check) {
+    final reason = switch (check['reason']) {
+      'passed' => 'Image and content checks passed',
+      'payload_mismatch' => 'Image content differs from submitted content',
+      'image_quality' => 'Insufficient image quality',
+      'decode_unavailable' => 'Could not independently read this frame',
+      'insufficient_module_scale' => 'QR detail is too small',
+      'format_uncertain' => 'QR format could not be confirmed',
+      'outer_grid_difference' => 'QR grid could not be matched reliably',
+      'outer_colour_difference' => 'Colour outside the logo needs verification',
+      'central_design_unsupported' => 'Central design could not be verified',
+      _ => 'Image verification was inconclusive',
+    };
+    final scale = check['pixels_per_module'];
+    final differences = check['outside_mismatches'];
+    return [
+      reason,
+      if (check['image_width'] is num && check['image_height'] is num)
+        '${check['image_width']} × ${check['image_height']} px crop',
+      if (scale is num) '${scale.toStringAsFixed(1)} pixels per module',
+      if (differences is num) '$differences differing outer modules',
     ].join(' · ');
   }
 

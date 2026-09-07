@@ -6,7 +6,7 @@ every module outside a bounded central logo to match. Unsupported encodings or
 unreadable captures abstain. No reference image or attendance token is stored.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import cv2
 import numpy as np
@@ -22,9 +22,21 @@ from structural.qr_decoder import _rescue_views
 class AttendanceGridCheck:
     passed: bool = False
     central_logo: bool = False
+    reason: str = "not_checked"
+    payload_mismatch: bool = False
+    module_count: int | None = None
+    pixels_per_module: float | None = None
+    outside_mismatches: int | None = None
+    image_width: int | None = None
+    image_height: int | None = None
 
 
 def check_attendance_grid(image, payload: str) -> AttendanceGridCheck:
+    result = _check_attendance_grid(image, payload)
+    return replace(result, image_width=image.width, image_height=image.height)
+
+
+def _check_attendance_grid(image, payload: str) -> AttendanceGridCheck:
     """Accept only readable, sufficiently detailed, matching attendance images.
 
 The logo allowance is at most the central 30% of the symbol side, rounded
@@ -33,9 +45,9 @@ coloured central graphic. Even one changed module outside it rejects the
 allowance. Adversarial CNN evidence is handled separately by the caller.
 """
     if route_payload(payload).payload_type != "attendance":
-        return AttendanceGridCheck()
+        return AttendanceGridCheck(reason="unsupported_payload")
     if not assess_image_quality(image).usable:
-        return AttendanceGridCheck()
+        return AttendanceGridCheck(reason="image_quality")
     rgb = np.asarray(image.convert("RGB"))
     gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
     decoded, points, straight = "", None, None
@@ -48,15 +60,23 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
         if decoded:
             points = points / scale if points is not None else None
             break
-    if decoded != payload or points is None or straight is None:
-        return AttendanceGridCheck()
+    if decoded and decoded != payload:
+        return AttendanceGridCheck(reason="payload_mismatch", payload_mismatch=True)
+    if not decoded or points is None or straight is None:
+        return AttendanceGridCheck(reason="decode_unavailable")
     n = len(straight)
     if straight.shape != (n, n) or not 21 <= n <= 177 or (n - 17) % 4:
-        return AttendanceGridCheck()
+        return AttendanceGridCheck(reason="grid_unavailable")
     corners = np.asarray(points, dtype=np.float32).reshape(4, 2)
     edges = np.linalg.norm(corners - np.roll(corners, -1, axis=0), axis=1)
-    if np.min(edges) / n < 5:
-        return AttendanceGridCheck()
+    pixels_per_module = float(np.min(edges) / n)
+    def uncertain(reason, mismatches=None):
+        return AttendanceGridCheck(
+            reason=reason, module_count=n, pixels_per_module=pixels_per_module,
+            outside_mismatches=mismatches,
+        )
+    if pixels_per_module < 5:
+        return uncertain("insufficient_module_scale")
     observed = straight < 128
 
     # Both redundant format strings must be intact. These positions mirror
@@ -74,7 +94,7 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
         if BCH_type_info(value) == vertical == horizontal
     ]
     if len(formats) != 1:
-        return AttendanceGridCheck()
+        return uncertain("format_uncertain")
     ecc, mask = formats[0] >> 3, formats[0] & 7
     qr = qrcode.QRCode(
         version=(n - 17) // 4, error_correction=ecc, border=0, mask_pattern=mask
@@ -83,13 +103,16 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     try:
         qr.make(fit=False)
     except qrcode.exceptions.DataOverflowError:
-        return AttendanceGridCheck()
+        return uncertain("encoding_unsupported")
     difference = observed != np.asarray(qr.get_matrix(), dtype=bool)
     lo, hi = int(n * 0.35), int(np.ceil(n * 0.65))
     outside = np.ones((n, n), dtype=bool)
     outside[lo:hi, lo:hi] = False
-    if difference[outside].any():
-        return AttendanceGridCheck()
+    mismatch_count = int(difference[outside].sum())
+    if mismatch_count:
+        # Sampling errors and unsupported encoder segmentation also cause this.
+        # A mismatch is not, by itself, proof of an attack.
+        return uncertain("outer_grid_difference", mismatch_count)
 
     # Retain colour evidence: binarising a coloured overlay alone would hide it.
     side = n * 6
@@ -102,11 +125,14 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     chroma = np.ptp(rectified.astype(np.int16), axis=2) > 40
     outside_pixels = np.repeat(np.repeat(outside, 6, axis=0), 6, axis=1)
     if float(chroma[outside_pixels].mean()) > 0.01:
-        return AttendanceGridCheck()
+        return uncertain("outer_colour_difference", 0)
     logo = bool(difference.any())
     if logo and (
         ecc != qrcode.constants.ERROR_CORRECT_H
         or float(chroma[~outside_pixels].mean()) < 0.10
     ):
-        return AttendanceGridCheck()
-    return AttendanceGridCheck(passed=True, central_logo=logo)
+        return uncertain("central_design_unsupported", 0)
+    return AttendanceGridCheck(
+        passed=True, central_logo=logo, reason="passed", module_count=n,
+        pixels_per_module=pixels_per_module, outside_mismatches=0,
+    )

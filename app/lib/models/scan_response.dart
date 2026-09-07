@@ -43,6 +43,7 @@ class BranchScores {
   final String? structuralType; // clean | adversarial | tampered
   final String? structuralRawType;
   final String structuralMethod;
+  final List<Map<String, dynamic>> attendanceChecks;
   final String? structuralQualityStatus; // usable | marginal | unusable
   final List<String> structuralQualityConditions;
   final String? structuralRescanReason;
@@ -67,6 +68,7 @@ class BranchScores {
     this.structuralType,
     this.structuralRawType,
     this.structuralMethod = 'cnn',
+    this.attendanceChecks = const [],
     this.structuralQualityStatus,
     this.structuralQualityConditions = const [],
     this.structuralRescanReason,
@@ -93,6 +95,10 @@ class BranchScores {
       structuralType: json['structural_type'] as String?,
       structuralRawType: json['structural_raw_type'] as String?,
       structuralMethod: json['structural_method'] as String? ?? 'cnn',
+      attendanceChecks: (json['attendance_checks'] as List? ?? const [])
+          .whereType<Map>()
+          .map((value) => Map<String, dynamic>.from(value))
+          .toList(),
       structuralQualityStatus: json['structural_quality_status'] as String?,
       structuralQualityConditions: _toStringList(
         json['structural_quality_conditions'],

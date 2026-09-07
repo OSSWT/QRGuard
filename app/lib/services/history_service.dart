@@ -138,6 +138,7 @@ class HistoryService {
         'structural_type': branch.structuralType,
         'structural_raw_type': branch.structuralRawType,
         'structural_method': branch.structuralMethod,
+        'attendance_checks': branch.attendanceChecks,
         'structural_quality_status': branch.structuralQualityStatus,
         'structural_quality_conditions': branch.structuralQualityConditions,
         'structural_rescan_reason': branch.structuralRescanReason,

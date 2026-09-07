@@ -1,4 +1,60 @@
-# Attendance QR policy — 1.2.0+8013
+# Attendance QR policy
+
+## 8014 candidate — physical acceptance pending
+
+The 8013 physical-phone follow-up exposed two failures: 61-module crops reported
+3.8 pixels/module, and logo-sensitive CNN results became Blocked whenever the
+strict grid check abstained. The 8013 image replays below were not physical
+camera acceptance and did not establish live-camera reliability.
+
+The 8014 candidate separates positive image/payload mismatch from inconclusive
+grid, format, colour and decoding checks. Inconclusive attendance design checks
+now abstain to Rescan with no effective structural score; raw CNN scores/classes
+are retained. Exact Safe checks remain strict pending actual camera evidence.
+An adversarial aggregate prediction still retains its existing risk treatment.
+
+Camera acquisition requests 1920x1080 (the actual device stream may differ).
+For attendance byte payloads the client estimates minimum crop size from QR H
+capacity; the 134-byte example requires 397 pixels including the quiet zone.
+The scanner uses the shortest detected edge and frame-size ceiling, and the
+cropper enforces the same estimate. Larger issuer-selected versions may still
+need a backend Rescan. This estimate never creates detail by upsampling.
+
+Each checked frame reports its failure reason, crop dimensions, measured module
+scale and outer-grid mismatch count where available. Details and private local
+capture metadata retain these checks. The UI says Rescan needed for inconclusive
+image evidence and no longer labels attendance hand-off as a URL override.
+
+USB validation uses a separate `com.osswt.qrguard.capture` debug build; production
+8013 remains unchanged until acceptance:
+
+```powershell
+cd app
+flutter build apk --debug --no-pub --dart-define=QRGUARD_BACKEND_URL=http://127.0.0.1:8014
+cd ..
+.\scripts\dev\Start-AttendanceCameraCheck.ps1
+```
+
+Connect and authorize one USB-debugging phone. The helper installs without
+clearing app data, forwards port 8014, and runs the candidate backend locally.
+If a previous Capture installation has a saved backend URL, select
+`http://127.0.0.1:8014` in its backend settings. QR crops saved to the ignored
+`.tmp/attendance-camera-8014` directory can reveal the attendance token by
+decoding; keep them private and do not commit them. Stop the server after testing.
+
+Acceptance requires reproducing the user's normal camera scans, examining the
+exact failed frames, validating any further sampling changes against attacks,
+and repeating normal scans across distance and angle before a production release.
+
+Candidate verification: 492 backend tests passed (3 conditional skips), 110
+Flutter tests passed, Flutter analysis reported no issues, and the added capture
+metadata passed the API regression. Original-photo Gallery replay remains Safe/1.
+The USB candidate was built and its package/version inspected:
+`com.osswt.qrguard.capture`, version code 8014. APK SHA-256:
+`d3bc93faa75666134ae328f312838c8a72b18482b41df7897d1606f8893e5564`.
+No phone was connected and physical-camera acceptance has not been completed.
+
+## 8013 deployed baseline and historical verification
 
 Normal hi-hive attendance QRs can return Safe after their decoded content and
 image pass a deterministic structural design check. Matching `Q01:*:` alone

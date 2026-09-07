@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/api_client.dart';
+import '../services/attendance_capture_policy.dart';
 import '../services/capture_quality.dart';
 import '../services/history_service.dart';
 import '../services/qr_cropper.dart';
@@ -190,7 +191,9 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
           frameWidth: sample.frameSize.width,
           frameHeight: sample.frameSize.height,
           normalizeCameraColor: widget.imageSource == 'camera',
-          minimumOutputSide: widget.imageSource == 'camera' ? 256 : 24,
+          minimumOutputSide: widget.imageSource == 'camera'
+              ? minimumCameraCropSide(widget.payload)
+              : 24,
         ),
     ]);
   }
