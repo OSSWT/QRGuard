@@ -1,11 +1,16 @@
 # Attendance QR policy
 
-## 8014 candidate — physical acceptance pending
+## 8014 final application release
 
-Release constraint from user (2026-09-07): **Rescan needed is testing-only**.
-Do not promote the current preview state/presentation to production. Removing
-this testing presentation must not turn unavailable evidence into Safe. Final
-production handling requires resolution and acceptance of the camera issue.
+Release decision (2026-09-08): the final application version is
+`1.2.0+8014`. Diagnostic ZIP export, automatic replacement rounds and the
+preview banner remain enabled only by `QRGUARD_DIAGNOSTIC_PREVIEW=true`; they
+are absent from the production build. Production still fails closed when image
+evidence is unavailable or inconclusive and never converts it into Safe.
+
+This final application release does not claim a formal Structural-model
+promotion. The existing controlled-release evidence boundary and the need for
+fresh independent physical-camera acceptance remain documented below.
 
 Private camera archive follow-up: three 707/708px inputs passed payload binding
 and reported about 8.8px/module but failed exact outer-grid comparison at
@@ -141,8 +146,9 @@ scale and outer-grid mismatch count where available. Details and private local
 capture metadata retain these checks. The UI says Rescan needed for inconclusive
 image evidence and no longer labels attendance hand-off as a URL override.
 
-USB validation uses a separate `com.osswt.qrguard.capture` debug build; production
-8013 remains unchanged until acceptance:
+The candidate-stage USB validation used a separate
+`com.osswt.qrguard.capture` debug build, allowing the then-deployed 8013
+baseline to remain unchanged during those checks:
 
 ```powershell
 cd app

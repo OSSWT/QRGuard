@@ -20,7 +20,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('1.2.0 (8012)'), findsOneWidget);
+    expect(find.text('1.2.0 (8014)'), findsOneWidget);
     expect(find.text('r07 controlled release'), findsOneWidget);
     expect(find.text('Safety boundaries'), findsOneWidget);
     expect(

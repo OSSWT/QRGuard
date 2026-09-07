@@ -71,7 +71,7 @@ $downloadPage = @"
 </head>
 <body>
   <h1>Download QRGuard for Android</h1>
-  <p>This is the signed FYP test build. Android may ask you to allow installation from this browser.</p>
+  <p>This is the signed QRGuard 1.2.0 final release. Android may ask you to allow installation from this browser.</p>
   <p><a class="button" href="/downloads/$apkName">Download APK</a></p>
   <p>Web application: <a href="$WebUrl">$WebUrl</a></p>
   <p><a href="/privacy.html">Privacy policy</a></p>

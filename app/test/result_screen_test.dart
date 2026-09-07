@@ -405,7 +405,7 @@ void main() {
     expect(find.text('Passed'), findsOneWidget);
     expect(find.text('QR grid checked · Central logo allowed'), findsOneWidget);
     expect(
-      find.textContaining('Raw image model: tampered (1.00)'),
+      find.textContaining('UTAR attendance QR structure verified'),
       findsOneWidget,
     );
     final snapshot = HistoryService.snapshotForStorage(scan);

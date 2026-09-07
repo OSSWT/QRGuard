@@ -18,7 +18,7 @@ class SettingsService {
   static const _institutionKey = 'profile_institution';
 
   /// Release builds receive the production HTTPS endpoint with:
-  /// `--dart-define=QRGUARD_BACKEND_URL=https://...run.app`.
+  /// `--dart-define=QRGUARD_BACKEND_URL=https://...onrender.com`.
   /// Development keeps the browser/emulator loopback defaults.
   static const _configuredBackendUrl = String.fromEnvironment(
     'QRGUARD_BACKEND_URL',
