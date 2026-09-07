@@ -214,14 +214,14 @@ flutter pub get
 flutter run
 ```
 
-The checked Android version is `1.2.0+8013`.
+The checked Android version is `1.2.0+8014`.
 
-Release `1.2.0+8013` is built, signed and deployed to the production endpoint. Its
-APK is 73,462,225 bytes with SHA-256
-`df0810d0d9be018b41f15ce02e2c2be9856772bcd6441df24dd16e0961c62ce9`.
+Release `1.2.0+8014` is built, signed and deployed to the production endpoint. Its
+APK is 73,478,661 bytes with SHA-256
+`403c423ce451c20031e93695524324c07b8468eb4df667a1f78d377b5e03bc46`.
 The hosted APK matches that hash. The production API reports unified
 `structural-r07-corrective-v1`, and the production Web version endpoint reports
-`1.2.0+8013`.
+`1.2.0+8014`.
 
 ## Verification
 
