@@ -98,13 +98,24 @@ List<Uint8List> prepareBestThreeCropsInBackground(List<CropRequest> requests) {
   return crops;
 }
 
-/// Rectify the bounded fallback pool, reject unusable pixels, then select three
-/// frames by actual crop contrast/detail with a small exposure-diversity bonus.
-/// This runs in the existing isolate so camera callbacks and preview stay fluid.
+/// Rectify the geometry-ranked fallback pool until three usable crops exist.
+///
+/// Quality used to be measured only after all five full-resolution candidates
+/// had been rectified and PNG-encoded. That made the first scan unnecessarily
+/// expensive on physical phones. Check each crop immediately and stop at the
+/// three frames required by the backend consensus contract.
 List<Uint8List> prepareQualityRankedCropsInBackground(
   List<CropRequest> requests,
 ) {
-  final crops = prepareUsableCropsInBackground(requests);
+  final crops = <Uint8List>[];
+  for (final request in requests) {
+    final crop = _prepareCrop(request);
+    if (crop == null || crop.isEmpty) continue;
+    final quality = assessCaptureQuality(crop);
+    if (quality == null || !quality.usable) continue;
+    crops.add(crop);
+    if (crops.length == 3) break;
+  }
   return [for (final ranked in rankCaptureCrops(crops)) ranked.bytes];
 }
 
@@ -123,8 +134,10 @@ Uint8List? _prepareCrop(CropRequest request) {
     frameSize: Size(request.frameWidth, request.frameHeight),
     normalizeCameraColor: request.normalizeCameraColor,
     minimumOutputSide: request.minimumOutputSide,
-    // Preview experiment: faster lossless encoding, identical decoded pixels.
-    pngCompressionLevel: diagnosticPreview ? 1 : 6,
+    // Level 1 is lossless and its decoded pixels match the previous level 6
+    // output. It avoids spending several seconds compressing three camera crops
+    // before the network request can even begin on lower-powered phones.
+    pngCompressionLevel: 1,
   );
 }
 

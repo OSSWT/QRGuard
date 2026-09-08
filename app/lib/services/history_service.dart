@@ -86,6 +86,7 @@ class HistoryService {
   static const _dbName = 'qrguard_history.db';
   static const _table = 'scans';
   static const _maxRecords = 200; // keep the list useful and the file small
+  static const _databaseVersion = 3;
 
   Database? _db;
   final List<ScanRecord> _webRecords = [];
@@ -98,7 +99,7 @@ class HistoryService {
 
   Future<Database> get _database async => _db ??= await openDatabase(
     p.join(await getDatabasesPath(), _dbName),
-    version: 2,
+    version: _databaseVersion,
     onCreate: (db, _) => db.execute('''
           CREATE TABLE $_table (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -116,8 +117,24 @@ class HistoryService {
           'ALTER TABLE $_table ADD COLUMN analysis_snapshot TEXT',
         );
       }
+      if (oldVersion < 3) {
+        await removeLegacyExampleRecord(db);
+      }
     },
   );
+
+  /// Version 8014 was tested on physical devices with a blocked example.com
+  /// scan. Android preserves SQLite data across an APK update, so that test row
+  /// can otherwise look like bundled sample content after installing the final
+  /// build. This tightly scoped migration removes only that known record.
+  @visibleForTesting
+  static Future<void> removeLegacyExampleRecord(DatabaseExecutor db) async {
+    await db.delete(
+      _table,
+      where: 'registered_domain = ? AND verdict = ? AND risk_score = ?',
+      whereArgs: const ['example.com', 'blocked', 84],
+    );
+  }
 
   /// Hash a payload for storage. Exposed so tests can assert nothing raw is kept.
   static String hashPayload(String payload) =>

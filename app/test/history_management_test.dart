@@ -67,6 +67,20 @@ void main() {
     expect(database.rawDeletes.single.arguments, [3, 7]);
   });
 
+  test('database migration removes only the legacy example scan', () async {
+    final database = _RecordingDatabase();
+
+    await HistoryService.removeLegacyExampleRecord(database);
+
+    expect(database.deletes, [
+      const _DeleteCall(
+        'scans',
+        where: 'registered_domain = ? AND verdict = ? AND risk_score = ?',
+        whereArgs: ['example.com', 'blocked', 84],
+      ),
+    ]);
+  });
+
   testWidgets('long press selects records and deletes only the selection', (
     tester,
   ) async {
@@ -197,7 +211,18 @@ class _FakeHistoryService extends HistoryService {
 class _RecordingDatabase implements Database {
   final _RecordingTransaction transactionLog = _RecordingTransaction();
   final List<_RawDeleteCall> rawDeletes = [];
+  final List<_DeleteCall> deletes = [];
   int transactionCount = 0;
+
+  @override
+  Future<int> delete(
+    String table, {
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
+    deletes.add(_DeleteCall(table, where: where, whereArgs: whereArgs));
+    return 0;
+  }
 
   @override
   Future<T> transaction<T>(
