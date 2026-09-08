@@ -12,6 +12,8 @@ sees. `partial_analysis` then tells the user the verdict rests on one branch.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+
 import numpy as np
 
 
@@ -180,17 +182,27 @@ def _adaptive_binarise(gray: np.ndarray) -> np.ndarray:
     )
 
 
-def _rescue_views(gray: np.ndarray) -> tuple[tuple[np.ndarray, float], ...]:
-    """Return bounded detector views with coordinates mapped to the source."""
+def _rescue_views(
+    gray: np.ndarray, *, include_upscaled: bool = True
+) -> Iterator[tuple[np.ndarray, float]]:
+    """Yield bounded detector views with coordinates mapped to the source.
 
+    Build each fallback only when the preceding view failed. OpenCV often
+    decodes the native image immediately, so eagerly producing CLAHE, adaptive
+    threshold and 2x copies wasted most of the preparation work on successful
+    scans. Attendance crops already satisfy a measured pixels-per-module floor;
+    their verifier can disable synthetic upscales without discarding evidence.
+    """
+
+    yield gray, 1.0
+    if include_upscaled:
+        yield _upscale(gray, 2), 2.0
     contrast = _local_contrast(gray)
+    yield contrast, 1.0
+    if include_upscaled:
+        yield _upscale(contrast, 2), 2.0
+    yield _binarise(gray), 1.0
     adaptive = _adaptive_binarise(gray)
-    return (
-        (gray, 1.0),
-        (_upscale(gray, 2), 2.0),
-        (contrast, 1.0),
-        (_upscale(contrast, 2), 2.0),
-        (_binarise(gray), 1.0),
-        (adaptive, 1.0),
-        (_upscale(adaptive, 2), 2.0),
-    )
+    yield adaptive, 1.0
+    if include_upscaled:
+        yield _upscale(adaptive, 2), 2.0

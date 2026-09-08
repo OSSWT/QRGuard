@@ -233,7 +233,7 @@ flutter test
 flutter build apk --release
 ```
 
-Current change verification: 503 backend tests passed with three conditional
+Current change verification: 505 backend tests passed with three conditional
 skips, Flutter analysis reported no issues, and 121 Flutter tests passed with
 four private/environment-dependent skips. The
 production-endpoint Web build and signed Android release both completed; the APK

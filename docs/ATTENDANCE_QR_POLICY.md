@@ -12,6 +12,27 @@ This final application release does not claim a formal Structural-model
 promotion. The existing controlled-release evidence boundary and the need for
 fresh independent physical-camera acceptance remain documented below.
 
+### Production attendance latency correction
+
+The 2026-09-08 phone follow-up reached `Analysing QR Content`, confirming that
+client crop preparation had completed. Production logs showed both corresponding
+camera requests eventually returned HTTP 200, but the dense attendance path was
+still doing every expensive grid rescue even after one frame had already made a
+Safe result impossible.
+
+Camera Structural inference still requires its three-frame consensus. The
+attendance verifier still requires every selected frame to pass before applying
+the central-logo allowance. It now stops after the first failed grid because no
+later result can change that fail-closed outcome. Native attendance crops already
+meet the measured five-pixels-per-module floor, so their decoder no longer makes
+2x copies that add no physical evidence. General and Gallery decoding retain the
+full rescue sequence. Rescue images are also generated lazily for all QR paths.
+
+Regression verification: 505 backend tests passed with three conditional skips.
+The added tests require all three successful camera checks, require immediate
+short-circuit after a failed check, and prohibit synthetic upscaling in the
+camera attendance verifier.
+
 Private camera archive follow-up: three 707/708px inputs passed payload binding
 and reported about 8.8px/module but failed exact outer-grid comparison at
 7/18/10 modules. Client preparation was 15080ms of 18124ms total. Investigate

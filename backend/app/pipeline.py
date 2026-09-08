@@ -738,10 +738,23 @@ def run_scan(
         from structural.attendance_grid import check_attendance_grid
 
         selected = image_list[:1] if source != "camera" else image_list[:5]
-        checks = [check_attendance_grid(frame, sem.info.raw) for frame in selected]
+        checks = []
+        for frame in selected:
+            check = check_attendance_grid(
+                frame,
+                sem.info.raw,
+                include_upscaled_rescue=source != "camera",
+            )
+            checks.append(check)
+            # Passing still requires every selected frame. Once one frame fails,
+            # later checks cannot change that decision and only delay the rescan.
+            if not check.passed:
+                break
         attendance_checks = [asdict(check) for check in checks]
         attendance_payload_mismatch = any(check.payload_mismatch for check in checks)
-        attendance_checked = all(check.passed for check in checks) and (
+        attendance_checked = len(checks) == len(selected) and all(
+            check.passed for check in checks
+        ) and (
             structural.predicted_type == "clean"
             or all(check.central_logo for check in checks)
         )

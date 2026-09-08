@@ -6,15 +6,15 @@ every module outside a bounded central logo to match. Unsupported encodings or
 unreadable captures abstain. No reference image or attendance token is stored.
 """
 
-from dataclasses import dataclass, replace
 import os
+from dataclasses import dataclass, replace
 
 import cv2
 import numpy as np
 import qrcode
 from qrcode.util import BCH_type_info
-
 from semantic.payload_router import route_payload
+
 from structural.image_quality import assess_image_quality
 from structural.qr_decoder import _rescue_views
 
@@ -51,12 +51,18 @@ def _format_value(observed):
     return formats[0] if len(formats) == 1 else None
 
 
-def check_attendance_grid(image, payload: str) -> AttendanceGridCheck:
-    result = _check_attendance_grid(image, payload)
+def check_attendance_grid(
+    image, payload: str, *, include_upscaled_rescue: bool = True
+) -> AttendanceGridCheck:
+    result = _check_attendance_grid(
+        image, payload, include_upscaled_rescue=include_upscaled_rescue
+    )
     return replace(result, image_width=image.width, image_height=image.height)
 
 
-def _check_attendance_grid(image, payload: str) -> AttendanceGridCheck:
+def _check_attendance_grid(
+    image, payload: str, *, include_upscaled_rescue: bool = True
+) -> AttendanceGridCheck:
     """Accept only readable, sufficiently detailed, matching attendance images.
 
 The logo allowance is at most the central 30% of the symbol side, rounded
@@ -72,7 +78,12 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
     decoded, points, straight = "", None, None
     detector = cv2.QRCodeDetector()
-    for candidate, scale in _rescue_views(gray):
+    # Camera attendance crops must already contain at least five real pixels per
+    # module. Enlarging them cannot add evidence and makes difficult frames much
+    # slower on the production CPU, so keep the native-resolution rescue views.
+    for candidate, scale in _rescue_views(
+        gray, include_upscaled=include_upscaled_rescue
+    ):
         try:
             decoded, points, straight = detector.detectAndDecode(candidate)
         except cv2.error:

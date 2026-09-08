@@ -6,11 +6,10 @@ import hashlib
 import numpy as np
 import pytest
 import qrcode
-from PIL import Image, ImageDraw, ImageEnhance
-
 from app.pipeline import run_scan
+from PIL import Image, ImageDraw, ImageEnhance
 from semantic.payload_router import route_payload
-from structural.attendance_grid import check_attendance_grid
+from structural.attendance_grid import AttendanceGridCheck, check_attendance_grid
 from structural.structural_service import StructuralResult
 
 
@@ -107,7 +106,45 @@ def test_logo_false_positive_is_resolved_and_cnn_preserved(monkeypatch, source):
     assert result.branch_scores.structural_type == "clean"
     assert result.branch_scores.structural_raw_type == "tampered"
     assert result.branch_scores.p_structural_raw == 0.999
+    assert len(result.branch_scores.attendance_checks) == (3 if source == "camera" else 1)
     assert not any("manipulat" in reason for reason in result.reasons)
+
+
+def test_attendance_check_uses_native_resolution_rescues(monkeypatch):
+    payload, image = attendance_image()
+
+    def unexpected_upscale(*_args, **_kwargs):
+        raise AssertionError("attendance verification must not manufacture detail")
+
+    monkeypatch.setattr("structural.qr_decoder._upscale", unexpected_upscale)
+    assert check_attendance_grid(
+        image, payload, include_upscaled_rescue=False
+    ).passed
+
+
+def test_camera_attendance_stops_after_first_failed_grid(monkeypatch):
+    fake_model(monkeypatch, "tampered")
+    payload, image = attendance_image()
+    calls = 0
+
+    def failed_check(_image, _payload, **_kwargs):
+        nonlocal calls
+        calls += 1
+        return AttendanceGridCheck(reason="decode_unavailable")
+
+    monkeypatch.setattr(
+        "structural.attendance_grid.check_attendance_grid", failed_check
+    )
+    result = run_scan(
+        payload,
+        images=[image, image.rotate(90), image.rotate(180)],
+        image_source="camera",
+        require_camera_consensus=True,
+    )
+
+    assert calls == 1
+    assert result.branch_scores.structural_status == "inconclusive"
+    assert len(result.branch_scores.attendance_checks) == 1
 
 
 @pytest.mark.parametrize("case", ["no_image", "mismatch", "one_camera_frame", "mixed_payloads", "adversarial", "tampered_without_logo"])
@@ -181,8 +218,8 @@ def test_content_mismatch_blocks_even_when_cnn_says_clean(monkeypatch):
 def test_real_api_decodes_and_checks_attendance(monkeypatch, source):
     from io import BytesIO
 
-    from fastapi.testclient import TestClient
     from app.main import app
+    from fastapi.testclient import TestClient
 
     fake_model(monkeypatch, "tampered")
     payload, image = attendance_image()
