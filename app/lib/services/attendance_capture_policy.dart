@@ -62,3 +62,11 @@ int minimumCameraCropSide(String? payload) {
   final modules = index < 0 ? 177 : 21 + 4 * index;
   return math.max(256, (modules * 5.0 * 1.30).ceil());
 }
+
+/// Bound close-up camera crops before rectification and lossless PNG encoding.
+/// The backend ultimately measures and infers at 224 px, while attendance grid
+/// checks need the payload-dependent minimum above. Keeping up to 512 px avoids
+/// multi-second work on near-full-frame 1080p QR codes without discarding pixels
+/// required by larger attendance symbols.
+int maximumCameraCropSide(String? payload) =>
+    math.max(512, minimumCameraCropSide(payload));

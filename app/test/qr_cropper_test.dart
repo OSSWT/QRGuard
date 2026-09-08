@@ -299,5 +299,48 @@ void main() {
       expect(cropped.width, lessThanOrEqualTo(480));
       expect(cropped.height, lessThanOrEqualTo(480));
     });
+
+    test('a close-up camera crop is capped before expensive PNG work', () {
+      final result = cropToCode(
+        frame: _frame(
+          width: 1200,
+          height: 1200,
+          codeLeft: 100,
+          codeTop: 100,
+          codeSide: 1000,
+        ),
+        corners: _corners(left: 100, top: 100, side: 1000),
+        frameSize: const Size(1200, 1200),
+        normalizeCameraColor: true,
+        minimumOutputSide: 397,
+        maximumOutputSide: 512,
+        pngCompressionLevel: 1,
+      );
+
+      final cropped = img.decodeImage(result!)!;
+      expect(cropped.width, 512);
+      expect(cropped.height, 512);
+    });
+
+    test('camera processing cap never undercuts the required minimum', () {
+      final result = cropToCode(
+        frame: _frame(
+          width: 900,
+          height: 900,
+          codeLeft: 100,
+          codeTop: 100,
+          codeSide: 700,
+        ),
+        corners: _corners(left: 100, top: 100, side: 700),
+        frameSize: const Size(900, 900),
+        minimumOutputSide: 600,
+        maximumOutputSide: 512,
+        pngCompressionLevel: 1,
+      );
+
+      final cropped = img.decodeImage(result!)!;
+      expect(cropped.width, 600);
+      expect(cropped.height, 600);
+    });
   });
 }

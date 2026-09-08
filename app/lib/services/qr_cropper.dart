@@ -45,6 +45,7 @@ Uint8List? cropToCode({
   Size frameSize = Size.zero,
   bool normalizeCameraColor = false,
   int minimumOutputSide = _minSide,
+  int? maximumOutputSide,
   int pngCompressionLevel = 6,
 }) {
   if (corners.isEmpty) return null;
@@ -112,12 +113,16 @@ Uint8List? cropToCode({
       ),
   ];
   final averageEdge = edges.reduce((a, b) => a + b) / edges.length;
-  final outputSide = math
+  final naturalOutputSide = math
       .min(
         (averageEdge * expansion).round(),
         math.min(decoded.width, decoded.height),
       )
       .toInt();
+  final effectiveMaximum = maximumOutputSide == null
+      ? naturalOutputSide
+      : math.max(minimumOutputSide, maximumOutputSide);
+  final outputSide = math.min(naturalOutputSide, effectiveMaximum);
   if (outputSide < math.max(_minSide, minimumOutputSide)) return null;
 
   try {

@@ -217,8 +217,8 @@ flutter run
 The checked Android version is `1.2.0+8014`.
 
 Release `1.2.0+8014` is built, signed and deployed to the production endpoint. Its
-APK is 73,478,661 bytes with SHA-256
-`7df59627a5e19699546bcbc337b8a75e772bef601319619ff9eaa0c8c1381983`.
+APK is 73,544,197 bytes with SHA-256
+`23e04a9947b2d09aaa6d46591e86bda2c2671d2bfb36bd7d463ec49dc7da2e3e`.
 The hosted APK matches that hash. The production API reports unified
 `structural-r07-corrective-v1`, and the production Web version endpoint reports
 `1.2.0+8014`.
@@ -234,7 +234,7 @@ flutter build apk --release
 ```
 
 Current change verification: 503 backend tests passed with three conditional
-skips, Flutter analysis reported no issues, and 118 Flutter tests passed with
+skips, Flutter analysis reported no issues, and 121 Flutter tests passed with
 four private/environment-dependent skips. The
 production-endpoint Web build and signed Android release both completed; the APK
 identity and signer certificate were verified independently of the build step.

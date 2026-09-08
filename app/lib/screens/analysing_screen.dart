@@ -25,6 +25,7 @@ class CropRequest {
     required this.frameHeight,
     required this.normalizeCameraColor,
     this.minimumOutputSide = 24,
+    this.maximumOutputSide,
   });
 
   final Uint8List frame;
@@ -36,6 +37,7 @@ class CropRequest {
   final double frameHeight;
   final bool normalizeCameraColor;
   final int minimumOutputSide;
+  final int? maximumOutputSide;
 }
 
 /// One live-camera frame whose QR corners are expressed in [frameSize].
@@ -134,6 +136,7 @@ Uint8List? _prepareCrop(CropRequest request) {
     frameSize: Size(request.frameWidth, request.frameHeight),
     normalizeCameraColor: request.normalizeCameraColor,
     minimumOutputSide: request.minimumOutputSide,
+    maximumOutputSide: request.maximumOutputSide,
     // Level 1 is lossless and its decoded pixels match the previous level 6
     // output. It avoids spending several seconds compressing three camera crops
     // before the network request can even begin on lower-powered phones.
@@ -213,6 +216,9 @@ class _AnalysingScreenState extends State<AnalysingScreen> {
           minimumOutputSide: widget.imageSource == 'camera'
               ? minimumCameraCropSide(widget.payload)
               : 24,
+          maximumOutputSide: widget.imageSource == 'camera'
+              ? maximumCameraCropSide(widget.payload)
+              : null,
         ),
     ]);
   }

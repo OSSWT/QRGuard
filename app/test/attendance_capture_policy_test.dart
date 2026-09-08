@@ -21,4 +21,15 @@ void main() {
       expect(minimumCameraCropSide(payload), 256);
     }
   });
+
+  test('camera processing cap preserves attendance minimum detail', () {
+    final attendance = 'Q01:*:${'A' * 128}';
+
+    expect(maximumCameraCropSide('https://example.com'), 512);
+    expect(maximumCameraCropSide(attendance), 512);
+    expect(
+      maximumCameraCropSide('Q01:*:${'A' * 1024}'),
+      greaterThanOrEqualTo(minimumCameraCropSide('Q01:*:${'A' * 1024}')),
+    );
+  });
 }
