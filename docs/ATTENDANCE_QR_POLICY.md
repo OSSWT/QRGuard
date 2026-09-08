@@ -33,19 +33,37 @@ The added tests require all three successful camera checks, require immediate
 short-circuit after a failed check, and prohibit synthetic upscaling in the
 camera attendance verifier.
 
+The subsequent physical-phone result completed in 6172ms and recognised the
+61x61 attendance grid at 6.4 pixels per module, but abstained because OpenCV's
+canonical grid could not confirm both redundant format copies. The bounded
+fixed-pattern registration described below is now the production fallback for
+this specific sampling failure. It fits only standard QR function patterns and
+still requires independent payload decoding, exact outer data-module agreement,
+the existing colour/logo rules and all selected frames passing. Setting
+`QRGUARD_ATTENDANCE_REGISTERED_SAMPLING=0` remains an emergency kill switch.
+
+The result screen also keeps the official hi-hive hand-off available after an
+inconclusive image result. This opens the official app to scan the original QR
+again; QRGuard never forwards or submits the attendance token. A Partial result
+therefore remains visibly Partial unless the strict registered check passes.
+
+The rebuilt production package remains `1.2.0+8014`, is signed by the existing
+QRGuard certificate and has SHA-256
+`45a69a0d86acddb614d0605c4350cb9de7fe7ed43ff96adec4ef325c3433b5a6`.
+
 Private camera archive follow-up: three 707/708px inputs passed payload binding
 and reported about 8.8px/module but failed exact outer-grid comparison at
 7/18/10 modules. Client preparation was 15080ms of 18124ms total. Investigate
 sampling/geometry and capture performance; do not simply permit N mismatches.
 
-Preview sampling follow-up: `QRGUARD_ATTENDANCE_REGISTERED_SAMPLING=1` enables
+Earlier preview follow-up: `QRGUARD_ATTENDANCE_REGISTERED_SAMPLING=1` enabled
 bounded geometric registration fitted only to standard finder/alignment/timing
-patterns, never the payload's data modules. It is OFF by default. Reconstructed
-outer data still requires zero differences; payload binding, quality, colour,
-logo bounds and adversarial policy remain. Diagnostics retain the original
-decoder mismatch count plus the sampling method. The private three-frame replay
-passes with zero outer differences after registration. This is replay evidence,
-not new physical-camera acceptance. The user must rescan on the test site.
+patterns, never the payload's data modules. It was off by default during that
+preview. Reconstructed outer data still requires zero differences; payload
+binding, quality, colour, logo bounds and adversarial policy remain. Diagnostics
+retain the original decoder mismatch count plus the sampling method. The private
+three-frame replay passed with zero outer differences after registration. The
+production promotion after physical-phone follow-up is recorded above.
 
 The first global/affine prototype did not generalize to clean synthetic inputs
 and was not deployed. A bounded bilinear fit also handles a reproduced OpenCV

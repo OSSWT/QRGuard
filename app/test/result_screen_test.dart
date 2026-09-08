@@ -339,6 +339,7 @@ void main() {
       expect(find.text('Partial analysis'), findsWidgets);
       expect(find.text('Blocked'), findsNothing);
       expect(find.text('Override blocked URL'), findsNothing);
+      expect(find.text('Open hi-hive to scan again'), findsOneWidget);
       await tester.tap(find.text('Details'));
       await tester.pumpAndSettle();
       expect(find.textContaining('1 differing outer modules'), findsOneWidget);

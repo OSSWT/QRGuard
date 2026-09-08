@@ -4,15 +4,14 @@ import numpy as np
 import pytest
 import qrcode
 from PIL import ImageDraw
-from structural.attendance_grid import check_attendance_grid
-from structural.attendance_grid import _format_value
+from structural.attendance_grid import _format_value, check_attendance_grid
 from structural.registered_sampling import sample_registered_grid
 from test_attendance_grid import attendance_image
 
 
 @pytest.mark.parametrize('row,col', [(20, 20), (57, 60), (58, 58), (58, 60), (60, 58)])
 def test_registered_sampling_preserves_changed_modules(row, col, monkeypatch):
-    monkeypatch.setenv('QRGUARD_ATTENDANCE_REGISTERED_SAMPLING', '1')
+    monkeypatch.delenv('QRGUARD_ATTENDANCE_REGISTERED_SAMPLING', raising=False)
     payload, image = attendance_image()
     x, y = (col + 4) * 8, (row + 4) * 8
     colour = 'white' if image.getpixel((x + 4, y + 4))[0] < 128 else 'black'
@@ -36,11 +35,11 @@ def test_registration_recovers_clean_grid_without_payload_input(identity, mask):
     assert not diff.any()
 
 
-def test_registration_experiment_is_off_by_default(monkeypatch):
-    monkeypatch.delenv('QRGUARD_ATTENDANCE_REGISTERED_SAMPLING', raising=False)
+def test_registration_can_be_disabled(monkeypatch):
+    monkeypatch.setenv('QRGUARD_ATTENDANCE_REGISTERED_SAMPLING', '0')
     payload, image = attendance_image()
     def forbidden(*args):
-        raise AssertionError('Production must not invoke preview registration')
+        raise AssertionError('Disabled registration must not be invoked')
     monkeypatch.setattr('structural.registered_sampling.sample_registered_grid', forbidden)
     ImageDraw.Draw(image).rectangle((192, 192, 199, 199), fill='white')
     check_attendance_grid(image, payload)
@@ -56,8 +55,8 @@ def test_format_copies_must_match_exactly():
     assert _format_value(observed) is None
 
 
-def test_preview_can_reread_format_from_pixels_before_data_check(monkeypatch):
-    monkeypatch.setenv('QRGUARD_ATTENDANCE_REGISTERED_SAMPLING', '1')
+def test_production_rereads_format_from_pixels_before_data_check(monkeypatch):
+    monkeypatch.delenv('QRGUARD_ATTENDANCE_REGISTERED_SAMPLING', raising=False)
     payload, image = attendance_image()
     original = cv2.QRCodeDetector
     class MisSampledFormatDetector:
@@ -73,4 +72,4 @@ def test_preview_can_reread_format_from_pixels_before_data_check(monkeypatch):
     check = check_attendance_grid(image, payload)
     assert check.passed
     assert check.decoder_format_uncertain
-    assert check.sampling_method == 'fixed_pattern_registration_preview_v2'
+    assert check.sampling_method == 'fixed_pattern_registration_v2'

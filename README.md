@@ -218,7 +218,7 @@ The checked Android version is `1.2.0+8014`.
 
 Release `1.2.0+8014` is built, signed and deployed to the production endpoint. Its
 APK is 73,544,197 bytes with SHA-256
-`23e04a9947b2d09aaa6d46591e86bda2c2671d2bfb36bd7d463ec49dc7da2e3e`.
+`45a69a0d86acddb614d0605c4350cb9de7fe7ed43ff96adec4ef325c3433b5a6`.
 The hosted APK matches that hash. The production API reports unified
 `structural-r07-corrective-v1`, and the production Web version endpoint reports
 `1.2.0+8014`.

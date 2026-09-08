@@ -118,8 +118,10 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     # qrcode.QRCode.setup_type_info; no guessed ECC/mask can authorize Safe.
     format_value = _format_value(observed)
     decoder_format_uncertain = format_value is None
-    preview_registration = os.getenv("QRGUARD_ATTENDANCE_REGISTERED_SAMPLING") == "1"
-    if decoder_format_uncertain and preview_registration:
+    registered_sampling = (
+        os.getenv("QRGUARD_ATTENDANCE_REGISTERED_SAMPLING", "1") != "0"
+    )
+    if decoder_format_uncertain and registered_sampling:
         # Registration uses only standard fixed patterns, so it needs neither
         # the format value nor the payload. Read BOTH format copies again from
         # the physical image before proceeding to independent data comparison.
@@ -127,7 +129,7 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
         registered = sample_registered_grid(gray, corners, n)
         if registered is not None:
             observed = registered
-            sampling_method = "fixed_pattern_registration_preview_v2"
+            sampling_method = "fixed_pattern_registration_v2"
             format_value = _format_value(observed)
     if format_value is None:
         return uncertain("format_uncertain")
@@ -146,14 +148,13 @@ allowance. Adversarial CNN evidence is handled separately by the caller.
     outside[lo:hi, lo:hi] = False
     mismatch_count = int(difference[outside].sum())
     decoder_mismatches = None if decoder_format_uncertain else mismatch_count
-    # Preview-only experiment. Production defaults to the unchanged verifier.
-    if mismatch_count and preview_registration and sampling_method == "decoder_grid":
+    if mismatch_count and registered_sampling and sampling_method == "decoder_grid":
         from structural.registered_sampling import sample_registered_grid
         registered = sample_registered_grid(gray, corners, n)
         if registered is not None:
             difference = registered != np.asarray(qr.get_matrix(), dtype=bool)
             mismatch_count = int(difference[outside].sum())
-            sampling_method = "fixed_pattern_registration_preview_v2"
+            sampling_method = "fixed_pattern_registration_v2"
     if mismatch_count:
         # Sampling errors and unsupported encoder segmentation also cause this.
         # A mismatch is not, by itself, proof of an attack.

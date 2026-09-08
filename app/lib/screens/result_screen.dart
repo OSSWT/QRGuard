@@ -444,7 +444,7 @@ class _ResultScreenState extends State<ResultScreen> {
     }
 
     if (_canProceed &&
-        !_requiresStructuralRescan &&
+        (!_requiresStructuralRescan || _isHiHive) &&
         (_kind == _ResultKind.warning || _kind == _ResultKind.partial)) {
       widgets.add(const SizedBox(height: 6));
       widgets.add(
